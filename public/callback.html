@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<link rel="apple-touch-icon" sizes="76x76" href="img/apple-icon.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="img/favicon.png">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Callback Page</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+	<div id="app" style="margin-top: 5rem;">
+		<div class="text-center">
+			<h1>SQAaaS WEB</h1>
+			<h3 class="">v1.0.0</h3>
+			
+		</div>
+		<div class="text-center" style="margin: 8rem;">
+			<h2 class="headline">You are going to be redirected to the Dashboard in:</h2>
+			<span style="width: 300px; height: 300px; font-size: 48px;">
+				{{countDown}}
+			</span> 
+		</div>
+	</div>
+ 
+	<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/vue"></script>
+	<script>
+	new Vue({
+		el: '#app',
+		data: () => ({
+			countDown: 3
+		}),  
+		created(){  
+			var url = window.location.href;
+				console.log(url)
+			var _this = this    
+
+			// Check if there was an error parameter
+			var error = url.match('error=([^&]*)')
+			if (error) {
+				// If so, extract the error description and display it
+				var description = url.match('error_description=([^&]*)')
+				console.log('Error: ' + error[1] + '<br>Description: ' + description[1] + '</br>');
+				return;
+			}
+
+			// Extract id token from the id_token parameter
+			var match = url.match('access_token=([^&]*)');
+			if (match) {
+				var access_token = match[1]; // String captured by ([^&]*)
+
+				// Save access_token and redirect_url
+				if (access_token) {
+					console.log(access_token);                
+					localStorage.setItem("access_token",JSON.stringify({ 'access_token': access_token }));
+					this.countDownTimer()
+					
+				}else{
+					console.log('Error: Could not retrieve id token from the URL');
+				}
+			}else{
+				console.log('Error: There was no id token in the URL');
+			}        
+		},   
+		methods: {
+				countDownTimer() {
+					if(this.countDown > 0) {
+						setTimeout(() => {
+							this.countDown -= 1
+							this.countDownTimer()
+						}, 1000)
+					}else{
+						var url_redirect =  window.location.origin + "/#/auth/dashboard"     
+						// var url_redirect = 'http://localhost:8080/#/auth/dashboard'            
+						window.location.href = url_redirect
+					}
+				}
+			}
+	
+		})
+	</script>
+	<style>
+		body { 
+			background: url(img/back-callback.png) no-repeat center center fixed; 
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+		}
+	</style>
+</body>
+</html>
