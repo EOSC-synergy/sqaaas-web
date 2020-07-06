@@ -1,0 +1,6 @@
+version: "3.6"
+
+services:
+  myrepo-testing-java:
+    image: "ubuntu:16.04"
+    hostname: "myrepo-testing-host"
