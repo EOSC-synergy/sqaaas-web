@@ -1,12 +1,12 @@
 config:
   project_repos:
-    myrepo:
+    sqaas-web:
       repo: 'https://github.com/EOSC-synergy/sqaaas-web.git'
 
 sqa_criteria:
   qc_doc:
     repos:
-      worsica-cicd:
+      sqaas-web:
         container: testing-jpl-sqaaas
         commands:
           - git clone https://github.com/EOSC-synergy/sqaaas-web.git
