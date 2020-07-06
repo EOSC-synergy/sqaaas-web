@@ -17,6 +17,7 @@ sqa_criteria:
                 url_authorize: "https://aai-dev.egi.eu/oidc/authorize",
                 url_user_info: "https://aai-dev.egi.eu/oidc/userinfo",
             }' > src/env.js
+          - npm install
           - npm run build
           - git checkout gh-pages
           - cd dist/
