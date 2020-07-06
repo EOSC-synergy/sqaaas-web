@@ -9,5 +9,5 @@ sqa_criteria:
       sqaas-web:
         container: testing-jpl-sqaaas
         commands:
-          - sh /jpl-sqaaas-testing/script.sh
+          - sh /testing-jpl-sqaaas/script.sh
           
