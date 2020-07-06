@@ -7,7 +7,7 @@ sqa_criteria:
   qc_doc:
     repos:
       worsica-cicd:
-        container: myrepo-testing-host
+        container: testing-jpl-sqaaas
         commands:
           - git clone https://github.com/EOSC-synergy/sqaaas-web.git
           - cd sqaaas-web

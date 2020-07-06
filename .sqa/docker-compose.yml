@@ -1,6 +1,6 @@
 version: "3.6"
 
 services:
-  myrepo-testing-java:
+  testing-jpl-sqaaas:
     image: "ubuntu:16.04"
-    hostname: "myrepo-testing-host"
+    hostname: "testing-jpl-integration"
