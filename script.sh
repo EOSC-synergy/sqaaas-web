@@ -1,5 +1,3 @@
-#!/bin/sh
-
 #Create env.js file
 cd /testing-jpl-sqaaas/sqaaas-web
 echo 'module.exports = {
