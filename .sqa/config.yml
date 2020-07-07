@@ -2,6 +2,7 @@ config:
   project_repos:
     sqaas-web:
       repo: 'https://github.com/EOSC-synergy/sqaaas-web.git'
+      branch: jpl-branch
 
 sqa_criteria:
   qc_doc:
