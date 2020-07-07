@@ -11,5 +11,5 @@ sqa_criteria:
         container: testing-jpl-sqaaas
         commands:
           - ls -l /testing-jpl-sqaaas
-          - sh /testing-jpl-sqaaas/sqaaas-web/script.sh
+          - sh -c /testing-jpl-sqaaas/sqaaas-web/script.sh
           
