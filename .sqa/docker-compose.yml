@@ -2,10 +2,11 @@ version: "3.6"
 
 services:
   testing-jpl-sqaaas:
-    image: "ubuntu:16.04"
+    image: "node"
     container_name: testing-jpl-sqaaas
     hostname: "testing-jpl-sqaaas"
     volumes:
      - type: bind
        source: ./
        target: /testing-jpl-sqaaas
+    command: sleep infinity
