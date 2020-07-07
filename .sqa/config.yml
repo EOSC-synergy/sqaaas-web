@@ -2,9 +2,7 @@ config:
   project_repos:
     sqaas-web:
       repo: 'https://github.com/EOSC-synergy/sqaaas-web.git'
-      branch: jpl-branch
-      dockerhub: dianamnaranjo/sqaaas-jpl
-      dockertag: latest
+      branch: jpl-branch      
 
 sqa_criteria:
   qc_doc:
@@ -12,5 +10,6 @@ sqa_criteria:
       sqaas-web:
         container: testing-jpl-sqaaas
         commands:
-          - sh /testing-jpl-sqaaas/script.sh
+          - ls -l
+          - sh /testing-jpl-sqaaas/sqaaas-web/script.sh
           
