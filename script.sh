@@ -1,3 +1,4 @@
+cd /testing-jpl-sqaaas
 #Create env.js file
 echo 'module.exports = {
     provider_url: "https://aai-dev.egi.eu",
