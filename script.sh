@@ -16,9 +16,12 @@ npm run build
 
 git config --global user.email "dianamariand92@gmail.com"
 git config --global user.name "dianamariand92"
+git remote show origin
+git remote update
+git fetch
 git branch
 #Go to the dist folder of the gh-pages branch
-git checkout -b gh-pages --track origin/gh-pages
+git checkout gh-pages
 cd dist/
 cp -R * ../
 cd ..
