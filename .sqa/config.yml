@@ -3,6 +3,8 @@ config:
     sqaas-web:
       repo: 'https://github.com/EOSC-synergy/sqaaas-web.git'
       branch: jpl-branch
+      dockerhub: dianamnaranjo/sqaaas-jpl
+      dockertag: latest
 
 sqa_criteria:
   qc_doc:
