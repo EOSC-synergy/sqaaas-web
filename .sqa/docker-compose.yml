@@ -10,3 +10,5 @@ services:
        source: ./
        target: /testing-jpl-sqaaas
     command: sleep infinity
+    environment:
+     - GITHUB_TOKEN=${GITHUB_TOKEN}
