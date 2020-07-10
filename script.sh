@@ -1,6 +1,7 @@
 cd /testing-jpl-sqaaas
 #Create env.js file
-git clone https://github.com/EOSC-synergy/sqaaas-web.git
+echo $GITHUB_TOKEN
+git clone https://$GITHUB_TOKEN@github.com/EOSC-synergy/sqaaas-web.git
 cd sqaaas-web
 git branch
 echo 'module.exports = {
