@@ -2,7 +2,10 @@ config:
   project_repos:
     sqaas-web:
       repo: 'https://github.com/EOSC-synergy/sqaaas-web.git'
-      branch: jpl-branch      
+      branch: jpl-branch
+  credentials:
+      - id: token_sqaaas_web
+        variable: GITHUB_TOKEN
 
 sqa_criteria:
   qc_doc:
