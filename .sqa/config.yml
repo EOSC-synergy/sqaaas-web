@@ -17,4 +17,4 @@ sqa_criteria:
           - sh /testing-jpl-sqaaas/script.sh
 
 environment:
-  GITHUB_TOKEN: ""
+  GITHUB_TOKEN: "test"
