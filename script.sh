@@ -1,6 +1,6 @@
 cd /testing-jpl-sqaaas
 #Create env.js file
-echo $GITHUB_TOKEN
+
 git clone https://$GITHUB_TOKEN@github.com/EOSC-synergy/sqaaas-web.git
 cd sqaaas-web
 git branch
@@ -18,9 +18,8 @@ npm install
 #Create static website
 npm run build
 
-git config --global user.email "dianamariand92@gmail.com"
-git config --global user.name "dianamariand92"
-
+echo "Changing branch"
+echo $GITHUB_TOKEN
 #Go to the dist folder of the gh-pages branch
 git checkout gh-pages
 cd dist/
