@@ -1,4 +1,4 @@
-@Library(['github.com/indigo-dc/jenkins-pipeline-library@get-config-setting-noncps']) _
+@Library(['github.com/indigo-dc/jenkins-pipeline-library@credentials-into-docker-compose']) _
 
 def projectConfig
 
