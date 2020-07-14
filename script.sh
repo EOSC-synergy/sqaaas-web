@@ -22,7 +22,7 @@ git config --global user.email "dianamariand92@gmail.com"
 git config --global user.name "dianamariand92"
 
 #Go to the dist folder of the gh-pages branch
-git checkout gh-pages
+git checkout origin/gh-pages
 cd dist/
 cp -R * ../
 cd ..
