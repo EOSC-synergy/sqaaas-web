@@ -3,7 +3,7 @@ cd /testing-jpl-sqaaas
 
 git clone https://$GITHUB_TOKEN@github.com/EOSC-synergy/sqaaas-web.git
 cd sqaaas-web
-git branch -a
+
 echo 'module.exports = {
     provider_url: "https://aai-dev.egi.eu",
     client_id: "10333f08-7e8f-4cc4-bba0-e66f4e5505d0",        
@@ -22,7 +22,7 @@ git config --global user.email "dianamariand92@gmail.com"
 git config --global user.name "dianamariand92"
 
 #Go to the dist folder of the gh-pages branch
-git checkout origin/gh-pages
+git checkout -b gh-pages origin/gh-pages
 cd dist/
 cp -R * ../
 cd ..
