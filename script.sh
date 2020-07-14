@@ -3,7 +3,7 @@ cd /testing-jpl-sqaaas
 
 git clone https://$GITHUB_TOKEN@github.com/EOSC-synergy/sqaaas-web.git
 cd sqaaas-web
-git branch
+git branch -a
 echo 'module.exports = {
     provider_url: "https://aai-dev.egi.eu",
     client_id: "10333f08-7e8f-4cc4-bba0-e66f4e5505d0",        
