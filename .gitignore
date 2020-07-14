@@ -6,6 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 test/unit/coverage
 src/env.js
+package-lock.json
 
 # Editor directories and files
 .idea
