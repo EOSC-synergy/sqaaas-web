@@ -7,6 +7,9 @@ services:
     hostname: "testing-jpl-sqaaas"
     volumes:
      - type: bind
-       source: ./
+       source: ./sqaaas-web
        target: /testing-jpl-sqaaas
+     - type: bind
+       source: ./sqaaas-web2
+       target: /gh-pages
     command: sleep infinity

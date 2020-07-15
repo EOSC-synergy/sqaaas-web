@@ -1,9 +1,9 @@
 config:
   project_repos:
-    sqaas-web:
+    sqaaas-web:
       repo: 'https://github.com/EOSC-synergy/sqaaas-web.git'
       branch: jpl-branch
-    sqaas-web2:
+    sqaaas-web2:
       repo: 'https://github.com/EOSC-synergy/sqaaas-web.git'
       branch: gh-pages
   credentials:
@@ -14,8 +14,9 @@ config:
 sqa_criteria:
   qc_doc:
     repos:
-      sqaas-web:
+      sqaaas-web:
         container: testing-jpl-sqaaas
         commands:
           - ls -a /testing-jpl-sqaaas
-          - sh /testing-jpl-sqaaas/script.sh
+          - ls -a /gh-pages
+          # - sh /testing-jpl-sqaaas/script2.sh
