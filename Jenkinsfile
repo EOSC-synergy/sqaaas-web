@@ -1,4 +1,4 @@
-@Library(['github.com/indigo-dc/jenkins-pipeline-library@credentials-into-docker-compose']) _
+@Library(['github.com/indigo-dc/jenkins-pipeline-library@feature/private-repositories']) _
 
 def projectConfig
 
@@ -7,9 +7,16 @@ pipeline {
 
     stages {
         stage('SQA baseline dynamic stages') {
+            when {
+                anyOf {
+                    branch 'refs/heads/*'
+                    buildingTag()
+                    not { changeRequest() }
+                }
+            }
             steps {
                 script {
-                    projectConfig = pipelineConfig()
+                    projectConfig = pipelineConfig('./.sqa/config.yml', null, null, null, 'eoscsynergy/jpl-validator:jib-with-jpl')
                     buildStages(projectConfig)
                 }
             }
