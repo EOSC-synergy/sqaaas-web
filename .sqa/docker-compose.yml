@@ -2,7 +2,12 @@ version: "3.7"
 
 services:
   testing-jpl-sqaaas:
-    image: "node"
+    build:
+      context: /testing-jpl-sqaaas
+      dockerfile: Dockerfile
+      image: sqaaas-web:${GIT_BRANCH}
+      cache_from:
+        - node
     container_name: testing-jpl-sqaaas
     hostname: "testing-jpl-sqaaas"
     volumes:
