@@ -8,4 +8,4 @@ RUN pip install setuptools
 RUN npm install
 
 #Create static website
-npm run build
+RUN npm run build
