@@ -3,7 +3,7 @@ version: "3.7"
 services:
   testing-jpl-sqaaas:
     build:
-      context: /testing-jpl-sqaaas
+      context: ./
       dockerfile: Dockerfile
       cache_from:
         - node
