@@ -16,7 +16,7 @@ pipeline {
             }
             steps {
                 script {
-                    projectConfig = pipelineConfig('./.sqa/config.yml', null, null, null, 'eoscsynergy/jpl-validator:jib-with-jpl')
+                    projectConfig = pipelineConfig('./.sqa/config.yml', null, null, 'userpass_sqaaas_web', 'eoscsynergy/jpl-validator:jib-with-jpl')
                     buildStages(projectConfig)
                 }
             }

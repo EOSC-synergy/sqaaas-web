@@ -1,9 +1,4 @@
 config:
-  project_repos:
-    sqaas-web:
-      repo: 'https://github.com/EOSC-synergy/sqaaas-web.git'
-      branch: jpl-branch
-      credentials_id: userpass_sqaaas_web
   credentials:
       - id: userpass_sqaaas_web
         username_var: GIT_USER
@@ -12,7 +7,7 @@ config:
 sqa_criteria:
   qc_doc:
     repos:
-      sqaas-web:
+      sqaaas-web:
         container: testing-jpl-sqaaas
         commands:
           - ls -a /testing-jpl-sqaaas
