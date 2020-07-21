@@ -10,5 +10,6 @@ sqa_criteria:
       sqaaas-web:
         container: testing-jpl-sqaaas
         commands:
+          - env
           - ls -a /testing-jpl-sqaaas
           - sh /testing-jpl-sqaaas/script2.sh
