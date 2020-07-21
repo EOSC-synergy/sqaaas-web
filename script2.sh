@@ -14,10 +14,10 @@ git branch -a
 #git branch -a
 
 #Install dependencies
-#npm install
+npm install
 
 #Create static website
-#npm run build
+npm run build
 
 git config --global user.email "dianamariand92@gmail.com"
 git config --global user.name "dianamariand92"
