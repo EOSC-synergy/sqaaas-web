@@ -1,4 +1,2 @@
 #!/bin/sh
-echo "username=${GIT_USER}"
-echo "password=${GIT_PASSWORD}"
-echo ""
+echo -e "protocol=https\nhost=github.com\nusername=${GIT_USER}\npassword=${GIT_PASSWORD}" | git credential fill
