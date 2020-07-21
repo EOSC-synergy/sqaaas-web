@@ -5,7 +5,7 @@ RUN apt-get -y update && apt-get -y install ghp-import python-pip
 RUN pip install setuptools
 
 #Install dependencies
-RUN NPM_CONFIG_PREFIX="./" npm install
+RUN npm --prefix ./ install
 
 #Create static website
-RUN NPM_CONFIG_PREFIX="./" npm run build
+RUN npm --prefix ./ run build
