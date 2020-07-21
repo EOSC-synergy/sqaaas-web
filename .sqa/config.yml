@@ -5,8 +5,9 @@ config:
       branch: jpl-branch
       credentials_id: userpass_sqaaas_web
   credentials:
-      - id: token_sqaaas_web
-        variable: GITHUB_TOKEN
+      - id: userpass_sqaaas_web
+        username_var: GIT_USER
+        password_var: GIT_PASSWORD
 
 sqa_criteria:
   qc_doc:
