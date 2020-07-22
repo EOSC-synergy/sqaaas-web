@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #echo "$@" >> ./testgithelperargs.log
 if [[ "$1" =~ ^[U,u]sername.* ]]; then
   echo "${GIT_USER}"
