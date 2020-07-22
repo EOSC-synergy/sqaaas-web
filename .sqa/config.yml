@@ -11,6 +11,6 @@ sqa_criteria:
         container: testing-jpl-sqaaas
         commands:
           - env
-          - ls -a /testing
+          - ls -la /testing
           - /testing/.git_credential_helper.sh get
           - sh /testing/script2.sh
