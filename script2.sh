@@ -25,5 +25,5 @@ git config --global user.name "dianamariand92"
 #git config credential.helper '!f() { sleep 1; echo "username=${GIT_USER}"; echo "password=${GIT_PASSWORD}"; }; f'
 #git config core.askpass /testing-jpl-sqaaas/.git_credential_helper.sh
 
-GIT_ASKPASS="/testing-jpl-sqaaas/.git_credential_helper.sh" ghp-import -p dist/
+GIT_ASKPASS=".git_credential_helper.sh" ghp-import -p dist/
 
