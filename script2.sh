@@ -1,4 +1,4 @@
-cd /testing-jpl-sqaaas
+cd /testing
 #Create env.js file
 
 #Install ghp-import
