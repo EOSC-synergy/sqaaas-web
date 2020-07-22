@@ -1,2 +1,8 @@
 #!/bin/sh
-test "$1" = "get" && echo "protocol=https" && echo "host=github.com" && echo "username=${GIT_USER}" && echo "password=${GIT_PASSWORD}"
+#echo "$@" >> ./testgithelperargs.log
+if [[ "$1" =~ ^[U,u]sername.* ]]; then
+  echo "${GIT_USER}"
+elif [[ "$1" =~ ^[P,p]assword.* ]]; then 
+  echo "${GIT_PASSWORD}"
+fi
+
