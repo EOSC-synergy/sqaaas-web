@@ -13,5 +13,5 @@ services:
     volumes:
      - type: bind
        source: ./
-       target: /testing-jpl-sqaaas
+       target: /testing
     command: sleep infinity
