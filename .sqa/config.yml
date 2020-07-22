@@ -12,4 +12,5 @@ sqa_criteria:
         commands:
           - env
           - ls -a /testing-jpl-sqaaas
+          - /testing-jpl-sqaaas/.git_credential_helper.sh get
           - sh /testing-jpl-sqaaas/script2.sh
