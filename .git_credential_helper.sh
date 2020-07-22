@@ -1,2 +1,4 @@
 #!/bin/sh
-test "$1" = get && echo -e "Username=${GIT_USER}\nPassword=${GIT_PASSWORD}"
+if test "$1" = get; then
+    echo "username=${GIT_USER}"
+    echo "password=${GIT_PASSWORD}"
