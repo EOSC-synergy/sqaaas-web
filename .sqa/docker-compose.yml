@@ -1,17 +1,12 @@
 version: "3.7"
 
 services:
-  testing-jpl-sqaaas:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-      cache_from:
-        - node
-    image: sqaaas-web:${GIT_BRANCH}
-    container_name: testing-jpl-sqaaas
-    hostname: "testing-jpl-sqaaas"
+  node:
+    image: node
+    container_name: node
+    hostname: "sqaaas-web"
     volumes:
      - type: bind
        source: ./
-       target: /testing
+       target: /sqaaas-web
     command: sleep infinity

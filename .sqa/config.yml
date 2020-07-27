@@ -8,9 +8,10 @@ sqa_criteria:
   qc_doc:
     repos:
       sqaaas-web:
-        container: testing-jpl-sqaaas
+        container: node
         commands:
-          - env
-          - ls -la /testing
-          - /testing/.git_credential_helper.sh get
-          - sh /testing/script2.sh
+          - > 
+            env GIT_ASKPASS=/sqaaas-web/.git_credential_helper.sh
+            npm --prefix /sqaaas-web run deploy --
+            --user="Diana M. Naranjo <dnaranjo@i3m.upv.es>"
+            --repo=https://${GIT_USER}@github.com/eosc-synergy/sqaaas-web
