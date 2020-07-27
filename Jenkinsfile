@@ -9,9 +9,8 @@ pipeline {
         stage('SQA baseline dynamic stages') {
             when {
                 anyOf {
-                    branch 'refs/heads/*'
-                    buildingTag()
-                    not { changeRequest() }
+                    branch 'master'
+                    branch 'jpl-branch'
                 }
             }
             steps {
