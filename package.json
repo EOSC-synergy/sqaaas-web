@@ -19,6 +19,7 @@
     "core-js": "^2.6.11",
     "file-saver": "^2.0.2",
     "font-awesome": "^4.7.0",
+    "github-api": "^3.3.0",
     "google-maps": "^3.2.1",
     "json-to-pretty-yaml": "^1.2.2",
     "json2yaml": "^1.1.0",
