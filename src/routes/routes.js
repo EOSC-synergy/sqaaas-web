@@ -6,7 +6,7 @@ import NotFound from '../pages/NotFoundPage.vue'
 // Admin pages
 import Overview from 'src/pages/Overview.vue'
 import UserProfile from 'src/pages/UserProfile.vue'
-import TableList from 'src/pages/TableList.vue'
+import Files from 'src/pages/Files.vue'
 import Typography from 'src/pages/Typography.vue'
 import Icons from 'src/pages/Icons.vue'
 import Maps from 'src/pages/Maps.vue'
@@ -19,13 +19,13 @@ const routes = [
     component: Login,
     // redirect: '/dashboard'
   },
-  { path: '', 
-    component: Login, 
-    // beforeEnter: requireAuth  
+  { path: '',
+    component: Login,
+    // beforeEnter: requireAuth
   },
-  { path: '/', 
-    component: Login, 
-  // beforeEnter: requireAuth  
+  { path: '/',
+    component: Login,
+  // beforeEnter: requireAuth
   },
   // {
   //   path: '/dashboard',
@@ -50,9 +50,9 @@ const routes = [
         component: UserProfile
       },
       {
-        path: 'table-list',
-        name: 'Table List',
-        component: TableList
+        path: 'files',
+        name: 'Files',
+        component: Files
       },
       {
         path: 'typography',
