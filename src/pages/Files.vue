@@ -162,7 +162,7 @@
       var _this = this
        var auth={
         username:'dianamariand92',
-        password:'',
+        password:'67d0fcf4c984ebe9b952e565c47023e26b6440fa',
         repository:'test',
         branchName:'master'
       }

@@ -48,7 +48,7 @@
 		<div class="auth-wallpaper col-6 d-none d-lg-flex" style="padding:0;">
 			<img src="../../public/img/back-callback.png" style="height: 100%;width: 100%;" alt="">
 		</div>
-     </div>   
+     </div>
 	</div>
 </template>
 
@@ -62,29 +62,29 @@ export default {
 		error: false,
 		error_message_text: "",
 		processing: false,
-		passwordFieldType: 'password',		
+		passwordFieldType: 'password',
 		mistake: {
 				username: false,
 				password: false
 			}
 		};
-    },	
+    },
     methods: {
         login_egi(){
-            var url = 
+            var url =
             this.env.url_authorize
             + '?response_type=code token token_id'
-            + '&scope=openid profile'       
+            + '&scope=openid profile'
             + '&nonce=abc'
-            + '&client_id=' + this.env.client_id 
-            + '&redirect_uri=' + this.env.redirect_uri;    
+            + '&client_id=' + this.env.client_id
+            + '&redirect_uri=' + this.env.redirect_uri;
             window.location.replace(url)
 		},
 		login(){
-			this.$router.push({name: 'dashboard'});
+			this.$router.push({name: 'SelectOption'});
 		}
-    }	
-}    
+    }
+}
 </script>
 <style lang="scss">
 
@@ -100,7 +100,7 @@ export default {
       align-items: center;
       justify-content: center;
       height: 100px;
-      background-color: #c9d22a;      
+      background-color: #c9d22a;
     }
 	.main {
       margin: 0;
@@ -112,7 +112,7 @@ export default {
 	overflow: hidden;
 	display: flex;
 	align-items: center;
-	justify-content: center;        
+	justify-content: center;
 }
 
 h1,h2,h3{
@@ -174,7 +174,7 @@ form .error {
 	.showimage {
 		display: none;
 	}
-    
+
 }
 
 </style>

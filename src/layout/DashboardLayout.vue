@@ -1,6 +1,6 @@
 <template>
 	<div class="wrapper">
-		<side-bar>
+		<side-bar v-show="$route.path != '/auth/select-option' && $route.path != '/auth/full-assessment' ">
 			<mobile-menu slot="content"></mobile-menu>
 			<sidebar-link to="/auth/dashboard">
 				<i class="nc-icon nc-chart-pie-35"></i>
@@ -14,25 +14,17 @@
 				<i class="nc-icon nc-notes"></i>
 				<p>Generate Files</p>
 			</sidebar-link>
-			<!-- <sidebar-link to="/auth/typography">
-				<i class="nc-icon nc-paper-2"></i>
-				<p>Typography</p>
-			</sidebar-link>
-			<sidebar-link to="/auth/icons">
-				<i class="nc-icon nc-atom"></i>
-				<p>Icons</p>
-			</sidebar-link> -->
-			<!-- <sidebar-link to="/auth/maps">
-				<i class="nc-icon nc-pin-3"></i>
-				<p>Maps</p>
-			</sidebar-link> -->
-			<!-- <sidebar-link to="/auth/notifications">
-				<i class="nc-icon nc-bell-55"></i>
-				<p>Notifications</p>
-			</sidebar-link> -->
-
 		</side-bar>
-		<div class="main-panel">
+    <div v-if="$route.path == '/auth/select-option' || $route.path == '/auth/full-assessment' ">
+			<top-navbar></top-navbar>
+
+			<dashboard-content @click="toggleSidebar">
+
+			</dashboard-content>
+
+			<content-footer></content-footer>
+		</div>
+		<div v-else class="main-panel">
 			<top-navbar></top-navbar>
 
 			<dashboard-content @click="toggleSidebar">

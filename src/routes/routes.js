@@ -7,6 +7,8 @@ import NotFound from '../pages/NotFoundPage.vue'
 import Overview from 'src/pages/Overview.vue'
 import UserProfile from 'src/pages/UserProfile.vue'
 import Files from 'src/pages/Files.vue'
+import SelectOption from 'src/pages/SelectOption.vue'
+import FullAssessment from 'src/pages/FullAssessment.vue'
 import Typography from 'src/pages/Typography.vue'
 import Icons from 'src/pages/Icons.vue'
 import Maps from 'src/pages/Maps.vue'
@@ -43,6 +45,16 @@ const routes = [
         path: 'dashboard',
         name: 'dashboard',
         component: Overview
+      },
+      {
+        path: 'select-option',
+        name: 'SelectOption',
+        component: SelectOption
+      },
+      {
+        path: 'full-assessment',
+        name: 'full_assessment',
+        component: FullAssessment
       },
       {
         path: 'user',
