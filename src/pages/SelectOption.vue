@@ -1,26 +1,38 @@
 <template>
   	<div class="content">
 		<div class="container-fluid">
-			<div class="row" style="height:60vh;">
+			<div class="row" style="height:80vh;">
 				<div class="col-12" style="margin-top:40px;">
-					<card style="height:50vh;" class="strpied-tabled-with-hover"
+					<card style="height:70vh;" class="strpied-tabled-with-hover"
 						body-classes=""
 					>
 						<template slot="header">
-							<h4 style="font-weight: bold;" class="card-title text-center">SELECT AN OPTION</h4>
 						</template>
 
 						<template>
-              <div class="row" style="justify-content: center;margin-top:60px;">
-                <div style="padding:20px 80px;display:grid;">
-                  <img style="height:150px;" src="../../public/img/full-assessment.jpg" alt="">
-                  <button class="btn btn-primary btn-simple" @click="gotoFull()">Full Assessment</button>
+              <div class="row">
+                <div class="col-md-6 text-center" style="padding-top:100px;">
+                  <img style="height:250px;" src="../../public/img/select.png" alt="">
+
                 </div>
-                <div style="padding:20px 80px;display:grid;">
-                  <img style="height:150px;" src="../../public/img/customized-assessment.png" alt="">
-                  <button class="btn btn-primary btn-simple" @click="gotoCustomized()">Customized Assessment</button>
+                <div class="col-md-6">
+                  <div class="row select-options" style="background-color:#FF5733;" @click="gotoCustomized()">
+                    <i class="fa fa-chevron-right fa-5x col-md-2" style="color:white;padding-top:20px;" aria-hidden="true"></i>
+                    <div class="col-md-10">
+                      <h2 style="color:white;font-family:initial;">Pipeline as a Service</h2>
+                      <span style="color:white;">Custom CI/CD pipelines based according to the quality criteria from the Software as a Service.</span>
+                    </div>
+                  </div>
+                  <div class="row select-options" style="background-color:#0D88B7;" @click="gotoFull()">
+                    <i class="fa fa-chevron-right fa-5x col-md-2" style="color:white;padding-top:20px;" aria-hidden="true"></i>
+                    <div class="col-md-10">
+                      <h2 style="color:white;font-family:initial;">Online Quality Assessment</h2>
+                      <span style="color:white;">Evaluates the level of compliance of a source code repository or running service according to the quality criteria from the Software & Service baseline.</span>
+                    </div>
+                  </div>
                 </div>
               </div>
+
 						</template>
 					</card>
 				</div>
@@ -56,5 +68,12 @@
 <style scoped>
 .pos-buttons{
   display: inline-flex!important;
+}
+
+.select-options{
+  border: 1px solid gray;
+  padding: 20px;
+  margin: 4rem 2rem;
+  cursor: pointer;
 }
 </style>
