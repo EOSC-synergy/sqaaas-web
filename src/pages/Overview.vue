@@ -27,7 +27,7 @@
                 <div class="text-right">
                   <button type="button" class="btn-simple btn btn-xs btn-info" @click="addRepo()"><i class="fa fa-plus"></i>ADD REPOSITORY</button>
                 </div>
-                <div class="row" style="padding-left:20px;margin-bottom:1rem;">
+                <div class="row" style="padding-left:20px;margin-bottom:4rem;">
                   <span class="custom-label">Customize workspace:</span>
                   <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="config.workspace.yes"></base-checkbox>
                   <span class="custom-label">No</span><base-checkbox name="workspace" v-model="config.workspace.no"></base-checkbox>
@@ -84,7 +84,7 @@
                 </div>
 
 
-                <div class="row" style="padding-left:20px;margin-bottom:1rem;">
+                <div class="row" style="padding-left:20px;margin-bottom:4rem;">
                   <span class="custom-label">Add Credentials:</span>
                   <span class="custom-label">Yes</span><base-checkbox name="credentials" v-model="config.credentials.yes"></base-checkbox>
                   <span class="custom-label">No</span><base-checkbox name="credentials" v-model="config.credentials.no"></base-checkbox>
@@ -130,7 +130,7 @@
 
                   </ul>
                 </div>
-                <div class="row" style="padding-left:20px;margin-bottom:1rem;">
+                <div class="row" style="padding-left:20px;margin-bottom:4rem;">
                   <span class="custom-label">Environment variables:</span>
                   <span class="custom-label">Yes</span><base-checkbox name="env" v-model="config.env.yes"></base-checkbox>
                   <span class="custom-label">No</span><base-checkbox name="env" v-model="config.env.no"></base-checkbox>
@@ -151,7 +151,7 @@
                   </base-input>
 
 
-                  <div>
+                  <div style="margin-bottom:30px;">
                     <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnv()"><i class="fa fa-plus"></i>ADD Env Vars</button>
                   </div>
                 </div>
@@ -159,7 +159,7 @@
                   <span class="custom-label">Env Vars</span>
                   <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between"
-                      v-for="(env,key) in config.all_envs.environment"
+                      v-for="(env,key) in config.all_envs"
                       :key="key"
                     >
                     {{key}}:{{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnv(key)"><i class="fa fa-minus"></i></button></span>
@@ -169,7 +169,7 @@
                   </ul>
                 </div>
 
-                <div style="padding-left:5px;">
+                <div style="padding-left:5px;padding-bottom:5px;">
                   <span class="custom-label" for="timeout" style="padding-right:20px;">Timeout:</span>
 	                <input style="width:80px;" type="number" id="timeout" value="600" placeholder="600" step="100">
 
@@ -280,7 +280,7 @@
                   </ul>
                 </div>
 
-              <div class="text-right" style="padding-top:1rem;">
+              <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
                 <button type="button" class="btn-fill btn btn-info" @click="addService()"><i class="fa fa-plus"></i>ADD SERVICE</button>
               </div>
 
@@ -484,22 +484,20 @@
         this.credentials.password = '';
       },
       addEnv(){
-        var envVars= [];
+        var envVars= {};
         var key= this.env.key.replace(" ", "")
 				var value = this.env.value.replace(" ", "")
         envVars[key]=value
         console.log(envVars)
-        this.config.all_envs['environment']={
-          key:value
-        };
+        this.config.all_envs[key]=value
         console.log(this.config.all_envs)
         this.showEnv = true;
         this.cleanEnv()
 
       },
       removeEnv(item){
-        this.$delete(this.config.all_envs.environment,item)
-        if (this.isEmpty(this.config.all_envs.environment)) {
+        this.$delete(this.config.all_envs,item)
+        if (this.isEmpty(this.config.all_envs)) {
           this.showEnv = false;
         }
       },
@@ -531,11 +529,6 @@
       },
       addVolume(){
         this.showVolumes = true;
-        // this.service.volumes={
-        //   type:this.volume.type,
-        //   source:this.volume.source,
-        //   target:this.volume.target
-        // };
         this.count +=1;
         var name = "volume "+this.count;
         this.volumes[name]={
