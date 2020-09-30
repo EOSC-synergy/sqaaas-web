@@ -5,6 +5,7 @@ import NotFound from '../pages/NotFoundPage.vue'
 
 // Admin pages
 import Overview from 'src/pages/Overview.vue'
+import SQACriteria from 'src/pages/SQACriteria.vue'
 import UserProfile from 'src/pages/UserProfile.vue'
 import Files from 'src/pages/Files.vue'
 import SelectOption from 'src/pages/SelectOption.vue'
@@ -50,6 +51,11 @@ const routes = [
         path: 'select-option',
         name: 'SelectOption',
         component: SelectOption
+      },
+      {
+        path: 'sqa-criteria',
+        name: 'SQACriteria',
+        component: SQACriteria
       },
       {
         path: 'full-assessment',

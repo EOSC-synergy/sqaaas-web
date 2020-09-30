@@ -6,13 +6,13 @@
 				<i class="nc-icon nc-chart-pie-35"></i>
 				<p>General Options</p>
 			</sidebar-link>
-			<sidebar-link to="/auth/user">
-				<i class="nc-icon nc-circle-09"></i>
+			<sidebar-link to="/auth/sqa-criteria">
+				<i class="nc-icon nc-tap-01"></i>
 				<p>SQA Criteria</p>
 			</sidebar-link>
 			<sidebar-link to="/auth/files">
 				<i class="nc-icon nc-notes"></i>
-				<p>Generate Files</p>
+				<p>Actions</p>
 			</sidebar-link>
 		</side-bar>
     <div v-if="$route.path == '/auth/select-option' || $route.path == '/auth/full-assessment' ">

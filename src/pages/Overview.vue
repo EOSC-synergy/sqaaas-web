@@ -144,7 +144,7 @@
                         v-model="env.key">
                   </base-input>
                   <base-input class="col-md-6" type="text"
-                        label="Username Var"
+                        label="value"
                         :disabled="false"
                         placeholder="GIT_USER"
                         v-model="env.value">
@@ -228,18 +228,18 @@
                 <button type="button" class="btn-simple btn btn-xs btn-info" @click="addVolume()"><i class="fa fa-plus"></i>ADD VOLUME</button>
               </div>
               <div v-show="showVolumes" style="padding-top:20px;">
-                  <span class="custom-label">Volume</span>
-                  <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between"
-                      v-for="(vol,key) in volumes"
-                      :key="key"
-                    >
-                    {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeVolume(vol,key)"><i class="fa fa-minus"></i></button></span>
+                <span class="custom-label">Volume</span>
+                <ul class="list-group">
+                  <li class="list-group-item d-flex justify-content-between"
+                    v-for="(vol,key) in volumes"
+                    :key="key"
+                  >
+                  {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeVolume(vol,key)"><i class="fa fa-minus"></i></button></span>
 
-                    </li>
+                  </li>
 
-                  </ul>
-                </div>
+                </ul>
+              </div>
               <div class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
                 <span class="custom-label">Environment variables:</span>
                 <span class="custom-label">Yes</span><base-checkbox name="env" v-model="envComposeYesNo.yes"></base-checkbox>
@@ -255,7 +255,7 @@
                         v-model="envCompose.key">
                   </base-input>
                   <base-input class="col-md-6" type="text"
-                        label="Username Var"
+                        label="value"
                         :disabled="false"
                         placeholder="1"
                         v-model="envCompose.value">
