@@ -4,7 +4,7 @@
 			<span>User: {{username}}</span>
       <div class="row">
         <div class="col-md-6" style="margin-top:40px;">
-            <card>
+            <card style="height:62vh;overflow-y: auto;">
               <template slot="header">
                 <h4 class="card-title text-center">CONFIG YAML</h4>
               </template>
@@ -179,7 +179,7 @@
             </card>
         </div>
         <div class="col-md-6" style="margin-top:40px;">
-          <card>
+          <card style="height:62vh;overflow-y: auto;">
             <template slot="header">
               <h4 class="card-title text-center">DOCKER COMPOSE YAML</h4>
             </template>
@@ -284,6 +284,21 @@
                 <button type="button" class="btn-fill btn btn-info" @click="addService()"><i class="fa fa-plus"></i>ADD SERVICE</button>
               </div>
 
+              <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;">
+                <span class="custom-label">Services</span>
+                <ul class="list-group">
+                  <li class="list-group-item d-flex justify-content-between"
+                    v-for="(env,key) in services"
+                    :key="key"
+                  >
+                  {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeService(key)"><i class="fa fa-minus"></i></button></span>
+
+                  </li>
+
+                </ul>
+              </div>
+
+
             </template>
           </card>
         </div>
@@ -341,6 +356,7 @@
         showEnv:false,
         showVolumes:false,
         showEnvCompose:false,
+        showServices:false,
         service:{
           image:'',
           container_name:'',
@@ -569,12 +585,17 @@
           volumes: this.service.volumes,
           environment: this.service.envs
         }
+        this.showServices = true;
         console.log(this.services)
         this.cleanService()
         var yamlText= YAML.stringify(this.services)
         console.log(yamlText)
       },
       removeService(item){
+        this.$delete(this.services,item)
+        if (this.isEmpty(this.services)) {
+          this.showServices = false;
+        }
 
       },
       cleanService(){
