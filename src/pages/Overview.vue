@@ -22,12 +22,10 @@
                             :disabled="false"
                             placeholder="https://github.com/WORSICA/worsica-processing.git"
                             v-model="repo.url">
-                    </base-input>
+                  </base-input>
                 </div>
-                <div class="text-right">
-                  <button type="button" class="btn-simple btn btn-xs btn-info" @click="addRepo()"><i class="fa fa-plus"></i>ADD REPOSITORY</button>
-                </div>
-                <div class="row" style="padding-left:20px;margin-bottom:4rem;">
+
+                <div class="row" style="padding-left:20px;margin-bottom:1rem;">
                   <span class="custom-label">Customize workspace:</span>
                   <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="config.workspace.yes"></base-checkbox>
                   <span class="custom-label">No</span><base-checkbox name="workspace" v-model="config.workspace.no"></base-checkbox>
@@ -69,6 +67,10 @@
                   </div>
                 </div>
 
+                <div class="text-right">
+                  <button type="button" class="btn-simple btn btn-xs btn-info" @click="addRepo()"><i class="fa fa-plus"></i>ADD REPOSITORY</button>
+                </div>
+
                 <div v-show="showRepo" style="padding-top:20px;">
                   <span class="custom-label">Repositories</span>
                   <ul class="list-group">
@@ -104,13 +106,13 @@
                         label="Username Var"
                         :disabled="false"
                         placeholder="GIT_USER"
-                        v-model="credentials.username">
+                        v-model="credentials.username_var">
                     </base-input>
                     <base-input class="col-md-4" type="text"
                         label="Password Var"
                         :disabled="false"
                         placeholder="GIT_PASSWORD"
-                        v-model="credentials.password">
+                        v-model="credentials.password_var">
                     </base-input>
                   </div>
                   <div>
@@ -121,10 +123,10 @@
                   <span class="custom-label">Credentials Var</span>
                   <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between"
-                      v-for="(cred,key) in config.all_credentials"
+                      v-for="(cred,key) in all_credentials"
                       :key="key"
                     >
-                    {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCred(key)"><i class="fa fa-minus"></i></button></span>
+                    {{cred}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCred(key)"><i class="fa fa-minus"></i></button></span>
 
                     </li>
 
@@ -171,7 +173,7 @@
 
                 <div style="padding-left:5px;padding-bottom:5px;">
                   <span class="custom-label" for="timeout" style="padding-right:20px;">Timeout:</span>
-	                <input style="width:80px;" type="number" id="timeout" value="600" placeholder="600" step="100">
+	                <input style="width:80px;" type="number" id="timeout" value="600" step="100" v-model="$store.state.config_yaml.timeout">
 
                 </div>
 
@@ -328,13 +330,14 @@
           },
         credentials:{
           id:'',
-          username:'',
-          password:'',
+          username_var:'',
+          password_var:'',
         },
         env:{
           key:'',
           value:''
         },
+        all_credentials:[],
         config:{
           all_repos:{},
           workspace:{
@@ -396,11 +399,10 @@
       'config.workspace.no'(val){
          if(val==true){
           this.config.workspace.yes = false;
-          this.showRepo = false;
-          this.config.all_repos[this.repo.name]={
-            'repo':this.repo.url,
-            'branch':'master'
-          }
+          // this.config.all_repos[this.repo.name]={
+          //   'repo':this.repo.url,
+          //   'branch':'master'
+          // }
         }else{
           this.config.workspace.yes = true;
         }
@@ -415,8 +417,7 @@
       'config.credentials.no'(val){
          if(val==true){
           this.config.credentials.yes = false;
-          this.showCred = false;
-          this.config.all_credentials={};
+          this.all_credentials={};
         }else{
           this.config.credentials.yes = true;
         }
@@ -431,8 +432,7 @@
       'config.env.no'(val){
          if(val==true){
           this.config.env.yes = false;
-          this.showEnv = false;
-          this.config.all_envs["environment"]={};
+          this.config.all_envs={};
         }else{
           this.config.env.yes = true;
         }
@@ -447,8 +447,7 @@
       'envComposeYesNo.no'(val){
          if(val==true){
           this.envComposeYesNo.yes = false;
-          this.showEnvCompose = false;
-          this.service.envs["environment"]={};
+          this.service.envs={};
         }else{
           this.envComposeYesNo.yes = true;
         }
@@ -456,19 +455,47 @@
 
     },
     methods:{
+      notifyVue (message) {
+
+        this.$notify(
+          {
+            message: message,
+            icon: 'nc-icon nc-simple-remove',
+            timeout:2000,
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+            type: 'danger'
+          })
+      },
       addRepo(){
-        this.config.all_repos[this.repo.name]={
-          'repo':this.repo.url,
-          'branch':this.repo.branch
+        if(this.repo.path == ''){
+          this.repo.path = '.sqa/docker-compose.yml'
         }
-        this.showRepo = true;
-        var yamlText= YAML.stringify(this.config.all_repos)
-        console.log(yamlText)
-        this.cleanWorkspace()
+        if(this.repo.branch == ''){
+          this.repo.branch = 'master'
+        }
+        if(this.repo.name == '' || this.repo.url == ''){
+          var error_message = "Repository Name and URL are required";
+          this.notifyVue(error_message)
+        }else{
+          this.config.all_repos[this.repo.name]={
+            'repo':this.repo.url,
+            'branch':this.repo.branch,
+            'deploy_template':this.repo.path
+          }
+          this.showRepo = true;
+          this.config.workspace.no = true;
+          this.$store.state.config_yaml.config.project_repos = this.config.all_repos
+          var yamlText= YAML.stringify(this.$store.state.config_yaml)
+          console.log(yamlText)
+          this.cleanWorkspace()
+
+        }
 
       },
       removeRepo(item){
         this.$delete(this.config.all_repos,item)
+        this.$store.state.config_yaml.config.project_repos = this.config.all_repos
         if (this.isEmpty(this.config.all_repos)) {
           this.showRepo = false;
         }
@@ -480,24 +507,32 @@
         this.repo.branch = '';
       },
       addCred(){
-        this.config.all_credentials[this.credentials.id]={
-          'username_var':this.credentials.username,
-          'password_var':this.credentials.password
-        };
+        // this.config.all_credentials={
+        //   id:this.credentials.id,
+        //   'username_var':this.credentials.username,
+        //   'password_var':this.credentials.password
+        // };
+        this.all_credentials.push(this.credentials)
+        this.$store.state.config_yaml.config.credentials = this.all_credentials;
+        var yamlText= YAML.stringify(this.$store.state.config_yaml)
+        console.log(yamlText)
+
         this.showCred = true;
         this.cleanCred()
+        console.log(this.all_credentials)
 
       },
       removeCred(item){
-        this.$delete(this.config.all_credentials,item)
-        if (this.isEmpty(this.config.all_credentials)) {
+        this.$delete(this.all_credentials,item)
+        this.$store.state.config_yaml.config.credentials = this.all_credentials;
+        if (this.isEmpty(this.all_credentials)) {
           this.showCred = false;
         }
       },
       cleanCred(){
-        this.credentials.id = '';
-        this.credentials.username = '',
-        this.credentials.password = '';
+        this.credentials.id = "";
+        this.credentials.username_var = "";
+        this.credentials.password_var = "";
       },
       addEnv(){
         var envVars= {};
@@ -507,12 +542,18 @@
         console.log(envVars)
         this.config.all_envs[key]=value
         console.log(this.config.all_envs)
+        this.$store.state.config_yaml.environment = this.config.all_envs;
+        var yamlText= YAML.stringify(this.$store.state.config_yaml)
+        console.log(yamlText)
         this.showEnv = true;
         this.cleanEnv()
 
       },
       removeEnv(item){
         this.$delete(this.config.all_envs,item)
+        this.$store.state.config_yaml.environment = this.config.all_envs;
+        var yamlText= YAML.stringify(this.$store.state.config_yaml)
+        console.log(yamlText)
         if (this.isEmpty(this.config.all_envs)) {
           this.showEnv = false;
         }

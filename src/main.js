@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './App.vue'
 import env from './env.js'
+import store from "./store";
 
 // LightBootstrap plugin
 import LightBootstrap from './light-bootstrap-main'
@@ -16,8 +17,8 @@ Vue.use(LightBootstrap)
 
 Vue.mixin({
   data: function(){
-    return {      
-      env:env,      
+    return {
+      env:env,
     }
   }
 })
@@ -39,5 +40,6 @@ const router = new VueRouter({
 new Vue({
   el: '#app',
   render: h => h(App),
-  router
+  router,
+  store,
 })

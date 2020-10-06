@@ -15,6 +15,7 @@
                   <option value="qc_security">qc_security</option>
                   <option value="qc_doc">qc_doc</option>
                 </select>
+                <a style="margin-left: 2rem;color:red;" v-show="show_link" :href="criteria_link" target="_blank">Criteria Information</a>
               <template>
               </template>
             </card>
@@ -32,9 +33,9 @@
                             placeholder="/myrepo-testing/tox.ini"
                             v-model="tox.file">
                     </base-input>
-                    <div style="padding-top:30px;">
+                    <!-- <div style="padding-top:30px;">
                       <button type="button" class="btn-simple btn btn-xs btn-info" @click="addToxFile()"><i class="fa fa-plus"></i>ADD</button>
-                    </div>
+                    </div> -->
                     <base-input style="padding-left:40px;" type="text"
                             label="Test env"
                             :disabled="false"
@@ -47,15 +48,9 @@
 
                   </div>
                   <div v-show="show_tool_tox" style="padding-top:20px;margin-bottom:2rem;">
-                    <span class="custom-label">Tox</span>
+                    <span class="custom-label">Test Env</span>
 
                     <ul class="list-group">
-                      <li v-if="tox.file!=''" class="list-group-item d-flex justify-content-between">
-                        Tox file: {{tox.file}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removetoxfile()"><i class="fa fa-minus"></i></button></span>
-                      </li>
-                      <li v-if="testenv.length>0" class="list-group-item d-flex justify-content-between">
-                        Test Env:
-                      </li>
                       <li style="padding-left:40px;" class="list-group-item d-flex justify-content-between"
                         v-for="(env,key) in testenv"
                         :key="key"
@@ -114,6 +109,19 @@
                   <button type="button" class="btn-fill btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
                 </div>
               <template>
+                <div v-show="showCriteria" style="padding-top:20px;margin-bottom:2rem;">
+                    <span class="custom-label">Criterias</span>
+                    <ul class="list-group">
+                      <li class="list-group-item d-flex justify-content-between"
+                        v-for="(val,key) in selected_criteria"
+                        :key="key"
+                      >
+                      {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCriteria(key)"><i class="fa fa-minus"></i></button></span>
+
+                      </li>
+
+                    </ul>
+                  </div>
               </template>
             </card>
         </div>
@@ -140,7 +148,12 @@
         },
         showCommands:false,
         testenv:[],
-        show_tool_tox:false
+        show_tool_tox:false,
+        error_message:'',
+        show_link:false,
+        criteria_link:'',
+        showCriteria:false,
+        selected_criteria:{}
 
 
 
@@ -149,15 +162,85 @@
     watch:{
         'criteria'(val){
           console.log(val)
+          if(val != "default"){
+            this.show_link = true;
+            if(val == "qc_style"){
+              this.criteria_link = ""
+            }else if(val == "qc_coverage"){
+              this.criteria_link=""
+            }else if(val == "qc_functional"){
+              this.criteria_link = ""
+            }else if(val == "qc_security"){
+              this.criteria_link = ""
+            }else if(val == "qc_doc"){
+              this.criteria_link == ""
+            }
+          }
         }
 
     },
     methods:{
+      notifyVue (message) {
+
+        this.$notify(
+          {
+            message: message,
+            icon: 'nc-icon nc-simple-remove',
+            timeout:2000,
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+            type: 'danger'
+          })
+      },
+      addCriteria(){
+        if(this.criteria == 'default'){
+          this.error_message = "Error: you must select a valid criteria";
+          this.notifyVue(this.error_message)
+        }else{
+          var commands = {}
+          var tox = {}
+          commands=this.commands
+          tox={
+            tox_file:this.tox.file,
+            testenv: this.testenv
+          }
+          this.showCriteria = true
+          this.clearCommand();
+          this.showCommands = false;
+          this.show_tool_tox = false;
+          this.clearTox();
+
+
+
+          this.selected_criteria[this.criteria]={
+            repos:{
+              'repo_name_from_config':{
+                container:'service_from_docker_compose',
+                commands,
+                tox
+
+              }
+
+            }
+
+          }
+            console.log(this.selected_criteria);
+            var yamlText= YAML.stringify(this.selected_criteria)
+            console.log(yamlText)
+
+        }
+      },
+      removeCriteria(key){
+        this.$delete(this.selected_criteria,key)
+        if (this.isEmpty(this.selected_criteria)) {
+          this.showCriteria = false;
+        }
+
+      },
       addCommand(){
         this.commands.push(this.command);
         this.showCommands = true;
-        this.clearCommand();
-
+        this.command = '';
       },
       removeCommand(key){
         this.$delete(this.commands,key)
@@ -169,14 +252,9 @@
       clearCommand(){
         this.command = '';
       },
-      addToxFile(){
-        this.show_tool_tox = true;
-      },
-      removetoxfile(){
+      clearTox(){
         this.tox.file = '';
-        if(this.tox.file == '' || this.testenv.length <= 0){
-          this.show_tool_tox = false;
-        }
+        this.testenv = [];
       },
       addTestEnv(){
         this.testenv.push(this.tox.env);
