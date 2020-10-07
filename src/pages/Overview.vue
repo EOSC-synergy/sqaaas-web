@@ -1,10 +1,10 @@
 <template>
   <div class="content">
     <div class="container-fluid">
-			<span>User: {{username}}</span>
+			<!-- <span>User: {{username}}</span> -->
       <div class="row">
         <div class="col-md-6" style="margin-top:40px;">
-            <card style="height:62vh;overflow-y: auto;">
+            <card style="height:75vh;overflow-y: auto;">
               <template slot="header">
                 <h4 class="card-title text-center">CONFIG YAML</h4>
               </template>
@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="text-right">
-                  <button type="button" class="btn-simple btn btn-xs btn-info" @click="addRepo()"><i class="fa fa-plus"></i>ADD REPOSITORY</button>
+                  <button type="button" class="btn-fill btn btn-info" @click="addRepo()"><i class="fa fa-plus"></i>ADD REPOSITORY</button>
                 </div>
 
                 <div v-show="showRepo" style="padding-top:20px;">
@@ -86,7 +86,7 @@
                 </div>
 
 
-                <div class="row" style="padding-left:20px;margin-bottom:4rem;">
+                <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem;">
                   <span class="custom-label">Add Credentials:</span>
                   <span class="custom-label">Yes</span><base-checkbox name="credentials" v-model="config.credentials.yes"></base-checkbox>
                   <span class="custom-label">No</span><base-checkbox name="credentials" v-model="config.credentials.no"></base-checkbox>
@@ -108,31 +108,31 @@
                         placeholder="GIT_USER"
                         v-model="credentials.username_var">
                     </base-input>
-                    <base-input class="col-md-4" type="text"
+                    <base-input class="col-md-4" type="password"
                         label="Password Var"
                         :disabled="false"
                         placeholder="GIT_PASSWORD"
                         v-model="credentials.password_var">
                     </base-input>
                   </div>
-                  <div>
+                  <div class="text-right">
                     <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCred()"><i class="fa fa-plus"></i>ADD Credentials</button>
                   </div>
                 </div>
-                <div v-show="showCred" style="padding-top:20px;">
-                  <span class="custom-label">Credentials Var</span>
+                <div v-show="showCred" style="padding-top:20px;margin-bottom:2rem;">
+                  <span class="custom-label">Credentials</span>
                   <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between"
                       v-for="(cred,key) in all_credentials"
                       :key="key"
                     >
-                    {{cred}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCred(key)"><i class="fa fa-minus"></i></button></span>
+                    {{cred.id}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCred(key)"><i class="fa fa-minus"></i></button></span>
 
                     </li>
 
                   </ul>
                 </div>
-                <div class="row" style="padding-left:20px;margin-bottom:4rem;">
+                <div class="row" style="padding-left:20px;margin-top:2rem;margin-bottom:2rem;">
                   <span class="custom-label">Environment variables:</span>
                   <span class="custom-label">Yes</span><base-checkbox name="env" v-model="config.env.yes"></base-checkbox>
                   <span class="custom-label">No</span><base-checkbox name="env" v-model="config.env.no"></base-checkbox>
@@ -151,13 +151,11 @@
                         placeholder="GIT_USER"
                         v-model="env.value">
                   </base-input>
-
-
-                  <div style="margin-bottom:30px;">
+                  <div style="margin-bottom:30px;width:95%;" class="text-right">
                     <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnv()"><i class="fa fa-plus"></i>ADD Env Vars</button>
                   </div>
                 </div>
-                <div v-show="showEnv" style="padding-top:20px;">
+                <div v-show="showEnv" style="padding-top:20px;margin-bottom:1rem;">
                   <span class="custom-label">Env Vars</span>
                   <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between"
@@ -171,7 +169,7 @@
                   </ul>
                 </div>
 
-                <div style="padding-left:5px;padding-bottom:5px;">
+                <div style="padding-left:5px;padding-bottom:5px;margin-bottom:2rem;margin-top:2rem;">
                   <span class="custom-label" for="timeout" style="padding-right:20px;">Timeout:</span>
 	                <input style="width:80px;" type="number" id="timeout" value="600" step="100" v-model="$store.state.config_yaml.timeout">
 
@@ -181,7 +179,7 @@
             </card>
         </div>
         <div class="col-md-6" style="margin-top:40px;">
-          <card style="height:62vh;overflow-y: auto;">
+          <card style="height:75vh;overflow-y: auto;">
             <template slot="header">
               <h4 class="card-title text-center">DOCKER COMPOSE YAML</h4>
             </template>
@@ -264,7 +262,7 @@
                   </base-input>
 
 
-                  <div>
+                  <div style="margin-bottom:30px;width:95%;" class="text-right">
                     <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnvCompose()"><i class="fa fa-plus"></i>ADD Env Vars</button>
                   </div>
                 </div>
@@ -417,7 +415,9 @@
       'config.credentials.no'(val){
          if(val==true){
           this.config.credentials.yes = false;
-          this.all_credentials={};
+          this.credentials.id='';
+          this.credentials.username_var='';
+          this.credentials.password_var='';
         }else{
           this.config.credentials.yes = true;
         }
@@ -447,7 +447,7 @@
       'envComposeYesNo.no'(val){
          if(val==true){
           this.envComposeYesNo.yes = false;
-          this.service.envs={};
+          this.service.envs=[];
         }else{
           this.envComposeYesNo.yes = true;
         }
@@ -512,7 +512,12 @@
         //   'username_var':this.credentials.username,
         //   'password_var':this.credentials.password
         // };
-        this.all_credentials.push(this.credentials)
+        var cred = {
+          id: this.credentials.id,
+          username_var: this.credentials.username_var,
+          password_var: this.credentials.password_var,
+        }
+        this.all_credentials.push(cred)
         this.$store.state.config_yaml.config.credentials = this.all_credentials;
         var yamlText= YAML.stringify(this.$store.state.config_yaml)
         console.log(yamlText)
@@ -543,8 +548,6 @@
         this.config.all_envs[key]=value
         console.log(this.config.all_envs)
         this.$store.state.config_yaml.environment = this.config.all_envs;
-        var yamlText= YAML.stringify(this.$store.state.config_yaml)
-        console.log(yamlText)
         this.showEnv = true;
         this.cleanEnv()
 
@@ -552,8 +555,6 @@
       removeEnv(item){
         this.$delete(this.config.all_envs,item)
         this.$store.state.config_yaml.environment = this.config.all_envs;
-        var yamlText= YAML.stringify(this.$store.state.config_yaml)
-        console.log(yamlText)
         if (this.isEmpty(this.config.all_envs)) {
           this.showEnv = false;
         }
@@ -567,12 +568,11 @@
         var key= this.envCompose.key.replace(" ", "")
 				var value = this.envCompose.value.replace(" ", "")
         envVars[key]=value
+        console.log(envVars)
+        console.log(this.service.envs)
         this.service.envs.push(envVars)
         this.showEnvCompose = true;
         this.cleanEnvCompose()
-
-
-
       },
       removeEnvCompose(item){
         this.$delete(this.service.envs,item)
@@ -628,12 +628,18 @@
         }
         this.showServices = true;
         console.log(this.services)
+        this.$store.state.docker_compose.services = this.services;
+        var yamlText= YAML.stringify(this.$store.state.docker_compose)
+        console.log(yamlText)
         this.cleanService()
         var yamlText= YAML.stringify(this.services)
         console.log(yamlText)
       },
       removeService(item){
         this.$delete(this.services,item)
+        this.$store.state.docker_compose.services = this.services;
+        var yamlText= YAML.stringify(this.$store.state.docker_compose)
+        console.log(yamlText)
         if (this.isEmpty(this.services)) {
           this.showServices = false;
         }
@@ -644,6 +650,7 @@
         this.service.container_name='';
         this.service.hostname='';
         this.service.envs=[];
+        this.volumes={};
         this.service.volumes=[];
         this.cleanEnvCompose();
         this.cleanVolume();

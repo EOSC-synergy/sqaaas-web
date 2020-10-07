@@ -133,6 +133,7 @@
   import Card from 'src/components/Cards/Card.vue'
   import jwtDecode from "jwt-decode"
   import YAML from 'json-to-pretty-yaml'
+  import Mustache from 'mustache';
   export default {
     components: {
       Card
@@ -204,29 +205,46 @@
             tox_file:this.tox.file,
             testenv: this.testenv
           }
-          this.showCriteria = true
+          this.showCriteria = true;
           this.clearCommand();
           this.showCommands = false;
           this.show_tool_tox = false;
           this.clearTox();
 
 
-
+          console.log(this.$store.state.config_yaml.config.project_repos)
+          var repoName = Object.keys(this.$store.state.config_yaml.config.project_repos)
+          var ServiceName = Object.keys(this.$store.state.docker_compose.services)
+          console.log(repoName)
+          // var all = {}
+          // all[repoName]={
+          //     container:'service_from_docker_compose',
+          //     commands,
+          //     tox
+          // }
           this.selected_criteria[this.criteria]={
             repos:{
-              'repo_name_from_config':{
-                container:'service_from_docker_compose',
+              "{{repoName}}":{
+                container:"{{service_from_docker_compone}}",
                 commands,
                 tox
 
-              }
-
+                }
             }
+          }
+          console.log(this.selected_criteria);
+          var yamlText= YAML.stringify(this.selected_criteria)
+          console.log(yamlText)
+          var data = {
+            repoName: repoName,
+            service_from_docker_compone:ServiceName
 
           }
-            console.log(this.selected_criteria);
-            var yamlText= YAML.stringify(this.selected_criteria)
-            console.log(yamlText)
+          var rendered = Mustache.render(yamlText, data);
+          console.log(rendered)
+          this.commands=[];
+          this.tox.file='';
+          this.testenv=[];
 
         }
       },

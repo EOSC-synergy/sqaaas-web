@@ -15,7 +15,13 @@ export default new Vuex.Store({
      sqa_criteria:{},
      environment:{},
      timeout:"600"
-   }
+   },
+   docker_compose:{
+     version:"3.6",
+     services:{
+
+     }
+   },
  },
  getters: {},
  mutations: {},
