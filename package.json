@@ -11,7 +11,7 @@
     "lint": "vue-cli-service lint",
     "dev": "vue-cli-service serve --open",
     "lint-fix": "vue-cli-service lint --fix",
-    "deploy": "npm install && npm run build && gh-pages -d dist/"
+    "deploy": "npm install && npm run build && echo 'sqaaas.eosc-synergy.eu' > dist/CNAME  && gh-pages -d dist/"
   },
   "dependencies": {
     "bootstrap": "^4.3.1",
