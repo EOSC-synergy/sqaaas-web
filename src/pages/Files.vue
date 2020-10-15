@@ -25,17 +25,22 @@
 
                 </div>
               </template>
-
-
-
-
-
             </card>
+            <card class="strpied-tabled-with-hover"
+                  body-classes=""
+            >
+              <template slot="header">
+                <h4 class="card-title">Run Pipeline</h4>
+              </template>
 
+              <template >
+                <div style="padding-bottom:20px;">
+                  <button class="btn  btn-primary btn-fill" @click="generateFiles()">Run Pipeline</button>
 
+                </div>
+              </template>
+            </card>
           </div>
-
-
         </div>
       </div>
   	</div>

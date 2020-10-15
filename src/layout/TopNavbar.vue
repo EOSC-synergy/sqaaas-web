@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg" style="background:#c9d22a;padding-bottom:2px;padding-top:3px">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">DASHBOARD</a>
+      <a class="navbar-brand" href="#">SQAaaS WEB</a>
       <button type="button"
               class="navbar-toggler navbar-toggler-right"
               :class="{toggled: $sidebar.showSidebar}"
@@ -12,7 +12,7 @@
         <span class="navbar-toggler-bar burger-lines"></span>
         <span class="navbar-toggler-bar burger-lines"></span>
         <span class="navbar-toggler-bar burger-lines"></span>
-		
+
       </button>
       <div class="collapse navbar-collapse justify-content-end">
         <!-- <ul class="nav navbar-nav mr-auto">
@@ -41,12 +41,12 @@
           </li>
         </ul> -->
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" href="#">
               Account
             </a>
-          </li>
-          <base-dropdown title="Dropdown">
+          </li> -->
+          <!-- <base-dropdown title="Dropdown">
             <a class="dropdown-item" href="#">Action</a>
             <a class="dropdown-item" href="#">Another action</a>
             <a class="dropdown-item" href="#">Something</a>
@@ -54,7 +54,7 @@
             <a class="dropdown-item" href="#">Something</a>
             <div class="divider"></div>
             <a class="dropdown-item" href="#">Separated link</a>
-          </base-dropdown>
+          </base-dropdown> -->
           <li class="nav-item">
             <button class="btn btn-primary btn-simple nav-link" @click="logOut()">Log Out</button>
           </li>
@@ -93,7 +93,7 @@
         this.$sidebar.displaySidebar(false)
       },
       logOut(){
-		this.$router.replace(this.$route.query.redirect || "/logout");        
+		this.$router.replace(this.$route.query.redirect || "/logout");
       }
     }
   }
