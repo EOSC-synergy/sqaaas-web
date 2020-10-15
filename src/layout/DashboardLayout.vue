@@ -4,15 +4,15 @@
 			<mobile-menu slot="content"></mobile-menu>
 			<sidebar-link to="/auth/dashboard">
 				<i class="nc-icon nc-chart-pie-35"></i>
-				<p>General Options</p>
+				<p>1. General Options</p>
 			</sidebar-link>
 			<sidebar-link to="/auth/sqa-criteria">
 				<i class="nc-icon nc-tap-01"></i>
-				<p>SQA Criteria</p>
+				<p>2. SQA Criteria</p>
 			</sidebar-link>
 			<sidebar-link to="/auth/files">
 				<i class="nc-icon nc-notes"></i>
-				<p>Actions</p>
+				<p>3. Actions</p>
 			</sidebar-link>
 		</side-bar>
     <div v-if="$route.path == '/auth/select-option' || $route.path == '/auth/full-assessment' ">
