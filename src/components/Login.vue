@@ -1,60 +1,117 @@
 <template>
 	<div class="auth-layout">
-		<div class="nav d-lg-none"><h2>SQAaaS Web</h2></div>
-		<div class="main row">
-        <div class="col-lg-6 col-12">
-			<div class="col-md-6 mx-auto">
-				<div id="first">
-					<div class="form ">
-						<div class="logo mb-3">
-							<div class="col-md-12 text-center">
-								<h1>Welcome</h1>
-							</div>
-						</div>
-						<form action="" method="post" name="login">
-							<div class="form-group">
-								<label for="exampleInputEmail1">Email address</label>
-								<input type="email" name="email"  class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
-							</div>
-							<div class="form-group">
-								<label for="exampleInputEmail1">Password</label>
-								<input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Password">
-							</div>
-							<div class="form-group">
-								<p class="text-center">By signing up you accept our <a href="#">Terms Of Use</a></p>
-							</div>
-							<div class="col-md-12 text-center ">
-								<button type="button" class=" btn mybtn btn-primary tx-tfm" @click="login()">Login</button>
-							</div>
-							<div class="col-md-12 ">
-								<div class="login-or">
-									<hr class="hr-or">
-									<span class="span-or text-center">or Login with</span>
-								</div>
-							</div>
-							<div class="col-md-12 mb-3">
-								<p class="text-center">
-									<img src="../../static/egi.png" alt="" style="height:50px;margin-bottom:5px;">
-								</p>
-							</div>
-							<div class="col-md-12 mb-3 text-center">
-									<button type="button" class=" btn btn-primary tx-tfm" @click="login_egi()">EGI Check-in</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="auth-wallpaper col-6 d-none d-lg-flex" style="padding:0;">
-			<img src="../../public/img/back-callback.png" style="height: 100%;width: 100%;" alt="">
-		</div>
-     </div>   
+    <header class="bg-blue text-white">
+      <!-- <div class="bg-primary" id="navbar-sticky"> -->
+        <div class="topbar" id="top">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6">
+                <div id="text-7" class="widget widget_text">
+                  <div class="textwidget"></div>
+                </div><!-- .static-hero-widget -->
+              </div>
+              <div class="col-sm-6 text-sm-right">
+                <div id="text-6" class="widget widget_text">
+                  <div class="textwidget">
+                    <p><a class="textwidget" href="https://twitter.com/EOSC_synergy" target="_blank" rel="noopener noreferrer">Follow us on twitter</a>
+                    </p>
+                  </div>
+                </div><!-- .static-hero-widget -->
+              </div>
+            </div>
+
+          </div><!-- .container -->
+        </div>
+
+        <!-- ******************* The Navbar Area ******************* -->
+        <div id="wrapper-navbar" class="bg-blue" itemscope="" itemtype="http://schema.org/WebSite">
+
+          <a class="skip-link sr-only sr-only-focusable" href="#content">Skip to content</a>
+
+          <nav class="navbar navbar-expand-md navbar-dark">
+
+            <div class="container">
+
+                <!-- Your site title as branding in the menu -->
+              <a href="https://www.eosc-synergy.eu/" class="navbar-brand custom-logo-link" rel="home"><img src="../../public/img/logo-eosc-synergy-png.png" class="img-fluid" alt="EOSC synergy"></a><!-- end custom logo -->
+
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+
+              <!-- The WordPress Menu goes here -->
+              <div id="navbarNavDropdown" class="collapse navbar-collapse"><ul id="main-menu" class="navbar-nav ml-auto">
+                <li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-668" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-668 nav-item"><a title="About" href="https://www.eosc-synergy.eu/about/" class="nav-link text-white">About</a></li>
+                <li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-47" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-47 nav-item"><a title="Partners" href="https://www.eosc-synergy.eu/partners/" class="nav-link text-white">Partners</a></li>
+                <li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-790" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-790 nav-item"><a title="Contact us" href="https://www.eosc-synergy.eu/contact-us/" class="nav-link text-white">Contact us</a></li>
+                <li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-668" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-668 nav-item"> <button type="button" class=" btn btn-simple btn-login" @click="login()">Login</button></li>
+                </ul></div>										</div><!-- .container -->
+
+                        </nav><!-- .site-navigation -->
+
+              </div><!-- #wrapper-navbar end -->
+      <!-- </div> -->
+			</header>
+
+
+    <div class="container" style="min-height:60vh;">
+      <h2 >EOSC Synergy Software Quality Assurance</h2>
+      <div class="entry-content">
+        <p>
+          Quality is a&nbsp;fundamental aspect for&nbsp; a successful uptake of EOSC services
+          and data repositories by the European research communities. EOSC Synergy is developing
+          a quality based approach to foster the adoption of EOSC services and data repositories,
+          which will improve, promote and reward quality. This approach exploits an automated
+          validation process to assess the quality of the services and data repositories
+          featuring continuous integration (CI) and continuous delivery (CD) pipelines.
+          The pipelines are programmatically composed leveraging the Pipeline as Code implementation in Jenkins.
+
+
+
+        </p>
+        <div class="row text-center" style="padding:2rem 0rem;">
+          <div class="col-12 col-md-6">
+            <img loading="lazy" width="481" height="500" src="../../public/img/SQA.png" alt="" class="wp-image-492"  sizes="(max-width: 781px) 100vw, 781px">
+
+          </div>
+          <div class="col-12 col-md-6">
+            <img loading="lazy" width="401" height="500" src="../../public/img/OBS.png" alt="" class="wp-image-492"  sizes="(max-width: 781px) 100vw, 781px">
+          </div>
+        </div>
+
+        <p>
+          The EOSC Synergy project will contribute to the improvement and recognition of the quality attributes of both data
+          and services in the EOSC, paving the path towards their long-term sustainability.
+        </p>
+        <p>
+          To access the service, authentication is done through EGI Check-in.
+        </p>
+        <div class="col-12">
+          <p class="text-center">
+            <img src="../../static/egi.png" alt="" style="height:50px;margin-bottom:5px;">
+          </p>
+        </div>
+
+      </div>
+
+      <div>
+
+      </div>
+
+    </div>
+
+     <content-footer></content-footer>
 	</div>
 </template>
 
 <script>
+import ContentFooter from '../layout/ContentFooter'
 
 export default {
+   components: {
+      // TopNavbar,
+      ContentFooter,
+    },
 	data() {
 		return {
 		username: "",
@@ -62,119 +119,173 @@ export default {
 		error: false,
 		error_message_text: "",
 		processing: false,
-		passwordFieldType: 'password',		
+		passwordFieldType: 'password',
 		mistake: {
 				username: false,
 				password: false
 			}
 		};
-    },	
+    },
     methods: {
         login_egi(){
-            var url = 
+            var url =
             this.env.url_authorize
             + '?response_type=code token token_id'
-            + '&scope=openid profile'       
+            + '&scope=openid profile'
             + '&nonce=abc'
-            + '&client_id=' + this.env.client_id 
-            + '&redirect_uri=' + this.env.redirect_uri;    
+            + '&client_id=' + this.env.client_id
+            + '&redirect_uri=' + this.env.redirect_uri;
             window.location.replace(url)
 		},
-		login(){
-			this.$router.push({name: 'dashboard'});
-		}
-    }	
-}    
-</script>
-<style lang="scss">
 
-.column {
-  float: left;
-  width: 50%;
-}
-.auth-layout {
-    height: 100vh;
-    margin: 0;
-	.nav {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100px;
-      background-color: #c9d22a;      
     }
-	.main {
-      margin: 0;
-      height: 100%;
-	}
 }
-.auth-wallpaper {
-	// background-color: $top-nav-bg;
-	overflow: hidden;
-	display: flex;
-	align-items: center;
-	justify-content: center;        
+</script>
+<style scoped>
+
+.topbar {
+    border-bottom: 1px solid rgba(255,255,255,.3);
+    padding: 6px 0;
+    font-size: .8rem;
+    max-height: 33px;
 }
+
+.navbar {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: .5rem 1rem;
+    background-color:#73bbdc;
+}
+
+.navbar-brand {
+    display: inline-block;
+    padding-top: .3rem;
+    padding-bottom: .3rem;
+    margin-right: 1rem;
+    font-size: 1.25rem;
+    line-height: inherit;
+    white-space: nowrap;
+}
+
+.navbar-brand img {
+    max-width: 160px;
+    -webkit-filter: brightness(0) invert(1);
+    filter: brightness(0) invert(1);
+}
+
+.navbar>.container, .navbar>.container-fluid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.btn-login {
+  color: #be2832;
+  border:none;
+  font-weight: 700;
+  border: 1px solid transparent;
+  padding: .375rem 2rem;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  border-radius: 0;
+
+
+}
+
+.btn-login:hover {
+    color: #212529;
+    background-color: #aab224;
+    border-color: #a0a822;
+}
+
+/* // .column {
+//   float: left;
+//   width: 50%;
+// } */
+.entry-content{
+  padding: 2rem 0rem;
+}
+.bg-blue {
+    background-color: #73bbdc;
+}
+.textwidget{
+  color: #fff!important;
+  font-size:12px;
+
+}
+.text-white {
+    color: #fff!important;
+}
+
+
+/* // .auth-layout {
+//     height: 100vh;
+//     margin: 0;
+
+// 	nav {
+//       display: flex;
+//       align-items: center;
+//       justify-content: center;
+//       height: 100px;
+//       background-color: #73bbdc;
+//     }
+// 	.main {
+//       margin: 0;
+//       height: 100%;
+// 	}
+// }
+// .navbar-brand{
+//   max-width: 160px;
+//   filter: brightness(0) invert(1);
+// }
+// .nav-item{
+//   padding-right: 1.5rem;
+// }
+
+// .item{
+//   color: white;
+//   font-family: Nunito,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+// }
+// .auth-wallpaper {
+// 	// background-color: $top-nav-bg;
+// 	overflow: hidden;
+// 	display: flex;
+// 	align-items: center;
+// 	justify-content: center;
+// } */
 
 h1,h2,h3{
-font-family: 'Kaushan Script', cursive;
-}
-.myform{
-	position: relative;
-	display: -ms-flexbox;
-	display: flex;
-	padding: 1rem;
-	-ms-flex-direction: column;
-	flex-direction: column;
-	width: 100%;
-	pointer-events: auto;
-	background-color: #fff;
-	background-clip: padding-box;
-	border: 1px solid rgba(0,0,0,.2);
-	border-radius: 1.1rem;
-	outline: 0;
-	max-width: 500px;
-}
-.tx-tfm{
-	text-transform:uppercase;
-}
-.mybtn{
-	border-radius:50px;
+  margin-bottom: .5rem;
+  font-family: Nunito,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-weight: 700;
+  line-height: 1.1;
+  color: #343434;
 }
 
-.login-or {
-	position: relative;
-	color: #aaa;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-}
-.span-or {
-	display: block;
-	position: absolute;
-	left: 50%;
-	top: -2px;
-	margin-left: -25px;
-	background-color: #fff;
-	width: 70px;
-	text-align: center;
-	font-size: 12px;
-}
-.hr-or {
-	height: 1px;
-	margin-top: 0px !important;
-	margin-bottom: 0px !important;
+
+/* @media (min-width: 1200px){
+  .container {
+      max-width: 1240px;
+  }
+
 }
 
-form .error {
-	color: #ff0000;
+@media (min-width: 992px){
+  .container {
+      max-width: 960px;
+  }
+
 }
 
-@media (max-width: 720px){
-	.showimage {
-		display: none;
-	}
-    
-}
+@media (min-width: 768px){
+  .container {
+      max-width: 720px;
+  }
+
+} */
 
 </style>
