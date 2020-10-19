@@ -3,7 +3,7 @@
 		<div class="container-fluid">
 			<div class="row" style="height:80vh;">
 				<div class="col-12" style="margin-top:40px;">
-					<card style="height:70vh;" class="strpied-tabled-with-hover"
+					<card style="min-height:70vh;" class="strpied-tabled-with-hover"
 						body-classes=""
 					>
 						<template slot="header">

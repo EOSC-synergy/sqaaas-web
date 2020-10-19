@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg" style="background:#c9d22a;padding-bottom:2px;padding-top:3px">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">SQAaaS WEB</a>
+      <a class="navbar-brand" href="#">Software Quality Assurance as a Service</a>
       <button type="button"
               class="navbar-toggler navbar-toggler-right"
               :class="{toggled: $sidebar.showSidebar}"

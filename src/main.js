@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import VueAnalytics from 'vue-analytics'
 import App from './App.vue'
 import env from './env.js'
 import store from "./store";
@@ -34,6 +35,12 @@ const router = new VueRouter({
       return { x: 0, y: 0 }
     }
   }
+})
+
+Vue.use(VueAnalytics, {
+  id: 'UA-64569892-9',
+  router,
+  trackEvent: true
 })
 
 /* eslint-disable no-new */
