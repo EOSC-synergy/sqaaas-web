@@ -112,16 +112,12 @@
 }
 /* // Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
-  .res-size{
-    font-size:15px!important;
-  }
+
 }
 
 /* // Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
-    .res-size{
-      font-size:15px!important;
-    }
+
 
  }
 
