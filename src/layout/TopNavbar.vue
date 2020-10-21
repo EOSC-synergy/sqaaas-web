@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg" style="background:#c9d22a;padding-bottom:2px;padding-top:3px">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Software Quality Assurance as a Service</a>
+      <a class="navbar-brand res-size" href="#">Software Quality Assurance as a Service</a>
       <button type="button"
               class="navbar-toggler navbar-toggler-right"
               :class="{toggled: $sidebar.showSidebar}"
@@ -99,9 +99,34 @@
   }
 
 </script>
-<style>
+<style scoped>
 .navbar{
 	color:black;
 }
+
+@media (max-width: 576px) {
+  .res-size{
+    font-size:15px!important;
+  }
+
+}
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+
+}
+
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+
+
+ }
+
+/* // Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+
+  }
+
+/* // Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {  }
 
 </style>
