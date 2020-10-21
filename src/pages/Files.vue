@@ -8,22 +8,22 @@
             >
               <template slot="header">
                 <h4 class="card-title">Generate Files</h4>
-                <p class="card-category">Here is a subtitle for this table</p>
+                <p class="card-category">Jenkinsfile, config.yml and docker-compose.yml</p>
               </template>
 
               <template >
-                <div style="padding-bottom:20px;">
+                <!-- <div style="padding-bottom:20px;">
                   <button class="btn  btn-primary btn-fill" @click="generateFiles()">Generate Files</button>
 
-                </div>
+                </div> -->
                 <div style="padding-bottom:20px;">
-                  <button class="btn  btn-primary btn-fill" @click="renderTemplate('zip')">Render as Zip</button>
+                  <button class="btn  btn-primary btn-fill" @click="renderTemplate('zip')">Generate Files</button>
 
                 </div>
-                <div style="padding-bottom:20px;">
+                <!-- <div style="padding-bottom:20px;">
                   <button class="btn  btn-primary btn-fill" @click="renderTemplate('git')">Push Files</button>
 
-                </div>
+                </div> -->
               </template>
             </card>
             <card class="strpied-tabled-with-hover"
@@ -87,76 +87,59 @@
 			saveAs(blob, filename);
 		},
 		renderTemplate(value){
-        // var template = `
-        // config:
-        //   credentials:
-        //       - id: {{name}}
-        //         username_var: GIT_USER
-        //         password_var: GIT_PASSWORD
-
-        // sqa_criteria:
-        //   qc_doc:
-        //     repos:
-        //       sqaaas-web:
-        //         container: node
-        //         commands:
-        //           - >
-        //             env GIT_ASKPASS=/sqaaas-web/.git_credential_helper.sh
-        //             npm --prefix /sqaaas-web run deploy --
-        //             --user="Diana M. Naranjo <dnaranjo@i3m.upv.es>"
-        //             --repo=https://@github.com/eosc-synergy/sqaaas-web`
-
-        var template = {
-          config: {
-              credentials: [
-                {
-                  id:"{{id}}",
-                  username_var:"{{GIT_USER}}",
-                  username_var:"{{GIT_PASSWORD}}",
-              }
-              ]
-            },
-          sqa_criteria:
-            {
-              qc_doc:{
-                repos:{
-                  web:{
-                    container:"name",
-                    commands: [
-                        "npm install",
-                        "npm run dev"
-                    ]
-                  }
-                }
-
-              }
-
-            }
-
-
-        }
-        var yamlText= YAML.stringify(template)
-        console.log(yamlText)
-
-        var data = {
-          name: "Scott"
-        }
-        var rendered = Mustache.render(yamlText, data);
-        console.log(rendered)
+      console.log(this.$store.state)
         if(value=="zip"){
-          this.generateZip(rendered)
+          this.generateZip(this.$store.state)
         }else if(value == "git"){
           this.commitGithub(rendered)
         }
     },
     generateZip(rendered){
-      var zip = new JSZip();
-      var files_names=["config.yaml","docker-compose.yaml"]
-      for (let i = 0; i < files_names.length; i++) {
-        zip.folder(".sqa").file(files_names[i],rendered, {binary:true});
-        zip.file("Jenkinsfile",rendered)
+      var jenkinsfile = `
+      @Library(['github.com/indigo-dc/jenkins-pipeline-library@release/2.1.0']) _
 
-      }
+      def projectConfig
+
+      pipeline {
+          agent any
+
+          stages {
+              stage('SQA baseline dynamic stages') {
+                  when {
+                      anyOf {
+                          branch 'master'
+                          branch 'jpl-branch'
+                          branch 'dev-*'
+                      }
+                  }
+                  steps {
+                      script {
+                          projectConfig = pipelineConfig('./.sqa/config.yml',  'https://github.com/eosc-synergy/sqaaas-web.git', 'jpl-branch', 'userpass_sqaaas_web', 'eoscsynergy/jpl-validator:jib-with-jpl')
+                          buildStages(projectConfig)
+                      }
+                  }
+                  post {
+                      cleanup {
+                          cleanWs()
+                      }
+                  }
+              }
+          }
+      }`
+      var zip = new JSZip();
+
+      var files_names=["config.yaml","docker-compose.yaml"]
+      var yamlTextConfig= YAML.stringify(rendered.config_yaml)
+      console.log(yamlTextConfig)
+      var yamlTextCompose= YAML.stringify(rendered.docker_compose)
+      console.log(yamlTextCompose)
+      // for (let i = 0; i < files_names.length; i++) {
+
+      zip.folder(".sqa").file("config.yml",yamlTextConfig, {binary:true});
+      zip.folder(".sqa").file("docker-compose.yml", yamlTextCompose, {binary:true});
+      zip.file("Jenkinsfile",jenkinsfile)
+
+      // }
       zip.generateAsync({type:"blob"})
           .then(function(blob) {
               // see FileSaver.js
