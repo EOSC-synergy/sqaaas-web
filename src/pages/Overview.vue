@@ -668,15 +668,59 @@
         }
       },
       isEmpty(obj) {
-			for(var key in obj) {
-				if(obj.hasOwnProperty(key))
-					return false;
-			}
-			return true;
-		},
+        for(var key in obj) {
+          if(obj.hasOwnProperty(key))
+            return false;
+        }
+        return true;
+      },
+       objectSize(obj){
+        var size = 0, key;
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) size++;
+        }
+        return size;
+      }
 
     },
     created(){
+
+      var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos)
+      var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
+      for (let i = 0; i < sizeRepos; i++) {
+        this.config.all_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]=this.$store.state.config_yaml.config.project_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]
+      }
+      for (let i = 0; i < sizeServices; i++) {
+        this.services[Object.keys(this.$store.state.docker_compose.services)[i]]=this.$store.state.docker_compose.services[Object.keys(this.$store.state.docker_compose.services)[i]]
+      }
+
+      for (let i = 0; i < this.$store.state.config_yaml.config.credentials.length; i++) {
+        this.all_credentials.push(this.$store.state.config_yaml.config.credentials[i])
+      }
+
+      this.config.all_envs = this.$store.state.config_yaml.environment
+
+      if(this.isEmpty(this.config.all_repos)){
+        this.showRepo = false
+      }else {
+        this.showRepo = true
+      }
+      if(this.isEmpty(this.services)){
+        this.showServices = false
+      }else {
+        this.showServices = true
+      }
+       if(this.isEmpty(this.all_credentials)){
+        this.showCred = false
+      }else {
+        this.showCred = true
+      }
+      if(this.isEmpty(this.config.all_envs)){
+        this.showEnv = false
+      }else {
+        this.showEnv = true
+      }
+
       var token = JSON.parse(localStorage.getItem("access_token"));
       console.log(token)
       var decode = jwtDecode(token.access_token)
