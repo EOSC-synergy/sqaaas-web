@@ -26,7 +26,7 @@
 
 							<p>
 								Unless otherwise indicated, all materials created by the EOSC-synergy
-								consortium are licensed under a Creative Commons Attribution 
+								consortium are licensed under a Creative Commons Attribution
 								4.0 International License.
 							</p>
 
@@ -37,9 +37,9 @@
 						<div class="menu-footer-container">
 							<ul class="menu">
 								<li class="" style="border-top: 1px solid #343434;padding:0.5rem 0;">
-									<a href="#" style="color:#42697a">Data Privacy</a>
-								</li>					
-							
+									<a href="https://appsgrycap.i3m.upv.es:31443/im-web/terms.html" style="color:#42697a">Terms of Service</a>
+								</li>
+
 								<li style="border-top: 1px solid #343434;padding:0.5rem 0;">
 									<a href="#" style="color:#42697a">News & Events</a>
 								</li>
@@ -51,7 +51,7 @@
 
 						</div>
 					</div>
-				</div>			
+				</div>
 			</div>
 		</div>
 		<div class="text-center footer-widget" style="background:white;padding-bottom:1rem;">
@@ -71,7 +71,7 @@
 		}
 	},
 	created() {
-	}, 
+	},
 	methods: {
 		top(){
 			// this.btn = $('#button');

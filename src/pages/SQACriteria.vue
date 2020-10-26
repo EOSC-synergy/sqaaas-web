@@ -5,18 +5,40 @@
         <div class="col-12" style="margin-top:40px;">
             <card >
               <template slot="header">
-                <h4 class="card-title text-center">Select SQA Criteria</h4>
+                <h4 class="card-title text-center" style="padding-top:2rem;">Select SQA Criteria</h4>
               </template>
-                <select class="custom-select col-md-6" id="sqacriteria" v-model='criteria' style="margin-top:3rem;margin-bottom:3rem;margin-left:20px;">
-                  <option value="default">Choose a criteria...</option>
-                  <option value="qc_style">qc_style</option>
-                  <option value="qc_coverage">qc_coverage</option>
-                  <option value="qc_functional">qc_functional</option>
-                  <option value="qc_security">qc_security</option>
-                  <option value="qc_doc">qc_doc</option>
-                </select>
-                <a style="margin-left: 2rem;color:red;" v-show="show_link" :href="criteria_link" target="_blank">Criteria Information</a>
-              <template>
+              <template class="card-body">
+                <div style="margin-top:3rem;margin-bottom:1rem;margin-left:20px;display:grid;">
+                  <div>
+                    <select class="custom-select col-md-6" id="sqacriteria" v-model='criteria' >
+                      <option value="default">Choose a criteria...</option>
+                      <option value="qc_style">qc_style</option>
+                      <option value="qc_coverage">qc_coverage</option>
+                      <option value="qc_functional">qc_functional</option>
+                      <option value="qc_security">qc_security</option>
+                      <option value="qc_doc">qc_doc</option>
+                    </select>
+                    <a style="margin-left: 2rem;text-decoration: underline;" v-show="show_link" :href="criteria_link" target="_blank">Criteria Information</a>
+                  </div>
+                  <span v-show="showErrorCriteria" style="color:red">You must select a valid criteria</span>
+                </div>
+                <div v-show="showSelect" style="margin-top:3rem;margin-bottom:1rem;margin-left:20px;display:grid;">
+                  <span>Select a repository</span>
+                  <select class="custom-select col-md-6" id="respository" v-model='repository' >
+                    <option value="default">Choose a repository...</option>
+                    <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="key">{{key}}</option>
+                  </select>
+                  <span v-show="showErrorRepo" style="color:red">You must select a respository</span>
+                </div>
+
+                <div v-show="showSelect" style="margin-top:1rem;margin-bottom:3rem;margin-left:20px;display:grid;">
+                  <span>Select a service</span>
+                  <select class="custom-select col-md-6" id="service" v-model='service' >
+                    <option value="default">Choose a service...</option>
+                    <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
+                  </select>
+                  <span v-show="showErrorService" style="color:red">You must select a service</span>
+                </div>
               </template>
             </card>
 
@@ -141,6 +163,8 @@
     data () {
       return {
         criteria:'default',
+        repository:'default',
+        service:'default',
         command:'',
         commands:[],
         tox:{
@@ -154,7 +178,11 @@
         show_link:false,
         criteria_link:'',
         showCriteria:false,
-        selected_criteria:{}
+        selected_criteria:{},
+        showSelect:false,
+        showErrorRepo:false,
+        showErrorService:false,
+        showErrorCriteria:false,
 
 
 
@@ -162,9 +190,10 @@
     },
     watch:{
         'criteria'(val){
-          console.log(val)
           if(val != "default"){
             this.show_link = true;
+            this.showSelect = true;
+            this.showErrorCriteria = false;
             if(val == "qc_style"){
               this.criteria_link = ""
             }else if(val == "qc_coverage"){
@@ -176,9 +205,24 @@
             }else if(val == "qc_doc"){
               this.criteria_link == ""
             }
+          }else{
+            this.show_link = false;
+            this.showSelect = false;
+            this.showErrorCriteria = true;
           }
-        }
+        },
+        'repository'(val){
+          if(val != "default"){
+            this.showErrorRepo = false;
+          }
 
+        },
+        'service'(val){
+          if(val != "default"){
+            this.showErrorService = false;
+          }
+
+        }
     },
     methods:{
       notifyVue (message) {
@@ -187,16 +231,22 @@
           {
             message: message,
             icon: 'nc-icon nc-simple-remove',
-            timeout:2000,
+            timeout:3000,
             horizontalAlign: 'center',
             verticalAlign: 'top',
             type: 'danger'
           })
       },
       addCriteria(){
-        if(this.criteria == 'default'){
-          this.error_message = "Error: you must select a valid criteria";
-          this.notifyVue(this.error_message)
+        if(this.criteria == 'default' || this.repository == 'default' || this.service == "default"){
+          // this.error_message = "Error: you must select a valid criteria";
+          if(this.criteria == 'default'){
+            this.showErrorCriteria = true;
+          }else if(this.repository == 'default' || this.service == "default"){
+            this.showErrorRepo = true;
+            this.showErrorService = true;
+          }
+          // this.notifyVue(this.error_message)
         }else{
           var commands = {}
           var tox = {}
@@ -208,40 +258,33 @@
           this.showCriteria = true;
           this.clearCommand();
           this.showCommands = false;
+          this.showErrorRepo = false;
+          this.showErrorService = false;
+          this.showErrorCriteria = false;
           this.show_tool_tox = false;
           this.clearTox();
 
-
-          console.log(this.$store.state.config_yaml.config.project_repos)
-          var repoName = Object.keys(this.$store.state.config_yaml.config.project_repos)
-          var ServiceName = Object.keys(this.$store.state.docker_compose.services)
-          console.log(repoName)
-          // var all = {}
-          // all[repoName]={
-          //     container:'service_from_docker_compose',
-          //     commands,
-          //     tox
-          // }
-          this.selected_criteria[this.criteria]={
-            repos:{
-              "{{repoName}}":{
-                container:"{{service_from_docker_compone}}",
+          var repoName = this.repository
+          var service = this.service
+          var repo = {}
+          repo[repoName]={
+                container:service,
                 commands,
                 tox
 
-                }
-            }
           }
-          console.log(this.selected_criteria);
-          var yamlText= YAML.stringify(this.selected_criteria)
-          console.log(yamlText)
-          var data = {
-            repoName: repoName,
-            service_from_docker_compone:ServiceName
 
+          this.selected_criteria[this.criteria]={
+            repos:''
           }
-          var rendered = Mustache.render(yamlText, data);
-          console.log(rendered)
+          console.log(this.selected_criteria)
+
+          this.selected_criteria[this.criteria]["repos"]=repo
+
+
+          console.log(this.selected_criteria);
+          this.$store.state.config_yaml.sqa_criteria = this.selected_criteria;
+          console.log(this.$store.state.config_yaml.sqa_criteria)
           this.commands=[];
           this.tox.file='';
           this.testenv=[];
@@ -293,11 +336,26 @@
             return false;
         }
         return true;
-		  },
+      },
+      objectSize(obj){
+        var size = 0, key;
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) size++;
+        }
+        return size;
+      }
 
 
     },
     created(){
+        var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
+        var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
+        console.log(sizeRepos)
+        console.log(sizeServices)
+        if(sizeRepos == 0 || sizeServices == 0){
+          this.notifyVue("Error you must add at least one repository and one service")
+          this.$router.push({name:"dashboard"})
+        }
 
       }
   }

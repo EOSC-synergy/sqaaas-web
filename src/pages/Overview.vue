@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="text-right">
-                  <button type="button" class="btn-fill btn btn-info" @click="addRepo()"><i class="fa fa-plus"></i>ADD REPOSITORY</button>
+                  <button type="button" class="btn-fill btn btn-info" @click="addRepo();track()"><i class="fa fa-plus"></i>ADD REPOSITORY</button>
                 </div>
 
                 <div v-show="showRepo" style="padding-top:20px;">
@@ -455,6 +455,10 @@
 
     },
     methods:{
+      track(){
+        this.$ga.event('button','add','repository',0)
+        console.log(this.$ga)
+      },
       notifyVue (message) {
 
         this.$notify(
@@ -673,17 +677,18 @@
 
     },
     created(){
-        var token = JSON.parse(localStorage.getItem("access_token"));
-        console.log(token)
-        var decode = jwtDecode(token.access_token)
-        console.log(decode)
-        var _this = this
-        $.ajax({
-			url: this.env.url_user_info,
-			type: 'POST',
-			contentType: 'application/json',
-			headers: {
-				'Authorization': 'Bearer ' + token.access_token
+      var token = JSON.parse(localStorage.getItem("access_token"));
+      console.log(token)
+      var decode = jwtDecode(token.access_token)
+      console.log(decode)
+      var _this = this
+
+      $.ajax({
+        url: this.env.url_user_info,
+        type: 'POST',
+        contentType: 'application/json',
+        headers: {
+          'Authorization': 'Bearer ' + token.access_token
 			},
 			success: function (result) {
         // CallBack(result);

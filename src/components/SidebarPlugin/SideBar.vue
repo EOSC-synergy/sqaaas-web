@@ -9,7 +9,7 @@
 				<div class="logo-img">
 					<img src="../../../static/eosc-synergy.png" alt="">
 				</div>
-			SQAaaS WEB
+			SQAaaS
 			</a>
 		</div>
 
