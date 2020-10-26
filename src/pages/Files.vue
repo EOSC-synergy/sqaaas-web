@@ -272,6 +272,32 @@
       var _this=this
       return this.repo.updateHead('heads/' + _this.currentBranch.name,_this.newCommit.sha);
     },
+    objectSize(obj){
+      var size = 0, key;
+      for (key in obj) {
+          if (obj.hasOwnProperty(key)) size++;
+      }
+      return size;
+    },
+    notifyVue (message) {
+      this.$notify(
+        {
+          message: message,
+          icon: 'nc-icon nc-simple-remove',
+          timeout:3000,
+          horizontalAlign: 'center',
+          verticalAlign: 'top',
+          type: 'danger'
+        })
+    },
+  },
+  created(){
+    var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
+    console.log(sizeCriteria)
+    if(sizeCriteria == 0){
+      this.notifyVue("Error you must add at least one sqa criteria")
+      this.$router.push({name:"SQACriteria"})
+    }
   }
 }
 </script>

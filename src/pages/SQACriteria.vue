@@ -231,7 +231,7 @@
           {
             message: message,
             icon: 'nc-icon nc-simple-remove',
-            timeout:2000,
+            timeout:3000,
             horizontalAlign: 'center',
             verticalAlign: 'top',
             type: 'danger'
@@ -336,11 +336,26 @@
             return false;
         }
         return true;
-		  },
+      },
+      objectSize(obj){
+        var size = 0, key;
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) size++;
+        }
+        return size;
+      }
 
 
     },
     created(){
+        var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
+        var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
+        console.log(sizeRepos)
+        console.log(sizeServices)
+        if(sizeRepos == 0 || sizeServices == 0){
+          this.notifyVue("Error you must add at least one repository and one service")
+          this.$router.push({name:"dashboard"})
+        }
 
       }
   }

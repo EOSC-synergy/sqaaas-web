@@ -18,20 +18,20 @@
                 <div class="col-12 col-md-6">
                   <div class="row select-options" style="background-color:#FF5733;" @click="gotoCustomized()">
                     <div class="col-2 col-md-2">
-                      <i class="fa fa-chevron-right " style="color:white;padding-top:20px;font-size: 5vmax;" aria-hidden="true"></i>
+                      <i class="fa fa-chevron-right icons-select" aria-hidden="true"></i>
                     </div>
                     <div class="col-10 col-md-10">
-                      <h2 style="color:white;font-family:initial;font-size: 2vmax;">Pipeline as a Service</h2>
+                      <h2 class="custom-title">Pipeline as a Service</h2>
                       <span style="color:white;">Custom CI/CD pipelines based according to the quality criteria from the Software as a Service.</span>
                     </div>
                   </div>
                   <div class="row select-options" style="background-color:#0D88B7;" @click="gotoFull()">
                     <div class="col-2 col-md-2">
-                      <i class="fa fa-chevron-right" style="color:white;padding-top:20px;font-size: 5vmax;" aria-hidden="true"></i>
+                      <i class="fa fa-chevron-right icons-select" aria-hidden="true"></i>
 
                     </div>
                     <div class="col-10 col-md-10">
-                      <h2 style="color:white;font-family:initial;font-size: 2vmax;">Online Quality Assessment</h2>
+                      <h2 class="custom-title">Online Quality Assessment</h2>
                       <span style="color:white;">Evaluates the level of compliance of a source code repository or running service according to the quality criteria from the Software & Service baseline.</span>
                     </div>
                   </div>
@@ -80,13 +80,37 @@
   padding: 20px;
   margin: 4rem 2rem;
   cursor: pointer;
+  width: 80%;
+}
+
+.icons-select{
+  color:white;
+  padding-top:20px;
+  font-size: 80px;
+}
+
+.custom-title{
+  color:white;
+  font-size: 20px;
 }
 
 @media (max-width: 576px) {
   .select-options{
-    margin:1rem;
-    padding: 10px;
+    margin:0px 0px 10px 0px;
+    padding: 0px;
+    width: 100%;
 
+  }
+
+  .icons-select{
+    color:white;
+    padding-top:20px;
+    font-size: 40px;
+  }
+
+  .custom-title{
+    color:white;
+    font-size: 18px;
   }
 }
 /* // Small devices (landscape phones, 576px and up) */
@@ -94,6 +118,7 @@
   .select-options{
     margin:1rem;
     padding: 10px;
+    width: 90%;
 
 
   }
@@ -102,9 +127,24 @@
 /* // Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
   .select-options{
-    margin:1rem;
+  border: 1px solid gray;
+  padding: 20px;
+  margin: 4rem 2rem;
+  cursor: pointer;
+  width: 80%;
+}
 
-  }
+.icons-select{
+  color:white;
+  padding-top:20px;
+  font-size: 80px;
+}
+
+.custom-title{
+  color:white;
+  font-size: 20px;
+}
+
  }
 
 /* // Large devices (desktops, 992px and up) */

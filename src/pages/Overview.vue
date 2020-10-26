@@ -677,17 +677,18 @@
 
     },
     created(){
-        var token = JSON.parse(localStorage.getItem("access_token"));
-        console.log(token)
-        var decode = jwtDecode(token.access_token)
-        console.log(decode)
-        var _this = this
-        $.ajax({
-			url: this.env.url_user_info,
-			type: 'POST',
-			contentType: 'application/json',
-			headers: {
-				'Authorization': 'Bearer ' + token.access_token
+      var token = JSON.parse(localStorage.getItem("access_token"));
+      console.log(token)
+      var decode = jwtDecode(token.access_token)
+      console.log(decode)
+      var _this = this
+
+      $.ajax({
+        url: this.env.url_user_info,
+        type: 'POST',
+        contentType: 'application/json',
+        headers: {
+          'Authorization': 'Bearer ' + token.access_token
 			},
 			success: function (result) {
         // CallBack(result);
