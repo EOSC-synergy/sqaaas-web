@@ -68,16 +68,16 @@
 		},
 		methods: {
 				countDownTimer() {
-					if(this.countDown > 0) {
-						setTimeout(() => {
-							this.countDown -= 1
-							this.countDownTimer()
-						}, 1000)
-					}else{
+					// if(this.countDown > 0) {
+					// 	setTimeout(() => {
+					// 		this.countDown -= 1
+					// 		this.countDownTimer()
+					// 	}, 1000)
+					// }else{
 						var url_redirect =  window.location.origin + "/#/auth/select-option"
 						// var url_redirect = 'http://localhost:8080/#/auth/dashboard'
 						window.location.href = url_redirect
-					}
+					// }
 				}
 			}
 
