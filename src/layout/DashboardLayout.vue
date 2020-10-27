@@ -1,7 +1,7 @@
 <template>
 	<div class="wrapper">
 		<side-bar v-show="$route.path != '/auth/select-option' && $route.path != '/auth/full-assessment' ">
-			<mobile-menu slot="content"></mobile-menu>
+
 			<sidebar-link to="/auth/dashboard">
 				<i class="nc-icon nc-chart-pie-35"></i>
 				<p>1. General Options</p>
@@ -14,6 +14,12 @@
 				<i class="nc-icon nc-notes"></i>
 				<p>3. Actions</p>
 			</sidebar-link>
+      <hr style="background-color:rgba(255,255,255,0.6);">
+      <sidebar-link to="/auth/select-option">
+				<i class="nc-icon nc-stre-left"></i>
+				<p>Back</p>
+			</sidebar-link>
+      <mobile-menu></mobile-menu>
 		</side-bar>
     <div v-if="$route.path == '/auth/select-option' || $route.path == '/auth/full-assessment' ">
 			<top-navbar></top-navbar>
