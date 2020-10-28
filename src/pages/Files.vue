@@ -108,13 +108,11 @@
                   when {
                       anyOf {
                           branch 'master'
-                          branch 'jpl-branch'
-                          branch 'dev-*'
                       }
                   }
                   steps {
                       script {
-                          projectConfig = pipelineConfig('./.sqa/config.yml',  'https://github.com/eosc-synergy/sqaaas-web.git', 'jpl-branch', 'userpass_sqaaas_web', 'eoscsynergy/jpl-validator:jib-with-jpl')
+                          projectConfig = pipelineConfig()
                           buildStages(projectConfig)
                       }
                   }
