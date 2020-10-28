@@ -134,8 +134,8 @@ export default {
             + '&scope=openid profile'
             + '&nonce=abc'
             + '&client_id=' + this.env.client_id
-            // + '&redirect_uri=' + this.env.redirect_uri;
-            + '&redirect_uri=' + "http://localhost:8080/callback.html";
+            + '&redirect_uri=' + this.env.redirect_uri;
+            // + '&redirect_uri=' + "http://localhost:8080/callback.html";
             window.location.replace(url)
 		},
 
