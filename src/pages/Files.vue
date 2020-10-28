@@ -108,8 +108,6 @@
                   when {
                       anyOf {
                           branch 'master'
-                          branch 'jpl-branch'
-                          branch 'dev-*'
                       }
                   }
                   steps {
