@@ -17,11 +17,12 @@ export default new Vuex.Store({
      timeout:"600"
    },
    docker_compose:{
-     version:"3.6",
+     version:"3.7",
      services:{
 
      }
    },
+
  },
  getters: {},
  mutations: {},

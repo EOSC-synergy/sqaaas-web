@@ -185,12 +185,19 @@
             </template>
 
             <template>
-              <base-input style="padding-left:20px;" type="text"
-                        label="Docker Image"
-                        :disabled="false"
-                        placeholder="worsica/worsica-backend:worsica-processing-dev_latest"
-                        v-model="service.image">
-              </base-input>
+              <!-- <div class="row"> -->
+                <base-input style="padding-left:20px;" type="text"
+                          label="Docker Image"
+                          :disabled="false"
+                          placeholder="worsica/worsica-backend:worsica-processing-dev_latest"
+                          v-model="service.image">
+                </base-input>
+                <div class="row" style="justify-content: flex-end;padding-right:20px;">
+                  <span class="custom-label">One shot image</span><base-checkbox name="workpace" v-model="oneshot"></base-checkbox>
+
+                </div>
+
+              <!-- </div> -->
               <base-input style="padding-left:20px;" type="text"
                         label="Container Name"
                         :disabled="false"
@@ -317,6 +324,7 @@
     data () {
       return {
         username:'',
+        oneshot: false,
 
         repo:{
             name:'',
@@ -610,7 +618,6 @@
           }
         for (let i = 0; i < this.service.volumes.length; i++) {
           if(this.service.volumes[i].target == item1.target){
-            console.log("entra",i)
             this.service.volumes.splice(i,1)
           }
         }
@@ -622,22 +629,27 @@
         this.volume.target = '';
       },
       addService(){
-        console.log(this.service.envs)
-        this.services[this.service.container_name]={
-          image: this.service.image,
-          container_name: this.service.container_name,
-          hostname: this.service.hostname,
-          volumes: this.service.volumes,
-          environment: this.service.envs
+        if(this.oneshot== true){
+          this.services[this.service.container_name]={
+            image: this.service.image,
+            container_name: this.service.container_name,
+            hostname: this.service.hostname,
+            volumes: this.service.volumes,
+            command: 'sleep infinity',
+            environment: this.service.envs
+          }
+        }else{
+          this.services[this.service.container_name]={
+            image: this.service.image,
+            container_name: this.service.container_name,
+            hostname: this.service.hostname,
+            volumes: this.service.volumes,
+            environment: this.service.envs
+          }
         }
         this.showServices = true;
-        console.log(this.services)
         this.$store.state.docker_compose.services = this.services;
-        var yamlText= YAML.stringify(this.$store.state.docker_compose)
-        console.log(yamlText)
-        this.cleanService()
-        var yamlText= YAML.stringify(this.services)
-        console.log(yamlText)
+        this.cleanService();
       },
       removeService(item){
         this.$delete(this.services,item)

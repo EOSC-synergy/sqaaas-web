@@ -165,6 +165,7 @@
         criteria:'default',
         repository:'default',
         service:'default',
+        repos:{"repos":{}},
         command:'',
         commands:[],
         tox:{
@@ -267,24 +268,16 @@
           var repoName = this.repository
           var service = this.service
           var repo = {}
-          repo[repoName]={
+          repo={
                 container:service,
                 commands,
                 tox
-
           }
 
-          this.selected_criteria[this.criteria]={
-            repos:''
-          }
-          console.log(this.selected_criteria)
-
-          this.selected_criteria[this.criteria]["repos"]=repo
-
-
+          this.repos.repos[this.repository]=repo
+          this.selected_criteria[this.criteria]=this.repos
           console.log(this.selected_criteria);
           this.$store.state.config_yaml.sqa_criteria = this.selected_criteria;
-          console.log(this.$store.state.config_yaml.sqa_criteria)
           this.commands=[];
           this.tox.file='';
           this.testenv=[];
