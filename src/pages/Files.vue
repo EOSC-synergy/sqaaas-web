@@ -101,94 +101,123 @@
     methods:{
 
       createPipeline(){
-        console.log(this.$store.state.docker_compose.services)
-        var services = [];
-        var all_services = this.$store.state.docker_compose.services
-        for (var serv in all_services){
-          var volumes = []
-          for (let i = 0; i < all_services[serv].volumes.length; i++) {
-            var volume = {
-                 "volume_source": all_services[serv].volumes[i].source,
-                  "volume_target": all_services[serv].volumes[i].target,
-                  "volume_type": all_services[serv].volumes[i].type
-            }
-            volumes.push(volume)
+        // console.log(this.$store.state.docker_compose.services)
+        // var services = [];
+        // var all_services = this.$store.state.docker_compose.services
+        // for (var serv in all_services){
+        //   var volumes = []
+        //   for (let i = 0; i < all_services[serv].volumes.length; i++) {
+        //     var volume = {
+        //          "volume_source": all_services[serv].volumes[i].source,
+        //           "volume_target": all_services[serv].volumes[i].target,
+        //           "volume_type": all_services[serv].volumes[i].type
+        //     }
+        //     volumes.push(volume)
 
-          }
-          if(serv.command){
-            var service = {
-                        "command": all_services[serv].command,
-                        "hostname": all_services[serv].hostname,
-                        "image": all_services[serv].image,
-                        "service_id": serv,
-                        "volumes": volumes
-                    }
+        //   }
+        //   if(serv.command){
+        //     var service = {
+        //                 "command": all_services[serv].command,
+        //                 "hostname": all_services[serv].hostname,
+        //                 "image": all_services[serv].image,
+        //                 "service_id": serv,
+        //                 "volumes": volumes
+        //             }
 
-          }else{
-            var service = {
-                          "hostname": all_services[serv].hostname,
-                          "image": all_services[serv].image,
-                          "service_id": serv,
-                          "volumes": volumes
-                      }
-          }
+        //   }else{
+        //     var service = {
+        //                   "hostname": all_services[serv].hostname,
+        //                   "image": all_services[serv].image,
+        //                   "service_id": serv,
+        //                   "volumes": volumes
+        //               }
+        //   }
 
-          services.push(service);
+        //   services.push(service);
 
-        }
+        // }
 
-        var repos = []
-        var all_repos = this.$store.state.config_yaml.config.project_repos;
-        for (var repo in all_repos){
-          var repo_save = {
-            "branch": all_repos[repo].branch,
-              "repo_id": repo,
-              "repo_url":  all_repos[repo].repo
-          }
+        // var repos = []
+        // var all_repos = this.$store.state.config_yaml.config.project_repos;
+        // for (var repo in all_repos){
+        //   var repo_save = {
+        //       "branch": all_repos[repo].branch,
+        //       "repo_id": repo,
+        //       "repo_url":  all_repos[repo].repo
+        //   }
 
-          repos.push(repo_save)
-        }
+        //   repos.push(repo_save)
+        // }
 
+        // var credentials = []
+        // var all_credentials = this.$store.state.config_yaml.config.credentials;
+        // for (var cred in all_credentials){
+        //   var save_credential = {
+        //     "id": cred,
+        //     "type": "username_password",
+        //     "username_var": all_credentials[cred].username_var,
+        //     "password_var": all_credentials[cred].password_var
+        //   }
 
-        var criterias=[];
-        var all_criterias = this.$store.state.config_yaml.sqa_criteria;
+        //   credentials.push(save_credential)
+        // }
 
-        for(var criteria in all_criterias){
-          var repos_criteria = []
-          for (var i in all_criterias[criteria].repos){
-            var save_repo = {
-                          "build_tool": {
-                              "commands": all_criterias[criteria].repos[i].commands,
-                              "tox":{
-                                "tox_file":all_criterias[criteria].repos[i].tox.tox_file,
-                                "testenv":all_criterias[criteria].repos[i].tox.test_env
-                              }
-                          },
-                          "container": all_criterias[criteria].repos[i].container,
-                          "repo_id": i
-                      }
+        // var environments = []
+        // var all_environments = this.$store.state.config_yaml.environment;
+        // for (var env in all_environments){
+        //   var save_env = {
+        //     "id": all,
+        //     "type": "username_password",
+        //     "username_var": all_credentials[cred].username_var,
+        //     "password_var": all_credentials[cred].password_var
+        //   }
 
-            repos_criteria.push(save_repo)
-          }
+        //   credentials.push(save_credential)
+        // }
 
-          var criteria_save = {
-                                "criterion": criteria,
-                                "repos": repos_criteria
-                            }
+        // var criterias=[];
+        // var all_criterias = this.$store.state.config_yaml.sqa_criteria;
 
-           criterias.push(criteria_save);
-        }
+        // for(var criteria in all_criterias){
+        //   var repos_criteria = []
+        //   for (var i in all_criterias[criteria].repos){
+        //     var save_repo = {
+        //                   "build_tool": {
+        //                       "commands": all_criterias[criteria].repos[i].commands,
+        //                       "tox":{
+        //                         "tox_file":all_criterias[criteria].repos[i].tox.tox_file,
+        //                         "testenv":all_criterias[criteria].repos[i].tox.test_env
+        //                       }
+        //                   },
+        //                   "container": all_criterias[criteria].repos[i].container,
+        //                   "repo_id": i
+        //               }
+
+        //     repos_criteria.push(save_repo)
+        //   }
+
+        //   var criteria_save = {
+        //                         "criterion": criteria,
+        //                         "repos": repos_criteria
+        //                     }
+
+        //    criterias.push(criteria_save);
+        // }
 
         var data = [
                       {
                           "composer_data": {
-                              "services": services,
+                              "services": this.$store.state.docker_compose.services,
                               "version": "3.7"
                           },
                           "config_data": [
                               {
-                                  "project_repos": repos,
-                                  "sqa_criteria": criterias
+                                  "config":{
+                                    "project_repos": this.$store.state.config_yaml.config.project_repos,
+                                    "credentials" : this.$store.state.config_yaml.config.credentials,
+                                  },
+                                  "environment" : this.$store.state.config_yaml.environment,
+                                  "sqa_criteria": this.$store.state.config_yaml.sqa_criteria
                               }
                           ],
                           "jenkinsfile_data": {

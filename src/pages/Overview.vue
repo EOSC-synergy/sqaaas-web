@@ -93,30 +93,43 @@
                 </div>
                 <div v-show='config.credentials.yes' style="padding-left:30px;">
 
-                  <base-input type="text"
+                  <base-input type="text" class="no-margin"
                         label="ID"
                         :disabled="false"
                         placeholder="userpass"
                         v-model="credentials.id">
                   </base-input>
+                  <span v-show="showErrorCredId" style="color:red;font-size:12px;">This filed is required</span>
 
-                  <div class="row">
-
-                    <base-input class="col-md-4" type="text"
-                        label="Username Var"
-                        :disabled="false"
-                        placeholder="GIT_USER"
-                        v-model="credentials.username_var">
-                    </base-input>
-                    <base-input class="col-md-4" type="password"
-                        label="Password Var"
-                        :disabled="false"
-                        placeholder="GIT_PASSWORD"
-                        v-model="credentials.password_var">
-                    </base-input>
+                  <div class="row" style="margin-bottom:10px;">
+                    <div class="col-md-6" style="display:grid;">
+                      <base-input  type="text" class="no-margin"
+                          label="Username Var"
+                          :disabled="false"
+                          placeholder="GIT_USER"
+                          v-model="credentials.username_var">
+                      </base-input>
+                      <span v-show="showErrorCredUser" style="color:red;font-size:12px;">This filed is required</span>
+                    </div>
+                    <div class="col-md-6" style="display:grid;" >
+                      <base-input  type="password" class="no-margin"
+                          label="Password Var"
+                          :disabled="false"
+                          placeholder="GIT_PASSWORD"
+                          v-model="credentials.password_var">
+                      </base-input>
+                      <span v-show="showErrorCredPass" style="color:red;font-size:12px;">This filed is required</span>
+                    </div>
                   </div>
-                  <div class="text-right">
-                    <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCred()"><i class="fa fa-plus"></i>ADD Credentials</button>
+                  <select class="custom-select" id="cred" v-model='credentials.type' >
+                    <option value="default">Choose a type...</option>
+                    <option value="username_password">Username Password</option>
+                    <option value="certificate">Certificate</option>
+                    <option value="ssh_user_private-key">SSH User Private Key</option>
+                  </select>
+                  <span v-show="showErrorCredType" style="color:red;font-size:12px;">This filed is required</span>
+                  <div class="text-right" style="padding-top:15px;">
+                    <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCred()"><i class="fa fa-plus"></i>ADD CREDENTIALS</button>
                   </div>
                 </div>
                 <div v-show="showCred" style="padding-top:20px;margin-bottom:2rem;">
@@ -152,7 +165,7 @@
                         v-model="env.value">
                   </base-input>
                   <div style="margin-bottom:30px;width:95%;" class="text-right">
-                    <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnv()"><i class="fa fa-plus"></i>ADD Env Vars</button>
+                    <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnv()"><i class="fa fa-plus"></i>ADD ENV VAR</button>
                   </div>
                 </div>
                 <div v-show="showEnv" style="padding-top:20px;margin-bottom:1rem;">
@@ -338,6 +351,7 @@
           id:'',
           username_var:'',
           password_var:'',
+          type:"default"
         },
         env:{
           key:'',
@@ -366,6 +380,10 @@
         showVolumes:false,
         showEnvCompose:false,
         showServices:false,
+        showErrorCredId:false,
+        showErrorCredPass:false,
+        showErrorCredUser:false,
+        showErrorCredType:false,
         service:{
           image:'',
           container_name:'',
@@ -519,24 +537,49 @@
         this.repo.branch = '';
       },
       addCred(){
-        // this.config.all_credentials={
-        //   id:this.credentials.id,
-        //   'username_var':this.credentials.username,
-        //   'password_var':this.credentials.password
-        // };
-        var cred = {
-          id: this.credentials.id,
-          username_var: this.credentials.username_var,
-          password_var: this.credentials.password_var,
-        }
-        this.all_credentials.push(cred)
-        this.$store.state.config_yaml.config.credentials = this.all_credentials;
-        var yamlText= YAML.stringify(this.$store.state.config_yaml)
-        console.log(yamlText)
+        if(this.credentials.type == "default" || this.credentials.id=="" || this.credentials.username_var=="" || this.credentials.password_var == ""){
+          console.log("error")
+          if(this.credentials.type == "default"){
+            this.showErrorCredType = true;
+          }else{
+            this.showErrorCredType = false;
+          }
+          if(this.credentials.id==""){
+            this.showErrorCredId = true;
+          }else{
+            this.showErrorCredId = false;
+          }
+          if(this.credentials.password_var == ""){
+            this.showErrorCredPass = true;
+          }else{
+            this.showErrorCredPass = false;
+          }
+          if(this.credentials.username_var==""){
+            this.showErrorCredUser = true;
+          }else{
+            this.showErrorCredUser = false;
+          }
 
-        this.showCred = true;
-        this.cleanCred()
-        console.log(this.all_credentials)
+        }else{
+          this.showErrorCredId = false;
+          this.showErrorCredPass = false;
+          this.showErrorCredType = false;
+          this.showErrorCredUser = false;
+          var cred = {
+            id: this.credentials.id,
+            username_var: this.credentials.username_var,
+            password_var: this.credentials.password_var,
+            type: this.credentials.type
+          }
+          this.all_credentials.push(cred)
+          this.$store.state.config_yaml.config.credentials = this.all_credentials;
+          var yamlText= YAML.stringify(this.$store.state.config_yaml)
+          console.log(yamlText)
+
+          this.showCred = true;
+          this.cleanCred()
+          console.log(this.all_credentials)
+        }
 
       },
       removeCred(item){
@@ -550,6 +593,7 @@
         this.credentials.id = "";
         this.credentials.username_var = "";
         this.credentials.password_var = "";
+        this.credentials.type = "default";
       },
       addEnv(){
         var envVars= {};
@@ -668,6 +712,7 @@
         this.service.envs=[];
         this.volumes={};
         this.service.volumes=[];
+        this.oneshot = false;
         this.cleanEnvCompose();
         this.cleanVolume();
         this.envComposeYesNo.no = true;
@@ -767,6 +812,10 @@
 }
 input[type=number]::-webkit-inner-spin-button {
   opacity: 1;
+}
+
+.no-margin{
+  margin:0px!important;
 }
 
 </style>
