@@ -16,6 +16,8 @@ import './registerServiceWorker'
 Vue.use(VueRouter)
 Vue.use(LightBootstrap)
 
+window.axios = require('axios');
+
 Vue.mixin({
   data: function(){
     return {

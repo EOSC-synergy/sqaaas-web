@@ -49,23 +49,30 @@
                     <h4 class="card-title text-center">Tox Tool</h4>
                   </template>
                   <div class="row">
-                    <base-input style="padding-left:40px;" type="text"
-                            label="Tox file"
-                            :disabled="false"
-                            placeholder="/myrepo-testing/tox.ini"
-                            v-model="tox.file">
-                    </base-input>
-                    <!-- <div style="padding-top:30px;">
-                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="addToxFile()"><i class="fa fa-plus"></i>ADD</button>
-                    </div> -->
-                    <base-input style="padding-left:40px;" type="text"
-                            label="Test env"
-                            :disabled="false"
-                            placeholder="stylecheck"
-                            v-model="tox.env">
-                    </base-input>
-                    <div style="padding-top:30px;">
-                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="addTestEnv()"><i class="fa fa-plus"></i>ADD</button>
+                    <div class="col-12 col-md-6">
+
+                      <base-input type="text" class="col-10 no-margin"
+                              label="Tox file"
+                              :disabled="false"
+                              placeholder="/myrepo-testing/tox.ini"
+                              v-model="tox.file">
+                      </base-input>
+                      <span v-show="showErrorFile" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
+                    </div>
+                    <div class="col-12 col-md-6" style="display:grid;">
+                      <div style="display:flex;">
+                        <base-input type="text" class="col-10 no-margin"
+                                label="Test env"
+                                :disabled="false"
+                                placeholder="stylecheck"
+                                v-model="tox.env">
+                        </base-input>
+                        <div class="col-2"  style="padding-top:30px;padding-left:0px;">
+                          <button type="button" class="btn-simple btn btn-xs btn-info" @click="addTestEnv()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD</button>
+                        </div>
+                      </div>
+                      <span v-show="showErrorEnv" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
+
                     </div>
 
                   </div>
@@ -94,12 +101,16 @@
                     <h4 class="card-title text-center">Add Comands</h4>
                   </template>
                   <div class="row">
-                    <base-input style="padding-left:40px;" type="text"
-                            label="Command"
-                            :disabled="false"
-                            placeholder="npm install"
-                            v-model="command">
-                    </base-input>
+                    <div class="display:grid;">
+                      <base-input style="padding-left:40px;" type="text" class="no-margin"
+                              label="Command"
+                              :disabled="false"
+                              placeholder="npm install"
+                              v-model="command">
+                      </base-input>
+                      <span v-show="showErrorCommand" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
+
+                    </div>
                     <div style="padding-top:30px;">
                       <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCommand()"><i class="fa fa-plus"></i>ADD</button>
                     </div>
@@ -165,6 +176,7 @@
         criteria:'default',
         repository:'default',
         service:'default',
+        repos:{"repos":{}},
         command:'',
         commands:[],
         tox:{
@@ -183,8 +195,9 @@
         showErrorRepo:false,
         showErrorService:false,
         showErrorCriteria:false,
-
-
+        showErrorCommand: false,
+        showErrorFile: false,
+        showErrorEnv:false
 
       }
     },
@@ -263,28 +276,36 @@
           this.showErrorCriteria = false;
           this.show_tool_tox = false;
           this.clearTox();
+          var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria)
+          if(sizeCriteria > 0){
+            console.log(this.$store.state.config_yaml.sqa_criteria)
+            var sizeSelectCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria[this.criteria])
+            console.log(sizeSelectCriteria)
+             if(sizeSelectCriteria > 0){
+               this.repos["repos"] = this.$store.state.config_yaml.sqa_criteria[this.criteria]["repos"]
+             }
+
+          }else{
+            this.repos["repos"]={};
+          }
+          // this.repos.repos[this.repository] = this.$store.state.config_yaml.sqa_criteria[this.criteria];
+          console.log(this.repos)
 
           var repoName = this.repository
           var service = this.service
           var repo = {}
-          repo[repoName]={
+          repo={
                 container:service,
                 commands,
                 tox
-
           }
 
-          this.selected_criteria[this.criteria]={
-            repos:''
-          }
-          console.log(this.selected_criteria)
-
-          this.selected_criteria[this.criteria]["repos"]=repo
-
-
+          console.log(this.repos)
+          this.repos.repos[this.repository]=repo
+          console.log(this.repos)
+          this.selected_criteria[this.criteria]=this.repos
           console.log(this.selected_criteria);
           this.$store.state.config_yaml.sqa_criteria = this.selected_criteria;
-          console.log(this.$store.state.config_yaml.sqa_criteria)
           this.commands=[];
           this.tox.file='';
           this.testenv=[];
@@ -293,15 +314,21 @@
       },
       removeCriteria(key){
         this.$delete(this.selected_criteria,key)
+        this.$store.state.config_yaml.sqa_criteria = this.selected_criteria;
         if (this.isEmpty(this.selected_criteria)) {
           this.showCriteria = false;
         }
 
       },
       addCommand(){
-        this.commands.push(this.command);
-        this.showCommands = true;
-        this.command = '';
+        if(this.command == ''){
+          this.showErrorCommand = true;
+        }else{
+          this.showErrorCommand = false;
+          this.commands.push(this.command);
+          this.showCommands = true;
+          this.command = '';
+        }
       },
       removeCommand(key){
         this.$delete(this.commands,key)
@@ -318,9 +345,20 @@
         this.testenv = [];
       },
       addTestEnv(){
-        this.testenv.push(this.tox.env);
-        this.show_tool_tox = true;
-        this.tox.env = ''
+        if(this.tox.env == '' || this.tox.file == ''){
+          if(this.tox.env == '' ){
+            this.showErrorEnv = true
+          }
+          if(this.tox.file == '' ){
+            this.showErrorFile = true
+          }
+        }else{
+          this.showErrorEnv = false
+          this.showErrorTest = false
+          this.testenv.push(this.tox.env);
+          this.show_tool_tox = true;
+          this.tox.env = ''
+        }
 
       },
       removetestEnv(key){
@@ -355,6 +393,19 @@
         if(sizeRepos == 0 || sizeServices == 0){
           this.notifyVue("Error you must add at least one repository and one service")
           this.$router.push({name:"dashboard"})
+        }else{
+          var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
+          var getCriteria = this.$store.state.config_yaml.sqa_criteria
+          for (var i in getCriteria){
+            console.log(i)
+            this.selected_criteria[i] = getCriteria[i];
+          }
+          console.log(this.selected_criteria)
+          if(sizeCriteria != 0){
+            this.showCriteria = true;
+          }else{
+            this.showCriteria = false;
+          }
         }
 
       }
@@ -369,6 +420,10 @@
 }
 input[type=number]::-webkit-inner-spin-button {
   opacity: 1;
+}
+
+.no-margin{
+  margin:0px!important;
 }
 
 </style>
