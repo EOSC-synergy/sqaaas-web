@@ -7,6 +7,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
  state: {
+   name:'',
+   pipeline_id:'',
    config_yaml:{
      config:{
        project_repos:"",

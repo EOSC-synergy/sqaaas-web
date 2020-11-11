@@ -12,6 +12,17 @@ export default {
               return callBackHandler(error);
           });
       },
+      deletePipelineCall(data, callBackHandler) {
+          axios({
+              method: 'delete',
+              url: 'http://194.210.120.204:20495/dev/pipeline'+data+'/delete',
+          }).then(response => {
+              return callBackHandler(response);
+          })
+          .catch(error => {
+              return callBackHandler(error);
+          });
+      },
       runPipelineCall(data, callBackHandler){
         axios({
           method: 'post',
@@ -24,9 +35,9 @@ export default {
         });
 
       },
-      checkSatusCall(data, callBackHandler){
+      checkStatusCall(data, callBackHandler){
         axios({
-          method: 'post',
+          method: 'get',
           url: 'http://194.210.120.204:20495/dev/pipeline/'+data+'/status',
         }).then(response => {
             return callBackHandler(response);
