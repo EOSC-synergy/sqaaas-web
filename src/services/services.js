@@ -16,7 +16,7 @@ export default {
       deletePipelineCall(data, callBackHandler) {
           axios({
               method: 'delete',
-              url: 'http://194.210.120.204:20495/dev/pipeline'+data+'/delete',
+              url: 'http://194.210.120.204:20495/stage/v1/pipeline'+data+'/delete',
           }).then(response => {
               return callBackHandler(response);
           })
@@ -39,7 +39,7 @@ export default {
       checkStatusCall(data, callBackHandler){
         axios({
           method: 'get',
-          url: 'http://194.210.120.204:20495/dev/pipeline/'+data+'/status',
+          url: 'http://194.210.120.204:20495/stage/v1/pipeline/'+data+'/status',
         }).then(response => {
             return callBackHandler(response);
         })
@@ -47,6 +47,33 @@ export default {
             return callBackHandler(error);
         });
 
-      }
+      },
+    downloadFileCall(id, callBackHandler){
+      axios({
+          method: 'get',
+          url: 'http://194.210.120.204:20495/stage/v1/pipeline/'+id+'/compressed_files',
+          data: data.repo
+        }).then(response => {
+            return callBackHandler(response);
+        })
+        .catch(error => {
+            return callBackHandler(error);
+        });
+
+    },
+    pullRequestCall(id,data, callBackHandler){
+      axios({
+          method: 'post',
+          url: 'http://194.210.120.204:20495/stage/v1/pipeline/'+id+'/pull_request',
+          data: data.repo
+        }).then(response => {
+            return callBackHandler(response);
+        })
+        .catch(error => {
+            return callBackHandler(error);
+        });
+
+
+    }
   }
 }

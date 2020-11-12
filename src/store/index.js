@@ -11,8 +11,8 @@ export default new Vuex.Store({
    pipeline_id:'',
    config_yaml:{
      config:{
-       project_repos:"",
-       credentials:""
+       project_repos:{},
+       credentials:[]
      },
      sqa_criteria:{},
      environment:{},

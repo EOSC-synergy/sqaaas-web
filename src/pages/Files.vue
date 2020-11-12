@@ -170,7 +170,7 @@
         this.createPipelineCall(data,this.createPipelineCallBack)
       },
       createPipelineCallBack(response){
-        if(response.status == 201){
+        if(response.status == 200){
           if (response.data.id && response.data.id != 0){
             this.pipeline_id = response.data.id;
             this.$store.state.pipeline_id = this.pipeline_id;
@@ -427,7 +427,7 @@
       this.$router.push({name:"SQACriteria"})
     }
     // this.pipeline_id = this.$store.state.pipeline_id;
-    this.pipeline_id = "dda7f26e-9433-413c-964f-cc62a510b113";
+    this.pipeline_id = "371c16c8-90f0-46b9-806d-856e464aeba7";
     if(this.pipeline_id == ''){
       this.showCard = false;
       this.disabled_button = false;
