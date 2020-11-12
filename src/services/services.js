@@ -1,9 +1,10 @@
 export default {
   methods: {
       createPipelineCall(data, callBackHandler) {
+          console.log(data)
           axios({
               method: 'post',
-              url: 'http://194.210.120.204:20495/dev/pipeline',
+              url: 'http://194.210.120.204:20495/stage/v1/pipeline',
               data: data
           }).then(response => {
               return callBackHandler(response);
@@ -26,7 +27,7 @@ export default {
       runPipelineCall(data, callBackHandler){
         axios({
           method: 'post',
-          url: 'http://194.210.120.204:20495/dev/pipeline/'+data+'/run',
+          url: 'http://194.210.120.204:20495/stage/v1/pipeline/'+data+'/run',
         }).then(response => {
             return callBackHandler(response);
         })

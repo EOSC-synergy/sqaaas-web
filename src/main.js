@@ -17,6 +17,7 @@ Vue.use(VueRouter)
 Vue.use(LightBootstrap)
 
 window.axios = require('axios');
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 Vue.mixin({
   data: function(){

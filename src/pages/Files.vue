@@ -129,7 +129,7 @@
       },
 
       createPipeline(){
-        var data = [
+        var data =
                       {
                           "name": this.$store.state.name,
                           "composer_data": {
@@ -165,7 +165,7 @@
                               ]
                           }
                       }
-                  ]
+
         console.log(data)
         this.createPipelineCall(data,this.createPipelineCallBack)
       },
@@ -426,7 +426,8 @@
       this.notifyVue("Error you must add at least one sqa criteria")
       this.$router.push({name:"SQACriteria"})
     }
-    this.pipeline_id = this.$store.state.pipeline_id;
+    // this.pipeline_id = this.$store.state.pipeline_id;
+    this.pipeline_id = "dda7f26e-9433-413c-964f-cc62a510b113";
     if(this.pipeline_id == ''){
       this.showCard = false;
       this.disabled_button = false;
