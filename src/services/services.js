@@ -16,7 +16,7 @@ export default {
       deletePipelineCall(data, callBackHandler) {
           axios({
               method: 'delete',
-              url: 'http://194.210.120.204:20495/stage/v1/pipeline'+data+'/delete',
+              url: 'http://194.210.120.204:20495/stage/v1/pipeline/'+data,
           }).then(response => {
               return callBackHandler(response);
           })
@@ -53,6 +53,7 @@ export default {
           method: 'get',
           url: 'http://194.210.120.204:20495/stage/v1/pipeline/'+id+'/compressed_files',
         }).then(response => {
+          console.log(response)
             return callBackHandler(response);
         })
         .catch(error => {

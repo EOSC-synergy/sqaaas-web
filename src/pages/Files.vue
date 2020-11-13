@@ -118,7 +118,7 @@
 
       },
       deletePipelineCallBack(response){
-        if(response.status == 201){
+        if(response.status == 200){
 
             this.pipeline_id = '';
             this.$store.state.pipeline_id = this.pipeline_id;
