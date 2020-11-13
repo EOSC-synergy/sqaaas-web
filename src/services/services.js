@@ -10,7 +10,7 @@ export default {
               return callBackHandler(response);
           })
           .catch(error => {
-              return callBackHandler(error);
+              return callBackHandler(error.response);
           });
       },
       deletePipelineCall(data, callBackHandler) {
@@ -21,7 +21,7 @@ export default {
               return callBackHandler(response);
           })
           .catch(error => {
-              return callBackHandler(error);
+              return callBackHandler(error.response);
           });
       },
       runPipelineCall(data, callBackHandler){
@@ -32,7 +32,7 @@ export default {
             return callBackHandler(response);
         })
         .catch(error => {
-            return callBackHandler(error);
+            return callBackHandler(error.response);
         });
 
       },
@@ -44,7 +44,7 @@ export default {
             return callBackHandler(response);
         })
         .catch(error => {
-            return callBackHandler(error);
+            return callBackHandler(error.response);
         });
 
       },
@@ -52,12 +52,11 @@ export default {
       axios({
           method: 'get',
           url: 'http://194.210.120.204:20495/stage/v1/pipeline/'+id+'/compressed_files',
-          data: data.repo
         }).then(response => {
             return callBackHandler(response);
         })
         .catch(error => {
-            return callBackHandler(error);
+            return callBackHandler(error.response);
         });
 
     },
@@ -70,7 +69,7 @@ export default {
             return callBackHandler(response);
         })
         .catch(error => {
-            return callBackHandler(error);
+            return callBackHandler(error.response);
         });
 
 

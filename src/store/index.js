@@ -9,6 +9,7 @@ export default new Vuex.Store({
  state: {
    name:'',
    pipeline_id:'',
+   build_url:'',
    config_yaml:{
      config:{
        project_repos:{},

@@ -1,6 +1,9 @@
 <template>
   	<div class="content">
       <div class="container-fluid">
+        <div  v-show="loading" class="loading-overlay is-active">
+          <span class="fas fa-spinner fa-3x fa-spin"></span>
+        </div>
         <div class="row">
           <div class="col-12">
 
@@ -57,10 +60,10 @@
 
                 <div class="row" style="padding-bottom:20px;padding-left:15px;">
                   <div class="col-md-6 text-center">
-                    <button class="btn  btn-primary btn-fill" @click="renderTemplate('zip')">Generate Files</button>
+                    <button class="btn  btn-primary btn-fill" @click="generateFiles()">Generate Files</button>
                   </div>
                   <div class="col-md-6 text-center" >
-                    <button  class="btn  btn-primary btn-fill" @click="checkStatus()">Pull Request</button>
+                    <button  class="btn  btn-primary btn-fill" @click="pullrequest()">Pull Request</button>
                   </div>
                 </div>
               </template>
@@ -106,6 +109,7 @@
         build_status:'',
         pipeline_id:'',
         disabled_button: false,
+        loading: false,
 		}
     },
     methods:{
@@ -120,11 +124,12 @@
             this.$store.state.pipeline_id = this.pipeline_id;
             this.showCard = false;
             this.disabled_button = false;
+            this.notifyVue("Pipeline deleted successfully",'nc-icon nc-check-2','info');
 
 
         }else{
           this.disabled_button = false;
-          this.notifyVue("Error:" + response.error)
+          this.notifyVue("Error:" + response.error,'nc-icon nc-simple-remove','danger')
         }
       },
 
@@ -167,6 +172,7 @@
                       }
 
         console.log(data)
+        this.loading = true;
         this.createPipelineCall(data,this.createPipelineCallBack)
       },
       createPipelineCallBack(response){
@@ -176,16 +182,17 @@
             this.$store.state.pipeline_id = this.pipeline_id;
             this.showCard = true;
             this.disabled_button = true;
-
-
+            this.notifyVue("Pipeline created successfully",'nc-icon nc-check-2','info');
           }
         }else{
           this.disabled_button = false;
-          this.notifyVue("Error:" + response.error)
+          this.notifyVue("Error:" + response.data.detail,'nc-icon nc-simple-remove','danger')
         }
+        this.loading = false;
 
       },
       runPipeline(){
+        this.loading = true;
         this.runPipelineCall(this.pipeline_id,this.runPipelineCallBack)
       },
       runPipelineCallBack(response){
@@ -193,14 +200,18 @@
           if (response.data.build_url){
             this.showCard = true;
             this.build_url = response.data.build_url;
+            this.$store.state.build_url = this.build_url;
             this.showBuildUrl = true;
+            this.notifyVue("Pipeline executed successfully",'nc-icon nc-check-2','info');
           }
         }else{
           this.showBuildUrl = false;
-          this.notifyVue("Error:" + response.error)
+          this.notifyVue("Error:" + response.data.detail,'nc-icon nc-simple-remove','danger')
         }
+        this.loading = false;
       },
       checkStatus(){
+        this.loading = true;
         this.checkStatusCall(this.pipeline_id,this.checkStatusCallBack)
       },
       checkStatusCallBack(response){
@@ -211,10 +222,28 @@
           }
         }else{
           this.showStatus = false;
-          this.notifyVue("Error:" + response.error)
+          this.notifyVue("Error: " + response.data.detail,'nc-icon nc-simple-remove','info')
         }
+        this.loading = false;
       },
+      generateFiles(){
+        this.downloadFileCall(this.pipeline_id,this.downloadFileCallBack);
+      },
+      downloadFileCallBack(response){
+        console.log(response)
 
+      },
+      // pullrequest(){
+      //   var data = {
+      //     "repo": this.$store.state.config_yaml.config.project_repos
+      //   }
+      //   console.log(data);
+      //   // this.pullRequestCall(this.pipeline_id,data,this.pullRequestCallBack);
+      // },
+      // pullRequestCallBack(response){
+      //   console.log(response)
+
+      // },
 
       renderTemplate(value){
         console.log(this.$store.state)
@@ -407,15 +436,15 @@
         }
         return size;
       },
-      notifyVue (message) {
+      notifyVue (message,icon,color) {
         this.$notify(
           {
             message: message,
-            icon: 'nc-icon nc-simple-remove',
+            icon: icon,
             timeout:3000,
             horizontalAlign: 'center',
             verticalAlign: 'top',
-            type: 'danger'
+            type: color
           })
       },
   },
@@ -423,20 +452,46 @@
     var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
     console.log(sizeCriteria)
     if(sizeCriteria == 0){
-      this.notifyVue("Error you must add at least one sqa criteria")
+      this.notifyVue("Error you must add at least one sqa criteria",'nc-icon nc-simple-remove','danger')
       this.$router.push({name:"SQACriteria"})
     }
-    // this.pipeline_id = this.$store.state.pipeline_id;
-    this.pipeline_id = "371c16c8-90f0-46b9-806d-856e464aeba7";
-    if(this.pipeline_id == ''){
-      this.showCard = false;
-      this.disabled_button = false;
-    }else{
-      this.disabled_button =true;
-      this.showCard = true;
-    }
+
+    var json = JSON.stringify(this.$store.state);
+    console.log(json)
+    this.pipeline_id = this.$store.state.pipeline_id;
+    this.build_url = this.$store.state.build_url;
+    // this.pipeline_id = "371c16c8-90f0-46b9-806d-856e464aeba7";
+      if(this.pipeline_id == ''){
+        this.showCard = false;
+        this.disabled_button = false;
+      }else{
+        this.disabled_button =true;
+        this.showCard = true;
+      }
+      if(this.build_url == ''){
+        this.showBuildUrl = false;
+      }else{
+        this.showBuildUrl = true;
+      }
   }
 }
 </script>
 <style>
+
+.loading-overlay {
+  display: none;
+  background: rgba(255, 255, 255, 0.7);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 9998;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-overlay.is-active {
+  display: flex;
+}
 </style>
