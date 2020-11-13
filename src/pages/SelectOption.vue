@@ -1,9 +1,9 @@
 <template>
   	<div class="content">
 		<div class="container-fluid">
-			<div class="row" style="height:80vh;">
+			<div class="row" >
 				<div class="col-12" style="margin-top:40px;">
-					<card style="height:70vh;" class="strpied-tabled-with-hover"
+					<card  class="strpied-tabled-with-hover"
 						body-classes=""
 					>
 						<template slot="header">
@@ -137,7 +137,7 @@
 .icons-select{
   color:white;
   padding-top:20px;
-  font-size: 80px;
+  font-size: 50px;
 }
 
 .custom-title{
@@ -149,6 +149,11 @@
 
 /* // Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
+  .icons-select{
+    color:white;
+    padding-top:20px;
+    font-size: 80px;
+  }
 
   }
 
