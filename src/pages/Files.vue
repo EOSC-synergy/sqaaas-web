@@ -26,6 +26,9 @@
 
                   </div>
                 </div>
+                <div class="text-center" v-show="pipeline_id != ''">
+                  <span>Pipeline ID: {{pipeline_id}}</span>
+                </div>
               </template>
             </card>
 
@@ -172,7 +175,7 @@
         loading: false,
         repo_pull_request:'',
         showErrorPullRequest:false,
-        pull_request_url: 'https://github.com/EOSC-synergy/sqaaas-api-spec/pull/23'
+        pull_request_url: 'https://github.com/EOSC-synergy/checkstyle-samples/pull/2'
 		}
     },
     watch:{
@@ -288,6 +291,7 @@
         if(response.status == 200){
           if (response.data.build_status){
             this.build_status = response.data.build_status;
+            this.$store.state.status = this.build_status;
             this.showStatus = true;
           }
         }else{
