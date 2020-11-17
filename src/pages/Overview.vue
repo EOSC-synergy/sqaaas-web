@@ -508,10 +508,10 @@
           var error_message = "Repository Name and URL are required";
           this.notifyVue(error_message)
         }else{
-          this.config.all_repos[this.repo.name]={
-            'repo':this.repo.url,
-            'branch':this.repo.branch,
-            'deploy_template':this.repo.path
+          this.config.all_repos[this.repo.name.trim()]={
+            'repo':this.repo.url.trim(),
+            'branch':this.repo.branch.trim(),
+            'deploy_template':this.repo.path.trim()
           }
           this.showRepo = true;
           this.config.workspace.no = true;
@@ -525,7 +525,8 @@
       },
       removeRepo(item){
         this.$delete(this.config.all_repos,item)
-        this.$store.state.config_yaml.config.project_repos = this.config.all_repos
+        this.$store.state.config_yaml.config.project_repos = this.config.all_repos;
+        this.$store.state.config_yaml.sqa_criteria={};
         if (this.isEmpty(this.config.all_repos)) {
           this.showRepo = false;
         }
@@ -645,9 +646,9 @@
         this.count +=1;
         var name = "volume "+this.count;
         this.volumes[name]={
-          type:this.volume.type,
-          source:this.volume.source,
-          target:this.volume.target
+          type:this.volume.type.trim(),
+          source:this.volume.source.trim(),
+          target:this.volume.target.trim()
         }
         this.service.volumes.push(this.volumes[name])
         this.cleanVolume();
@@ -698,8 +699,7 @@
       removeService(item){
         this.$delete(this.services,item)
         this.$store.state.docker_compose.services = this.services;
-        var yamlText= YAML.stringify(this.$store.state.docker_compose)
-        console.log(yamlText)
+        this.$store.state.config_yaml.sqa_criteria={};
         if (this.isEmpty(this.services)) {
           this.showServices = false;
         }

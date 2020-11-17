@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content" style="background-color:#f8f9fa;">
     <div class="container-fluid">
       <div class="row">
         <div class="col-12" style="margin-top:40px;">
@@ -8,8 +8,18 @@
                 <h4 class="card-title text-center" style="padding-top:2rem;">Select SQA Criteria</h4>
               </template>
               <template class="card-body">
+                <div class="col-12 col-md-10">
+                   <base-input type="text" class="no-margin"
+                            label="Pipeline Name"
+                            :disabled="false"
+                            placeholder="worsica"
+                            v-model="pipelineName">
+                    </base-input>
+                    <span v-show="showErrorPipeline" style="color:red; font-size:12px;">This field is required.</span>
+                </div>
                 <div style="margin-top:3rem;margin-bottom:1rem;margin-left:20px;display:grid;">
                   <div>
+
                     <select class="custom-select col-md-6" id="sqacriteria" v-model='criteria' >
                       <option value="default">Choose a criteria...</option>
                       <option value="qc_style">qc_style</option>
@@ -20,7 +30,7 @@
                     </select>
                     <a style="margin-left: 2rem;text-decoration: underline;" v-show="show_link" :href="criteria_link" target="_blank">Criteria Information</a>
                   </div>
-                  <span v-show="showErrorCriteria" style="color:red">You must select a valid criteria</span>
+                  <span v-show="showErrorCriteria" style="color:red; font-size:12px;">You must select a valid criteria</span>
                 </div>
                 <div v-show="showSelect" style="margin-top:3rem;margin-bottom:1rem;margin-left:20px;display:grid;">
                   <span>Select a repository</span>
@@ -28,7 +38,7 @@
                     <option value="default">Choose a repository...</option>
                     <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="key">{{key}}</option>
                   </select>
-                  <span v-show="showErrorRepo" style="color:red">You must select a respository</span>
+                  <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
                 </div>
 
                 <div v-show="showSelect" style="margin-top:1rem;margin-bottom:3rem;margin-left:20px;display:grid;">
@@ -37,7 +47,7 @@
                     <option value="default">Choose a service...</option>
                     <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
                   </select>
-                  <span v-show="showErrorService" style="color:red">You must select a service</span>
+                  <span v-show="showErrorService" style="color:red; font-size:12px;">You must select a service</span>
                 </div>
               </template>
             </card>
@@ -173,6 +183,7 @@
     },
     data () {
       return {
+        pipelineName:'',
         criteria:'default',
         repository:'default',
         service:'default',
@@ -197,7 +208,8 @@
         showErrorCriteria:false,
         showErrorCommand: false,
         showErrorFile: false,
-        showErrorEnv:false
+        showErrorEnv:false,
+        showErrorPipeline:false
 
       }
     },
@@ -251,13 +263,18 @@
           })
       },
       addCriteria(){
-        if(this.criteria == 'default' || this.repository == 'default' || this.service == "default"){
+        if(this.criteria == 'default' || this.repository == 'default' || this.service == "default" || this.pipelineName==''){
           // this.error_message = "Error: you must select a valid criteria";
           if(this.criteria == 'default'){
             this.showErrorCriteria = true;
           }else if(this.repository == 'default' || this.service == "default"){
             this.showErrorRepo = true;
             this.showErrorService = true;
+          }
+          if(this.pipelineName == ''){
+             this.showErrorPipeline = true;
+          }else{
+            this.showErrorPipeline = false;
           }
           // this.notifyVue(this.error_message)
         }else{
@@ -306,6 +323,7 @@
           this.selected_criteria[this.criteria]=this.repos
           console.log(this.selected_criteria);
           this.$store.state.config_yaml.sqa_criteria = this.selected_criteria;
+          this.$store.state.name = this.pipelineName;
           this.commands=[];
           this.tox.file='';
           this.testenv=[];
@@ -386,6 +404,7 @@
 
     },
     created(){
+        this.pipelineName = this.$store.state.name
         var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
         var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
         console.log(sizeRepos)

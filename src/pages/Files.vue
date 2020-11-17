@@ -1,64 +1,130 @@
 <template>
   	<div class="content">
       <div class="container-fluid">
+        <div  v-show="loading" class="loading-overlay is-active">
+          <span class="fas fa-spinner fa-3x fa-spin"></span>
+        </div>
         <div class="row">
           <div class="col-12">
+
             <card class="strpied-tabled-with-hover"
                   body-classes=""
             >
               <template slot="header">
-                <h4 class="card-title">Generate Files</h4>
-                <p class="card-category">Jenkinsfile, config.yml and docker-compose.yml</p>
+                <h4 class="card-title text-center">Pipeline</h4>
               </template>
 
               <template >
-                <!-- <div style="padding-bottom:20px;">
-                  <button class="btn  btn-primary btn-fill" @click="generateFiles()">Generate Files</button>
+                <div class="row text-center">
 
-                </div> -->
-                <div style="padding-bottom:20px;padding-left:15px;">
-                  <button class="btn  btn-primary btn-fill" @click="renderTemplate('zip')">Generate Files</button>
+                  <div class="col-12 col-md-6" style="padding-bottom:20px;padding-left:15px;">
+                    <button class="btn  btn-primary btn-fill" :disabled='disabled_button' @click="createPipeline()">Create Pipeline</button>
 
-                </div>
-                <!-- <div style="padding-bottom:20px;">
-                  <button class="btn  btn-primary btn-fill" @click="renderTemplate('git')">Push Files</button>
+                  </div>
+                  <div class="col-12 col-md-6" style="padding-bottom:20px;padding-left:15px;">
+                    <button class="btn  btn-primary btn-fill" :disabled='!disabled_button' @click="deletePipeline()">Delete Pipeline</button>
 
-                </div> -->
-              </template>
-            </card>
-            <card class="strpied-tabled-with-hover"
-                  body-classes=""
-            >
-              <template slot="header">
-                <h4 class="card-title">Create Pipeline</h4>
-              </template>
-
-              <template >
-                <div style="padding-bottom:20px;padding-left:15px;">
-                  <button class="btn  btn-primary btn-fill" @click="createPipeline()">Create Pipeline</button>
-
+                  </div>
                 </div>
               </template>
             </card>
 
-            <card v-show="showCard" class="strpied-tabled-with-hover"
-                  body-classes=""
-            >
-              <template slot="header">
-                <h4 class="card-title">Check Status</h4>
-              </template>
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <card v-show="showCard" class="strpied-tabled-with-hover"
+                      body-classes=""
+                >
+                  <template slot="header" >
+                    <h4 class="card-title text-center" style="padding-bottom:4rem;">Execute Pipeline</h4>
+                  </template>
 
-              <template >
-                <div style="padding-bottom:20px;padding-left:15px;">
-                  <span>Build URL:</span><a style="margin-left: 2rem;text-decoration: underline;" :href="build_url" target="_blank">Status Information</a>
-                </div>
-                <div style="padding-bottom:20px;padding-left:15px;">
-                  <button class="btn  btn-primary btn-fill" @click="checkStatus()">Status</button>
+                  <template >
+                    <div class="row" style="padding-bottom:20px;padding-left:15px;padding-bottom: 3rem;">
+                      <!-- <div class="col-12 text-center" > -->
+                        <div class="col-12 col-md-6 text-center">
+                          <button class="btn  btn-primary btn-fill" @click="runPipeline()">Run pipeline</button>
+                        </div>
+                        <div class="col-12 col-md-6 text-center" style="padding-top:15px;" v-show="showBuildUrl">
+                          <span>Build URL:  </span><a style="text-decoration: underline;" :href="build_url" target="_blank">Click here</a>
+                        </div>
+                      <!-- </div> -->
+                    </div>
+                  </template>
+                </card>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <card v-show="showCard" class="strpied-tabled-with-hover"
+                      body-classes=""
+                >
+                  <template slot="header" >
+                    <h4 class="card-title text-center" style="padding-bottom:4rem;">Check Status of Pipeline</h4>
+                  </template>
+
+                  <template >
+                    <div class="row" style="padding-bottom:20px;padding-left:15px;padding-bottom: 3rem;">
+                      <div class="col-12 col-md-6 text-center">
+                        <button  class="btn  btn-primary btn-fill" @click="checkStatus()">Check status</button>
+                      </div>
+                      <div class="col-12 col-md-6" v-show="showStatus" style="padding-top:15px;">
+                        <span>Status: </span>
+                        <span style="text-transform: uppercase;padding-right:10px;">{{build_status}}</span>
+                        <i v-if="build_status == 'success'" style="color:green;" class="fa fa-check" aria-hidden="true"></i>
+                        <i v-else style="color:red;" class="fa fa-times" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </template>
+                </card>
+              </div>
+            </div>
 
 
-                </div>
-              </template>
-            </card>
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <card v-show="showCard" class="strpied-tabled-with-hover"
+                body-classes=""  style="height:228px;"
+                >
+                <template slot="header" >
+                  <h4 class="card-title text-center" style="padding-bottom:2rem;">Generate Files to JePL</h4>
+                </template>
+
+                <template >
+
+                  <div class="row" style="padding-bottom:20px;padding-left:15px;">
+                    <div class="col-12 text-center">
+                      <button class="btn  btn-primary btn-fill" @click="generateFiles()">Generate Files</button>
+                    </div>
+                  </div>
+                </template>
+                </card>
+              </div>
+              <div class="col-12 col-md-6">
+                  <card v-show="showCard" class="strpied-tabled-with-hover"
+                  body-classes="" style="height:228px;"
+                  >
+                    <template slot="header" >
+                      <h4 class="card-title text-center" style="padding-bottom:2rem;">Pull Request</h4>
+                    </template>
+
+                    <template >
+                      <div class="row" style="padding-bottom:20px;padding-left:15px;">
+                        <div class="col-12 col-md-6">
+                          <base-input type="text" class="no-margin"
+                              label="Repository"
+                              :disabled="false"
+                              placeholder="https://github.com/EOSC-synergy/sqaaas-web.git"
+                              v-model="repo_pull_request">
+                          </base-input>
+                          <span v-show="showErrorPullRequest" style="color:red; font-size:12px;">This field is required.</span>
+                        </div>
+                        <div class="col-12 col-md-6 text-center" style="margin-top:20px;">
+                          <button  class="btn  btn-primary btn-fill" @click="pullrequest()">Pull Request</button>
+                        </div>
+                      </div>
+                    </template>
+                  </card>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -94,118 +160,49 @@
           sha:''
         },
         showCard:false,
+        showBuildUrl:false,
+        showStatus:false,
         build_url:'',
+        build_status:'',
         pipeline_id:'',
+        disabled_button: false,
+        loading: false,
+        repo_pull_request:'',
+        showErrorPullRequest:false,
 		}
     },
+    watch:{
+      "repo_pull_request"(val){
+        if(val != ''){
+          this.showErrorPullRequest = false;
+        }
+      }
+    },
     methods:{
+      deletePipeline(){
+          this.deletePipelineCall(this.pipeline_id,this.deletePipelineCallBack)
+
+      },
+      deletePipelineCallBack(response){
+        if(response.status == 200){
+
+            this.pipeline_id = '';
+            this.$store.state.pipeline_id = this.pipeline_id;
+            this.showCard = false;
+            this.disabled_button = false;
+            this.notifyVue("Pipeline deleted successfully",'nc-icon nc-check-2','info');
+
+
+        }else{
+          this.disabled_button = false;
+          this.notifyVue("Error:" + response.error,'nc-icon nc-simple-remove','danger')
+        }
+      },
 
       createPipeline(){
-        // console.log(this.$store.state.docker_compose.services)
-        // var services = [];
-        // var all_services = this.$store.state.docker_compose.services
-        // for (var serv in all_services){
-        //   var volumes = []
-        //   for (let i = 0; i < all_services[serv].volumes.length; i++) {
-        //     var volume = {
-        //          "volume_source": all_services[serv].volumes[i].source,
-        //           "volume_target": all_services[serv].volumes[i].target,
-        //           "volume_type": all_services[serv].volumes[i].type
-        //     }
-        //     volumes.push(volume)
-
-        //   }
-        //   if(serv.command){
-        //     var service = {
-        //                 "command": all_services[serv].command,
-        //                 "hostname": all_services[serv].hostname,
-        //                 "image": all_services[serv].image,
-        //                 "service_id": serv,
-        //                 "volumes": volumes
-        //             }
-
-        //   }else{
-        //     var service = {
-        //                   "hostname": all_services[serv].hostname,
-        //                   "image": all_services[serv].image,
-        //                   "service_id": serv,
-        //                   "volumes": volumes
-        //               }
-        //   }
-
-        //   services.push(service);
-
-        // }
-
-        // var repos = []
-        // var all_repos = this.$store.state.config_yaml.config.project_repos;
-        // for (var repo in all_repos){
-        //   var repo_save = {
-        //       "branch": all_repos[repo].branch,
-        //       "repo_id": repo,
-        //       "repo_url":  all_repos[repo].repo
-        //   }
-
-        //   repos.push(repo_save)
-        // }
-
-        // var credentials = []
-        // var all_credentials = this.$store.state.config_yaml.config.credentials;
-        // for (var cred in all_credentials){
-        //   var save_credential = {
-        //     "id": cred,
-        //     "type": "username_password",
-        //     "username_var": all_credentials[cred].username_var,
-        //     "password_var": all_credentials[cred].password_var
-        //   }
-
-        //   credentials.push(save_credential)
-        // }
-
-        // var environments = []
-        // var all_environments = this.$store.state.config_yaml.environment;
-        // for (var env in all_environments){
-        //   var save_env = {
-        //     "id": all,
-        //     "type": "username_password",
-        //     "username_var": all_credentials[cred].username_var,
-        //     "password_var": all_credentials[cred].password_var
-        //   }
-
-        //   credentials.push(save_credential)
-        // }
-
-        // var criterias=[];
-        // var all_criterias = this.$store.state.config_yaml.sqa_criteria;
-
-        // for(var criteria in all_criterias){
-        //   var repos_criteria = []
-        //   for (var i in all_criterias[criteria].repos){
-        //     var save_repo = {
-        //                   "build_tool": {
-        //                       "commands": all_criterias[criteria].repos[i].commands,
-        //                       "tox":{
-        //                         "tox_file":all_criterias[criteria].repos[i].tox.tox_file,
-        //                         "testenv":all_criterias[criteria].repos[i].tox.test_env
-        //                       }
-        //                   },
-        //                   "container": all_criterias[criteria].repos[i].container,
-        //                   "repo_id": i
-        //               }
-
-        //     repos_criteria.push(save_repo)
-        //   }
-
-        //   var criteria_save = {
-        //                         "criterion": criteria,
-        //                         "repos": repos_criteria
-        //                     }
-
-        //    criterias.push(criteria_save);
-        // }
-
-        var data = [
+        var data =
                       {
+                          "name": this.$store.state.name,
                           "composer_data": {
                               "services": this.$store.state.docker_compose.services,
                               "version": "3.7"
@@ -239,57 +236,96 @@
                               ]
                           }
                       }
-                  ]
+
         console.log(data)
+        this.loading = true;
         this.createPipelineCall(data,this.createPipelineCallBack)
       },
       createPipelineCallBack(response){
-        if(response.status == 201){
+        if(response.status == 200){
           if (response.data.id && response.data.id != 0){
             this.pipeline_id = response.data.id;
-            this.runPipelineCall(response.data.id,this.runPipelineCallBack)
-
+            this.$store.state.pipeline_id = this.pipeline_id;
+            this.showCard = true;
+            this.disabled_button = true;
+            this.notifyVue("Pipeline created successfully",'nc-icon nc-check-2','info');
           }
         }else{
-          this.notifyVue("Error:" + response.error)
+          this.disabled_button = false;
+          this.notifyVue("Error:" + response.data.detail,'nc-icon nc-simple-remove','danger')
         }
+        this.loading = false;
 
+      },
+      runPipeline(){
+        this.loading = true;
+        this.runPipelineCall(this.pipeline_id,this.runPipelineCallBack)
       },
       runPipelineCallBack(response){
         if(response.status == 200){
           if (response.data.build_url){
             this.showCard = true;
-            this.build_url = response.data.build_url
+            this.build_url = response.data.build_url;
+            this.$store.state.build_url = this.build_url;
+            this.showBuildUrl = true;
+            this.notifyVue("Pipeline executed successfully",'nc-icon nc-check-2','info');
           }
         }else{
-          this.notifyVue("Error:" + response.error)
+          this.showBuildUrl = false;
+          this.notifyVue("Error:" + response.data.detail,'nc-icon nc-simple-remove','danger')
         }
+        this.loading = false;
       },
       checkStatus(){
+        this.loading = true;
         this.checkStatusCall(this.pipeline_id,this.checkStatusCallBack)
       },
       checkStatusCallBack(response){
         if(response.status == 200){
-          if (response.data.build_url){
-            this.showCard = true;
-            this.build_url = response.data.build_url
+          if (response.data.build_status){
+            this.build_status = response.data.build_status;
+            this.showStatus = true;
           }
         }else{
-          this.notifyVue("Error:" + response.error)
+          this.showStatus = false;
+          this.notifyVue("Error: " + response.data.detail,'nc-icon nc-simple-remove','danger')
+        }
+        this.loading = false;
+      },
+      generateFiles(){
+        this.downloadFileCall(this.pipeline_id,this.downloadFileCallBack);
+      },
+      downloadFileCallBack(response){
+        console.log(response)
+
+      },
+      pullrequest(){
+        if(this.repo_pull_request == ''){
+          this.showErrorPullRequest = true;
+        }else{
+          this.showErrorPullRequest = false;
+          this.loading = true;
+          var data = {
+            "repo": this.repo_pull_request
+          }
+          console.log(data);
+          this.pullRequestCall(this.pipeline_id,data,this.pullRequestCallBack);
+
         }
       },
+      pullRequestCallBack(response){
+         if(response.status == 200){
+          if (response.data.build_status){
+            this.notifyVue("Pull Request done successfully",'nc-icon nc-simple-remove','info')
+            this.repo_pull_request = ''
+          }
+        }else{
+          this.notifyVue("Error: " + response.data.detail,'nc-icon nc-simple-remove','danger')
+        }
+        this.loading = false;
 
-      generateFiles(){
-        var content = "What's up , hello world";
-        // any kind of extension (.txt,.cpp,.cs,.bat)
-        var filename = "config.yaml";
-
-        var blob = new Blob([content], {
-        type: "text/plain;charset=utf-8"
-        });
-
-        saveAs(blob, filename);
       },
+
       renderTemplate(value){
         console.log(this.$store.state)
           if(value=="zip"){
@@ -348,132 +384,132 @@
                 saveAs(blob, "sqa_files.zip");
           });
       },
-      commitGithub(rendered){
-        var _this = this
-        var auth={
-          username:'dianamariand92',
-          password:'',
-          repository:'test',
-          branchName:'master'
-        }
-        this.filesToCommitNew = [
-          {content: rendered, path: '.sqa/config.yaml'},
-          // {content: 'May the Force be with you', path: 'jedi.txt'}
+      // commitGithub(rendered){
+      //   var _this = this
+      //   var auth={
+      //     username:'dianamariand92',
+      //     password:'',
+      //     repository:'test',
+      //     branchName:'master'
+      //   }
+      //   this.filesToCommitNew = [
+      //     {content: rendered, path: '.sqa/config.yaml'},
+      //     // {content: 'May the Force be with you', path: 'jedi.txt'}
 
-        ]
-        this.GithubAPI(auth)
-      },
-      GithubAPI(auth) {
-          // let repo;
+      //   ]
+      //   this.GithubAPI(auth)
+      // },
+      // GithubAPI(auth) {
+      //     // let repo;
 
-          let gh = new GitHub(auth);
+      //     let gh = new GitHub(auth);
 
-          this.repo =  gh.getRepo('dianamariand92', 'test');
-            var _this = this
+      //     this.repo =  gh.getRepo('dianamariand92', 'test');
+      //       var _this = this
 
-          this.setBranch('master').then(function(response){
-            console.log(response)
-            _this.pushFiles('Making a commit to test',_this.filesToCommitNew)
-              .then(function() {
-                console.log('Files committed!');
-            });
+      //     this.setBranch('master').then(function(response){
+      //       console.log(response)
+      //       _this.pushFiles('Making a commit to test',_this.filesToCommitNew)
+      //         .then(function() {
+      //           console.log('Files committed!');
+      //       });
 
-          }
+      //     }
 
-          )
-      },
-      pushFiles(message,files){
-        var _this = this
-        if (!this.repo) {
-              throw 'Repository is not initialized';
-          }
-          if (!this.currentBranch.hasOwnProperty('name')) {
-              throw 'Branch is not set';
-          }
+      //     )
+      // },
+      // pushFiles(message,files){
+      //   var _this = this
+      //   if (!this.repo) {
+      //         throw 'Repository is not initialized';
+      //     }
+      //     if (!this.currentBranch.hasOwnProperty('name')) {
+      //         throw 'Branch is not set';
+      //     }
 
-          return _this.getCurrentCommitSHA()
-              .then(_this.getCurrentTreeSHA)
-              .then( () => _this.createFiles(files) )
-              .then(_this.createTree)
-              .then( () => _this.createCommit(message) )
-              .then(_this.updateHead)
-              .catch((e) => {
-                  console.error(e);
-              });
+      //     return _this.getCurrentCommitSHA()
+      //         .then(_this.getCurrentTreeSHA)
+      //         .then( () => _this.createFiles(files) )
+      //         .then(_this.createTree)
+      //         .then( () => _this.createCommit(message) )
+      //         .then(_this.updateHead)
+      //         .catch((e) => {
+      //             console.error(e);
+      //         });
 
 
-      },
-      setBranch(branchName) {
-        var _this = this
-          if (!this.repo) {
-              throw 'Repository is not initialized';
-          }
+      // },
+      // setBranch(branchName) {
+      //   var _this = this
+      //     if (!this.repo) {
+      //         throw 'Repository is not initialized';
+      //     }
 
-          return this.repo.listBranches().then((branches) => {
+      //     return this.repo.listBranches().then((branches) => {
 
-              let branchExists = branches.data.find( branch => branch.name === branchName );
-              if (!branchExists) {
-                  return _this.repo.createBranch('master', branchName)
-                      .then(() => {
-                          return _this.currentBranch.name = branchName;
-                      });
-              } else {
-                  return _this.currentBranch.name = branchName;
-              }
-          });
-      },
+      //         let branchExists = branches.data.find( branch => branch.name === branchName );
+      //         if (!branchExists) {
+      //             return _this.repo.createBranch('master', branchName)
+      //                 .then(() => {
+      //                     return _this.currentBranch.name = branchName;
+      //                 });
+      //         } else {
+      //             return _this.currentBranch.name = branchName;
+      //         }
+      //     });
+      // },
 
-      getCurrentCommitSHA() {
-        var _this=this
-        return this.repo.getRef('heads/' + _this.currentBranch.name)
-          .then((ref) => {
-            _this.currentBranch.commitSHA = ref.data.object.sha;
-          });
-      },
-      getCurrentTreeSHA() {
-        var _this=this
-        return this.repo.getCommit(_this.currentBranch.commitSHA)
-          .then((commit) => {
-            _this.currentBranch.treeSHA = commit.data.tree.sha;
-          });
-      },
-      createFiles(filesInfo) {
-        var _this=this
-        let promises = [];
-        let length = filesInfo.length;
-        for (let i = 0; i < length; i++) {
-          promises.push(_this.createFile(filesInfo[i]));
-        }
-        return Promise.all(promises);
-      },
-      createFile(file) {
-        var _this=this
-        return this.repo.createBlob(file.content)
-        .then((blob) => {
-          _this.filesToCommit.push({sha: blob.data.sha,path: file.path,mode: '100644',type: 'blob'});
-          });
-      },
-      createTree() {
-        var _this=this
-        console.log(_this.filesToCommit)
-        console.log(_this.currentBranch.treeSHA)
-        return this.repo.createTree(_this.filesToCommit, _this.currentBranch.treeSHA)
-        .then((tree) => {
-          console.log(tree)
-            _this.newCommit.treeSHA = tree.data.sha;
-          });
-      },
-      createCommit(message) {
-        var _this=this
-        return this.repo.commit(_this.currentBranch.commitSHA, _this.newCommit.treeSHA, message)
-            .then((commit) => {
-                _this.newCommit.sha = commit.data.sha;
-          });
-      },
-      updateHead() {
-        var _this=this
-        return this.repo.updateHead('heads/' + _this.currentBranch.name,_this.newCommit.sha);
-      },
+      // getCurrentCommitSHA() {
+      //   var _this=this
+      //   return this.repo.getRef('heads/' + _this.currentBranch.name)
+      //     .then((ref) => {
+      //       _this.currentBranch.commitSHA = ref.data.object.sha;
+      //     });
+      // },
+      // getCurrentTreeSHA() {
+      //   var _this=this
+      //   return this.repo.getCommit(_this.currentBranch.commitSHA)
+      //     .then((commit) => {
+      //       _this.currentBranch.treeSHA = commit.data.tree.sha;
+      //     });
+      // },
+      // createFiles(filesInfo) {
+      //   var _this=this
+      //   let promises = [];
+      //   let length = filesInfo.length;
+      //   for (let i = 0; i < length; i++) {
+      //     promises.push(_this.createFile(filesInfo[i]));
+      //   }
+      //   return Promise.all(promises);
+      // },
+      // createFile(file) {
+      //   var _this=this
+      //   return this.repo.createBlob(file.content)
+      //   .then((blob) => {
+      //     _this.filesToCommit.push({sha: blob.data.sha,path: file.path,mode: '100644',type: 'blob'});
+      //     });
+      // },
+      // createTree() {
+      //   var _this=this
+      //   console.log(_this.filesToCommit)
+      //   console.log(_this.currentBranch.treeSHA)
+      //   return this.repo.createTree(_this.filesToCommit, _this.currentBranch.treeSHA)
+      //   .then((tree) => {
+      //     console.log(tree)
+      //       _this.newCommit.treeSHA = tree.data.sha;
+      //     });
+      // },
+      // createCommit(message) {
+      //   var _this=this
+      //   return this.repo.commit(_this.currentBranch.commitSHA, _this.newCommit.treeSHA, message)
+      //       .then((commit) => {
+      //           _this.newCommit.sha = commit.data.sha;
+      //     });
+      // },
+      // updateHead() {
+      //   var _this=this
+      //   return this.repo.updateHead('heads/' + _this.currentBranch.name,_this.newCommit.sha);
+      // },
       objectSize(obj){
         var size = 0, key;
         for (key in obj) {
@@ -481,15 +517,15 @@
         }
         return size;
       },
-      notifyVue (message) {
+      notifyVue (message,icon,color) {
         this.$notify(
           {
             message: message,
-            icon: 'nc-icon nc-simple-remove',
+            icon: icon,
             timeout:3000,
-            horizontalAlign: 'center',
+            horizontalAlign: 'right',
             verticalAlign: 'top',
-            type: 'danger'
+            type: color
           })
       },
   },
@@ -497,11 +533,56 @@
     var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
     console.log(sizeCriteria)
     if(sizeCriteria == 0){
-      this.notifyVue("Error you must add at least one sqa criteria")
+      this.notifyVue("Error you must add at least one sqa criteria",'nc-icon nc-simple-remove','danger')
       this.$router.push({name:"SQACriteria"})
     }
+
+    var json = JSON.stringify(this.$store.state);
+    console.log(json)
+    this.pipeline_id = this.$store.state.pipeline_id;
+    this.build_url = this.$store.state.build_url;
+    this.build_status = this.$store.state.status;
+    // this.pipeline_id = "371c16c8-90f0-46b9-806d-856e464aeba7";
+      if(this.pipeline_id == ''){
+        this.showCard = false;
+        this.disabled_button = false;
+      }else{
+        this.disabled_button =true;
+        this.showCard = true;
+      }
+      if(this.build_url == ''){
+        this.showBuildUrl = false;
+      }else{
+        this.showBuildUrl = true;
+      }
+      if(this.build_status == ''){
+        this.showStatus = false;
+      }else{
+        this.showStatus = true;
+      }
   }
 }
 </script>
 <style>
+
+.loading-overlay {
+  display: none;
+  background: rgba(255, 255, 255, 0.7);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 9998;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-overlay.is-active {
+  display: flex;
+}
+
+.no-margin{
+  margin:0px!important;
+}
 </style>
