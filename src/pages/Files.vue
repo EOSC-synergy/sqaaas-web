@@ -121,6 +121,9 @@
                           <button  class="btn  btn-primary btn-fill" @click="pullrequest()">Pull Request</button>
                         </div>
                       </div>
+                      <div>
+                        <a :href="pull_request_url">{{pull_request_url}}</a>
+                      </div>
                     </template>
                   </card>
               </div>
@@ -169,6 +172,7 @@
         loading: false,
         repo_pull_request:'',
         showErrorPullRequest:false,
+        pull_request_url: 'https://github.com/EOSC-synergy/sqaaas-api-spec/pull/23'
 		}
     },
     watch:{
@@ -315,9 +319,10 @@
       },
       pullRequestCallBack(response){
          if(response.status == 200){
-          if (response.data.build_status){
+          if (response.data.pull_request_url){
             this.notifyVue("Pull Request done successfully",'nc-icon nc-simple-remove','info')
             this.repo_pull_request = ''
+            this.pull_request_url = response.data.pull_request_url;
           }
         }else{
           this.notifyVue("Error: " + response.data.detail,'nc-icon nc-simple-remove','danger')
