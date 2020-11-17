@@ -29,45 +29,102 @@
               </template>
             </card>
 
-            <card v-show="showCard" class="strpied-tabled-with-hover"
-                  body-classes=""
-            >
-              <template slot="header" >
-                <h4 class="card-title text-center" style="padding-bottom:4rem;">Actions</h4>
-              </template>
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <card v-show="showCard" class="strpied-tabled-with-hover"
+                      body-classes=""
+                >
+                  <template slot="header" >
+                    <h4 class="card-title text-center" style="padding-bottom:4rem;">Execute Pipeline</h4>
+                  </template>
 
-              <template >
-                <div class="row" style="padding-bottom:20px;padding-left:15px;padding-bottom: 3rem;">
-                  <div class="col-md-6 text-center" >
-                    <button class="btn  btn-primary btn-fill" @click="runPipeline()">Run pipeline</button>
-                    <div style="padding-top:15px;" v-show="showBuildUrl">
-                      <span>Build URL:  </span><a style="text-decoration: underline;" :href="build_url" target="_blank">Click here</a>
-
+                  <template >
+                    <div class="row" style="padding-bottom:20px;padding-left:15px;padding-bottom: 3rem;">
+                      <!-- <div class="col-12 text-center" > -->
+                        <div class="col-12 col-md-6 text-center">
+                          <button class="btn  btn-primary btn-fill" @click="runPipeline()">Run pipeline</button>
+                        </div>
+                        <div class="col-12 col-md-6 text-center" style="padding-top:15px;" v-show="showBuildUrl">
+                          <span>Build URL:  </span><a style="text-decoration: underline;" :href="build_url" target="_blank">Click here</a>
+                        </div>
+                      <!-- </div> -->
                     </div>
+                  </template>
+                </card>
+              </div>
 
-                  </div>
-                  <div class="col-md-6 text-center">
-                    <button  class="btn  btn-primary btn-fill" @click="checkStatus()">Check status</button>
-                     <div class="" v-show="showStatus" style="padding-top:15px;">
-                      <span>Status: </span>
-                      <span style="text-transform: uppercase;padding-right:10px;">{{build_status}}</span>
-                      <i v-if="build_status == 'success'" style="color:green;" class="fa fa-check" aria-hidden="true"></i>
-                      <i v-else style="color:red;" class="fa fa-times" aria-hidden="true"></i>
+              <div class="col-12 col-md-6">
+                <card v-show="showCard" class="strpied-tabled-with-hover"
+                      body-classes=""
+                >
+                  <template slot="header" >
+                    <h4 class="card-title text-center" style="padding-bottom:4rem;">Check Status of Pipeline</h4>
+                  </template>
 
+                  <template >
+                    <div class="row" style="padding-bottom:20px;padding-left:15px;padding-bottom: 3rem;">
+                      <div class="col-12 col-md-6 text-center">
+                        <button  class="btn  btn-primary btn-fill" @click="checkStatus()">Check status</button>
+                      </div>
+                      <div class="col-12 col-md-6" v-show="showStatus" style="padding-top:15px;">
+                        <span>Status: </span>
+                        <span style="text-transform: uppercase;padding-right:10px;">{{build_status}}</span>
+                        <i v-if="build_status == 'success'" style="color:green;" class="fa fa-check" aria-hidden="true"></i>
+                        <i v-else style="color:red;" class="fa fa-times" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </template>
+                </card>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <card v-show="showCard" class="strpied-tabled-with-hover"
+                body-classes=""  style="height:228px;"
+                >
+                <template slot="header" >
+                  <h4 class="card-title text-center" style="padding-bottom:2rem;">Generate Files to JePL</h4>
+                </template>
+
+                <template >
+
+                  <div class="row" style="padding-bottom:20px;padding-left:15px;">
+                    <div class="col-12 text-center">
+                      <button class="btn  btn-primary btn-fill" @click="generateFiles()">Generate Files</button>
                     </div>
                   </div>
-                </div>
+                </template>
+                </card>
+              </div>
+              <div class="col-12 col-md-6">
+                  <card v-show="showCard" class="strpied-tabled-with-hover"
+                  body-classes="" style="height:228px;"
+                  >
+                    <template slot="header" >
+                      <h4 class="card-title text-center" style="padding-bottom:2rem;">Pull Request</h4>
+                    </template>
 
-                <div class="row" style="padding-bottom:20px;padding-left:15px;">
-                  <div class="col-md-6 text-center">
-                    <button class="btn  btn-primary btn-fill" @click="generateFiles()">Generate Files</button>
-                  </div>
-                  <div class="col-md-6 text-center" >
-                    <button  class="btn  btn-primary btn-fill" @click="pullrequest()">Pull Request</button>
-                  </div>
-                </div>
-              </template>
-            </card>
+                    <template >
+                      <div class="row" style="padding-bottom:20px;padding-left:15px;">
+                        <div class="col-12 col-md-6">
+                          <base-input type="text" class="no-margin"
+                              label="Repository"
+                              :disabled="false"
+                              placeholder="https://github.com/EOSC-synergy/sqaaas-web.git"
+                              v-model="repo_pull_request">
+                          </base-input>
+                          <span v-show="showErrorPullRequest" style="color:red; font-size:12px;">This field is required.</span>
+                        </div>
+                        <div class="col-12 col-md-6 text-center" style="margin-top:20px;">
+                          <button  class="btn  btn-primary btn-fill" @click="pullrequest()">Pull Request</button>
+                        </div>
+                      </div>
+                    </template>
+                  </card>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -110,7 +167,16 @@
         pipeline_id:'',
         disabled_button: false,
         loading: false,
+        repo_pull_request:'',
+        showErrorPullRequest:false,
 		}
+    },
+    watch:{
+      "repo_pull_request"(val){
+        if(val != ''){
+          this.showErrorPullRequest = false;
+        }
+      }
     },
     methods:{
       deletePipeline(){
@@ -222,7 +288,7 @@
           }
         }else{
           this.showStatus = false;
-          this.notifyVue("Error: " + response.data.detail,'nc-icon nc-simple-remove','info')
+          this.notifyVue("Error: " + response.data.detail,'nc-icon nc-simple-remove','danger')
         }
         this.loading = false;
       },
@@ -233,17 +299,32 @@
         console.log(response)
 
       },
-      // pullrequest(){
-      //   var data = {
-      //     "repo": this.$store.state.config_yaml.config.project_repos
-      //   }
-      //   console.log(data);
-      //   // this.pullRequestCall(this.pipeline_id,data,this.pullRequestCallBack);
-      // },
-      // pullRequestCallBack(response){
-      //   console.log(response)
+      pullrequest(){
+        if(this.repo_pull_request == ''){
+          this.showErrorPullRequest = true;
+        }else{
+          this.showErrorPullRequest = false;
+          this.loading = true;
+          var data = {
+            "repo": this.repo_pull_request
+          }
+          console.log(data);
+          this.pullRequestCall(this.pipeline_id,data,this.pullRequestCallBack);
 
-      // },
+        }
+      },
+      pullRequestCallBack(response){
+         if(response.status == 200){
+          if (response.data.build_status){
+            this.notifyVue("Pull Request done successfully",'nc-icon nc-simple-remove','info')
+            this.repo_pull_request = ''
+          }
+        }else{
+          this.notifyVue("Error: " + response.data.detail,'nc-icon nc-simple-remove','danger')
+        }
+        this.loading = false;
+
+      },
 
       renderTemplate(value){
         console.log(this.$store.state)
@@ -442,7 +523,7 @@
             message: message,
             icon: icon,
             timeout:3000,
-            horizontalAlign: 'center',
+            horizontalAlign: 'right',
             verticalAlign: 'top',
             type: color
           })
@@ -460,6 +541,7 @@
     console.log(json)
     this.pipeline_id = this.$store.state.pipeline_id;
     this.build_url = this.$store.state.build_url;
+    this.build_status = this.$store.state.status;
     // this.pipeline_id = "371c16c8-90f0-46b9-806d-856e464aeba7";
       if(this.pipeline_id == ''){
         this.showCard = false;
@@ -472,6 +554,11 @@
         this.showBuildUrl = false;
       }else{
         this.showBuildUrl = true;
+      }
+      if(this.build_status == ''){
+        this.showStatus = false;
+      }else{
+        this.showStatus = true;
       }
   }
 }
@@ -493,5 +580,9 @@
 
 .loading-overlay.is-active {
   display: flex;
+}
+
+.no-margin{
+  margin:0px!important;
 }
 </style>

@@ -70,7 +70,7 @@ export default {
       axios({
           method: 'post',
           url: this.api +'/'+id+'/pull_request',
-          data: data.repo
+          data: data
         }).then(response => {
             return callBackHandler(response);
         })
