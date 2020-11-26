@@ -17,12 +17,16 @@
                             placeholder="worsica-processing"
                             v-model="repo.name">
                   </base-input>
+                  <span v-show="showErrorRepoName" style="color:red; font-size:12px;">This field is required.</span>
+
                   <base-input type="text"
                             label="Repository URL"
                             :disabled="false"
                             placeholder="https://github.com/WORSICA/worsica-processing.git"
                             v-model="repo.url">
                   </base-input>
+                  <span v-show="showErrorRepoUrl" style="color:red; font-size:12px;">This field is required.</span>
+
                 </div>
 
                 <div class="row" style="padding-left:20px;margin-bottom:1rem;">
@@ -384,6 +388,8 @@
         showErrorCredPass:false,
         showErrorCredUser:false,
         showErrorCredType:false,
+        showErrorRepoName:false,
+        showErrorRepoUrl:false,
         service:{
           image:'',
           container_name:'',
@@ -478,6 +484,16 @@
           this.envComposeYesNo.yes = true;
         }
       },
+      'repo.url'(val){
+        if(val != ''){
+          this.showErrorRepoUrl = false;
+        }
+      },
+      'repo.name'(val){
+        if(val != ''){
+          this.showErrorRepoName = false;
+        }
+      }
 
     },
     methods:{
@@ -505,9 +521,15 @@
           this.repo.branch = 'master'
         }
         if(this.repo.name == '' || this.repo.url == ''){
-          var error_message = "Repository Name and URL are required";
-          this.notifyVue(error_message)
+          if(this.repo.name == ''){
+            this.showErrorRepoName = true;
+          }
+          if(this.repo.url == ''){
+            this.showErrorRepoUrl = true;
+          }
         }else{
+          this.showErrorRepoName = false;
+          this.showErrorRepoUrl = false;
           this.config.all_repos[this.repo.name.trim()]={
             'repo':this.repo.url.trim(),
             'branch':this.repo.branch.trim(),
@@ -516,8 +538,6 @@
           this.showRepo = true;
           this.config.workspace.no = true;
           this.$store.state.config_yaml.config.project_repos = this.config.all_repos
-          var yamlText= YAML.stringify(this.$store.state.config_yaml)
-          console.log(yamlText)
           this.cleanWorkspace()
 
         }
@@ -539,7 +559,6 @@
       },
       addCred(){
         if(this.credentials.type == "default" || this.credentials.id=="" || this.credentials.username_var=="" || this.credentials.password_var == ""){
-          console.log("error")
           if(this.credentials.type == "default"){
             this.showErrorCredType = true;
           }else{
@@ -574,12 +593,9 @@
           }
           this.all_credentials.push(cred)
           this.$store.state.config_yaml.config.credentials = this.all_credentials;
-          var yamlText= YAML.stringify(this.$store.state.config_yaml)
-          console.log(yamlText)
 
           this.showCred = true;
           this.cleanCred()
-          console.log(this.all_credentials)
         }
 
       },
@@ -601,9 +617,7 @@
         var key= this.env.key.replace(" ", "")
 				var value = this.env.value.replace(" ", "")
         envVars[key]=value
-        console.log(envVars)
         this.config.all_envs[key]=value
-        console.log(this.config.all_envs)
         this.$store.state.config_yaml.environment = this.config.all_envs;
         this.showEnv = true;
         this.cleanEnv()
@@ -625,8 +639,6 @@
         var key= this.envCompose.key.replace(" ", "")
 				var value = this.envCompose.value.replace(" ", "")
         envVars[key]=value
-        console.log(envVars)
-        console.log(this.service.envs)
         this.service.envs.push(envVars)
         this.showEnvCompose = true;
         this.cleanEnvCompose()
@@ -652,11 +664,9 @@
         }
         this.service.volumes.push(this.volumes[name])
         this.cleanVolume();
-        console.log(this.service.volumes)
 
       },
       removeVolume(item1,item2){
-        console.log(item1,item2)
         this.$delete(this.volumes,item2)
           if (this.isEmpty(this.service.volumes)) {
             this.showVolumes = false;
@@ -666,7 +676,6 @@
             this.service.volumes.splice(i,1)
           }
         }
-        console.log(this.service.volumes)
       },
       cleanVolume(){
         this.volume.type = '';
@@ -817,5 +826,7 @@ input[type=number]::-webkit-inner-spin-button {
 .no-margin{
   margin:0px!important;
 }
+
+
 
 </style>
