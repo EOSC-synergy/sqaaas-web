@@ -16,6 +16,26 @@ import Maps from 'src/pages/Maps.vue'
 import Notifications from 'src/pages/Notifications.vue'
 import Upgrade from 'src/pages/Upgrade.vue'
 
+function requireAuth (to, from, next) {
+  localStorage.getItem('session');
+  var session = JSON.parse(localStorage.getItem("session"));
+   if(session){
+     if(session.user.authenticated == true){
+       return next()
+     }else{
+        next({
+         path: '/login',
+         query: { redirect: to.fullPath }
+       })
+     }
+   }else{
+      next({
+         path: '/login',
+         query: { redirect: to.fullPath }
+       })
+   }
+}
+
 const routes = [
   {
     path: '/login',
@@ -45,31 +65,37 @@ const routes = [
       {
         path: 'dashboard',
         name: 'dashboard',
+        beforeEnter: requireAuth,
         component: Overview
       },
       {
         path: 'select-option',
         name: 'SelectOption',
+        beforeEnter: requireAuth,
         component: SelectOption
       },
       {
         path: 'sqa-criteria',
         name: 'SQACriteria',
+        beforeEnter: requireAuth,
         component: SQACriteria
       },
       {
         path: 'full-assessment',
         name: 'full_assessment',
+        beforeEnter: requireAuth,
         component: FullAssessment
       },
       {
         path: 'user',
         name: 'User',
+        beforeEnter: requireAuth,
         component: UserProfile
       },
       {
         path: 'files',
         name: 'Files',
+        beforeEnter: requireAuth,
         component: Files
       },
       {
@@ -101,7 +127,7 @@ const routes = [
         beforeEnter (to, from, next) {
           next('/login')
           // localStorage.removeItem('session');
-          localStorage.removeItem('token');
+          localStorage.removeItem('session');
           localStorage.clear()
         }
       }

@@ -137,7 +137,32 @@ export default {
             + '&redirect_uri=' + this.env.redirect_uri;
             // + '&redirect_uri=' + "http://localhost:8080/callback.html";
             window.location.replace(url)
-		},
+    },
+    created(){
+        this.$store.state={
+          name:'',
+          pipeline_id:'',
+          build_url:'',
+          status:'',
+          pull_request_url:'',
+          config_yaml:{
+            config:{
+              project_repos:{},
+              credentials:[]
+            },
+            sqa_criteria:{},
+            environment:{},
+            timeout:"600"
+          },
+          docker_compose:{
+            version:"3.7",
+            services:{
+
+            }
+
+          },
+      }
+    }
 
     }
 }

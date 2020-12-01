@@ -787,10 +787,9 @@
         this.showEnv = true
       }
 
-      var token = JSON.parse(localStorage.getItem("access_token"));
-      console.log(token)
-      var decode = jwtDecode(token.access_token)
-      console.log(decode)
+      var session = JSON.parse(localStorage.getItem("session"));
+      var token = session.user.access_token;
+      var decode = jwtDecode(token)
       var _this = this
 
       $.ajax({
@@ -798,7 +797,7 @@
         type: 'POST',
         contentType: 'application/json',
         headers: {
-          'Authorization': 'Bearer ' + token.access_token
+          'Authorization': 'Bearer ' + token
 			},
 			success: function (result) {
         // CallBack(result);

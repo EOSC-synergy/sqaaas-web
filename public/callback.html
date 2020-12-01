@@ -22,7 +22,6 @@
 		}),
 		created(){
 			var url = window.location.href;
-				console.log(url)
 			var _this = this
 
 			// Check if there was an error parameter
@@ -41,11 +40,9 @@
 
 				// Save access_token and redirect_url
 				if (access_token) {
-					console.log(access_token);
-          localStorage.setItem("access_token",JSON.stringify({ 'access_token': access_token }));
+          localStorage.setItem("session",JSON.stringify({ user:{'access_token': access_token, authenticated:true} }));
           var url_redirect = window.location.origin + "/#/auth/select-option"
           window.location.href = url_redirect
-					this.countDownTimer()
 
 				}else{
 					console.log('Error: Could not retrieve id token from the URL');
@@ -55,6 +52,7 @@
 			}
 		},
 		methods: {
+
 
 			}
 
