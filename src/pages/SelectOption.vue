@@ -77,7 +77,7 @@
 
 .disabled{
   cursor: default!important;
-  background-color: rgb(13, 136, 183,0.3);
+  background-color: rgb(13, 136, 183,0.3)!important;
 
 }
 

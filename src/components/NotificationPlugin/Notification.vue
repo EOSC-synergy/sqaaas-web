@@ -153,6 +153,8 @@ export default {
 .notifications .alert {
   position: fixed;
   z-index: 10000;
+  color: black;
+  font-size: 16px;
 
   &[data-notify='container'] {
     width: 480px;

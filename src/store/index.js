@@ -11,6 +11,7 @@ export default new Vuex.Store({
    pipeline_id:'',
    build_url:'',
    status:'',
+   pull_request_url:'',
    config_yaml:{
      config:{
        project_repos:{},

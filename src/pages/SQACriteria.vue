@@ -295,9 +295,7 @@
           this.clearTox();
           var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria)
           if(sizeCriteria > 0){
-            console.log(this.$store.state.config_yaml.sqa_criteria)
             var sizeSelectCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria[this.criteria])
-            console.log(sizeSelectCriteria)
              if(sizeSelectCriteria > 0){
                this.repos["repos"] = this.$store.state.config_yaml.sqa_criteria[this.criteria]["repos"]
              }
@@ -306,7 +304,6 @@
             this.repos["repos"]={};
           }
           // this.repos.repos[this.repository] = this.$store.state.config_yaml.sqa_criteria[this.criteria];
-          console.log(this.repos)
 
           var repoName = this.repository
           var service = this.service
@@ -317,11 +314,8 @@
                 tox
           }
 
-          console.log(this.repos)
           this.repos.repos[this.repository]=repo
-          console.log(this.repos)
           this.selected_criteria[this.criteria]=this.repos
-          console.log(this.selected_criteria);
           this.$store.state.config_yaml.sqa_criteria = this.selected_criteria;
           this.$store.state.name = this.pipelineName;
           this.commands=[];
@@ -407,8 +401,6 @@
         this.pipelineName = this.$store.state.name
         var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
         var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
-        console.log(sizeRepos)
-        console.log(sizeServices)
         if(sizeRepos == 0 || sizeServices == 0){
           this.notifyVue("Error you must add at least one repository and one service")
           this.$router.push({name:"dashboard"})
@@ -416,10 +408,8 @@
           var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
           var getCriteria = this.$store.state.config_yaml.sqa_criteria
           for (var i in getCriteria){
-            console.log(i)
             this.selected_criteria[i] = getCriteria[i];
           }
-          console.log(this.selected_criteria)
           if(sizeCriteria != 0){
             this.showCriteria = true;
           }else{

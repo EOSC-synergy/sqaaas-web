@@ -26,6 +26,9 @@
 
                   </div>
                 </div>
+                <div class="text-center" v-show="pipeline_id != ''">
+                  <span>Pipeline ID: {{pipeline_id}}</span>
+                </div>
               </template>
             </card>
 
@@ -121,6 +124,9 @@
                           <button  class="btn  btn-primary btn-fill" @click="pullrequest()">Pull Request</button>
                         </div>
                       </div>
+                      <div>
+                        <a :href="pull_request_url" target="_blank">{{pull_request_url}}</a>
+                      </div>
                     </template>
                   </card>
               </div>
@@ -169,6 +175,7 @@
         loading: false,
         repo_pull_request:'',
         showErrorPullRequest:false,
+        pull_request_url: ''
 		}
     },
     watch:{
@@ -184,7 +191,7 @@
 
       },
       deletePipelineCallBack(response){
-        if(response.status == 200){
+        if(response.status == 204){
 
             this.pipeline_id = '';
             this.$store.state.pipeline_id = this.pipeline_id;
@@ -195,7 +202,7 @@
 
         }else{
           this.disabled_button = false;
-          this.notifyVue("Error:" + response.error,'nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error "+ response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
         }
       },
 
@@ -237,12 +244,11 @@
                           }
                       }
 
-        console.log(data)
         this.loading = true;
         this.createPipelineCall(data,this.createPipelineCallBack)
       },
       createPipelineCallBack(response){
-        if(response.status == 200){
+        if(response.status == 201){
           if (response.data.id && response.data.id != 0){
             this.pipeline_id = response.data.id;
             this.$store.state.pipeline_id = this.pipeline_id;
@@ -252,7 +258,7 @@
           }
         }else{
           this.disabled_button = false;
-          this.notifyVue("Error:" + response.data.detail,'nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error "+ response.status +":" + response.data.detail,'nc-icon nc-simple-remove','danger')
         }
         this.loading = false;
 
@@ -270,9 +276,12 @@
             this.showBuildUrl = true;
             this.notifyVue("Pipeline executed successfully",'nc-icon nc-check-2','info');
           }
+        }else if(response.status == 204){
+          this.notifyVue("Waiting for scan organization",'nc-icon nc-simple-remove','warning')
+
         }else{
           this.showBuildUrl = false;
-          this.notifyVue("Error:" + response.data.detail,'nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error "+ response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
         }
         this.loading = false;
       },
@@ -284,11 +293,19 @@
         if(response.status == 200){
           if (response.data.build_status){
             this.build_status = response.data.build_status;
+            this.$store.state.status = this.build_status;
             this.showStatus = true;
           }
+          if (response.data.build_url){
+            this.showCard = true;
+            this.build_url = response.data.build_url;
+            this.$store.state.build_url = this.build_url;
+            this.showBuildUrl = true;
+          }
+
         }else{
           this.showStatus = false;
-          this.notifyVue("Error: " + response.data.detail,'nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error "+ response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
         }
         this.loading = false;
       },
@@ -296,7 +313,20 @@
         this.downloadFileCall(this.pipeline_id,this.downloadFileCallBack);
       },
       downloadFileCallBack(response){
-        console.log(response)
+        if(response.status == 200){
+          var element = document.createElement('a');
+          element.setAttribute('href', 'https://api-staging.sqaaas.eosc-synergy.eu/v1/pipeline/' + this.pipeline_id  +'/compressed_files');
+          element.setAttribute('download' , 'jepl.zip');
+          element.style.display = 'none';
+          document.body.appendChild(element);
+          element.click();
+        }else{
+          this.showStatus = false;
+          this.notifyVue("Error "+ response.status +":" +  response.data.reason,'nc-icon nc-simple-remove','danger')
+        }
+
+
+
 
       },
       pullrequest(){
@@ -308,26 +338,26 @@
           var data = {
             "repo": this.repo_pull_request
           }
-          console.log(data);
           this.pullRequestCall(this.pipeline_id,data,this.pullRequestCallBack);
 
         }
       },
       pullRequestCallBack(response){
          if(response.status == 200){
-          if (response.data.build_status){
+          if (response.data.pull_request_url){
             this.notifyVue("Pull Request done successfully",'nc-icon nc-simple-remove','info')
             this.repo_pull_request = ''
+            this.pull_request_url = response.data.pull_request_url;
+            this.$store.state.pull_request_url = this.pull_request_url;
           }
         }else{
-          this.notifyVue("Error: " + response.data.detail,'nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error "+ response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
         }
         this.loading = false;
 
       },
 
       renderTemplate(value){
-        console.log(this.$store.state)
           if(value=="zip"){
             this.generateZip(this.$store.state)
           }else if(value == "git"){
@@ -368,9 +398,7 @@
 
         var files_names=["config.yaml","docker-compose.yaml"]
         var yamlTextConfig= YAML.stringify(rendered.config_yaml)
-        console.log(yamlTextConfig)
         var yamlTextCompose= YAML.stringify(rendered.docker_compose)
-        console.log(yamlTextCompose)
         // for (let i = 0; i < files_names.length; i++) {
 
         zip.folder(".sqa").file("config.yml",yamlTextConfig, {binary:true});
@@ -525,24 +553,22 @@
             timeout:3000,
             horizontalAlign: 'right',
             verticalAlign: 'top',
-            type: color
+            type: color,
           })
       },
   },
   created(){
     var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
-    console.log(sizeCriteria)
     if(sizeCriteria == 0){
       this.notifyVue("Error you must add at least one sqa criteria",'nc-icon nc-simple-remove','danger')
       this.$router.push({name:"SQACriteria"})
     }
 
     var json = JSON.stringify(this.$store.state);
-    console.log(json)
     this.pipeline_id = this.$store.state.pipeline_id;
+    this.pull_request_url = this.$store.state.pull_request_url;
     this.build_url = this.$store.state.build_url;
     this.build_status = this.$store.state.status;
-    // this.pipeline_id = "371c16c8-90f0-46b9-806d-856e464aeba7";
       if(this.pipeline_id == ''){
         this.showCard = false;
         this.disabled_button = false;

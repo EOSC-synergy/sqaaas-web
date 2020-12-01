@@ -1,12 +1,11 @@
 export default {
   data(){
     return {
-      api: 'http://194.210.120.204:20495/stage/v1/pipeline',
+      api: 'https://api-staging.sqaaas.eosc-synergy.eu/v1/pipeline',
     }
   },
   methods: {
       createPipelineCall(data, callBackHandler) {
-          console.log(data)
           axios({
               method: 'post',
               url: this.api,
@@ -58,7 +57,6 @@ export default {
           method: 'get',
           url: this.api +'/'+id+'/compressed_files',
         }).then(response => {
-          console.log(response)
             return callBackHandler(response);
         })
         .catch(error => {
