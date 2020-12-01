@@ -1,7 +1,7 @@
 export default {
   data(){
     return {
-      api: 'http://194.210.120.249:20495/stage/v1/pipeline',
+      api: 'https://api-staging.sqaaas.eosc-synergy.eu/v1/pipeline',
     }
   },
   methods: {

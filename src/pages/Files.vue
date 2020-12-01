@@ -315,7 +315,7 @@
       downloadFileCallBack(response){
         if(response.status == 200){
           var element = document.createElement('a');
-          element.setAttribute('href', 'http://194.210.120.249:20495/stage/v1/pipeline/' + this.pipeline_id  +'/compressed_files');
+          element.setAttribute('href', 'https://api-staging.sqaaas.eosc-synergy.eu/v1/pipeline/' + this.pipeline_id  +'/compressed_files');
           element.setAttribute('download' , 'jepl.zip');
           element.style.display = 'none';
           document.body.appendChild(element);
