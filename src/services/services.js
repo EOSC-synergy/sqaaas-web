@@ -1,14 +1,14 @@
 export default {
   data(){
     return {
-      api: 'https://api-staging.sqaaas.eosc-synergy.eu/v1/pipeline',
+
     }
   },
   methods: {
       createPipelineCall(data, callBackHandler) {
           axios({
               method: 'post',
-              url: this.api,
+              url: this.env.api,
               data: data
           }).then(response => {
               return callBackHandler(response);
@@ -20,7 +20,7 @@ export default {
       deletePipelineCall(data, callBackHandler) {
           axios({
               method: 'delete',
-              url: this.api +'/'+data,
+              url: this.env.api +'/'+data,
           }).then(response => {
               return callBackHandler(response);
           })
@@ -31,7 +31,7 @@ export default {
       runPipelineCall(data, callBackHandler){
         axios({
           method: 'post',
-          url: this.api +'/'+data+'/run',
+          url: this.env.api +'/'+data+'/run',
         }).then(response => {
             return callBackHandler(response);
         })
@@ -43,7 +43,7 @@ export default {
       checkStatusCall(data, callBackHandler){
         axios({
           method: 'get',
-          url: this.api +'/'+data+'/status',
+          url: this.env.api +'/'+data+'/status',
         }).then(response => {
             return callBackHandler(response);
         })
@@ -55,7 +55,7 @@ export default {
     downloadFileCall(id, callBackHandler){
       axios({
           method: 'get',
-          url: this.api +'/'+id+'/compressed_files',
+          url: this.env.api +'/'+id+'/compressed_files',
         }).then(response => {
             return callBackHandler(response);
         })
@@ -67,7 +67,7 @@ export default {
     pullRequestCall(id,data, callBackHandler){
       axios({
           method: 'post',
-          url: this.api +'/'+id+'/pull_request',
+          url: this.env.api +'/'+id+'/pull_request',
           data: data
         }).then(response => {
             return callBackHandler(response);
