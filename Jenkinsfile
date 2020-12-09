@@ -14,7 +14,7 @@ pipeline {
             }
             steps {
                 script {
-                    projectConfig = pipelineConfig(null,null,null,null,'eoscsynergy/jpl-validator:jib-with-jpl')
+                    projectConfig = pipelineConfig()
                     buildStages(projectConfig)
                 }
             }
