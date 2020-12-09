@@ -67,13 +67,14 @@
                   <template >
                     <div class="row" style="padding-bottom:20px;padding-left:15px;padding-bottom: 3rem;">
                       <div class="col-12 col-md-6 text-center">
-                        <button  class="btn  btn-primary btn-fill" @click="checkStatus()">Check status</button>
+                        <button  class="btn  btn-primary btn-fill" :disabled="disable_status" @click="checkStatus()">Check status</button>
                       </div>
                       <div class="col-12 col-md-6" v-show="showStatus" style="padding-top:15px;">
                         <span>Status: </span>
                         <span style="text-transform: uppercase;padding-right:10px;">{{build_status}}</span>
                         <i v-if="build_status == 'success'" style="color:green;" class="fa fa-check" aria-hidden="true"></i>
-                        <i v-else style="color:red;" class="fa fa-times" aria-hidden="true"></i>
+                        <i v-else-if ="build_status == 'FAILURE'" style="color:red;" class="fa fa-times" aria-hidden="true"></i>
+                        <i v-else style="color:red;" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                       </div>
                     </div>
                   </template>
@@ -175,7 +176,8 @@
         loading: false,
         repo_pull_request:'',
         showErrorPullRequest:false,
-        pull_request_url: ''
+        pull_request_url: '',
+        disable_status: true,
 		}
     },
     watch:{
@@ -187,16 +189,22 @@
     },
     methods:{
       deletePipeline(){
+        this.loading = true;
           this.deletePipelineCall(this.pipeline_id,this.deletePipelineCallBack)
-
       },
       deletePipelineCallBack(response){
+        console.log(response)
         if(response.status == 204){
 
+            this.$store.state.pipeline_id='';
+            this.$store.state.build_url='';
+            this.$store.state.status='';
+            this.$store.state.pull_request_url='';
             this.pipeline_id = '';
-            this.$store.state.pipeline_id = this.pipeline_id;
             this.showCard = false;
             this.disabled_button = false;
+            this.disabled_status = true;
+
             this.notifyVue("Pipeline deleted successfully",'nc-icon nc-check-2','info');
 
 
@@ -204,6 +212,7 @@
           this.disabled_button = false;
           this.notifyVue("Error "+ response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
         }
+        this.loading = false;
       },
 
       createPipeline(){
@@ -270,6 +279,7 @@
       runPipelineCallBack(response){
         if(response.status == 200){
           if (response.data.build_url){
+            this.disable_status = false;
             this.showCard = true;
             this.build_url = response.data.build_url;
             this.$store.state.build_url = this.build_url;
@@ -277,6 +287,7 @@
             this.notifyVue("Pipeline executed successfully",'nc-icon nc-check-2','info');
           }
         }else if(response.status == 204){
+          this.disable_status = false;
           this.notifyVue("Waiting for scan organization",'nc-icon nc-simple-remove','warning')
 
         }else{
@@ -564,11 +575,11 @@
       this.$router.push({name:"SQACriteria"})
     }
 
-    var json = JSON.stringify(this.$store.state);
     this.pipeline_id = this.$store.state.pipeline_id;
     this.pull_request_url = this.$store.state.pull_request_url;
     this.build_url = this.$store.state.build_url;
     this.build_status = this.$store.state.status;
+
       if(this.pipeline_id == ''){
         this.showCard = false;
         this.disabled_button = false;
@@ -583,8 +594,10 @@
       }
       if(this.build_status == ''){
         this.showStatus = false;
+        this.disabled_status = true;
       }else{
         this.showStatus = true;
+        this.disable_status = false;
       }
   }
 }
