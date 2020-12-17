@@ -193,7 +193,6 @@
           this.deletePipelineCall(this.pipeline_id,this.deletePipelineCallBack)
       },
       deletePipelineCallBack(response){
-        console.log(response)
         if(response.status == 204){
 
             this.$store.state.pipeline_id='';
@@ -209,8 +208,12 @@
 
 
         }else{
-          this.disabled_button = false;
-          this.notifyVue("Error "+ response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
+          if(response.status == 403){
+            this.disabled_button = false;
+            this.$router.replace(this.$route.query.redirect || "/logout");
+          }else{
+            this.notifyVue("Error "+ response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
+          }
         }
         this.loading = false;
       },
@@ -266,8 +269,12 @@
             this.notifyVue("Pipeline created successfully",'nc-icon nc-check-2','info');
           }
         }else{
-          this.disabled_button = false;
-          this.notifyVue("Error "+ response.status +":" + response.data.detail,'nc-icon nc-simple-remove','danger')
+           if(response.status == 403){
+            this.disabled_button = false;
+            this.$router.replace(this.$route.query.redirect || "/logout");
+          }else{
+            this.notifyVue("Error "+ response.status +":" + response.data.detail,'nc-icon nc-simple-remove','danger')
+          }
         }
         this.loading = false;
 
@@ -290,7 +297,10 @@
           this.disable_status = false;
           this.notifyVue("Waiting for scan organization",'nc-icon nc-simple-remove','warning')
 
+        }else if(response.status == 403){
+          this.$router.replace(this.$route.query.redirect || "/logout");
         }else{
+          this.showBuildUrl = false;
           this.showBuildUrl = false;
           this.notifyVue("Error "+ response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
         }
@@ -314,6 +324,9 @@
             this.showBuildUrl = true;
           }
 
+        }else if(response.status == 403){
+          this.showStatus = false;
+          this.$router.replace(this.$route.query.redirect || "/logout");
         }else{
           this.showStatus = false;
           this.notifyVue("Error "+ response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
@@ -331,6 +344,9 @@
           element.style.display = 'none';
           document.body.appendChild(element);
           element.click();
+        }else if(response.status == 403){
+          this.$router.replace(this.$route.query.redirect || "/logout");
+          this.showStatus = false;
         }else{
           this.showStatus = false;
           this.notifyVue("Error "+ response.status +":" +  response.data.reason,'nc-icon nc-simple-remove','danger')
@@ -361,6 +377,8 @@
             this.pull_request_url = response.data.pull_request_url;
             this.$store.state.pull_request_url = this.pull_request_url;
           }
+        }else if(response.status == 403){
+          this.$router.replace(this.$route.query.redirect || "/logout");
         }else{
           this.notifyVue("Error "+ response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
         }
