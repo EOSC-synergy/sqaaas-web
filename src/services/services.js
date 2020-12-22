@@ -56,6 +56,8 @@ export default {
       axios({
           method: 'get',
           url: this.env.api +'/'+id+'/compressed_files',
+          contentType:'application/zip',
+          responseType: 'blob'
         }).then(response => {
             return callBackHandler(response);
         })
