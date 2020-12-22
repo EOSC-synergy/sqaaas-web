@@ -146,6 +146,7 @@
   import LTable from 'src/components/Table.vue'
   import Card from 'src/components/Cards/Card.vue'
   import Services from 'src/services/services.js'
+  import FileSaver from 'file-saver'
   export default {
     components: {
 		LTable,
@@ -338,12 +339,7 @@
       },
       downloadFileCallBack(response){
         if(response.status == 200){
-          var element = document.createElement('a');
-          element.setAttribute('href', this.env.api + '/' + this.pipeline_id  +'/compressed_files');
-          element.setAttribute('download' , 'jepl.zip');
-          element.style.display = 'none';
-          document.body.appendChild(element);
-          element.click();
+          FileSaver(response.data,"sqaaas.zip")
         }else if(response.status == 403){
           this.$router.replace(this.$route.query.redirect || "/logout");
           this.showStatus = false;
