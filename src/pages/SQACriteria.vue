@@ -8,7 +8,7 @@
                 <h4 class="card-title text-center" style="padding-top:2rem;">Select SQA Criteria</h4>
               </template>
               <template class="card-body">
-                <div class="col-12 col-md-10">
+                <div class="col-12 col-md-6" >
                    <base-input type="text" class="no-margin"
                             label="Pipeline Name"
                             :disabled="false"
