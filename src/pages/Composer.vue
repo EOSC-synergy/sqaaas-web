@@ -215,7 +215,7 @@
         this.$notify(
           {
             message: message,
-            icon: 'nc-icon nc-simple-remove',
+            icon: 'nc-icon nc-app',
             timeout:2000,
             horizontalAlign: 'center',
             verticalAlign: 'top',

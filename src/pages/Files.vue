@@ -574,7 +574,7 @@
         this.$notify(
           {
             message: message,
-            icon: icon,
+            icon: 'nc-icon nc-app',
             timeout:3000,
             horizontalAlign: 'right',
             verticalAlign: 'top',
