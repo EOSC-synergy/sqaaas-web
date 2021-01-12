@@ -254,6 +254,7 @@
 
         this.$notify(
           {
+            title: "Error",
             message: message,
             icon: 'nc-icon nc-app',
             timeout:3000,
