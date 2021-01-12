@@ -61,7 +61,7 @@
     },
     methods:{
       gotoCustomized(){
-        this.$router.push({name: 'dashboard'});
+        this.$router.push({name: 'general'});
       },
       gotoFull(){
         this.$router.push({name: 'full_assessment'});

@@ -586,7 +586,7 @@
     var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
     if(sizeCriteria == 0){
       this.notifyVue("Error you must add at least one sqa criteria",'nc-icon nc-simple-remove','danger')
-      this.$router.push({name:"SQACriteria"})
+      // this.$router.push({name:"SQACriteria"})
     }
 
     this.pipeline_id = this.$store.state.pipeline_id;

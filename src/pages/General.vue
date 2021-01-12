@@ -2,30 +2,43 @@
   <div class="content">
     <div class="container-fluid">
 			<!-- <span>User: {{username}}</span> -->
-      <div class="row">
-        <div class="col-md-6" style="margin-top:40px;">
+      <div style="margin-top:30px;">
+        <div class="col-xs-12 col-md-6" style="margin:auto;">
             <card style="height:75vh;overflow-y: auto;">
               <template slot="header">
-                <h4 class="card-title text-center">CONFIG YAML</h4>
+                <h4 class="card-title text-center">GENERAL OPTIONS</h4>
               </template>
 
               <template>
-                <div class="col-12">
-                  <base-input type="text"
-                            label="Repository Name"
-                            :disabled="false"
-                            placeholder="worsica-processing"
-                            v-model="repo.name">
-                  </base-input>
+                <!-- <div class="col-12"> -->
+                  <div class="row"  style="padding-left:35px;margin-bottom:1rem;">
+                    <div class="col-10" style="padding:0px;margin:0px;">
+                      <base-input type="text"
+                                label="Repository Name"
+                                :disabled="false"
+                                placeholder="worsica-processing"
+                                v-model="repo.name"
+                                >
+                      </base-input>
+                    </div>
+                    <div class="col-2 custom-div-append">
+                      <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-placement="top" title="Information">
+                        <i class="fa fa-question"></i>
+                      </button>
+                    </div>
                   <span v-show="showErrorRepoName" style="color:red; font-size:12px;">This field is required.</span>
+                  </div>
 
-                  <base-input type="text"
-                            label="Repository URL"
-                            :disabled="false"
-                            placeholder="https://github.com/WORSICA/worsica-processing.git"
-                            v-model="repo.url">
-                  </base-input>
-                  <span v-show="showErrorRepoUrl" style="color:red; font-size:12px;">This field is required.</span>
+                  <div class="row"  style="padding-left:20px;margin-bottom:1rem;">
+
+                    <base-input class="col-12" type="text"
+                              label="Repository URL"
+                              :disabled="false"
+                              placeholder="https://github.com/WORSICA/worsica-processing.git"
+                              v-model="repo.url"
+                              >
+                    </base-input>
+                    <span v-show="showErrorRepoUrl" style="color:red; font-size:12px;">This field is required.</span>
 
                 </div>
 
@@ -71,7 +84,7 @@
                   </div>
                 </div>
 
-                <div class="text-right">
+                <div class="text-right" style="padding-right: 20px;">
                   <button type="button" class="btn-fill btn btn-info" @click="addRepo();track()"><i class="fa fa-plus"></i>ADD REPOSITORY</button>
                 </div>
 
@@ -195,137 +208,6 @@
               </template>
             </card>
         </div>
-        <div class="col-md-6" style="margin-top:40px;">
-          <card style="height:75vh;overflow-y: auto;">
-            <template slot="header">
-              <h4 class="card-title text-center">DOCKER COMPOSE YAML</h4>
-            </template>
-
-            <template>
-              <!-- <div class="row"> -->
-                <base-input style="padding-left:20px;" type="text"
-                          label="Docker Image"
-                          :disabled="false"
-                          placeholder="worsica/worsica-backend:worsica-processing-dev_latest"
-                          v-model="service.image">
-                </base-input>
-                <div class="row" style="justify-content: flex-end;padding-right:20px;">
-                  <span class="custom-label">One shot image</span><base-checkbox name="workpace" v-model="oneshot"></base-checkbox>
-
-                </div>
-
-              <!-- </div> -->
-              <base-input style="padding-left:20px;" type="text"
-                        label="Container Name"
-                        :disabled="false"
-                        placeholder="processing"
-                        v-model="service.container_name">
-              </base-input>
-              <base-input style="padding-left:20px;" type="text"
-                        label="Hostname"
-                        :disabled="false"
-                        placeholder="processing"
-                        v-model="service.hostname">
-              </base-input>
-              <div class="row" style="padding-left:20px;">
-                <base-input class="col-md-4" type="text"
-                        label="Volume type"
-                        :disabled="false"
-                        placeholder="bind"
-                        v-model="volume.type">
-                </base-input>
-                <base-input class="col-md-4" type="text"
-                        label="Volume Source"
-                        :disabled="false"
-                        placeholder="worsica_web_products"
-                        v-model="volume.source">
-                </base-input>
-                <base-input class="col-md-4" type="text"
-                        label="Volume target"
-                        :disabled="false"
-                        placeholder="/usr/local/worsica_web_products"
-                        v-model="volume.target">
-                </base-input>
-
-              </div>
-              <div class="text-right">
-                <button type="button" class="btn-simple btn btn-xs btn-info" @click="addVolume()"><i class="fa fa-plus"></i>ADD VOLUME</button>
-              </div>
-              <div v-show="showVolumes" style="padding-top:20px;">
-                <span class="custom-label">Volume</span>
-                <ul class="list-group">
-                  <li class="list-group-item d-flex justify-content-between"
-                    v-for="(vol,key) in volumes"
-                    :key="key"
-                  >
-                  {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeVolume(vol,key)"><i class="fa fa-minus"></i></button></span>
-
-                  </li>
-
-                </ul>
-              </div>
-              <div class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
-                <span class="custom-label">Environment variables:</span>
-                <span class="custom-label">Yes</span><base-checkbox name="env" v-model="envComposeYesNo.yes"></base-checkbox>
-                <span class="custom-label">No</span><base-checkbox name="env" v-model="envComposeYesNo.no"></base-checkbox>
-              </div>
-
-              <div class="row" v-show='envComposeYesNo.yes' style="padding-left:30px;">
-
-                  <base-input class="col-md-6" type="text"
-                        label="Key"
-                        :disabled="false"
-                        placeholder="Debug"
-                        v-model="envCompose.key">
-                  </base-input>
-                  <base-input class="col-md-6" type="text"
-                        label="value"
-                        :disabled="false"
-                        placeholder="1"
-                        v-model="envCompose.value">
-                  </base-input>
-
-
-                  <div style="margin-bottom:30px;width:95%;" class="text-right">
-                    <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnvCompose()"><i class="fa fa-plus"></i>ADD Env Vars</button>
-                  </div>
-                </div>
-                <div v-show="showEnvCompose" style="padding-top:20px;">
-                  <span class="custom-label">Env Vars</span>
-                  <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between"
-                      v-for="(env,key) in service.envs"
-                      :key="key"
-                    >
-                    {{Object.keys(env)[0]}}:{{Object.values(env)[0]}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnvCompose(key)"><i class="fa fa-minus"></i></button></span>
-
-                    </li>
-
-                  </ul>
-                </div>
-
-              <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
-                <button type="button" class="btn-fill btn btn-info" @click="addService()"><i class="fa fa-plus"></i>ADD SERVICE</button>
-              </div>
-
-              <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;">
-                <span class="custom-label">Services</span>
-                <ul class="list-group">
-                  <li class="list-group-item d-flex justify-content-between"
-                    v-for="(env,key) in services"
-                    :key="key"
-                  >
-                  {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeService(key)"><i class="fa fa-minus"></i></button></span>
-
-                  </li>
-
-                </ul>
-              </div>
-
-
-            </template>
-          </card>
-        </div>
       </div>
     </div>
   </div>
@@ -390,31 +272,6 @@
         showErrorCredType:false,
         showErrorRepoName:false,
         showErrorRepoUrl:false,
-        service:{
-          image:'',
-          container_name:'',
-          hostname:'',
-          volumes:[],
-          envs:[]
-        },
-        envComposeYesNo:{
-          yes:false,
-          no:true
-        },
-        envCompose:{
-          key:'',
-          value:''
-        },
-        services:{},
-        volume:{
-          type:'',
-          source:'',
-          target:''
-        },
-        volumes:{},
-        count:0,
-
-
 
       }
     },
@@ -467,21 +324,6 @@
           this.config.all_envs={};
         }else{
           this.config.env.yes = true;
-        }
-      },
-      'envComposeYesNo.yes'(val){
-        if(val==true){
-          this.envComposeYesNo.no = false;
-        }else{
-          this.envComposeYesNo.no = true;
-        }
-      },
-      'envComposeYesNo.no'(val){
-         if(val==true){
-          this.envComposeYesNo.yes = false;
-          this.service.envs=[];
-        }else{
-          this.envComposeYesNo.yes = true;
         }
       },
       'repo.url'(val){
@@ -634,105 +476,6 @@
         this.env.key = '';
         this.env.value = '';
       },
-      addEnvCompose(){
-        var envVars= {};
-        var key= this.envCompose.key.replace(" ", "")
-				var value = this.envCompose.value.replace(" ", "")
-        envVars[key]=value
-        this.service.envs.push(envVars)
-        this.showEnvCompose = true;
-        this.cleanEnvCompose()
-      },
-      removeEnvCompose(item){
-        this.$delete(this.service.envs,item)
-        if (this.isEmpty(this.service.envs)) {
-          this.showEnvCompose = false;
-        }
-      },
-      cleanEnvCompose(){
-        this.envCompose.key = '';
-        this.envCompose.value = '';
-      },
-      addVolume(){
-        this.showVolumes = true;
-        this.count +=1;
-        var name = "volume "+this.count;
-        this.volumes[name]={
-          type:this.volume.type.trim(),
-          source:this.volume.source.trim(),
-          target:this.volume.target.trim()
-        }
-        this.service.volumes.push(this.volumes[name])
-        this.cleanVolume();
-
-      },
-      removeVolume(item1,item2){
-        this.$delete(this.volumes,item2)
-          if (this.isEmpty(this.service.volumes)) {
-            this.showVolumes = false;
-          }
-        for (let i = 0; i < this.service.volumes.length; i++) {
-          if(this.service.volumes[i].target == item1.target){
-            this.service.volumes.splice(i,1)
-          }
-        }
-      },
-      cleanVolume(){
-        this.volume.type = '';
-        this.volume.source = '';
-        this.volume.target = '';
-      },
-      addService(){
-        if(this.oneshot== true){
-          this.services[this.service.container_name]={
-            image: this.service.image,
-            container_name: this.service.container_name,
-            hostname: this.service.hostname,
-            volumes: this.service.volumes,
-            command: 'sleep infinity',
-            environment: this.service.envs
-          }
-        }else{
-          this.services[this.service.container_name]={
-            image: this.service.image,
-            container_name: this.service.container_name,
-            hostname: this.service.hostname,
-            volumes: this.service.volumes,
-            environment: this.service.envs
-          }
-        }
-        this.showServices = true;
-        this.$store.state.docker_compose.services = this.services;
-        this.cleanService();
-      },
-      removeService(item){
-        this.$delete(this.services,item)
-        this.$store.state.docker_compose.services = this.services;
-        this.$store.state.config_yaml.sqa_criteria={};
-        if (this.isEmpty(this.services)) {
-          this.showServices = false;
-        }
-
-      },
-      cleanService(){
-        this.service.image='';
-        this.service.container_name='';
-        this.service.hostname='';
-        this.service.envs=[];
-        this.volumes={};
-        this.service.volumes=[];
-        this.oneshot = false;
-        this.cleanEnvCompose();
-        this.cleanVolume();
-        this.envComposeYesNo.no = true;
-        if (this.isEmpty(this.service.envs)) {
-          this.showEnvCompose = false;
-        }
-
-        if (this.isEmpty(this.service.volumes)) {
-          this.showVolumes = false;
-        }
-      },
       isEmpty(obj) {
         for(var key in obj) {
           if(obj.hasOwnProperty(key))
@@ -808,6 +551,11 @@
 
 			}
         });
+      },
+      mounted(){
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
       }
   }
 </script>
@@ -824,6 +572,29 @@ input[type=number]::-webkit-inner-spin-button {
 
 .no-margin{
   margin:0px!important;
+}
+
+.custom-append-button {
+  padding: 0.375rem 0.75rem;
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    /* line-height: 1.5; */
+    color: #495057;
+    /* text-align: center; */
+    /* white-space: nowrap; */
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    height: 40px;
+}
+
+.custom-div-append {
+  padding:27px 0px 0px 0px;
+  margin:0px;
+  margin-left: -3px;
 }
 
 
