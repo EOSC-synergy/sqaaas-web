@@ -3,7 +3,7 @@
     <div class="container-fluid">
 			<!-- <span>User: {{username}}</span> -->
       <div style="margin-top:30px;">
-        <div class="col-xs-12 col-md-6" style="margin:auto;">
+        <div class="col-12 col-md-10 col-lg-8 col-xl-6" style="margin:auto;padding:0px;">
             <card style="height:75vh;overflow-y: auto;">
               <template slot="header">
                 <h4 class="card-title text-center">GENERAL OPTIONS</h4>
@@ -351,7 +351,7 @@
             message: message,
             icon: 'nc-icon nc-app',
             timeout:2000,
-            horizontalAlign: 'center',
+            horizontalAlign: 'right',
             verticalAlign: 'top',
             type: 'danger'
           })
@@ -597,6 +597,18 @@ input[type=number]::-webkit-inner-spin-button {
   margin:0px;
   margin-left: -3px;
 }
+
+
+
+
+@media (max-width: 576px) {
+  .container-fluid{
+    padding-left: 0px!important;
+    padding-right: 0px!important;
+  }
+
+
+ }
 
 
 
