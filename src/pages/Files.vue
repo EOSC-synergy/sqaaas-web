@@ -7,6 +7,43 @@
         <div class="row">
           <div class="col-12">
 
+          <card class="strpied-tabled-with-hover"
+                  body-classes=""
+            >
+              <template slot="header">
+                <h4 class="card-title text-center">Information Summary</h4>
+              </template>
+
+              <template >
+                <div class="row text-center">
+                  <div class="col-12">
+                    <span>Pipeline name: </span>
+
+                  </div>
+                  <div class="col-12">
+                    <span>Repository Name:</span>
+                    <!-- POner todos los repositorios con la url en una tabla -->
+
+                  </div>
+                  <div class="col-12">
+                    <span>Docker image:</span>
+                  </div>
+                   <div class="col-12">
+                    <span>SQA Criterias:</span>
+                    <!-- Poner todos los sqa criteria con el repo el erivico y los comandos -->
+
+                  </div>
+
+
+
+                </div>
+              </template>
+            </card>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+
             <card class="strpied-tabled-with-hover"
                   body-classes=""
             >
@@ -584,6 +621,7 @@
       },
   },
   created(){
+    console.log(this.$store.state)
     var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
     if(sizeCriteria == 0){
       this.notifyVue("Error", "You must add at least one sqa criteria.",'nc-icon nc-simple-remove','danger')

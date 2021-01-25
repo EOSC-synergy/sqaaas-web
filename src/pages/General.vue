@@ -11,21 +11,18 @@
 
               <template>
                 <!-- <div class="col-12"> -->
-                  <div class="row"  style="padding-left:35px;margin-bottom:1rem;">
-                    <div class="col-10" style="padding:0px;margin:0px;">
-                      <base-input type="text"
-                                label="Repository Name"
-                                :disabled="false"
-                                placeholder="worsica-processing"
-                                v-model="repo.name"
-                                >
-                      </base-input>
-                    </div>
-                    <div class="col-2 custom-div-append">
-                      <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-placement="top" title="Information">
-                        <i class="fa fa-question"></i>
-                      </button>
-                    </div>
+                  <div class="row"  style="padding-left:20px;margin-bottom:1rem;">
+
+                    <base-input class="col-12" type="text"
+                              label="Repository Name"
+                              :disabled="false"
+                              placeholder="worsica-processing"
+                              v-model="repo.name"
+                              >
+                    </base-input>
+
+
+
                   <span v-show="showErrorRepoName" style="color:red; font-size:12px;">This field is required.</span>
                   </div>
 
@@ -43,9 +40,18 @@
                 </div>
 
                 <div class="row" style="padding-left:20px;margin-bottom:1rem;">
-                  <span class="custom-label">Customize workspace:</span>
-                  <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="config.workspace.yes"></base-checkbox>
-                  <span class="custom-label">No</span><base-checkbox name="workspace" v-model="config.workspace.no"></base-checkbox>
+                  <div style="display:contents" class="col-12 col-md-6">
+                    <span class="custom-label">Customize workspace:</span>
+                    <div class="custom-div-append">
+                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                          <i class="fa fa-question"></i>
+                        </button>
+                      </div>
+                  </div>
+                  <div style="display:contents" class="col-12 col-md-6">
+                    <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="config.workspace.yes"></base-checkbox>
+                    <span class="custom-label">No</span><base-checkbox name="workspace" v-model="config.workspace.no"></base-checkbox>
+                  </div>
                 </div>
                 <div v-show='config.workspace.yes' style="padding-left:30px;">
                   <!-- <base-input type="text"
@@ -496,20 +502,14 @@
     created(){
 
       var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos)
-      var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
       for (let i = 0; i < sizeRepos; i++) {
         this.config.all_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]=this.$store.state.config_yaml.config.project_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]
       }
-      for (let i = 0; i < sizeServices; i++) {
-        this.services[Object.keys(this.$store.state.docker_compose.services)[i]]=this.$store.state.docker_compose.services[Object.keys(this.$store.state.docker_compose.services)[i]]
-      }
-
       for (let i = 0; i < this.$store.state.config_yaml.config.credentials.length; i++) {
         this.all_credentials.push(this.$store.state.config_yaml.config.credentials[i])
       }
 
       this.config.all_envs = this.$store.state.config_yaml.environment
-
       if(this.isEmpty(this.config.all_repos)){
         this.showRepo = false
       }else {
@@ -584,16 +584,14 @@ input[type=number]::-webkit-inner-spin-button {
     color: #495057;
     /* text-align: center; */
     /* white-space: nowrap; */
-    background-color: #e9ecef;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+
+    border: none;
+
     height: 40px;
 }
 
 .custom-div-append {
-  padding:27px 0px 0px 0px;
+  padding:0px 0px 0px 0px;
   margin:0px;
   margin-left: -3px;
 }
