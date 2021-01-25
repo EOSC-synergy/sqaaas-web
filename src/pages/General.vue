@@ -44,7 +44,7 @@
                     <span class="custom-label">Customize workspace:</span>
                     <div class="custom-div-append">
                         <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
-                          <i class="fa fa-question"></i>
+                          <i class="fa fa-question-circle"></i>
                         </button>
                       </div>
                   </div>
