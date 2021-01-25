@@ -91,7 +91,7 @@
                 </div>
 
                 <div class="text-right" style="padding-right: 20px;">
-                  <button type="button" class="btn-fill btn btn-info" @click="addRepo();track()"><i class="fa fa-plus"></i>ADD REPOSITORY</button>
+                  <button type="button" class="btn-outline btn btn-info" @click="addRepo();track()"><i class="fa fa-plus"></i>ADD REPOSITORY</button>
                 </div>
 
                 <div v-show="showRepo" style="padding-top:20px;">
@@ -612,8 +612,13 @@ input[type=number]::-webkit-inner-spin-button {
     height: 40px;
 }
 
+.btn-info {
+    border-color: #1185EB;
+    color: #1185EB;
+}
+
 .btn-next {
-    background-color: #ff5100 !important;
+    background-color: #1DC7EA !important;
     color: black !important;
     padding:1rem 0 1rem 0;
     font-weight: bold;

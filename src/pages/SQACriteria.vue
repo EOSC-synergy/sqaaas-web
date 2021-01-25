@@ -149,7 +149,7 @@
                 <!-- <h4 class="card-title text-center">ADD Criteria</h4> -->
               </template>
                 <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
-                  <button type="button" class="btn-fill btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
+                  <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
                 </div>
               <template>
                 <div v-show="showCriteria" style="padding-top:20px;margin-bottom:2rem;">
@@ -459,7 +459,7 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .btn-next {
-    background-color: #ff5100 !important;
+    background-color: #1DC7EA !important;
     color: black !important;
     padding:1rem 0 1rem 0;
     font-weight: bold;
@@ -477,6 +477,11 @@ input[type=number]::-webkit-inner-spin-button {
   font-weight: bold;
   border: 2px solid black;
 
+}
+
+.btn-info {
+    border-color: #1185EB;
+    color: #1185EB;
 }
 
 </style>
