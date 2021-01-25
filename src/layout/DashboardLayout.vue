@@ -2,17 +2,21 @@
 	<div class="wrapper">
 		<side-bar v-show="$route.path != '/auth/select-option' && $route.path != '/auth/full-assessment' ">
 
-			<sidebar-link to="/auth/dashboard">
+			<sidebar-link to="/auth/general-options">
 				<i class="nc-icon nc-chart-pie-35"></i>
 				<p>1. General Options</p>
 			</sidebar-link>
+      <sidebar-link to="/auth/composer-options">
+				<i class="nc-icon nc-tag-content"></i>
+				<p>2. Composer Options</p>
+			</sidebar-link>
 			<sidebar-link to="/auth/sqa-criteria">
 				<i class="nc-icon nc-tap-01"></i>
-				<p>2. SQA Criteria</p>
+				<p>3. SQA Criteria</p>
 			</sidebar-link>
 			<sidebar-link to="/auth/files">
 				<i class="nc-icon nc-notes"></i>
-				<p>3. Actions</p>
+				<p>4. Actions</p>
 			</sidebar-link>
       <hr style="background-color:rgba(255,255,255,0.6);">
       <sidebar-link to="/auth/select-option">

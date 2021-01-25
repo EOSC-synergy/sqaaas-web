@@ -7,6 +7,43 @@
         <div class="row">
           <div class="col-12">
 
+          <card class="strpied-tabled-with-hover"
+                  body-classes=""
+            >
+              <template slot="header">
+                <h4 class="card-title text-center">Information Summary</h4>
+              </template>
+
+              <template >
+                <div class="row text-center">
+                  <div class="col-12">
+                    <span>Pipeline name: </span>
+
+                  </div>
+                  <div class="col-12">
+                    <span>Repository Name:</span>
+                    <!-- POner todos los repositorios con la url en una tabla -->
+
+                  </div>
+                  <div class="col-12">
+                    <span>Docker image:</span>
+                  </div>
+                   <div class="col-12">
+                    <span>SQA Criterias:</span>
+                    <!-- Poner todos los sqa criteria con el repo el erivico y los comandos -->
+
+                  </div>
+
+
+
+                </div>
+              </template>
+            </card>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+
             <card class="strpied-tabled-with-hover"
                   body-classes=""
             >
@@ -205,7 +242,7 @@
             this.disabled_button = false;
             this.disabled_status = true;
 
-            this.notifyVue("Pipeline deleted successfully",'nc-icon nc-check-2','info');
+            this.notifyVue("Success","Pipeline deleted successfully.",'nc-icon nc-check-2','info');
 
 
         }else{
@@ -213,7 +250,7 @@
             this.disabled_button = false;
             this.$router.replace(this.$route.query.redirect || "/logout");
           }else{
-            this.notifyVue("Error "+ response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
+            this.notifyVue("Error ", response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
           }
         }
         this.loading = false;
@@ -267,14 +304,14 @@
             this.$store.state.pipeline_id = this.pipeline_id;
             this.showCard = true;
             this.disabled_button = true;
-            this.notifyVue("Pipeline created successfully",'nc-icon nc-check-2','info');
+            this.notifyVue("Success","Pipeline created successfully.",'nc-icon nc-check-2','info');
           }
         }else{
            if(response.status == 403){
             this.disabled_button = false;
             this.$router.replace(this.$route.query.redirect || "/logout");
           }else{
-            this.notifyVue("Error "+ response.status +":" + response.data.detail,'nc-icon nc-simple-remove','danger')
+            this.notifyVue("Error", response.status +":" + response.data.detail,'nc-icon nc-simple-remove','danger')
           }
         }
         this.loading = false;
@@ -292,18 +329,18 @@
             this.build_url = response.data.build_url;
             this.$store.state.build_url = this.build_url;
             this.showBuildUrl = true;
-            this.notifyVue("Pipeline executed successfully",'nc-icon nc-check-2','info');
+            this.notifyVue("Success","Pipeline executed successfully.",'nc-icon nc-check-2','info');
           }
         }else if(response.status == 204){
           this.disable_status = false;
-          this.notifyVue("Waiting for scan organization",'nc-icon nc-simple-remove','warning')
+          this.notifyVue("Info","Waiting for scan organization.",'nc-icon nc-simple-remove','warning')
 
         }else if(response.status == 403){
           this.$router.replace(this.$route.query.redirect || "/logout");
         }else{
           this.showBuildUrl = false;
           this.showBuildUrl = false;
-          this.notifyVue("Error "+ response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error ", response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
         }
         this.loading = false;
       },
@@ -330,7 +367,7 @@
           this.$router.replace(this.$route.query.redirect || "/logout");
         }else{
           this.showStatus = false;
-          this.notifyVue("Error "+ response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error ", response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
         }
         this.loading = false;
       },
@@ -345,7 +382,7 @@
           this.showStatus = false;
         }else{
           this.showStatus = false;
-          this.notifyVue("Error "+ response.status +":" +  response.data.reason,'nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error ", response.status +":" +  response.data.reason,'nc-icon nc-simple-remove','danger')
         }
 
 
@@ -368,7 +405,7 @@
       pullRequestCallBack(response){
          if(response.status == 200){
           if (response.data.pull_request_url){
-            this.notifyVue("Pull Request done successfully",'nc-icon nc-simple-remove','info')
+            this.notifyVue("Success","Pull Request done successfully.",'nc-icon nc-simple-remove','info')
             this.repo_pull_request = ''
             this.pull_request_url = response.data.pull_request_url;
             this.$store.state.pull_request_url = this.pull_request_url;
@@ -376,7 +413,7 @@
         }else if(response.status == 403){
           this.$router.replace(this.$route.query.redirect || "/logout");
         }else{
-          this.notifyVue("Error "+ response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error ", response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
         }
         this.loading = false;
 
@@ -570,12 +607,13 @@
         }
         return size;
       },
-      notifyVue (message,icon,color) {
+      notifyVue (title,message,icon,color) {
         this.$notify(
           {
+            title: title,
             message: message,
-            icon: icon,
-            timeout:3000,
+            icon: 'nc-icon nc-app',
+            timeout:4000,
             horizontalAlign: 'right',
             verticalAlign: 'top',
             type: color,
@@ -583,10 +621,11 @@
       },
   },
   created(){
+    console.log(this.$store.state)
     var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
     if(sizeCriteria == 0){
-      this.notifyVue("Error you must add at least one sqa criteria",'nc-icon nc-simple-remove','danger')
-      this.$router.push({name:"SQACriteria"})
+      this.notifyVue("Error", "You must add at least one sqa criteria.",'nc-icon nc-simple-remove','danger')
+      // this.$router.push({name:"SQACriteria"})
     }
 
     this.pipeline_id = this.$store.state.pipeline_id;

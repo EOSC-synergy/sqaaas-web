@@ -2,10 +2,10 @@
   <div class="content" style="background-color:#f8f9fa;">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-12" style="margin-top:40px;">
+        <div class="col-12" style="margin-top:30px;">
             <card >
               <template slot="header">
-                <h4 class="card-title text-center" style="padding-top:2rem;">Select SQA Criteria</h4>
+                <h4 class="card-title text-center" style="padding-top:2rem;">SQA CRITERIA</h4>
               </template>
               <template class="card-body">
                 <div class="col-12 col-md-6" >
@@ -254,8 +254,9 @@
 
         this.$notify(
           {
+            title: "Error",
             message: message,
-            icon: 'nc-icon nc-simple-remove',
+            icon: 'nc-icon nc-app',
             timeout:3000,
             horizontalAlign: 'center',
             verticalAlign: 'top',
@@ -402,8 +403,8 @@
         var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
         var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
         if(sizeRepos == 0 || sizeServices == 0){
-          this.notifyVue("Error you must add at least one repository and one service")
-          this.$router.push({name:"dashboard"})
+          // this.notifyVue("Error you must add at least one service")
+          // this.$router.push({name:"composer"})
         }else{
           var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
           var getCriteria = this.$store.state.config_yaml.sqa_criteria
