@@ -113,7 +113,7 @@
                 </div>
 
               <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
-                <button type="button" class="btn-fill btn btn-info" @click="addService()"><i class="fa fa-plus"></i>ADD SERVICE</button>
+                <button type="button" class="btn-outline btn btn-info" @click="addService()"><i class="fa fa-plus"></i>ADD SERVICE</button>
               </div>
 
               <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;">
@@ -132,6 +132,16 @@
 
 
             </template>
+            <div class="row" style="margin-top:2rem; margin-bottom:2rem;">
+              <div class="col-12 col-md-12 text-center">
+                  <button @click="back()" type="button" class="btn btn-next-back btn-back" >
+                      BACK
+                  </button>
+                  <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
+                      NEXT
+                  </button>
+              </div>
+            </div>
           </card>
         </div>
       </div>
@@ -159,6 +169,7 @@
         showErrorCredType:false,
         showErrorRepoName:false,
         showErrorRepoUrl:false,
+        disable_done:true,
         service:{
           image:'',
           container_name:'',
@@ -206,6 +217,12 @@
 
     },
     methods:{
+       next(){
+         this.$router.push({name: 'SQACriteria'});
+      },
+      back(){
+         this.$router.push({name: 'general'});
+      },
       track(){
         this.$ga.event('button','add','repository',0)
         console.log(this.$ga)
@@ -292,6 +309,7 @@
           }
         }
         this.showServices = true;
+        this.disable_done = false;
         this.$store.state.docker_compose.services = this.services;
         this.cleanService();
       },
@@ -301,6 +319,7 @@
         this.$store.state.config_yaml.sqa_criteria={};
         if (this.isEmpty(this.services)) {
           this.showServices = false;
+          this.disable_done = true;
         }
 
       },
@@ -351,8 +370,10 @@
         }
 
         if(this.isEmpty(this.services)){
-          this.showServices = false
+          this.showServices = false;
+          this.disable_done = true;
         }else {
+          this.disable_done = false;
           this.showServices = true
         }
       }
@@ -432,6 +453,32 @@ input[type=number]::-webkit-inner-spin-button {
 
 
  }
+
+ .btn-info {
+    border-color: #1185EB;
+    color: #1185EB;
+}
+
+ .btn-next {
+    background-color: #1DC7EA !important;
+    color: black !important;
+    padding:1rem 0 1rem 0;
+    font-weight: bold;
+    border: 2px solid black;
+  }
+
+  .btn-next-back{
+    width: 20%!important;
+  }
+
+.btn-back{
+  padding:1rem 0 1rem 0;
+  background-color:#ccc!important;
+  margin-right:10%;
+  font-weight: bold;
+  border: 2px solid black;
+
+}
 
 
 

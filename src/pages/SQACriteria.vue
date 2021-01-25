@@ -149,7 +149,7 @@
                 <!-- <h4 class="card-title text-center">ADD Criteria</h4> -->
               </template>
                 <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
-                  <button type="button" class="btn-fill btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
+                  <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
                 </div>
               <template>
                 <div v-show="showCriteria" style="padding-top:20px;margin-bottom:2rem;">
@@ -164,8 +164,19 @@
                       </li>
 
                     </ul>
+
                   </div>
               </template>
+              <div class="row" style="margin-top:2rem; margin-bottom:2rem;">
+                <div class="col-12 col-md-12 text-center">
+                    <button @click="back()" type="button" class="btn btn-next-back btn-back" >
+                        BACK
+                    </button>
+                    <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
+                        NEXT
+                    </button>
+                </div>
+              </div>
             </card>
         </div>
       </div>
@@ -209,7 +220,8 @@
         showErrorCommand: false,
         showErrorFile: false,
         showErrorEnv:false,
-        showErrorPipeline:false
+        showErrorPipeline:false,
+        disable_done: true,
 
       }
     },
@@ -250,6 +262,12 @@
         }
     },
     methods:{
+       next(){
+         this.$router.push({name: 'Files'});
+      },
+      back(){
+         this.$router.push({name: 'composer'});
+      },
       notifyVue (message) {
 
         this.$notify(
@@ -287,6 +305,7 @@
             testenv: this.testenv
           }
           this.showCriteria = true;
+          this.disable_done = false;
           this.clearCommand();
           this.showCommands = false;
           this.showErrorRepo = false;
@@ -330,6 +349,7 @@
         this.$store.state.config_yaml.sqa_criteria = this.selected_criteria;
         if (this.isEmpty(this.selected_criteria)) {
           this.showCriteria = false;
+          this.disable_done = true;
         }
 
       },
@@ -403,8 +423,8 @@
         var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
         var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
         if(sizeRepos == 0 || sizeServices == 0){
-          // this.notifyVue("Error you must add at least one service")
-          // this.$router.push({name:"composer"})
+          this.notifyVue("Error you must add at least one service")
+          this.$router.push({name:"composer"})
         }else{
           var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
           var getCriteria = this.$store.state.config_yaml.sqa_criteria
@@ -413,8 +433,10 @@
           }
           if(sizeCriteria != 0){
             this.showCriteria = true;
+            this.disable_done = false;
           }else{
             this.showCriteria = false;
+            this.disable_done = true;
           }
         }
 
@@ -434,6 +456,32 @@ input[type=number]::-webkit-inner-spin-button {
 
 .no-margin{
   margin:0px!important;
+}
+
+.btn-next {
+    background-color: #1DC7EA !important;
+    color: black !important;
+    padding:1rem 0 1rem 0;
+    font-weight: bold;
+    border: 2px solid black;
+  }
+
+  .btn-next-back{
+    width: 10%!important;
+  }
+
+.btn-back{
+  padding:1rem 0 1rem 0;
+  background-color:#ccc!important;
+  margin-right:10%;
+  font-weight: bold;
+  border: 2px solid black;
+
+}
+
+.btn-info {
+    border-color: #1185EB;
+    color: #1185EB;
 }
 
 </style>
