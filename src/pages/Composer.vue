@@ -112,6 +112,19 @@
                   </ul>
                 </div>
 
+                <div class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
+                  <span class="custom-label">Push Image to Docker Registry?</span>
+                  <span class="custom-label">Yes</span><base-checkbox name="env" v-model="push_image.yes"></base-checkbox>
+                  <span class="custom-label">No</span><base-checkbox name="env" v-model="push_image.no"></base-checkbox>
+                </div>
+
+                <div class="row" v-show='push_image.yes' style="padding-left:30px;">
+                  <div style="padding-left:30px;padding-right:30px;">
+                    <p style="color:red;text-align:justify" >Attention: If you add this option, before continuing to the next step, you will have to provide the ID of the credentials created in Jenkins or <a target="blank" href="https://jenkins.eosc-synergy.eu/"> go now</a> and create them. </p>
+
+                  </div>
+                </div>
+
               <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
                 <button type="button" class="btn-outline btn btn-info" @click="addService()"><i class="fa fa-plus"></i>ADD SERVICE</button>
               </div>
@@ -132,6 +145,20 @@
 
 
             </template>
+            <div class="row" v-show="$store.state.docker_compose.push_services.length > 0" style="margin-top:2rem; margin-bottom:2rem;padding-left:10px;">
+              <div class="col-12 col-md-12 text-left">
+                  <base-input type="text" class="no-margin"
+                        label="Enter the ID of the Jenkins credentials."
+                        :disabled="false"
+                        placeholder="userpass"
+                        v-model="$store.state.docker_compose.id_cred_service">
+                    </base-input>
+
+              </div>
+              <div class="col-12 text-rigth">
+                  <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
+              </div>
+            </div>
             <div class="row" style="margin-top:2rem; margin-bottom:2rem;">
               <div class="col-12 col-md-12 text-center">
                   <button @click="back()" type="button" class="btn btn-next-back btn-back" >
@@ -163,13 +190,9 @@
         showVolumes:false,
         showEnvCompose:false,
         showServices:false,
-        showErrorCredId:false,
-        showErrorCredPass:false,
-        showErrorCredUser:false,
-        showErrorCredType:false,
-        showErrorRepoName:false,
-        showErrorRepoUrl:false,
+        showErrorCredID:false,
         disable_done:true,
+        id_credential: '',
         service:{
           image:'',
           container_name:'',
@@ -178,6 +201,10 @@
           envs:[]
         },
         envComposeYesNo:{
+          yes:false,
+          no:true
+        },
+        push_image:{
           yes:false,
           no:true
         },
@@ -199,6 +226,14 @@
       }
     },
     watch:{
+      '$store.state.docker_compose.id_cred_service'(val){
+        if(val != ''){
+          this.showErrorCredID = false;
+        }else{
+          this.showErrorCredID = true;
+
+        }
+      },
       'envComposeYesNo.yes'(val){
         if(val==true){
           this.envComposeYesNo.no = false;
@@ -214,11 +249,32 @@
           this.envComposeYesNo.yes = true;
         }
       },
+      'push_image.yes'(val){
+        if(val==true){
+
+          this.push_image.no = false;
+        }else{
+          this.push_image.no = true;
+        }
+      },
+      'push_image.no'(val){
+         if(val==true){
+          this.push_image.yes = false;
+        }else{
+          this.push_image.yes = true;
+        }
+      },
 
     },
     methods:{
        next(){
-         this.$router.push({name: 'SQACriteria'});
+         if(this.$store.state.docker_compose.push_services.length > 0 && this.$store.state.docker_compose.id_cred_service == ''){
+           this.showErrorCredID = true;
+         }else{
+           this.showErrorCredID = false;
+           this.$router.push({name: 'SQACriteria'});
+         }
+
       },
       back(){
          this.$router.push({name: 'general'});
@@ -309,12 +365,17 @@
           }
         }
         this.showServices = true;
+        if(this.push_image.yes == true){
+          this.$store.state.docker_compose.push_services.push(this.service.container_name);
+        }
         this.disable_done = false;
         this.$store.state.docker_compose.services = this.services;
         this.cleanService();
       },
       removeService(item){
-        this.$delete(this.services,item)
+        console.log(item);
+        this.$delete(this.services,item);
+        this.$store.state.docker_compose.push_services.splice(item,1)
         this.$store.state.docker_compose.services = this.services;
         this.$store.state.config_yaml.sqa_criteria={};
         if (this.isEmpty(this.services)) {
@@ -334,6 +395,7 @@
         this.cleanEnvCompose();
         this.cleanVolume();
         this.envComposeYesNo.no = true;
+        this.push_image.no = true;
         if (this.isEmpty(this.service.envs)) {
           this.showEnvCompose = false;
         }

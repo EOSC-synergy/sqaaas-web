@@ -122,7 +122,7 @@
                         placeholder="userpass"
                         v-model="credentials.id">
                   </base-input>
-                  <span v-show="showErrorCredId" style="color:red;font-size:12px;">This filed is required</span>
+                  <span v-show="showErrorCredId" style="color:red;font-size:12px;">This field is required</span>
 
                   <div class="row" style="margin-bottom:10px;">
                     <div class="col-md-6" style="display:grid;">
@@ -132,7 +132,7 @@
                           placeholder="GIT_USER"
                           v-model="credentials.username_var">
                       </base-input>
-                      <span v-show="showErrorCredUser" style="color:red;font-size:12px;">This filed is required</span>
+                      <span v-show="showErrorCredUser" style="color:red;font-size:12px;">This field is required</span>
                     </div>
                     <div class="col-md-6" style="display:grid;" >
                       <base-input  type="password" class="no-margin"
@@ -141,7 +141,7 @@
                           placeholder="GIT_PASSWORD"
                           v-model="credentials.password_var">
                       </base-input>
-                      <span v-show="showErrorCredPass" style="color:red;font-size:12px;">This filed is required</span>
+                      <span v-show="showErrorCredPass" style="color:red;font-size:12px;">This field is required</span>
                     </div>
                   </div>
                   <select class="custom-select" id="cred" v-model='credentials.type' >
@@ -150,7 +150,7 @@
                     <option value="certificate">Certificate</option>
                     <option value="ssh_user_private-key">SSH User Private Key</option>
                   </select>
-                  <span v-show="showErrorCredType" style="color:red;font-size:12px;">This filed is required</span>
+                  <span v-show="showErrorCredType" style="color:red;font-size:12px;">This field is required</span>
                   <div class="text-right" style="padding-top:15px;">
                     <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCred()"><i class="fa fa-plus"></i>ADD CREDENTIALS</button>
                   </div>

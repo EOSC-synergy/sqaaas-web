@@ -276,7 +276,7 @@
             message: message,
             icon: 'nc-icon nc-app',
             timeout:3000,
-            horizontalAlign: 'center',
+            horizontalAlign: 'right',
             verticalAlign: 'top',
             type: 'danger'
           })
@@ -425,6 +425,10 @@
         if(sizeRepos == 0 || sizeServices == 0){
           this.notifyVue("Error you must add at least one service")
           this.$router.push({name:"composer"})
+        }else if(this.$store.state.docker_compose.push_services.length > 0 && this.$store.state.docker_compose.id_cred_service == ""){
+          this.notifyVue("Error you must enter the ID of the credential in Jenkins.")
+          this.$router.push({name:"composer"})
+
         }else{
           var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
           var getCriteria = this.$store.state.config_yaml.sqa_criteria
