@@ -7,7 +7,7 @@
         <div class="row">
           <div class="col-12">
 
-          <card class="strpied-tabled-with-hover"
+          <card
                   body-classes=""
             >
               <template slot="header">
@@ -15,27 +15,136 @@
               </template>
 
               <template >
-                <div class="row text-center">
-                  <div class="col-12">
-                    <span>Pipeline name: </span>
-
+                <div class="row text-center" style="padding: 0px 40px 0px 40px;">
+                  <div class="col-12 col-md-8">
+                     <p class="text-left" style="font-size:14px;margin-bottom:1rem;">
+                      <strong style="font-weight:bold;">Pipeline name:</strong> {{($store.state.name) ? $store.state.name : ''}}
+                    </p>
+                     <p class="text-left" style="font-size:14px;">
+                      <strong style="font-weight:bold;">Repository:</strong> {{ ''}}
+                    </p>
                   </div>
-                  <div class="col-12">
-                    <span>Repository Name:</span>
-                    <!-- POner todos los repositorios con la url en una tabla -->
+                  <div v-if="Object.keys($store.state.config_yaml.config.project_repos).length > 0" class="col-12 col-md-12">
+                    <div class="table-responsive">
+                    <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Name</th>
+                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">URL</th>
+                        </thead>
+                        <tbody v-for="(repo, index) in $store.state.config_yaml.config.project_repos" :key="index">
+                                <tr
+                                    style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                    <td
+                                        style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        <div style="text-align:left;">
+                                            {{index}}
+                                        </div>
+                                    </td>
+                                    <td
+                                        style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        {{repo.repo}}
+                                    </td>
 
+                                </tr>
+
+                        </tbody>
+                    </table>
+                    </div>
                   </div>
-                  <div class="col-12">
-                    <span>Docker image:</span>
-                  </div>
-                   <div class="col-12">
-                    <span>SQA Criterias:</span>
-                    <!-- Poner todos los sqa criteria con el repo el erivico y los comandos -->
-
+                  <div class="col-12 col-md-8">
+                    <p class="text-left" style="font-size:14px;">
+                      <strong style="font-weight:bold;">Services:</strong> {{''}}
+                    </p>
                   </div>
 
+                  <div v-if="Object.keys($store.state.docker_compose.services).length > 0" class="col-12 col-md-12">
+                    <div class="table-responsive">
+                    <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Name</th>
+                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Image</th>
+                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Container Name</th>
+                        </thead>
+                        <tbody v-for="(service, index) in $store.state.docker_compose.services" :key="index">
+                                <tr
+                                    style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                    <td
+                                        style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        <div style="text-align:left;">
+                                            {{index}}
+                                        </div>
+                                    </td>
+                                    <td
+                                        style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        {{service.image}}
+                                    </td>
+                                    <td
+                                        style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        {{service.container_name}}
+                                    </td>
 
+                                </tr>
 
+                        </tbody>
+                    </table>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-8">
+                    <p class="text-left" style="font-size:14px;">
+                      <strong style="font-weight:bold;">SQA Criterias:</strong> {{''}}
+                    </p>
+                  </div>
+
+                  <div v-if="Object.keys($store.state.config_yaml.sqa_criteria).length > 0" class="col-12 col-md-12">
+                    <div class="table-responsive">
+                    <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Criteria</th>
+                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Repository</th>
+                        </thead>
+                        <tbody v-for="(criteria, index) in $store.state.config_yaml.sqa_criteria" :key="index">
+                                <tr
+                                    style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                    <td
+                                        style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        <div style="text-align:left;">
+                                            {{index}}
+                                        </div>
+                                    </td>
+                                    <td
+                                        style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;display:block;">
+                                        <div v-for="(repo_criteria, index) in criteria.repos" :key="index" style="margin-top:1rem;">
+                                          <div class="row">
+                                            <div class="col-md-6">
+                                              <p class="text-left" style="font-size:14px;margin-bottom:0px;">
+                                                <strong style="font-weight:bold;">Name:</strong> {{index}}
+                                              </p>
+                                              <p class="text-left" style="font-size:14px;margin-bottom:0px;">
+                                                <strong style="font-weight:bold;">Container:</strong> {{repo_criteria.container}}
+                                              </p>
+                                            </div>
+                                            <div class="col-md-6">
+                                              <p class="text-left" style="font-size:14px;margin-bottom:0;">
+                                                <strong style="font-weight:bold;">Commands: </strong>
+                                              </p>
+                                              <p style="margin-bottom:0;">
+                                                <span v-for="(command, index) in repo_criteria.commands" :key="index">
+                                                  {{(index==repo_criteria.commands.length-1) ? command : command+','}}
+                                                </span>
+                                              </p>
+
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                    </td>
+                                </tr>
+
+                        </tbody>
+                    </table>
+                    </div>
+                  </div>
                 </div>
               </template>
             </card>
@@ -676,5 +785,13 @@
 
 .no-margin{
   margin:0px!important;
+}
+
+.table thead th {
+    border-bottom: 0px!important;
+}
+
+.table td {
+    border-top: 0px!important;
 }
 </style>
