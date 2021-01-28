@@ -212,7 +212,7 @@
                 </div>
 
               </template>
-              <div class="row" style="margin-top:2rem; margin-bottom:2rem;">
+              <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
                 <div class="col-12 col-md-12 text-center">
                     <button @click="back()" type="button" class="btn btn-next-back btn-back" >
                         BACK
@@ -576,6 +576,12 @@
         });
       },
       mounted(){
+        this.$nextTick(function(){
+          $('#select_service').selectpicker({
+
+          });
+
+        });
         $(function () {
           $('[data-toggle="tooltip"]').tooltip()
         })
@@ -654,7 +660,5 @@ input[type=number]::-webkit-inner-spin-button {
 
 
  }
-
-
 
 </style>

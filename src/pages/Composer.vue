@@ -112,18 +112,7 @@
                   </ul>
                 </div>
 
-                <div class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
-                  <span class="custom-label">Push Image to Docker Registry?</span>
-                  <span class="custom-label">Yes</span><base-checkbox name="env" v-model="push_image.yes"></base-checkbox>
-                  <span class="custom-label">No</span><base-checkbox name="env" v-model="push_image.no"></base-checkbox>
-                </div>
 
-                <div class="row" v-show='push_image.yes' style="padding-left:30px;">
-                  <div style="padding-left:30px;padding-right:30px;">
-                    <p style="color:red;text-align:justify" >Attention: If you add this option, before continuing to the next step, you will have to provide the ID of the credentials created in Jenkins or <a target="blank" href="https://jenkins.eosc-synergy.eu/"> go now</a> and create them. </p>
-
-                  </div>
-                </div>
 
               <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
                 <button type="button" class="btn-outline btn btn-info" @click="addService()"><i class="fa fa-plus"></i>ADD SERVICE</button>
@@ -136,7 +125,11 @@
                     v-for="(env,key) in services"
                     :key="key"
                   >
-                  {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeService(key)"><i class="fa fa-minus"></i></button></span>
+                  {{key}}
+                  <div class="row">
+                    <span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeService(key)"><i class="fa fa-minus"></i></button></span>
+                    <base-checkbox v-show="push_image.yes" :checked="true" style="top: -5px;" :id="'service_'+ key" name="workpace"></base-checkbox>
+                  </div>
 
                   </li>
 
@@ -145,21 +138,83 @@
 
 
             </template>
-            <div class="row" v-show="$store.state.docker_compose.push_services.length > 0" style="margin-top:2rem; margin-bottom:2rem;padding-left:10px;">
-              <div class="col-12 col-md-12 text-left">
+
+
+            <div v-show="Object.keys($store.state.docker_compose.services).length > 0" class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
+              <span class="custom-label">Push Image to Docker Registry?</span>
+              <span class="custom-label">Yes</span><base-checkbox name="env" v-model="push_image.yes"></base-checkbox>
+              <span class="custom-label">No</span><base-checkbox name="env" v-model="push_image.no"></base-checkbox>
+            </div>
+
+
+            <div class="row" v-show='push_image.yes && Object.keys($store.state.docker_compose.services).length > 0' style="padding-left:10px;">
+              <div class="col-12" style="padding-left:30px;padding-right:30px;">
+                <p style="color:red;text-align:justify" >Attention: Before proceeding you will need to provide the ID of the credentials created in Jenkins or <a target="blank" href="https://jenkins.eosc-synergy.eu/"> go now</a> and create them. </p>
+                <!-- <div>
+                  <label style="display: block;margin-top: 2rem;">Select service</label>
+                  <select class="selectpicker" id="select_service"  multiple title="Please select ..." >
+                    <option value="" selected disabled>Please select</option>
+                    <option :value="index" v-for="(service, index) in $store.state.docker_compose.services" :key="index">
+                      {{index}}
+                    </option>
+
+                  </select>
+                </div> -->
+                <div style="margin-top:2rem;padding-left:0px;padding-right:0px;" class="col-12 col-md-12 text-left">
                   <base-input type="text" class="no-margin"
                         label="Enter the ID of the Jenkins credentials."
                         :disabled="false"
                         placeholder="userpass"
                         v-model="$store.state.docker_compose.id_cred_service">
-                    </base-input>
+                  </base-input>
+
+                </div>
+                <div class="col-12 text-right">
+                    <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
+                </div>
 
               </div>
-              <div class="col-12 text-rigth">
-                  <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
+
+              <div class="col-12" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top:2rem;padding-right:30px;padding-left:30px;">
+
+                <!-- Accordion Item 1 -->
+                <div class="card">
+                  <div class="card-header" role="tab" id="accordionHeadingOne">
+                    <div class="mb-0 row">
+                      <div class="col-12 no-padding accordion-head">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#accordionBodyOne" aria-expanded="false" aria-controls="accordionBodyOne"
+                          class="collapsed ">
+                          <i class="fa fa-angle-down" aria-hidden="true"></i>
+                          <p>Advanced Options</p>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="accordionBodyOne" class="collapse" role="tabpanel" aria-labelledby="accordionHeadingOne" aria-expanded="false" data-parent="accordion">
+                    <div class="card-block col-12">
+                      <!-- <p>Accordion Item 1 - Body</p> -->
+                      <base-input style="padding-bottom:1rem;" type="text" class="no-margin"
+                        label="JPL_IGNOREFAILURES"
+                        :disabled="false"
+                        placeholder="defined"
+                        v-model="$store.state.docker_compose.id_cred_service">
+                      </base-input>
+                      <base-input style="padding-bottom:1rem;" type="text" class="no-margin"
+                        label="JPL_DOCKERSERVER"
+                        :disabled="false"
+                        placeholder="mydockerregistry.example.com:8080"
+                        v-model="$store.state.docker_compose.id_cred_service">
+                      </base-input>
+
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="row" style="margin-top:2rem; margin-bottom:2rem;">
+
+
+            <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
               <div class="col-12 col-md-12 text-center">
                   <button @click="back()" type="button" class="btn btn-next-back btn-back" >
                       BACK
@@ -193,6 +248,7 @@
         showErrorCredID:false,
         disable_done:true,
         id_credential: '',
+        checked: true,
         service:{
           image:'',
           container_name:'',
@@ -251,7 +307,9 @@
       },
       'push_image.yes'(val){
         if(val==true){
-
+          var all_services = [];
+          all_services = Object.keys(this.$store.state.docker_compose.services);
+          this.$store.state.docker_compose.push_services = all_services;
           this.push_image.no = false;
         }else{
           this.push_image.no = true;
@@ -259,6 +317,7 @@
       },
       'push_image.no'(val){
          if(val==true){
+          this.$store.state.docker_compose.push_services = [];
           this.push_image.yes = false;
         }else{
           this.push_image.yes = true;
@@ -268,8 +327,10 @@
     },
     methods:{
        next(){
-         if(this.$store.state.docker_compose.push_services.length > 0 && this.$store.state.docker_compose.id_cred_service == ''){
-           this.showErrorCredID = true;
+         if(this.push_image.yes == true){
+           if(this.$store.state.docker_compose.push_services.length > 0 && this.$store.state.docker_compose.id_cred_service == ''){
+            this.showErrorCredID = true;
+            }
          }else{
            this.showErrorCredID = false;
            this.$router.push({name: 'SQACriteria'});
@@ -365,9 +426,11 @@
           }
         }
         this.showServices = true;
-        if(this.push_image.yes == true){
-          this.$store.state.docker_compose.push_services.push(this.service.container_name);
-        }
+        // if(this.push_image.yes == true){
+          // this.$store.state.docker_compose.push_services.push(this.service.container_name);
+        // }
+        $("#select_service").append('<option value="'+this.service.container_name+'">'+this.service.container_name+'</option>');
+        $("#select_service").selectpicker("refresh");
         this.disable_done = false;
         this.$store.state.docker_compose.services = this.services;
         this.cleanService();
@@ -375,12 +438,15 @@
       removeService(item){
         console.log(item);
         this.$delete(this.services,item);
-        this.$store.state.docker_compose.push_services.splice(item,1)
+        // this.$store.state.docker_compose.push_services.splice(item,1)
+        // $("option[value='"+item+"']").remove();
+        // $("#select_service").selectpicker("refresh");
         this.$store.state.docker_compose.services = this.services;
         this.$store.state.config_yaml.sqa_criteria={};
         if (this.isEmpty(this.services)) {
           this.showServices = false;
           this.disable_done = true;
+          this.push_image.yes = false;
         }
 
       },
@@ -463,6 +529,32 @@
         });
       },
       mounted(){
+        var _this = this
+        this.$nextTick(function(){
+          $('#select_service').selectpicker();
+
+          $("input").on('click',function(){
+           var array_name = []
+           var string_name = $(this).parent().closest('div').attr('id');
+           if(string_name != undefined){
+             array_name = string_name.split("_");
+             if(array_name[0] == "service"){
+               if($(this).prop('checked') == true){
+                 _this.$store.state.docker_compose.push_services.push(array_name[1]);
+               }else{
+                 const index = _this.$store.state.docker_compose.push_services.indexOf(array_name[1]);
+                  if (index > -1) {
+                    _this.$store.state.docker_compose.push_services.splice(index, 1);
+                  }
+               }
+             }
+           console.log(_this.$store.state.docker_compose.push_services)
+
+           }
+         })
+
+        });
+
         $(function () {
           $('[data-toggle="tooltip"]').tooltip()
         })
@@ -526,7 +618,7 @@ input[type=number]::-webkit-inner-spin-button {
     color: black !important;
     padding:1rem 0 1rem 0;
     font-weight: bold;
-    border: 2px solid black;
+    border: 2px solid black!important;
   }
 
   .btn-next-back{
@@ -538,10 +630,18 @@ input[type=number]::-webkit-inner-spin-button {
   background-color:#ccc!important;
   margin-right:10%;
   font-weight: bold;
-  border: 2px solid black;
+  border: 2px solid black!important;
 
 }
 
+.accordion-head i{
+    font-size: 1.5em;
+    float: right;
+}
+
+.accordion-head > .collapsed > i:before{
+    content: "\f105";
+}
 
 
 </style>
