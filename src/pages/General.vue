@@ -94,7 +94,7 @@
                   <button type="button" class="btn-outline btn btn-info" @click="addRepo();track()"><i class="fa fa-plus"></i>ADD REPOSITORY</button>
                 </div>
 
-                <div v-show="showRepo" style="padding-top:20px;">
+                <div v-show="showRepo" style="padding-top:20px;padding-left:20px;">
                   <span class="custom-label">Repositories</span>
                   <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between"
@@ -108,109 +108,127 @@
                   </ul>
                 </div>
 
-
-                <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem;">
-                  <span class="custom-label">Add Credentials:</span>
-                  <span class="custom-label">Yes</span><base-checkbox name="credentials" v-model="config.credentials.yes"></base-checkbox>
-                  <span class="custom-label">No</span><base-checkbox name="credentials" v-model="config.credentials.no"></base-checkbox>
-                </div>
-                <div v-show='config.credentials.yes' style="padding-left:30px;">
-
-                  <base-input type="text" class="no-margin"
-                        label="ID"
-                        :disabled="false"
-                        placeholder="userpass"
-                        v-model="credentials.id">
-                  </base-input>
-                  <span v-show="showErrorCredId" style="color:red;font-size:12px;">This field is required</span>
-
-                  <div class="row" style="margin-bottom:10px;">
-                    <div class="col-md-6" style="display:grid;">
-                      <base-input  type="text" class="no-margin"
-                          label="Username Var"
-                          :disabled="false"
-                          placeholder="GIT_USER"
-                          v-model="credentials.username_var">
-                      </base-input>
-                      <span v-show="showErrorCredUser" style="color:red;font-size:12px;">This field is required</span>
+                <div class="col-12" id="accordion_general_options" role="tablist" aria-multiselectable="true" style="padding-left:20px;margin-top:2rem;padding-right:0px;">
+                  <!-- Accordion Item 1 -->
+                  <div class="card">
+                    <div class="card-header" role="tab" id="accordionHeadingGeneralOptions">
+                      <div class="mb-0 row">
+                        <div class="col-12 no-padding accordion-head">
+                          <a data-toggle="collapse" data-parent="#accordion_general_options" href="#accordionBodyGeneralOptions" aria-expanded="false" aria-controls="accordionBodyGeneral"
+                            class="collapsed ">
+                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                            <p>ADVANCED OPTIONS</p>
+                          </a>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-md-6" style="display:grid;" >
-                      <base-input  type="password" class="no-margin"
-                          label="Password Var"
-                          :disabled="false"
-                          placeholder="GIT_PASSWORD"
-                          v-model="credentials.password_var">
-                      </base-input>
-                      <span v-show="showErrorCredPass" style="color:red;font-size:12px;">This field is required</span>
+
+                    <div id="accordionBodyGeneralOptions" class="collapse" role="tabpanel" aria-labelledby="accordionHeadingGeneralOptions" aria-expanded="false" data-parent="accordion_general_options">
+                      <div class="card-block col-12">
+                        <!-- <p>Accordion Item 1 - Body</p> -->
+                        <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem;">
+                          <span class="custom-label">Add Credentials:</span>
+                          <span class="custom-label">Yes</span><base-checkbox name="credentials" v-model="config.credentials.yes"></base-checkbox>
+                          <span class="custom-label">No</span><base-checkbox name="credentials" v-model="config.credentials.no"></base-checkbox>
+                        </div>
+                        <div v-show='config.credentials.yes' style="padding-left:30px;">
+
+                          <base-input type="text" class="no-margin"
+                                label="ID"
+                                :disabled="false"
+                                placeholder="userpass"
+                                v-model="credentials.id">
+                          </base-input>
+                          <span v-show="showErrorCredId" style="color:red;font-size:12px;">This field is required</span>
+
+                          <div class="row" style="margin-bottom:10px;">
+                            <div class="col-md-6" style="display:grid;">
+                              <base-input  type="text" class="no-margin"
+                                  label="Username Var"
+                                  :disabled="false"
+                                  placeholder="GIT_USER"
+                                  v-model="credentials.username_var">
+                              </base-input>
+                              <span v-show="showErrorCredUser" style="color:red;font-size:12px;">This field is required</span>
+                            </div>
+                            <div class="col-md-6" style="display:grid;" >
+                              <base-input  type="password" class="no-margin"
+                                  label="Password Var"
+                                  :disabled="false"
+                                  placeholder="GIT_PASSWORD"
+                                  v-model="credentials.password_var">
+                              </base-input>
+                              <span v-show="showErrorCredPass" style="color:red;font-size:12px;">This field is required</span>
+                            </div>
+                          </div>
+                          <select class="custom-select" id="cred" v-model='credentials.type' >
+                            <option value="default">Choose a type...</option>
+                            <option value="username_password">Username Password</option>
+                            <option value="certificate">Certificate</option>
+                            <option value="ssh_user_private-key">SSH User Private Key</option>
+                          </select>
+                          <span v-show="showErrorCredType" style="color:red;font-size:12px;">This field is required</span>
+                          <div class="text-right" style="padding-top:15px;">
+                            <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCred()"><i class="fa fa-plus"></i>ADD CREDENTIALS</button>
+                          </div>
+                        </div>
+                        <div v-show="showCred" style="padding-top:20px;margin-bottom:2rem;padding-left:30px;">
+                          <span class="custom-label">Credentials</span>
+                          <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between"
+                              v-for="(cred,key) in all_credentials"
+                              :key="key"
+                            >
+                            {{cred.id}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCred(key)"><i class="fa fa-minus"></i></button></span>
+
+                            </li>
+
+                          </ul>
+                        </div>
+                      <div class="row" style="padding-left:20px;margin-top:2rem;margin-bottom:2rem;">
+                        <span class="custom-label">Environment variables:</span>
+                        <span class="custom-label">Yes</span><base-checkbox name="env" v-model="config.env.yes"></base-checkbox>
+                        <span class="custom-label">No</span><base-checkbox name="env" v-model="config.env.no"></base-checkbox>
+                      </div>
+                      <div class="row" v-show='config.env.yes' style="padding-left:30px;">
+
+                        <base-input class="col-md-6" type="text"
+                              label="Key"
+                              :disabled="false"
+                              placeholder="GIT_USER"
+                              v-model="env.key">
+                        </base-input>
+                        <base-input class="col-md-6" type="text"
+                              label="value"
+                              :disabled="false"
+                              placeholder="GIT_USER"
+                              v-model="env.value">
+                        </base-input>
+                        <div style="margin-bottom:30px;width:95%;" class="text-right">
+                          <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnv()"><i class="fa fa-plus"></i>ADD ENV VAR</button>
+                        </div>
+                      </div>
+                      <div v-show="showEnv" style="padding-top:20px;margin-bottom:1rem;padding-left:30px;">
+                        <span class="custom-label">Env Vars</span>
+                        <ul class="list-group">
+                          <li class="list-group-item d-flex justify-content-between"
+                            v-for="(env,key) in config.all_envs"
+                            :key="key"
+                          >
+                          {{key}}:{{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnv(key)"><i class="fa fa-minus"></i></button></span>
+
+                          </li>
+
+                        </ul>
+                      </div>
+                      <div style="padding-left:5px;padding-bottom:5px;margin-bottom:2rem;margin-top:2rem;">
+                        <span class="custom-label" for="timeout" style="padding-right:20px;">Timeout:</span>
+                        <input style="width:80px;" type="number" id="timeout" value="600" step="100" v-model="$store.state.config_yaml.timeout">
+                      </div>
+                      </div>
                     </div>
                   </div>
-                  <select class="custom-select" id="cred" v-model='credentials.type' >
-                    <option value="default">Choose a type...</option>
-                    <option value="username_password">Username Password</option>
-                    <option value="certificate">Certificate</option>
-                    <option value="ssh_user_private-key">SSH User Private Key</option>
-                  </select>
-                  <span v-show="showErrorCredType" style="color:red;font-size:12px;">This field is required</span>
-                  <div class="text-right" style="padding-top:15px;">
-                    <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCred()"><i class="fa fa-plus"></i>ADD CREDENTIALS</button>
-                  </div>
                 </div>
-                <div v-show="showCred" style="padding-top:20px;margin-bottom:2rem;">
-                  <span class="custom-label">Credentials</span>
-                  <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between"
-                      v-for="(cred,key) in all_credentials"
-                      :key="key"
-                    >
-                    {{cred.id}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCred(key)"><i class="fa fa-minus"></i></button></span>
-
-                    </li>
-
-                  </ul>
-                </div>
-                <div class="row" style="padding-left:20px;margin-top:2rem;margin-bottom:2rem;">
-                  <span class="custom-label">Environment variables:</span>
-                  <span class="custom-label">Yes</span><base-checkbox name="env" v-model="config.env.yes"></base-checkbox>
-                  <span class="custom-label">No</span><base-checkbox name="env" v-model="config.env.no"></base-checkbox>
-                </div>
-                <div class="row" v-show='config.env.yes' style="padding-left:30px;">
-
-                  <base-input class="col-md-6" type="text"
-                        label="Key"
-                        :disabled="false"
-                        placeholder="GIT_USER"
-                        v-model="env.key">
-                  </base-input>
-                  <base-input class="col-md-6" type="text"
-                        label="value"
-                        :disabled="false"
-                        placeholder="GIT_USER"
-                        v-model="env.value">
-                  </base-input>
-                  <div style="margin-bottom:30px;width:95%;" class="text-right">
-                    <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnv()"><i class="fa fa-plus"></i>ADD ENV VAR</button>
-                  </div>
-                </div>
-                <div v-show="showEnv" style="padding-top:20px;margin-bottom:1rem;">
-                  <span class="custom-label">Env Vars</span>
-                  <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between"
-                      v-for="(env,key) in config.all_envs"
-                      :key="key"
-                    >
-                    {{key}}:{{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnv(key)"><i class="fa fa-minus"></i></button></span>
-
-                    </li>
-
-                  </ul>
-                </div>
-
-                <div style="padding-left:5px;padding-bottom:5px;margin-bottom:2rem;margin-top:2rem;">
-                  <span class="custom-label" for="timeout" style="padding-right:20px;">Timeout:</span>
-	                <input style="width:80px;" type="number" id="timeout" value="600" step="100" v-model="$store.state.config_yaml.timeout">
-
-                </div>
-
               </template>
               <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
                 <div class="col-12 col-md-12 text-center">
@@ -660,5 +678,14 @@ input[type=number]::-webkit-inner-spin-button {
 
 
  }
+
+ .accordion-head i{
+    font-size: 1.5em;
+    float: right;
+}
+
+.accordion-head > .collapsed > i:before{
+    content: "\f105";
+}
 
 </style>

@@ -22,6 +22,8 @@
 
                 </div>
 
+
+
               <!-- </div> -->
               <base-input style="padding-left:20px;" type="text"
                         label="Container Name"
@@ -29,96 +31,122 @@
                         placeholder="processing"
                         v-model="service.container_name">
               </base-input>
-              <base-input style="padding-left:20px;" type="text"
+
+
+              <div class="col-12" id="accordion_general" role="tablist" aria-multiselectable="true" style="padding-left:20px;margin-top:2rem;padding-right:0px;">
+                <!-- Accordion Item 1 -->
+                <div class="card">
+                  <div class="card-header" role="tab" id="accordionHeadingGeneral">
+                    <div class="mb-0 row">
+                      <div class="col-12 no-padding accordion-head">
+                        <a data-toggle="collapse" data-parent="#accordion_general" href="#accordionBodyGeneral" aria-expanded="false" aria-controls="accordionBodyGeneral"
+                          class="collapsed ">
+                          <i class="fa fa-angle-down" aria-hidden="true"></i>
+                          <p>ADVANCED OPTIONS</p>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="accordionBodyGeneral" class="collapse" role="tabpanel" aria-labelledby="accordionHeadingGeneral" aria-expanded="false" data-parent="accordion_general">
+                    <div class="card-block col-12">
+                      <!-- <p>Accordion Item 1 - Body</p> -->
+                      <base-input style="padding-left:20px;" type="text"
                         label="Hostname"
                         :disabled="false"
                         placeholder="processing"
                         v-model="service.hostname">
-              </base-input>
-              <div class="row" style="padding-left:20px;">
-                <base-input class="col-md-4" type="text"
-                        label="Volume type"
-                        :disabled="false"
-                        placeholder="bind"
-                        v-model="volume.type">
-                </base-input>
-                <base-input class="col-md-4" type="text"
-                        label="Volume Source"
-                        :disabled="false"
-                        placeholder="worsica_web_products"
-                        v-model="volume.source">
-                </base-input>
-                <base-input class="col-md-4" type="text"
-                        label="Volume target"
-                        :disabled="false"
-                        placeholder="/usr/local/worsica_web_products"
-                        v-model="volume.target">
-                </base-input>
+                      </base-input>
+                      <div class="row" style="padding-left:20px;">
+                        <div class="col-12 col-md-4" >
+                          <label class="control-label">
+                            Volume Type
+                          </label>
+                            <select class="custom-select" id="sqacriteria" v-model='volume.type' >
+                              <option value="bind">bind</option>
+                              <option disabled value="volume">volume</option>
+                              <option disabled value="tmpfs">tmpfs</option>
+                            </select>
+                        </div>
+                        <base-input class="col-12 col-md-4" type="text"
+                                label="Volume Source"
+                                :disabled="false"
+                                placeholder="worsica_web_products"
+                                v-model="volume.source">
+                        </base-input>
+                        <base-input class="col-12 col-md-4" type="text"
+                                label="Volume target"
+                                :disabled="false"
+                                placeholder="/usr/local/worsica_web_products"
+                                v-model="volume.target">
+                        </base-input>
 
-              </div>
-              <div class="text-right">
-                <button type="button" class="btn-simple btn btn-xs btn-info" @click="addVolume()"><i class="fa fa-plus"></i>ADD VOLUME</button>
-              </div>
-              <div v-show="showVolumes" style="padding-top:20px;">
-                <span class="custom-label">Volume</span>
-                <ul class="list-group">
-                  <li class="list-group-item d-flex justify-content-between"
-                    v-for="(vol,key) in volumes"
-                    :key="key"
-                  >
-                  {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeVolume(vol,key)"><i class="fa fa-minus"></i></button></span>
+                      </div>
+                      <div class="text-right">
+                        <button type="button" class="btn-simple btn btn-xs btn-info" @click="addVolume()"><i class="fa fa-plus"></i>ADD VOLUME</button>
+                      </div>
+                      <div v-show="showVolumes" style="padding-top:20px;">
+                        <span class="custom-label">Volume</span>
+                        <ul class="list-group">
+                          <li class="list-group-item d-flex justify-content-between"
+                            v-for="(vol,key) in volumes"
+                            :key="key"
+                          >
+                          {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeVolume(vol,key)"><i class="fa fa-minus"></i></button></span>
 
-                  </li>
+                          </li>
 
-                </ul>
-              </div>
-              <div class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
-                <span class="custom-label">Environment variables:</span>
-                <span class="custom-label">Yes</span><base-checkbox name="env" v-model="envComposeYesNo.yes"></base-checkbox>
-                <span class="custom-label">No</span><base-checkbox name="env" v-model="envComposeYesNo.no"></base-checkbox>
-              </div>
+                        </ul>
+                      </div>
+                      <div class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
+                        <span class="custom-label">Environment variables:</span>
+                        <span class="custom-label">Yes</span><base-checkbox name="env" v-model="envComposeYesNo.yes"></base-checkbox>
+                        <span class="custom-label">No</span><base-checkbox name="env" v-model="envComposeYesNo.no"></base-checkbox>
+                      </div>
 
-              <div class="row" v-show='envComposeYesNo.yes' style="padding-left:30px;">
+                      <div class="row" v-show='envComposeYesNo.yes' style="padding-left:30px;">
 
-                  <base-input class="col-md-6" type="text"
-                        label="Key"
-                        :disabled="false"
-                        placeholder="Debug"
-                        v-model="envCompose.key">
-                  </base-input>
-                  <base-input class="col-md-6" type="text"
-                        label="value"
-                        :disabled="false"
-                        placeholder="1"
-                        v-model="envCompose.value">
-                  </base-input>
+                          <base-input class="col-md-6" type="text"
+                                label="Key"
+                                :disabled="false"
+                                placeholder="Debug"
+                                v-model="envCompose.key">
+                          </base-input>
+                          <base-input class="col-md-6" type="text"
+                                label="value"
+                                :disabled="false"
+                                placeholder="1"
+                                v-model="envCompose.value">
+                          </base-input>
 
 
-                  <div style="margin-bottom:30px;width:95%;" class="text-right">
-                    <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnvCompose()"><i class="fa fa-plus"></i>ADD Env Vars</button>
+                          <div style="margin-bottom:30px;width:95%;" class="text-right">
+                            <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnvCompose()"><i class="fa fa-plus"></i>ADD Env Vars</button>
+                          </div>
+                        </div>
+                        <div v-show="showEnvCompose" style="padding-top:20px;">
+                          <span class="custom-label">Env Vars</span>
+                          <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between"
+                              v-for="(env,key) in service.envs"
+                              :key="key"
+                            >
+                            {{Object.keys(env)[0]}}:{{Object.values(env)[0]}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnvCompose(key)"><i class="fa fa-minus"></i></button></span>
+
+                            </li>
+
+                          </ul>
+                        </div>
+                    </div>
                   </div>
                 </div>
-                <div v-show="showEnvCompose" style="padding-top:20px;">
-                  <span class="custom-label">Env Vars</span>
-                  <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between"
-                      v-for="(env,key) in service.envs"
-                      :key="key"
-                    >
-                    {{Object.keys(env)[0]}}:{{Object.values(env)[0]}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnvCompose(key)"><i class="fa fa-minus"></i></button></span>
-
-                    </li>
-
-                  </ul>
-                </div>
-
-
+              </div>
 
               <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
                 <button type="button" class="btn-outline btn btn-info" @click="addService()"><i class="fa fa-plus"></i>ADD SERVICE</button>
               </div>
 
-              <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;">
+              <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;padding-left:20px;">
                 <span class="custom-label">Services</span>
                 <ul class="list-group">
                   <li class="list-group-item d-flex justify-content-between"
@@ -175,42 +203,7 @@
 
               </div>
 
-              <div class="col-12" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top:2rem;padding-right:30px;padding-left:30px;">
 
-                <!-- Accordion Item 1 -->
-                <div class="card">
-                  <div class="card-header" role="tab" id="accordionHeadingOne">
-                    <div class="mb-0 row">
-                      <div class="col-12 no-padding accordion-head">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#accordionBodyOne" aria-expanded="false" aria-controls="accordionBodyOne"
-                          class="collapsed ">
-                          <i class="fa fa-angle-down" aria-hidden="true"></i>
-                          <p>Advanced Options</p>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div id="accordionBodyOne" class="collapse" role="tabpanel" aria-labelledby="accordionHeadingOne" aria-expanded="false" data-parent="accordion">
-                    <div class="card-block col-12">
-                      <!-- <p>Accordion Item 1 - Body</p> -->
-                      <base-input style="padding-bottom:1rem;" type="text" class="no-margin"
-                        label="JPL_IGNOREFAILURES"
-                        :disabled="false"
-                        placeholder="defined"
-                        v-model="$store.state.docker_compose.id_cred_service">
-                      </base-input>
-                      <base-input style="padding-bottom:1rem;" type="text" class="no-margin"
-                        label="JPL_DOCKERSERVER"
-                        :disabled="false"
-                        placeholder="mydockerregistry.example.com:8080"
-                        v-model="$store.state.docker_compose.id_cred_service">
-                      </base-input>
-
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
 
 
@@ -270,7 +263,7 @@
         },
         services:{},
         volume:{
-          type:'',
+          type:'bind',
           source:'',
           target:''
         },
