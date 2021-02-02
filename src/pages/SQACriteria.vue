@@ -419,7 +419,7 @@
 
     },
     created(){
-      console.log(this.$store.state.docker_compose.push_services.length)
+      console.log(this.$store.state.docker_compose.services)
         this.pipelineName = this.$store.state.name
         var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
         var sizeServices = this.objectSize(this.$store.state.docker_compose.services)

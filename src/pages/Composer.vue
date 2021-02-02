@@ -302,15 +302,23 @@
         if(val==true){
           var all_services = [];
           all_services = Object.keys(this.$store.state.docker_compose.services);
-          this.$store.state.docker_compose.push_services = all_services;
+          for (let i = 0; i < all_services.length; i++) {
+            var service_name = all_services[i]
+            this.$store.state.docker_compose.services[service_name].image.push = true;
+          }
           this.push_image.no = false;
         }else{
+
           this.push_image.no = true;
         }
       },
       'push_image.no'(val){
          if(val==true){
-          this.$store.state.docker_compose.push_services = [];
+           all_services = Object.keys(this.$store.state.docker_compose.services);
+          for (let i = 0; i < all_services.length; i++) {
+            var service_name = all_services[i]
+            this.$store.state.docker_compose.services[service_name].image.push = false;
+          }
           this.push_image.yes = false;
         }else{
           this.push_image.yes = true;
@@ -321,8 +329,11 @@
     methods:{
        next(){
          if(this.push_image.yes == true){
-           if(this.$store.state.docker_compose.push_services.length > 0 && this.$store.state.docker_compose.id_cred_service == ''){
+           if(this.$store.state.docker_compose.id_cred_service == ''){
             this.showErrorCredID = true;
+            }else{
+              this.showErrorCredID = false;
+              this.$router.push({name: 'SQACriteria'});
             }
          }else{
            this.showErrorCredID = false;
@@ -402,7 +413,10 @@
       addService(){
         if(this.oneshot== true){
           this.services[this.service.container_name]={
-            image: this.service.image,
+            image: {
+              name: this.service.image,
+              push: false
+            },
             container_name: this.service.container_name,
             hostname: this.service.hostname,
             volumes: this.service.volumes,
@@ -411,7 +425,10 @@
           }
         }else{
           this.services[this.service.container_name]={
-            image: this.service.image,
+            image: {
+              name: this.service.image,
+              push: false
+            },
             container_name: this.service.container_name,
             hostname: this.service.hostname,
             volumes: this.service.volumes,
@@ -486,6 +503,13 @@
         this.$router.push({name:"general"})
       }else{
         var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
+        if(sizeServices > 0){
+          var all_services = Object.keys(this.$store.state.docker_compose.services);
+           for (let i = 0; i < all_services.length; i++) {
+             var service_name = all_services[i];
+             this.$store.state.docker_compose.services[service_name].image.push = false;
+           }
+        }
         for (let i = 0; i < sizeServices; i++) {
           this.services[Object.keys(this.$store.state.docker_compose.services)[i]]=this.$store.state.docker_compose.services[Object.keys(this.$store.state.docker_compose.services)[i]]
         }
@@ -533,15 +557,14 @@
              array_name = string_name.split("_");
              if(array_name[0] == "service"){
                if($(this).prop('checked') == true){
-                 _this.$store.state.docker_compose.push_services.push(array_name[1]);
+                //  _this.$store.state.docker_compose.push_services.push(array_name[1]);
+                 _this.$store.state.docker_compose.services[array_name[1]].image.push=true;
                }else{
-                 const index = _this.$store.state.docker_compose.push_services.indexOf(array_name[1]);
-                  if (index > -1) {
-                    _this.$store.state.docker_compose.push_services.splice(index, 1);
-                  }
+                  // _this.$store.state.docker_compose.push_services.splice(index, 1);
+                  _this.$store.state.docker_compose.services[array_name[1]].image.push=false;
                }
              }
-           console.log(_this.$store.state.docker_compose.push_services)
+           console.log(_this.$store.state.docker_compose.services)
 
            }
          })
