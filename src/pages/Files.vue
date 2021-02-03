@@ -380,7 +380,9 @@
                                     "credentials" : this.$store.state.config_yaml.config.credentials,
                                   },
                                   "environment" : this.$store.state.config_yaml.environment,
-                                  "sqa_criteria": this.$store.state.config_yaml.sqa_criteria
+                                  "sqa_criteria": this.$store.state.config_yaml.sqa_criteria,
+                                  "timeout": this.$store.state.config_yaml.timeout
+
                               }
                           ],
                           "jenkinsfile_data": {
