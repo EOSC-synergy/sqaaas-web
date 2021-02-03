@@ -4,17 +4,13 @@ import Login from '../components/Login.vue'
 import NotFound from '../pages/NotFoundPage.vue'
 
 // Admin pages
-import Overview from 'src/pages/Overview.vue'
+import General from 'src/pages/General.vue'
+import Composer from 'src/pages/Composer.vue'
 import SQACriteria from 'src/pages/SQACriteria.vue'
 import UserProfile from 'src/pages/UserProfile.vue'
 import Files from 'src/pages/Files.vue'
 import SelectOption from 'src/pages/SelectOption.vue'
 import FullAssessment from 'src/pages/FullAssessment.vue'
-import Typography from 'src/pages/Typography.vue'
-import Icons from 'src/pages/Icons.vue'
-import Maps from 'src/pages/Maps.vue'
-import Notifications from 'src/pages/Notifications.vue'
-import Upgrade from 'src/pages/Upgrade.vue'
 
 function requireAuth (to, from, next) {
   localStorage.getItem('session');
@@ -63,10 +59,16 @@ const routes = [
     // redirect: '/admin/overview',
     children: [
       {
-        path: 'dashboard',
-        name: 'dashboard',
+        path: 'general-options',
+        name: 'general',
         beforeEnter: requireAuth,
-        component: Overview
+        component: General
+      },
+      {
+        path: 'composer-options',
+        name: 'composer',
+        beforeEnter: requireAuth,
+        component: Composer
       },
       {
         path: 'select-option',
@@ -98,31 +100,7 @@ const routes = [
         beforeEnter: requireAuth,
         component: Files
       },
-      {
-        path: 'typography',
-        name: 'Typography',
-        component: Typography
-      },
-      {
-        path: 'icons',
-        name: 'Icons',
-        component: Icons
-      },
-      {
-        path: 'maps',
-        name: 'Maps',
-        component: Maps
-      },
-      {
-        path: 'notifications',
-        name: 'Notifications',
-        component: Notifications
-      },
-      {
-        path: 'upgrade',
-        name: 'Upgrade to PRO',
-        component: Upgrade
-      },
+
       { path: '/logout',
         beforeEnter (to, from, next) {
           next('/login')

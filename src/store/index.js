@@ -23,6 +23,8 @@ export default new Vuex.Store({
    },
    docker_compose:{
      version:"3.7",
+     push_services:[],
+     id_cred_service:"",
      services:{
 
      }
