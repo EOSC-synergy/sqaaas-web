@@ -124,14 +124,14 @@
                             <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnvCompose()"><i class="fa fa-plus"></i>ADD Env Vars</button>
                           </div>
                         </div>
-                        <div v-show="showEnvCompose" style="padding-top:20px;">
+                        <div v-show="showEnvCompose" style="padding-top:20px;padding-bottom:20px;">
                           <span class="custom-label">Env Vars</span>
                           <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between"
                               v-for="(env,key) in service.envs"
                               :key="key"
                             >
-                            {{Object.keys(env)[0]}}:{{Object.values(env)[0]}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnvCompose(key)"><i class="fa fa-minus"></i></button></span>
+                            {{key}}:{{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnvCompose(key)"><i class="fa fa-minus"></i></button></span>
 
                             </li>
 
@@ -193,12 +193,18 @@
                         label="Enter the ID of the Jenkins credentials."
                         :disabled="false"
                         placeholder="userpass"
-                        v-model="$store.state.docker_compose.id_cred_service">
+                        v-model="id_cred_service">
+                  </base-input>
+                  <div class="col-12 text-right">
+                      <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
+                  </div>
+                  <base-input style="padding-top:1rem;" type="text" class="no-margin"
+                        label="Enter the url of the registry"
+                        :disabled="false"
+                        placeholder="userpass"
+                        v-model="url_service">
                   </base-input>
 
-                </div>
-                <div class="col-12 text-right">
-                    <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
                 </div>
 
               </div>
@@ -242,12 +248,14 @@
         disable_done:true,
         id_credential: '',
         checked: true,
+        id_cred_service:'',
+        url_service:'https://hub.docker.com/',
         service:{
           image:'',
           container_name:'',
           hostname:'',
           volumes:[],
-          envs:[]
+          envs:{}
         },
         envComposeYesNo:{
           yes:false,
@@ -275,12 +283,28 @@
       }
     },
     watch:{
-      '$store.state.docker_compose.id_cred_service'(val){
+      'id_cred_service'(val){
         if(val != ''){
           this.showErrorCredID = false;
+          var all_services = [];
+          all_services = Object.keys(this.$store.state.docker_compose.services);
+          for (let i = 0; i < all_services.length; i++) {
+            var service_name = all_services[i]
+            this.$store.state.docker_compose.services[service_name].image.registry.credential_id = this.id_cred_service;
+          }
         }else{
           this.showErrorCredID = true;
 
+        }
+      },
+      'url_service'(val){
+        if(val != ''){
+          var all_services = [];
+          all_services = Object.keys(this.$store.state.docker_compose.services);
+          for (let i = 0; i < all_services.length; i++) {
+            var service_name = all_services[i]
+            this.$store.state.docker_compose.services[service_name].image.registry.url = this.url_service;
+          }
         }
       },
       'envComposeYesNo.yes'(val){
@@ -293,7 +317,8 @@
       'envComposeYesNo.no'(val){
          if(val==true){
           this.envComposeYesNo.yes = false;
-          this.service.envs=[];
+          this.service.envs={};
+          this.showEnvCompose = false;
         }else{
           this.envComposeYesNo.yes = true;
         }
@@ -304,7 +329,9 @@
           all_services = Object.keys(this.$store.state.docker_compose.services);
           for (let i = 0; i < all_services.length; i++) {
             var service_name = all_services[i]
-            this.$store.state.docker_compose.services[service_name].image.push = true;
+            this.$store.state.docker_compose.services[service_name].image.registry.push = true;
+            this.$store.state.docker_compose.services[service_name].image.registry.credential_id = this.id_cred_service;
+            this.$store.state.docker_compose.services[service_name].image.registry.url = this.url_service;
           }
           this.push_image.no = false;
         }else{
@@ -317,7 +344,9 @@
            all_services = Object.keys(this.$store.state.docker_compose.services);
           for (let i = 0; i < all_services.length; i++) {
             var service_name = all_services[i]
-            this.$store.state.docker_compose.services[service_name].image.push = false;
+            this.$store.state.docker_compose.services[service_name].image.registry.push = false;
+            this.$store.state.docker_compose.services[service_name].image.registry.credential_id = '';
+            this.$store.state.docker_compose.services[service_name].image.registry.url = 'https://hub.docker.com/';
           }
           this.push_image.yes = false;
         }else{
@@ -329,7 +358,7 @@
     methods:{
        next(){
          if(this.push_image.yes == true){
-           if(this.$store.state.docker_compose.id_cred_service == ''){
+           if(this.id_cred_service == ''){
             this.showErrorCredID = true;
             }else{
               this.showErrorCredID = false;
@@ -367,9 +396,11 @@
         var key= this.envCompose.key.replace(" ", "")
 				var value = this.envCompose.value.replace(" ", "")
         envVars[key]=value
-        this.service.envs.push(envVars)
+        this.service.envs[key]= value
+        console.log(this.service.envs)
         this.showEnvCompose = true;
         this.cleanEnvCompose()
+
       },
       removeEnvCompose(item){
         this.$delete(this.service.envs,item)
@@ -415,7 +446,12 @@
           this.services[this.service.container_name]={
             image: {
               name: this.service.image,
-              push: false
+              registry:{
+                url: '',
+                push: false,
+                credential_id:''
+
+              }
             },
             container_name: this.service.container_name,
             hostname: this.service.hostname,
@@ -425,9 +461,14 @@
           }
         }else{
           this.services[this.service.container_name]={
-            image: {
+             image: {
               name: this.service.image,
-              push: false
+              registry:{
+                url: '',
+                push: false,
+                credential_id:''
+
+              }
             },
             container_name: this.service.container_name,
             hostname: this.service.hostname,
@@ -446,7 +487,6 @@
         this.cleanService();
       },
       removeService(item){
-        console.log(item);
         this.$delete(this.services,item);
         // this.$store.state.docker_compose.push_services.splice(item,1)
         // $("option[value='"+item+"']").remove();
@@ -507,7 +547,7 @@
           var all_services = Object.keys(this.$store.state.docker_compose.services);
            for (let i = 0; i < all_services.length; i++) {
              var service_name = all_services[i];
-             this.$store.state.docker_compose.services[service_name].image.push = false;
+             this.$store.state.docker_compose.services[service_name].image.registry.push = false;
            }
         }
         for (let i = 0; i < sizeServices; i++) {
@@ -558,14 +598,16 @@
              if(array_name[0] == "service"){
                if($(this).prop('checked') == true){
                 //  _this.$store.state.docker_compose.push_services.push(array_name[1]);
-                 _this.$store.state.docker_compose.services[array_name[1]].image.push=true;
+                 _this.$store.state.docker_compose.services[array_name[1]].image.registry.push=true;
+                 _this.$store.state.docker_compose.services[array_name[1]].image.registry.credential_id=this.id_cred_service;
+                 _this.$store.state.docker_compose.services[array_name[1]].image.registry.url=this.url_service;
                }else{
-                  // _this.$store.state.docker_compose.push_services.splice(index, 1);
-                  _this.$store.state.docker_compose.services[array_name[1]].image.push=false;
+                 // _this.$store.state.docker_compose.push_services.splice(index, 1);
+                  _this.$store.state.docker_compose.services[array_name[1]].image.registry.push=false;
+                 _this.$store.state.docker_compose.services[array_name[1]].image.registry.credential_id='';
+                 _this.$store.state.docker_compose.services[array_name[1]].image.registry.url='https://hub.docker.com/';
                }
              }
-           console.log(_this.$store.state.docker_compose.services)
-
            }
          })
 
