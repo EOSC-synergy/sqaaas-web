@@ -128,15 +128,16 @@ export default {
     },
     methods: {
         login_egi(){
-            var url =
-            this.env.url_authorize
-            + '?response_type=code token token_id'
-            + '&scope=openid profile'
-            + '&nonce=abc'
-            + '&client_id=' + this.env.client_id
-            + '&redirect_uri=' + this.env.redirect_uri;
-            // + '&redirect_uri=' + "http://localhost:8080/callback.html";
-            window.location.replace(url)
+          this.$router.push({name: 'SelectOption'});
+          // var url =
+          // this.env.url_authorize
+          // + '?response_type=code token token_id'
+          // + '&scope=openid profile'
+          // + '&nonce=abc'
+          // + '&client_id=' + this.env.client_id
+          // + '&redirect_uri=' + this.env.redirect_uri;
+          // // + '&redirect_uri=' + "http://localhost:8080/callback.html";
+          // window.location.replace(url)
     },
     created(){
         this.$store.state={
