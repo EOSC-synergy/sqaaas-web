@@ -11,6 +11,7 @@ import UserProfile from 'src/pages/UserProfile.vue'
 import Files from 'src/pages/Files.vue'
 import SelectOption from 'src/pages/SelectOption.vue'
 import FullAssessment from 'src/pages/FullAssessment.vue'
+import VueRouter from 'vue-router'
 
 function requireAuth (to, from, next) {
   localStorage.getItem('session');
@@ -61,49 +62,49 @@ const routes = [
       {
         path: 'general-options',
         name: 'general',
-        beforeEnter: requireAuth,
+        // beforeEnter: requireAuth,
         component: General
       },
       {
         path: 'composer-options',
         name: 'composer',
-        beforeEnter: requireAuth,
+        // beforeEnter: requireAuth,
         component: Composer
       },
       {
         path: 'select-option',
         name: 'SelectOption',
-        beforeEnter: requireAuth,
+        // beforeEnter: requireAuth,
         component: SelectOption
       },
       {
         path: 'sqa-criteria',
         name: 'SQACriteria',
-        beforeEnter: requireAuth,
+        // beforeEnter: requireAuth,
         component: SQACriteria
       },
       {
         path: 'full-assessment',
         name: 'full_assessment',
-        beforeEnter: requireAuth,
+        // beforeEnter: requireAuth,
         component: FullAssessment
       },
       {
         path: 'user',
         name: 'User',
-        beforeEnter: requireAuth,
+        // beforeEnter: requireAuth,
         component: UserProfile
       },
       {
         path: 'files',
         name: 'Files',
-        beforeEnter: requireAuth,
+        // beforeEnter: requireAuth,
         component: Files
       },
 
       { path: '/logout',
         beforeEnter (to, from, next) {
-          next('/login')
+          next('/')
           // localStorage.removeItem('session');
           localStorage.removeItem('session');
           localStorage.clear()

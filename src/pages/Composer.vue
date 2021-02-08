@@ -564,26 +564,26 @@
       }
 
 
-      var session = JSON.parse(localStorage.getItem("session"));
-      var token = session.user.access_token;
-      var decode = jwtDecode(token)
-      var _this = this
-      $.ajax({
-        url: this.env.url_user_info,
-        type: 'POST',
-        contentType: 'application/json',
-        headers: {
-          'Authorization': 'Bearer ' + token
-			},
-			success: function (result) {
-        // CallBack(result);
+      // var session = JSON.parse(localStorage.getItem("session"));
+      // var token = session.user.access_token;
+      // var decode = jwtDecode(token)
+      // var _this = this
+      // $.ajax({
+      //   url: this.env.url_user_info,
+      //   type: 'POST',
+      //   contentType: 'application/json',
+      //   headers: {
+      //     'Authorization': 'Bearer ' + token
+			// },
+			// success: function (result) {
+      //   // CallBack(result);
 
-        _this.username = result
-			},
-			error: function (error) {
+      //   _this.username = result
+			// },
+			// error: function (error) {
 
-			}
-        });
+			// }
+      //   });
       },
       mounted(){
         var _this = this

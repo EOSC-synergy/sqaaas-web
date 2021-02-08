@@ -93,8 +93,9 @@
         this.$sidebar.displaySidebar(false)
       },
       logOut(){
-		this.$router.replace(this.$route.query.redirect || "/logout");
-      }
+        this.$router.push("/")
+		    // this.$router.replace(this.$route.query.redirect || "/logout");
+        }
     }
   }
 
