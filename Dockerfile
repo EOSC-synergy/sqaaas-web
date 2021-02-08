@@ -1,5 +1,5 @@
-FROM node
-
-#Install ghp-import
-RUN apt-get -y update && apt-get -y install ghp-import python-pip bash
-RUN pip install setuptools
+FROM nginx:alpine
+RUN npm install && npm run build
+COPY dist /usr/share/nginx/html
+RUN ["chmod", "+x", "entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]
