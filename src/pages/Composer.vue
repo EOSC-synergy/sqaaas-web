@@ -22,6 +22,8 @@
 
                 </div>
 
+
+
               <!-- </div> -->
               <base-input style="padding-left:20px;" type="text"
                         label="Container Name"
@@ -29,101 +31,133 @@
                         placeholder="processing"
                         v-model="service.container_name">
               </base-input>
-              <base-input style="padding-left:20px;" type="text"
+
+
+              <div class="col-12" id="accordion_general" role="tablist" aria-multiselectable="true" style="padding-left:20px;margin-top:2rem;padding-right:0px;">
+                <!-- Accordion Item 1 -->
+                <div class="card">
+                  <div class="card-header" role="tab" id="accordionHeadingGeneral">
+                    <div class="mb-0 row">
+                      <div class="col-12 no-padding accordion-head">
+                        <a data-toggle="collapse" data-parent="#accordion_general" href="#accordionBodyGeneral" aria-expanded="false" aria-controls="accordionBodyGeneral"
+                          class="collapsed ">
+                          <i class="fa fa-angle-down" aria-hidden="true"></i>
+                          <p>ADVANCED OPTIONS</p>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="accordionBodyGeneral" class="collapse" role="tabpanel" aria-labelledby="accordionHeadingGeneral" aria-expanded="false" data-parent="accordion_general">
+                    <div class="card-block col-12">
+                      <!-- <p>Accordion Item 1 - Body</p> -->
+                      <base-input style="padding-left:20px;" type="text"
                         label="Hostname"
                         :disabled="false"
                         placeholder="processing"
                         v-model="service.hostname">
-              </base-input>
-              <div class="row" style="padding-left:20px;">
-                <base-input class="col-md-4" type="text"
-                        label="Volume type"
-                        :disabled="false"
-                        placeholder="bind"
-                        v-model="volume.type">
-                </base-input>
-                <base-input class="col-md-4" type="text"
-                        label="Volume Source"
-                        :disabled="false"
-                        placeholder="worsica_web_products"
-                        v-model="volume.source">
-                </base-input>
-                <base-input class="col-md-4" type="text"
-                        label="Volume target"
-                        :disabled="false"
-                        placeholder="/usr/local/worsica_web_products"
-                        v-model="volume.target">
-                </base-input>
+                      </base-input>
+                      <div class="row" style="padding-left:20px;">
+                        <div class="col-12 col-md-4" >
+                          <label class="control-label">
+                            Volume Type
+                          </label>
+                            <select class="custom-select" id="sqacriteria" v-model='volume.type' >
+                              <option value="bind">bind</option>
+                              <option disabled value="volume">volume</option>
+                              <option disabled value="tmpfs">tmpfs</option>
+                            </select>
+                        </div>
+                        <base-input class="col-12 col-md-4" type="text"
+                                label="Volume Source"
+                                :disabled="false"
+                                placeholder="worsica_web_products"
+                                v-model="volume.source">
+                        </base-input>
+                        <base-input class="col-12 col-md-4" type="text"
+                                label="Volume target"
+                                :disabled="false"
+                                placeholder="/usr/local/worsica_web_products"
+                                v-model="volume.target">
+                        </base-input>
 
-              </div>
-              <div class="text-right">
-                <button type="button" class="btn-simple btn btn-xs btn-info" @click="addVolume()"><i class="fa fa-plus"></i>ADD VOLUME</button>
-              </div>
-              <div v-show="showVolumes" style="padding-top:20px;">
-                <span class="custom-label">Volume</span>
-                <ul class="list-group">
-                  <li class="list-group-item d-flex justify-content-between"
-                    v-for="(vol,key) in volumes"
-                    :key="key"
-                  >
-                  {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeVolume(vol,key)"><i class="fa fa-minus"></i></button></span>
+                      </div>
+                      <div class="text-right">
+                        <button type="button" class="btn-simple btn btn-xs btn-info" @click="addVolume()"><i class="fa fa-plus"></i>ADD VOLUME</button>
+                      </div>
+                      <div v-show="showVolumes" style="padding-top:20px;">
+                        <span class="custom-label">Volume</span>
+                        <ul class="list-group">
+                          <li class="list-group-item d-flex justify-content-between"
+                            v-for="(vol,key) in volumes"
+                            :key="key"
+                          >
+                          {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeVolume(vol,key)"><i class="fa fa-minus"></i></button></span>
 
-                  </li>
+                          </li>
 
-                </ul>
-              </div>
-              <div class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
-                <span class="custom-label">Environment variables:</span>
-                <span class="custom-label">Yes</span><base-checkbox name="env" v-model="envComposeYesNo.yes"></base-checkbox>
-                <span class="custom-label">No</span><base-checkbox name="env" v-model="envComposeYesNo.no"></base-checkbox>
-              </div>
+                        </ul>
+                      </div>
+                      <div class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
+                        <span class="custom-label">Environment variables:</span>
+                        <span class="custom-label">Yes</span><base-checkbox name="env" v-model="envComposeYesNo.yes"></base-checkbox>
+                        <span class="custom-label">No</span><base-checkbox name="env" v-model="envComposeYesNo.no"></base-checkbox>
+                      </div>
 
-              <div class="row" v-show='envComposeYesNo.yes' style="padding-left:30px;">
+                      <div class="row" v-show='envComposeYesNo.yes' style="padding-left:30px;">
 
-                  <base-input class="col-md-6" type="text"
-                        label="Key"
-                        :disabled="false"
-                        placeholder="Debug"
-                        v-model="envCompose.key">
-                  </base-input>
-                  <base-input class="col-md-6" type="text"
-                        label="value"
-                        :disabled="false"
-                        placeholder="1"
-                        v-model="envCompose.value">
-                  </base-input>
+                          <base-input class="col-md-6" type="text"
+                                label="Key"
+                                :disabled="false"
+                                placeholder="Debug"
+                                v-model="envCompose.key">
+                          </base-input>
+                          <base-input class="col-md-6" type="text"
+                                label="value"
+                                :disabled="false"
+                                placeholder="1"
+                                v-model="envCompose.value">
+                          </base-input>
 
 
-                  <div style="margin-bottom:30px;width:95%;" class="text-right">
-                    <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnvCompose()"><i class="fa fa-plus"></i>ADD Env Vars</button>
+                          <div style="margin-bottom:30px;width:95%;" class="text-right">
+                            <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnvCompose()"><i class="fa fa-plus"></i>ADD Env Vars</button>
+                          </div>
+                        </div>
+                        <div v-show="showEnvCompose" style="padding-top:20px;padding-bottom:20px;">
+                          <span class="custom-label">Env Vars</span>
+                          <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between"
+                              v-for="(env,key) in service.envs"
+                              :key="key"
+                            >
+                            {{key}}:{{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnvCompose(key)"><i class="fa fa-minus"></i></button></span>
+
+                            </li>
+
+                          </ul>
+                        </div>
+                    </div>
                   </div>
                 </div>
-                <div v-show="showEnvCompose" style="padding-top:20px;">
-                  <span class="custom-label">Env Vars</span>
-                  <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between"
-                      v-for="(env,key) in service.envs"
-                      :key="key"
-                    >
-                    {{Object.keys(env)[0]}}:{{Object.values(env)[0]}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnvCompose(key)"><i class="fa fa-minus"></i></button></span>
-
-                    </li>
-
-                  </ul>
-                </div>
+              </div>
 
               <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
                 <button type="button" class="btn-outline btn btn-info" @click="addService()"><i class="fa fa-plus"></i>ADD SERVICE</button>
               </div>
 
-              <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;">
+              <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;padding-left:20px;">
                 <span class="custom-label">Services</span>
                 <ul class="list-group">
                   <li class="list-group-item d-flex justify-content-between"
                     v-for="(env,key) in services"
                     :key="key"
                   >
-                  {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeService(key)"><i class="fa fa-minus"></i></button></span>
+                  {{key}}
+                  <div class="row">
+                    <span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeService(key)"><i class="fa fa-minus"></i></button></span>
+                    <base-checkbox v-show="push_image.yes" :checked="true" style="top: -5px;" :id="'service_'+ key" name="workpace"></base-checkbox>
+                  </div>
 
                   </li>
 
@@ -132,7 +166,54 @@
 
 
             </template>
-            <div class="row" style="margin-top:2rem; margin-bottom:2rem;">
+
+
+            <div v-show="Object.keys($store.state.docker_compose.services).length > 0" class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
+              <span class="custom-label">Push Image to Docker Registry?</span>
+              <span class="custom-label">Yes</span><base-checkbox name="env" v-model="push_image.yes"></base-checkbox>
+              <span class="custom-label">No</span><base-checkbox name="env" v-model="push_image.no"></base-checkbox>
+            </div>
+
+
+            <div class="row" v-show='push_image.yes && Object.keys($store.state.docker_compose.services).length > 0' style="padding-left:10px;">
+              <div class="col-12" style="padding-left:30px;padding-right:30px;">
+                <p style="color:red;text-align:justify" >Attention: Before proceeding you will need to provide the ID of the credentials created in Jenkins or <a target="blank" href="https://jenkins.eosc-synergy.eu/"> go now</a> and create them. </p>
+                <!-- <div>
+                  <label style="display: block;margin-top: 2rem;">Select service</label>
+                  <select class="selectpicker" id="select_service"  multiple title="Please select ..." >
+                    <option value="" selected disabled>Please select</option>
+                    <option :value="index" v-for="(service, index) in $store.state.docker_compose.services" :key="index">
+                      {{index}}
+                    </option>
+
+                  </select>
+                </div> -->
+                <div style="margin-top:2rem;padding-left:0px;padding-right:0px;" class="col-12 col-md-12 text-left">
+                  <base-input type="text" class="no-margin"
+                        label="Enter the ID of the Jenkins credentials."
+                        :disabled="false"
+                        placeholder="userpass"
+                        v-model="id_cred_service">
+                  </base-input>
+                  <div class="col-12 text-right">
+                      <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
+                  </div>
+                  <base-input style="padding-top:1rem;" type="text" class="no-margin"
+                        label="Enter the url of the registry"
+                        :disabled="false"
+                        placeholder="userpass"
+                        v-model="url_service">
+                  </base-input>
+
+                </div>
+
+              </div>
+
+
+            </div>
+
+
+            <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
               <div class="col-12 col-md-12 text-center">
                   <button @click="back()" type="button" class="btn btn-next-back btn-back" >
                       BACK
@@ -163,21 +244,24 @@
         showVolumes:false,
         showEnvCompose:false,
         showServices:false,
-        showErrorCredId:false,
-        showErrorCredPass:false,
-        showErrorCredUser:false,
-        showErrorCredType:false,
-        showErrorRepoName:false,
-        showErrorRepoUrl:false,
+        showErrorCredID:false,
         disable_done:true,
+        id_credential: '',
+        checked: true,
+        id_cred_service:'',
+        url_service:'https://hub.docker.com/',
         service:{
           image:'',
           container_name:'',
           hostname:'',
           volumes:[],
-          envs:[]
+          envs:{}
         },
         envComposeYesNo:{
+          yes:false,
+          no:true
+        },
+        push_image:{
           yes:false,
           no:true
         },
@@ -187,7 +271,7 @@
         },
         services:{},
         volume:{
-          type:'',
+          type:'bind',
           source:'',
           target:''
         },
@@ -199,6 +283,30 @@
       }
     },
     watch:{
+      'id_cred_service'(val){
+        if(val != ''){
+          this.showErrorCredID = false;
+          var all_services = [];
+          all_services = Object.keys(this.$store.state.docker_compose.services);
+          for (let i = 0; i < all_services.length; i++) {
+            var service_name = all_services[i]
+            this.$store.state.docker_compose.services[service_name].image.registry.credential_id = this.id_cred_service;
+          }
+        }else{
+          this.showErrorCredID = true;
+
+        }
+      },
+      'url_service'(val){
+        if(val != ''){
+          var all_services = [];
+          all_services = Object.keys(this.$store.state.docker_compose.services);
+          for (let i = 0; i < all_services.length; i++) {
+            var service_name = all_services[i]
+            this.$store.state.docker_compose.services[service_name].image.registry.url = this.url_service;
+          }
+        }
+      },
       'envComposeYesNo.yes'(val){
         if(val==true){
           this.envComposeYesNo.no = false;
@@ -209,16 +317,58 @@
       'envComposeYesNo.no'(val){
          if(val==true){
           this.envComposeYesNo.yes = false;
-          this.service.envs=[];
+          this.service.envs={};
+          this.showEnvCompose = false;
         }else{
           this.envComposeYesNo.yes = true;
+        }
+      },
+      'push_image.yes'(val){
+        if(val==true){
+          var all_services = [];
+          all_services = Object.keys(this.$store.state.docker_compose.services);
+          for (let i = 0; i < all_services.length; i++) {
+            var service_name = all_services[i]
+            this.$store.state.docker_compose.services[service_name].image.registry.push = true;
+            this.$store.state.docker_compose.services[service_name].image.registry.credential_id = this.id_cred_service;
+            this.$store.state.docker_compose.services[service_name].image.registry.url = this.url_service;
+          }
+          this.push_image.no = false;
+        }else{
+
+          this.push_image.no = true;
+        }
+      },
+      'push_image.no'(val){
+         if(val==true){
+           all_services = Object.keys(this.$store.state.docker_compose.services);
+          for (let i = 0; i < all_services.length; i++) {
+            var service_name = all_services[i]
+            this.$store.state.docker_compose.services[service_name].image.registry.push = false;
+            this.$store.state.docker_compose.services[service_name].image.registry.credential_id = '';
+            this.$store.state.docker_compose.services[service_name].image.registry.url = 'https://hub.docker.com/';
+          }
+          this.push_image.yes = false;
+        }else{
+          this.push_image.yes = true;
         }
       },
 
     },
     methods:{
        next(){
-         this.$router.push({name: 'SQACriteria'});
+         if(this.push_image.yes == true){
+           if(this.id_cred_service == ''){
+            this.showErrorCredID = true;
+            }else{
+              this.showErrorCredID = false;
+              this.$router.push({name: 'SQACriteria'});
+            }
+         }else{
+           this.showErrorCredID = false;
+           this.$router.push({name: 'SQACriteria'});
+         }
+
       },
       back(){
          this.$router.push({name: 'general'});
@@ -246,9 +396,11 @@
         var key= this.envCompose.key.replace(" ", "")
 				var value = this.envCompose.value.replace(" ", "")
         envVars[key]=value
-        this.service.envs.push(envVars)
+        this.service.envs[key]= value
+        console.log(this.service.envs)
         this.showEnvCompose = true;
         this.cleanEnvCompose()
+
       },
       removeEnvCompose(item){
         this.$delete(this.service.envs,item)
@@ -292,7 +444,15 @@
       addService(){
         if(this.oneshot== true){
           this.services[this.service.container_name]={
-            image: this.service.image,
+            image: {
+              name: this.service.image,
+              registry:{
+                url: '',
+                push: false,
+                credential_id:''
+
+              }
+            },
             container_name: this.service.container_name,
             hostname: this.service.hostname,
             volumes: this.service.volumes,
@@ -301,7 +461,15 @@
           }
         }else{
           this.services[this.service.container_name]={
-            image: this.service.image,
+             image: {
+              name: this.service.image,
+              registry:{
+                url: '',
+                push: false,
+                credential_id:''
+
+              }
+            },
             container_name: this.service.container_name,
             hostname: this.service.hostname,
             volumes: this.service.volumes,
@@ -309,17 +477,26 @@
           }
         }
         this.showServices = true;
+        // if(this.push_image.yes == true){
+          // this.$store.state.docker_compose.push_services.push(this.service.container_name);
+        // }
+        $("#select_service").append('<option value="'+this.service.container_name+'">'+this.service.container_name+'</option>');
+        $("#select_service").selectpicker("refresh");
         this.disable_done = false;
         this.$store.state.docker_compose.services = this.services;
         this.cleanService();
       },
       removeService(item){
-        this.$delete(this.services,item)
+        this.$delete(this.services,item);
+        // this.$store.state.docker_compose.push_services.splice(item,1)
+        // $("option[value='"+item+"']").remove();
+        // $("#select_service").selectpicker("refresh");
         this.$store.state.docker_compose.services = this.services;
         this.$store.state.config_yaml.sqa_criteria={};
         if (this.isEmpty(this.services)) {
           this.showServices = false;
           this.disable_done = true;
+          this.push_image.yes = false;
         }
 
       },
@@ -334,6 +511,7 @@
         this.cleanEnvCompose();
         this.cleanVolume();
         this.envComposeYesNo.no = true;
+        this.push_image.no = true;
         if (this.isEmpty(this.service.envs)) {
           this.showEnvCompose = false;
         }
@@ -365,6 +543,13 @@
         this.$router.push({name:"general"})
       }else{
         var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
+        if(sizeServices > 0){
+          var all_services = Object.keys(this.$store.state.docker_compose.services);
+           for (let i = 0; i < all_services.length; i++) {
+             var service_name = all_services[i];
+             this.$store.state.docker_compose.services[service_name].image.registry.push = false;
+           }
+        }
         for (let i = 0; i < sizeServices; i++) {
           this.services[Object.keys(this.$store.state.docker_compose.services)[i]]=this.$store.state.docker_compose.services[Object.keys(this.$store.state.docker_compose.services)[i]]
         }
@@ -401,6 +586,33 @@
         });
       },
       mounted(){
+        var _this = this
+        this.$nextTick(function(){
+          $('#select_service').selectpicker();
+
+          $("input").on('click',function(){
+           var array_name = []
+           var string_name = $(this).parent().closest('div').attr('id');
+           if(string_name != undefined){
+             array_name = string_name.split("_");
+             if(array_name[0] == "service"){
+               if($(this).prop('checked') == true){
+                //  _this.$store.state.docker_compose.push_services.push(array_name[1]);
+                 _this.$store.state.docker_compose.services[array_name[1]].image.registry.push=true;
+                 _this.$store.state.docker_compose.services[array_name[1]].image.registry.credential_id=this.id_cred_service;
+                 _this.$store.state.docker_compose.services[array_name[1]].image.registry.url=this.url_service;
+               }else{
+                 // _this.$store.state.docker_compose.push_services.splice(index, 1);
+                  _this.$store.state.docker_compose.services[array_name[1]].image.registry.push=false;
+                 _this.$store.state.docker_compose.services[array_name[1]].image.registry.credential_id='';
+                 _this.$store.state.docker_compose.services[array_name[1]].image.registry.url='https://hub.docker.com/';
+               }
+             }
+           }
+         })
+
+        });
+
         $(function () {
           $('[data-toggle="tooltip"]').tooltip()
         })
@@ -464,7 +676,7 @@ input[type=number]::-webkit-inner-spin-button {
     color: black !important;
     padding:1rem 0 1rem 0;
     font-weight: bold;
-    border: 2px solid black;
+    border: 2px solid black!important;
   }
 
   .btn-next-back{
@@ -476,10 +688,18 @@ input[type=number]::-webkit-inner-spin-button {
   background-color:#ccc!important;
   margin-right:10%;
   font-weight: bold;
-  border: 2px solid black;
+  border: 2px solid black!important;
 
 }
 
+.accordion-head i{
+    font-size: 1.5em;
+    float: right;
+}
+
+.accordion-head > .collapsed > i:before{
+    content: "\f105";
+}
 
 
 </style>

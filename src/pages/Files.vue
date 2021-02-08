@@ -380,7 +380,9 @@
                                     "credentials" : this.$store.state.config_yaml.config.credentials,
                                   },
                                   "environment" : this.$store.state.config_yaml.environment,
-                                  "sqa_criteria": this.$store.state.config_yaml.sqa_criteria
+                                  "sqa_criteria": this.$store.state.config_yaml.sqa_criteria,
+                                  "timeout": this.$store.state.config_yaml.timeout
+
                               }
                           ],
                           "jenkinsfile_data": {
@@ -734,7 +736,7 @@
     var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
     if(sizeCriteria == 0){
       this.notifyVue("Error", "You must add at least one sqa criteria.",'nc-icon nc-simple-remove','danger')
-      // this.$router.push({name:"SQACriteria"})
+      this.$router.push({name:"SQACriteria"})
     }
 
     this.pipeline_id = this.$store.state.pipeline_id;
