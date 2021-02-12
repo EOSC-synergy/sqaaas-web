@@ -14,9 +14,12 @@
                 <base-input style="padding-left:20px;" type="text"
                           label="Docker Image"
                           :disabled="false"
-                          placeholder="worsica/worsica-backend:worsica-processing-dev_latest"
+                          placeholder="Name of the image used by the container. Example: worsica/worsica-backend"
                           v-model="service.image">
                 </base-input>
+                <div class="col-12 text-right">
+                    <span v-show="showErrorImageName" style="color:red;font-size:12px;">This field is required</span>
+                </div>
                 <div class="row" style="justify-content: flex-end;padding-right:20px;">
                   <span class="custom-label">One shot image</span><base-checkbox name="workpace" v-model="oneshot"></base-checkbox>
 
@@ -28,9 +31,12 @@
               <base-input style="padding-left:20px;" type="text"
                         label="Container Name"
                         :disabled="false"
-                        placeholder="processing"
+                        placeholder="Container name. Example: processing"
                         v-model="service.container_name">
               </base-input>
+              <div class="col-12 text-right">
+                  <span v-show="showErrorContName" style="color:red;font-size:12px;">This field is required</span>
+              </div>
 
 
               <div class="col-12" id="accordion_general" role="tablist" aria-multiselectable="true" style="padding-left:20px;margin-top:2rem;padding-right:0px;">
@@ -51,13 +57,13 @@
                   <div id="accordionBodyGeneral" class="collapse" role="tabpanel" aria-labelledby="accordionHeadingGeneral" aria-expanded="false" data-parent="accordion_general">
                     <div class="card-block col-12">
                       <!-- <p>Accordion Item 1 - Body</p> -->
-                      <base-input style="padding-left:20px;" type="text"
+                      <base-input style="padding-left:5px;" type="text"
                         label="Hostname"
                         :disabled="false"
-                        placeholder="processing"
+                        placeholder="Container hostname. Example: processing"
                         v-model="service.hostname">
                       </base-input>
-                      <div class="row" style="padding-left:20px;">
+                      <div class="row" style="padding-left:5px;">
                         <div class="col-12 col-md-4" >
                           <label class="control-label">
                             Volume Type
@@ -98,13 +104,13 @@
 
                         </ul>
                       </div>
-                      <div class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
+                      <div class="row" style="padding-left:5px;margin-bottom:1rem;margin-top:2rem;">
                         <span class="custom-label">Environment variables:</span>
                         <span class="custom-label">Yes</span><base-checkbox name="env" v-model="envComposeYesNo.yes"></base-checkbox>
                         <span class="custom-label">No</span><base-checkbox name="env" v-model="envComposeYesNo.no"></base-checkbox>
                       </div>
 
-                      <div class="row" v-show='envComposeYesNo.yes' style="padding-left:30px;">
+                      <div class="row" v-show='envComposeYesNo.yes' style="padding-left:10x;">
 
                           <base-input class="col-md-6" type="text"
                                 label="Key"
@@ -138,6 +144,49 @@
                           </ul>
                         </div>
                     </div>
+                    <div  class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
+                      <span class="custom-label">Push Image to Docker Registry?</span>
+                      <span class="custom-label">Yes</span><base-checkbox name="env" v-model="push_image.yes"></base-checkbox>
+                      <span class="custom-label">No</span><base-checkbox name="env" v-model="push_image.no"></base-checkbox>
+                    </div>
+
+
+                    <div class="row" v-show='push_image.yes' style="padding-left:10px;margin-bottom: 2rem;">
+                      <div class="col-12" style="padding-left:30px;padding-right:30px;">
+                        <p style="color:red;text-align:justify" >Attention: Before proceeding you will need to provide the ID of the credentials created in Jenkins or <a target="blank" href="https://jenkins.eosc-synergy.eu/"> go now</a> and create them. </p>
+                        <!-- <div>
+                          <label style="display: block;margin-top: 2rem;">Select service</label>
+                          <select class="selectpicker" id="select_service"  multiple title="Please select ..." >
+                            <option value="" selected disabled>Please select</option>
+                            <option :value="index" v-for="(service, index) in $store.state.docker_compose.services" :key="index">
+                              {{index}}
+                            </option>
+
+                          </select>
+                        </div> -->
+                        <div style="margin-top:2rem;padding-left:0px;padding-right:0px;" class="col-12 col-md-12 text-left">
+                          <base-input type="text" class="no-margin"
+                                label="Enter the ID of the Jenkins credentials."
+                                :disabled="false"
+                                placeholder="userpass"
+                                v-model="id_cred_service">
+                          </base-input>
+                          <div class="col-12 text-right">
+                              <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
+                          </div>
+                          <base-input style="padding-top:1rem;" type="text" class="no-margin"
+                                label="Enter the url of the registry"
+                                :disabled="false"
+                                placeholder="userpass"
+                                v-model="url_service">
+                          </base-input>
+
+                        </div>
+
+                      </div>
+
+
+                    </div>
                   </div>
                 </div>
               </div>
@@ -147,16 +196,16 @@
               </div>
 
               <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;padding-left:20px;">
-                <span class="custom-label">Services</span>
+                  <span class="custom-label">Services</span>
                 <ul class="list-group">
                   <li class="list-group-item d-flex justify-content-between"
                     v-for="(env,key) in services"
                     :key="key"
                   >
-                  {{key}}
+                    {{key}}
                   <div class="row">
-                    <span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeService(key)"><i class="fa fa-minus"></i></button></span>
-                    <base-checkbox v-show="push_image.yes" :checked="true" style="top: -5px;" :id="'service_'+ key" name="workpace"></base-checkbox>
+                    <span><button type="button" title="Remove Service" class="btn-simple btn btn-xs btn-info" @click="removeService(key)"><i class="fa fa-minus"></i></button></span>
+                    <base-checkbox title= "Push images" disabled="true" :checked="($store.state.docker_compose.services[key].image.registry.push == true) ? true : false" style="top: -5px;" :id="'service_'+ key" name="workpace"></base-checkbox>
                   </div>
 
                   </li>
@@ -166,51 +215,6 @@
 
 
             </template>
-
-
-            <div v-show="Object.keys($store.state.docker_compose.services).length > 0" class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
-              <span class="custom-label">Push Image to Docker Registry?</span>
-              <span class="custom-label">Yes</span><base-checkbox name="env" v-model="push_image.yes"></base-checkbox>
-              <span class="custom-label">No</span><base-checkbox name="env" v-model="push_image.no"></base-checkbox>
-            </div>
-
-
-            <div class="row" v-show='push_image.yes && Object.keys($store.state.docker_compose.services).length > 0' style="padding-left:10px;">
-              <div class="col-12" style="padding-left:30px;padding-right:30px;">
-                <p style="color:red;text-align:justify" >Attention: Before proceeding you will need to provide the ID of the credentials created in Jenkins or <a target="blank" href="https://jenkins.eosc-synergy.eu/"> go now</a> and create them. </p>
-                <!-- <div>
-                  <label style="display: block;margin-top: 2rem;">Select service</label>
-                  <select class="selectpicker" id="select_service"  multiple title="Please select ..." >
-                    <option value="" selected disabled>Please select</option>
-                    <option :value="index" v-for="(service, index) in $store.state.docker_compose.services" :key="index">
-                      {{index}}
-                    </option>
-
-                  </select>
-                </div> -->
-                <div style="margin-top:2rem;padding-left:0px;padding-right:0px;" class="col-12 col-md-12 text-left">
-                  <base-input type="text" class="no-margin"
-                        label="Enter the ID of the Jenkins credentials."
-                        :disabled="false"
-                        placeholder="userpass"
-                        v-model="id_cred_service">
-                  </base-input>
-                  <div class="col-12 text-right">
-                      <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
-                  </div>
-                  <base-input style="padding-top:1rem;" type="text" class="no-margin"
-                        label="Enter the url of the registry"
-                        :disabled="false"
-                        placeholder="userpass"
-                        v-model="url_service">
-                  </base-input>
-
-                </div>
-
-              </div>
-
-
-            </div>
 
 
             <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
@@ -249,6 +253,8 @@
         id_credential: '',
         checked: true,
         id_cred_service:'',
+        showErrorImageName: false,
+        showErrorContName: false,
         url_service:'https://hub.docker.com/',
         service:{
           image:'',
@@ -283,6 +289,20 @@
       }
     },
     watch:{
+      'service.image'(val){
+        if(val == ''){
+          this.showErrorImageName = true;
+        }else{
+          this.showErrorImageName = false;
+        }
+      },
+      'service.container_name'(val){
+        if(val == ''){
+          this.showErrorContName = true;
+        }else{
+          this.showErrorContName = false;
+        }
+      },
       'id_cred_service'(val){
         if(val != ''){
           this.showErrorCredID = false;
@@ -325,14 +345,14 @@
       },
       'push_image.yes'(val){
         if(val==true){
-          var all_services = [];
-          all_services = Object.keys(this.$store.state.docker_compose.services);
-          for (let i = 0; i < all_services.length; i++) {
-            var service_name = all_services[i]
-            this.$store.state.docker_compose.services[service_name].image.registry.push = true;
-            this.$store.state.docker_compose.services[service_name].image.registry.credential_id = this.id_cred_service;
-            this.$store.state.docker_compose.services[service_name].image.registry.url = this.url_service;
-          }
+          // var all_services = [];
+          // all_services = Object.keys(this.$store.state.docker_compose.services);
+          // for (let i = 0; i < all_services.length; i++) {
+          //   var service_name = all_services[i]
+          //   this.$store.state.docker_compose.services[service_name].image.registry.push = true;
+          //   this.$store.state.docker_compose.services[service_name].image.registry.credential_id = this.id_cred_service;
+          //   this.$store.state.docker_compose.services[service_name].image.registry.url = this.url_service;
+          // }
           this.push_image.no = false;
         }else{
 
@@ -341,13 +361,13 @@
       },
       'push_image.no'(val){
          if(val==true){
-           all_services = Object.keys(this.$store.state.docker_compose.services);
-          for (let i = 0; i < all_services.length; i++) {
-            var service_name = all_services[i]
-            this.$store.state.docker_compose.services[service_name].image.registry.push = false;
-            this.$store.state.docker_compose.services[service_name].image.registry.credential_id = '';
-            this.$store.state.docker_compose.services[service_name].image.registry.url = 'https://hub.docker.com/';
-          }
+          // all_services = Object.keys(this.$store.state.docker_compose.services);
+          // for (let i = 0; i < all_services.length; i++) {
+          //   var service_name = all_services[i]
+          //   this.$store.state.docker_compose.services[service_name].image.registry.push = false;
+          //   this.$store.state.docker_compose.services[service_name].image.registry.credential_id = '';
+          //   this.$store.state.docker_compose.services[service_name].image.registry.url = 'https://hub.docker.com/';
+          // }
           this.push_image.yes = false;
         }else{
           this.push_image.yes = true;
@@ -442,49 +462,74 @@
         this.volume.target = '';
       },
       addService(){
-        if(this.oneshot== true){
-          this.services[this.service.container_name]={
-            image: {
-              name: this.service.image,
-              registry:{
-                url: '',
-                push: false,
-                credential_id:''
-
-              }
-            },
-            container_name: this.service.container_name,
-            hostname: this.service.hostname,
-            volumes: this.service.volumes,
-            command: 'sleep infinity',
-            environment: this.service.envs
+        if(this.service.image == '' || this.service.container_name == ''){
+          if(this.service.container_name == ''){
+            this.showErrorContName =  true;
           }
-        }else{
-          this.services[this.service.container_name]={
-             image: {
-              name: this.service.image,
-              registry:{
-                url: '',
-                push: false,
-                credential_id:''
+          if(this.service.image == ''){
+            this.showErrorImageName =  true;
+          }
 
-              }
-            },
-            container_name: this.service.container_name,
-            hostname: this.service.hostname,
-            volumes: this.service.volumes,
-            environment: this.service.envs
+        }else{
+          if(this.oneshot== true){
+            this.services[this.service.container_name]={
+              image: {
+                name: this.service.image,
+                registry:{
+                  url: '',
+                  push: false,
+                  credential_id:''
+
+                }
+              },
+              container_name: this.service.container_name,
+              hostname: this.service.hostname,
+              volumes: this.service.volumes,
+              command: 'sleep infinity',
+              environment: this.service.envs
+            }
+          }else{
+            this.services[this.service.container_name]={
+               image: {
+                name: this.service.image,
+                registry:{
+                  url: '',
+                  push: false,
+                  credential_id:''
+
+                }
+              },
+              container_name: this.service.container_name,
+              hostname: this.service.hostname,
+              volumes: this.service.volumes,
+              environment: this.service.envs
+            }
+          }
+          if(this.push_image.yes == true){
+            if(this.id_cred_service == ""){
+              this.showErrorCredID = true;
+            }else{
+              this.showErrorCredID = false;
+              this.services[this.service.container_name].image.registry.push = true;
+              this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
+              this.services[this.service.container_name].image.registry.url = this.url_service;
+              this.showServices = true;
+              $("#select_service").append('<option value="'+this.service.container_name+'">'+this.service.container_name+'</option>');
+              $("#select_service").selectpicker("refresh");
+              this.disable_done = false;
+              this.$store.state.docker_compose.services = this.services;
+              this.cleanService();
+            }
+          }else{
+              this.showServices = true;
+              $("#select_service").append('<option value="'+this.service.container_name+'">'+this.service.container_name+'</option>');
+              $("#select_service").selectpicker("refresh");
+              this.disable_done = false;
+              this.$store.state.docker_compose.services = this.services;
+              this.cleanService();
+
           }
         }
-        this.showServices = true;
-        // if(this.push_image.yes == true){
-          // this.$store.state.docker_compose.push_services.push(this.service.container_name);
-        // }
-        $("#select_service").append('<option value="'+this.service.container_name+'">'+this.service.container_name+'</option>');
-        $("#select_service").selectpicker("refresh");
-        this.disable_done = false;
-        this.$store.state.docker_compose.services = this.services;
-        this.cleanService();
       },
       removeService(item){
         this.$delete(this.services,item);
@@ -508,6 +553,7 @@
         this.volumes={};
         this.service.volumes=[];
         this.oneshot = false;
+        this.id_credential = '';
         this.cleanEnvCompose();
         this.cleanVolume();
         this.envComposeYesNo.no = true;
@@ -537,19 +583,20 @@
 
     },
     created(){
+      console.log(this.$store.state.docker_compose.services)
        var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
       if(sizeRepos == 0){
         this.notifyVue("Error you must add at least one repository",'nc-icon nc-simple-remove','danger')
         this.$router.push({name:"general"})
       }else{
         var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
-        if(sizeServices > 0){
-          var all_services = Object.keys(this.$store.state.docker_compose.services);
-           for (let i = 0; i < all_services.length; i++) {
-             var service_name = all_services[i];
-             this.$store.state.docker_compose.services[service_name].image.registry.push = false;
-           }
-        }
+        // if(sizeServices > 0){
+        //   var all_services = Object.keys(this.$store.state.docker_compose.services);
+        //    for (let i = 0; i < all_services.length; i++) {
+        //      var service_name = all_services[i];
+        //      this.$store.state.docker_compose.services[service_name].image.registry.push = false;
+        //    }
+        // }
         for (let i = 0; i < sizeServices; i++) {
           this.services[Object.keys(this.$store.state.docker_compose.services)[i]]=this.$store.state.docker_compose.services[Object.keys(this.$store.state.docker_compose.services)[i]]
         }

@@ -21,7 +21,7 @@
                       <strong style="font-weight:bold;">Pipeline name:</strong> {{($store.state.name) ? $store.state.name : ''}}
                     </p>
                      <p class="text-left" style="font-size:14px;">
-                      <strong style="font-weight:bold;">Repository:</strong> {{ ''}}
+                      <strong style="font-weight:bold;">Repositories:</strong> {{ ''}}
                     </p>
                   </div>
                   <div v-if="Object.keys($store.state.config_yaml.config.project_repos).length > 0" class="col-12 col-md-12">
@@ -62,8 +62,9 @@
                     <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                         <thead>
                             <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Name</th>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Image</th>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Container Name</th>
+                            <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Image</th>
+                            <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Container Name</th>
+                            <th style="text-align:center;justify-content:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Push Images</th>
                         </thead>
                         <tbody v-for="(service, index) in $store.state.docker_compose.services" :key="index">
                                 <tr
@@ -75,12 +76,16 @@
                                         </div>
                                     </td>
                                     <td
-                                        style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        {{service.image}}
+                                        style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        {{service.image.name}}
                                     </td>
                                     <td
-                                        style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                         {{service.container_name}}
+                                    </td>
+                                    <td
+                                        style="text-align:center;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        {{service.image.registry.push}}
                                     </td>
 
                                 </tr>

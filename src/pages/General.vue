@@ -16,7 +16,7 @@
                     <base-input class="col-12" type="text"
                               label="Repository Name"
                               :disabled="false"
-                              placeholder="worsica-processing"
+                              placeholder="Identifier of the repository name. Example: worsica-processing"
                               v-model="repo.name"
                               >
                     </base-input>
@@ -31,7 +31,7 @@
                     <base-input class="col-12" type="text"
                               label="Repository URL"
                               :disabled="false"
-                              placeholder="https://github.com/WORSICA/worsica-processing.git"
+                              placeholder="The URL you can use to clone the project."
                               v-model="repo.url"
                               >
                     </base-input>

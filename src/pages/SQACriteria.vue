@@ -12,7 +12,7 @@
                    <base-input type="text" class="no-margin"
                             label="Pipeline Name"
                             :disabled="false"
-                            placeholder="worsica"
+                            placeholder="Name of the pipeline. Exmaple: worsica"
                             v-model="pipelineName">
                     </base-input>
                     <span v-show="showErrorPipeline" style="color:red; font-size:12px;">This field is required.</span>
