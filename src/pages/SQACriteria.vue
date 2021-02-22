@@ -12,7 +12,7 @@
                    <base-input type="text" class="no-margin"
                             label="Pipeline Name"
                             :disabled="false"
-                            placeholder="worsica"
+                            placeholder="Name of the pipeline. Exmaple: worsica"
                             v-model="pipelineName">
                     </base-input>
                     <span v-show="showErrorPipeline" style="color:red; font-size:12px;">This field is required.</span>
@@ -276,7 +276,7 @@
             message: message,
             icon: 'nc-icon nc-app',
             timeout:3000,
-            horizontalAlign: 'center',
+            horizontalAlign: 'right',
             verticalAlign: 'top',
             type: 'danger'
           })
@@ -419,12 +419,18 @@
 
     },
     created(){
+      console.log(this.$store.state.docker_compose.services)
+      console.log(this.$store.state.config_yaml)
         this.pipelineName = this.$store.state.name
         var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
         var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
         if(sizeRepos == 0 || sizeServices == 0){
           this.notifyVue("Error you must add at least one service")
           this.$router.push({name:"composer"})
+        }else if(this.$store.state.docker_compose.push_services.length > 0 && this.$store.state.docker_compose.id_cred_service == ""){
+          this.notifyVue("Error you must enter the ID of the credential in Jenkins.")
+          this.$router.push({name:"composer"})
+
         }else{
           var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
           var getCriteria = this.$store.state.config_yaml.sqa_criteria
