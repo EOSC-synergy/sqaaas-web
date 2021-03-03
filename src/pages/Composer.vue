@@ -205,7 +205,7 @@
                     {{key}}
                   <div class="row">
                     <span><button type="button" title="Remove Service" class="btn-simple btn btn-xs btn-info" @click="removeService(key)"><i class="fa fa-minus"></i></button></span>
-                    <base-checkbox title= "Push images" disabled="true" :checked="($store.state.docker_compose.services[key].image.registry.push == true) ? true : false" style="top: -5px;" :id="'service_'+ key" name="workpace"></base-checkbox>
+                    <!-- <base-checkbox title= "Push images" disabled="true" :checked="($store.state.docker_compose.services[key].image.registry.push == true) ? true : false" style="top: -5px;" :id="'service_'+ key" name="workpace"></base-checkbox> -->
                   </div>
 
                   </li>
@@ -345,14 +345,7 @@
       },
       'push_image.yes'(val){
         if(val==true){
-          // var all_services = [];
-          // all_services = Object.keys(this.$store.state.docker_compose.services);
-          // for (let i = 0; i < all_services.length; i++) {
-          //   var service_name = all_services[i]
-          //   this.$store.state.docker_compose.services[service_name].image.registry.push = true;
-          //   this.$store.state.docker_compose.services[service_name].image.registry.credential_id = this.id_cred_service;
-          //   this.$store.state.docker_compose.services[service_name].image.registry.url = this.url_service;
-          // }
+
           this.push_image.no = false;
         }else{
 
@@ -361,13 +354,7 @@
       },
       'push_image.no'(val){
          if(val==true){
-          // all_services = Object.keys(this.$store.state.docker_compose.services);
-          // for (let i = 0; i < all_services.length; i++) {
-          //   var service_name = all_services[i]
-          //   this.$store.state.docker_compose.services[service_name].image.registry.push = false;
-          //   this.$store.state.docker_compose.services[service_name].image.registry.credential_id = '';
-          //   this.$store.state.docker_compose.services[service_name].image.registry.url = 'https://hub.docker.com/';
-          // }
+
           this.push_image.yes = false;
         }else{
           this.push_image.yes = true;
@@ -473,15 +460,16 @@
         }else{
           if(this.oneshot== true){
             this.services[this.service.container_name]={
-              image: {
-                name: this.service.image,
-                registry:{
-                  url: '',
-                  push: false,
-                  credential_id:''
+              // image: {
+              //   name: this.service.image,
+              //   registry:{
+              //     url: '',
+              //     push: false,
+              //     credential_id:''
 
-                }
-              },
+              //   }
+              // },
+              image: this.service.image,
               container_name: this.service.container_name,
               hostname: this.service.hostname,
               volumes: this.service.volumes,
@@ -490,15 +478,16 @@
             }
           }else{
             this.services[this.service.container_name]={
-               image: {
-                name: this.service.image,
-                registry:{
-                  url: '',
-                  push: false,
-                  credential_id:''
+              //  image: {
+              //   name: this.service.image,
+              //   registry:{
+              //     url: '',
+              //     push: false,
+              //     credential_id:''
 
-                }
-              },
+              //   }
+              // },
+              image: this.service.image,
               container_name: this.service.container_name,
               hostname: this.service.hostname,
               volumes: this.service.volumes,

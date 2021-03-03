@@ -85,7 +85,8 @@
                                     </td>
                                     <td
                                         style="text-align:center;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        {{service.image.registry.push}}
+                                        <!-- {{service.image.registry.push}} -->
+                                        N/A
                                     </td>
 
                                 </tr>
