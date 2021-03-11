@@ -8,46 +8,55 @@
                 <h4 class="card-title text-center" style="padding-top:2rem;">SQA CRITERIA</h4>
               </template>
               <template class="card-body">
-                <div class="col-12 col-md-6" >
-                   <base-input type="text" class="no-margin"
-                            label="Pipeline Name"
-                            :disabled="false"
-                            placeholder="Name of the pipeline. Exmaple: worsica"
-                            v-model="pipelineName">
-                    </base-input>
-                    <span v-show="showErrorPipeline" style="color:red; font-size:12px;">This field is required.</span>
-                </div>
-                <div style="margin-top:3rem;margin-bottom:1rem;margin-left:20px;display:grid;">
-                  <div>
+                <div class="row" style="margin:0px 1rem 2rem 1rem;">
 
-                    <select class="custom-select col-md-6" id="sqacriteria" v-model='criteria' >
-                      <option value="default">Choose a criteria...</option>
-                      <option value="qc_style">qc_style</option>
-                      <option value="qc_coverage">qc_coverage</option>
-                      <option value="qc_functional">qc_functional</option>
-                      <option value="qc_security">qc_security</option>
-                      <option value="qc_doc">qc_doc</option>
-                    </select>
-                    <a style="margin-left: 2rem;text-decoration: underline;" v-show="show_link" :href="criteria_link" target="_blank">Criteria Information</a>
+                  <div class="col-12 col-md-6" >
+                    <base-input type="text" class="no-margin"
+                              label="Pipeline Name"
+                              :disabled="false"
+                              placeholder="Name of the pipeline. Exmaple: worsica"
+                              v-model="pipelineName">
+                      </base-input>
+                      <span v-show="showErrorPipeline" style="color:red; font-size:12px;">This field is required.</span>
                   </div>
-                  <span v-show="showErrorCriteria" style="color:red; font-size:12px;">You must select a valid criteria</span>
-                </div>
-                <div v-show="showSelect" style="margin-top:3rem;margin-bottom:1rem;margin-left:20px;display:grid;">
-                  <span>Select a repository</span>
-                  <select class="custom-select col-md-6" id="respository" v-model='repository' >
-                    <option value="default">Choose a repository...</option>
-                    <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="key">{{key}}</option>
-                  </select>
-                  <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
-                </div>
+                  <div class="col-12 col-md-6" style="display:grid;">
+                    <div>
+                      <label> Choose a criteria</label>
+                      <select class="custom-select" id="sqacriteria" v-model='criteria' >
+                        <option value="default">Select ...</option>
+                        <option value="qc_style">qc_style</option>
+                        <option value="qc_coverage">qc_coverage</option>
+                        <option value="qc_functional">qc_functional</option>
+                        <option value="qc_security">qc_security</option>
+                        <option value="qc_doc">qc_doc</option>
+                      </select>
+                      <div class="text-right">
+                        <a style="text-decoration: underline;" v-show="show_link" :href="criteria_link" target="_blank">Criteria Information</a>
 
-                <div v-show="showSelect" style="margin-top:1rem;margin-bottom:3rem;margin-left:20px;display:grid;">
-                  <span>Select a service</span>
-                  <select class="custom-select col-md-6" id="service" v-model='service' >
-                    <option value="default">Choose a service...</option>
-                    <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
-                  </select>
-                  <span v-show="showErrorService" style="color:red; font-size:12px;">You must select a service</span>
+                      </div>
+                    </div>
+                    <span v-show="showErrorCriteria" style="color:red; font-size:12px;">You must select a valid criteria</span>
+                  </div>
+                </div>
+                <div class="row" style="margin:0px 1rem 2rem 1rem;">
+
+                  <div v-show="showSelect" class="col-12 col-md-6" style="display:grid;">
+                    <span>Select a repository</span>
+                    <select class="custom-select" id="respository" v-model='repository' >
+                      <option value="default">Choose a repository...</option>
+                      <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="key">{{key}}</option>
+                    </select>
+                    <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
+                  </div>
+
+                  <div v-show="showSelect" class="col-12 col-md-6" style="display:grid;">
+                    <span>Select a service</span>
+                    <select class="custom-select" id="service" v-model='service' >
+                      <option value="default">Choose a service...</option>
+                      <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
+                    </select>
+                    <span v-show="showErrorService" style="color:red; font-size:12px;">You must select a service</span>
+                  </div>
                 </div>
               </template>
             </card>
@@ -188,10 +197,12 @@
   import jwtDecode from "jwt-decode"
   import YAML from 'json-to-pretty-yaml'
   import Mustache from 'mustache';
+  import Services from '../services/services'
   export default {
     components: {
       Card
     },
+    mixins: [Services],
     data () {
       return {
         pipelineName:'',
@@ -414,11 +425,19 @@
             if (obj.hasOwnProperty(key)) size++;
         }
         return size;
+      },
+      checkauthCallBack(response){
+        if(response.status == 401){
+           this.$router.push({name:"logout"})
+        }else{
+          this.username = response;
+        }
       }
 
 
     },
     created(){
+      this.checkauthCall(this.checkauthCallBack);
       console.log(this.$store.state.docker_compose.services)
       console.log(this.$store.state.config_yaml)
         this.pipelineName = this.$store.state.name

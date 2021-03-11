@@ -18,6 +18,10 @@
 				<i class="nc-icon nc-notes"></i>
 				<p>4. Actions</p>
 			</sidebar-link>
+			<sidebar-link to="/auth/pipeline-execution">
+				<i class="nc-icon nc-preferences-circle-rotate"></i>
+				<p>5. Pipeline Execution</p>
+			</sidebar-link>
       <hr style="background-color:rgba(255,255,255,0.6);">
       <sidebar-link to="/auth/select-option">
 				<i class="nc-icon nc-stre-left"></i>
