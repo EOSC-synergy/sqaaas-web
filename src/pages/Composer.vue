@@ -6,12 +6,12 @@
         <div class="col-12 col-md-10 col-lg-8 col-xl-6" style="margin:auto;padding:0px;">
           <card style="height:75vh;overflow-y: auto;">
             <template slot="header">
-              <h4 class="card-title text-center">DOCKER COMPOSE</h4>
+              <h4 class="card-title text-center">COMPOSER OPTIONS</h4>
             </template>
 
             <template>
               <!-- <div class="row"> -->
-                <base-input style="padding-left:20px;" type="text"
+                <base-input style="padding-left:20px;margin-bottom:0px;" type="text"
                           label="Docker Image"
                           :disabled="false"
                           placeholder="Name of the image used by the container. Example: worsica/worsica-backend"
@@ -28,7 +28,7 @@
 
 
               <!-- </div> -->
-              <base-input style="padding-left:20px;" type="text"
+              <base-input style="padding-left:20px;margin-bottom:0px;" type="text"
                         label="Container Name"
                         :disabled="false"
                         placeholder="Container name. Example: processing"
@@ -45,7 +45,7 @@
                   <div class="card-header" role="tab" id="accordionHeadingGeneral">
                     <div class="mb-0 row">
                       <div class="col-12 no-padding accordion-head">
-                        <a data-toggle="collapse" data-parent="#accordion_general" href="#accordionBodyGeneral" aria-expanded="false" aria-controls="accordionBodyGeneral"
+                        <a data-toggle="collapse" id='link_accordion' data-parent="#accordion_general" href="#accordionBodyGeneral" aria-expanded="false" aria-controls="accordionBodyGeneral"
                           class="collapsed ">
                           <i class="fa fa-angle-down" aria-hidden="true"></i>
                           <p>ADVANCED OPTIONS</p>
@@ -197,8 +197,8 @@
 
               <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;padding-left:20px;">
                   <span class="custom-label">Services</span>
-                <ul class="list-group">
-                  <li class="list-group-item d-flex justify-content-between"
+                <ul class="list-group" style="border:1px solid #ced4da;">
+                  <li class="list-group-item d-flex justify-content-between" style="border:none;"
                     v-for="(env,key) in services"
                     :key="key"
                   >
@@ -235,12 +235,13 @@
 </template>
 <script>
   import Card from 'src/components/Cards/Card.vue'
-  import jwtDecode from "jwt-decode"
   import YAML from 'json-to-pretty-yaml'
+  import Services from '../services/services'
   export default {
     components: {
       Card
     },
+    mixins: [Services],
     data () {
       return {
         username:'',
@@ -290,16 +291,13 @@
     },
     watch:{
       'service.image'(val){
-        if(val == ''){
-          this.showErrorImageName = true;
-        }else{
+        if(val != ''){
           this.showErrorImageName = false;
         }
       },
       'service.container_name'(val){
-        if(val == ''){
-          this.showErrorContName = true;
-        }else{
+        if(val != ''){
+          console.log('active')
           this.showErrorContName = false;
         }
       },
@@ -469,7 +467,7 @@
 
               //   }
               // },
-              image: this.service.image,
+              image:this.service.image,
               container_name: this.service.container_name,
               hostname: this.service.hostname,
               volumes: this.service.volumes,
@@ -477,6 +475,8 @@
               environment: this.service.envs
             }
           }else{
+            this.showErrorImageName = false;
+            this.showErrorContName = false;
             this.services[this.service.container_name]={
               //  image: {
               //   name: this.service.image,
@@ -487,7 +487,7 @@
 
               //   }
               // },
-              image: this.service.image,
+              image:this.service.image,
               container_name: this.service.container_name,
               hostname: this.service.hostname,
               volumes: this.service.volumes,
@@ -499,22 +499,26 @@
               this.showErrorCredID = true;
             }else{
               this.showErrorCredID = false;
-              this.services[this.service.container_name].image.registry.push = true;
-              this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
-              this.services[this.service.container_name].image.registry.url = this.url_service;
+              // this.services[this.service.container_name].image.registry.push = true;
+              // this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
+              // this.services[this.service.container_name].image.registry.url = this.url_service;
               this.showServices = true;
-              $("#select_service").append('<option value="'+this.service.container_name+'">'+this.service.container_name+'</option>');
-              $("#select_service").selectpicker("refresh");
+              // $("#select_service").append('<option value="'+this.service.container_name+'">'+this.service.container_name+'</option>');
+              // $("#select_service").selectpicker("refresh");
               this.disable_done = false;
               this.$store.state.docker_compose.services = this.services;
               this.cleanService();
             }
           }else{
               this.showServices = true;
-              $("#select_service").append('<option value="'+this.service.container_name+'">'+this.service.container_name+'</option>');
-              $("#select_service").selectpicker("refresh");
+              // $("#select_service").append('<option value="'+this.service.container_name+'">'+this.service.container_name+'</option>');
+              // $("#select_service").selectpicker("refresh");
               this.disable_done = false;
               this.$store.state.docker_compose.services = this.services;
+              if($('#accordionBodyGeneral').hasClass('show')){
+                $('#link_accordion').click();
+
+              }
               this.cleanService();
 
           }
@@ -568,10 +572,19 @@
             if (obj.hasOwnProperty(key)) size++;
         }
         return size;
+      },
+
+      checkauthCallBack(response){
+        if(response.status == 401){
+           this.$router.push({name:"logout"})
+        }else{
+          this.username = response;
+        }
       }
 
     },
     created(){
+      var _this = this;
       console.log(this.$store.state.docker_compose.services)
        var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
       if(sizeRepos == 0){
@@ -599,32 +612,14 @@
         }
       }
 
+      this.checkauthCall(this.checkauthCallBack);
 
-      var session = JSON.parse(localStorage.getItem("session"));
-      var token = session.user.access_token;
-      var decode = jwtDecode(token)
-      var _this = this
-      $.ajax({
-        url: this.env.url_user_info,
-        type: 'POST',
-        contentType: 'application/json',
-        headers: {
-          'Authorization': 'Bearer ' + token
-			},
-			success: function (result) {
-        // CallBack(result);
 
-        _this.username = result
-			},
-			error: function (error) {
-
-			}
-        });
       },
       mounted(){
         var _this = this
         this.$nextTick(function(){
-          $('#select_service').selectpicker();
+          // $('#select_service').selectpicker();
 
           $("input").on('click',function(){
            var array_name = []

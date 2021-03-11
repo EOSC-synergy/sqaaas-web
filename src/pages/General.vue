@@ -11,31 +11,34 @@
 
               <template>
                 <!-- <div class="col-12"> -->
-                  <div class="row"  style="padding-left:20px;margin-bottom:1rem;">
+                  <div class="col-12"  style="padding-left:20px;margin-bottom:1rem;">
 
-                    <base-input class="col-12" type="text"
+                    <base-input style="margin-bottom:0px;" type="text"
                               label="Repository Name"
                               :disabled="false"
                               placeholder="Identifier of the repository name. Example: worsica-processing"
                               v-model="repo.name"
                               >
                     </base-input>
+                    <div class="col-12 text-right">
+                      <span v-show="showErrorRepoName" style="color:red; font-size:12px;">This field is required.</span>
 
-
-
-                  <span v-show="showErrorRepoName" style="color:red; font-size:12px;">This field is required.</span>
+                    </div>
                   </div>
 
-                  <div class="row"  style="padding-left:20px;margin-bottom:1rem;">
+                  <div class="col-12"  style="padding-left:20px;">
 
-                    <base-input class="col-12" type="text"
+                    <base-input style="margin-bottom:0px;"  type="text"
                               label="Repository URL"
                               :disabled="false"
                               placeholder="The URL you can use to clone the project."
                               v-model="repo.url"
                               >
                     </base-input>
-                    <span v-show="showErrorRepoUrl" style="color:red; font-size:12px;">This field is required.</span>
+                    <div class="col-12 text-right">
+                      <span v-show="showErrorRepoUrl" style="color:red; font-size:12px;">This field is required.</span>
+
+                    </div>
 
                 </div>
 
@@ -96,8 +99,8 @@
 
                 <div v-show="showRepo" style="padding-top:20px;padding-left:20px;">
                   <span class="custom-label">Repositories</span>
-                  <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between"
+                  <ul class="list-group" style="border:1px solid #ced4da;">
+                    <li class="list-group-item d-flex justify-content-between" style="border:none;"
                       v-for="(repo,key) in config.all_repos"
                       :key="key"
                     >
@@ -174,8 +177,8 @@
                         </div>
                         <div v-show="showCred" style="padding-top:20px;margin-bottom:2rem;padding-left:30px;">
                           <span class="custom-label">Credentials</span>
-                          <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between"
+                          <ul class="list-group" style="border:1px solid #ced4da;">
+                            <li class="list-group-item d-flex justify-content-between" style="border:none;"
                               v-for="(cred,key) in all_credentials"
                               :key="key"
                             >
@@ -210,8 +213,8 @@
                       </div>
                       <div v-show="showEnv" style="padding-top:20px;margin-bottom:1rem;padding-left:30px;">
                         <span class="custom-label">Env Vars</span>
-                        <ul class="list-group">
-                          <li class="list-group-item d-flex justify-content-between"
+                        <ul class="list-group" style="border:1px solid #ced4da;">
+                          <li class="list-group-item d-flex justify-content-between" style="border:none;"
                             v-for="(env,key) in config.all_envs"
                             :key="key"
                           >
@@ -251,10 +254,12 @@
   import Card from 'src/components/Cards/Card.vue'
   import jwtDecode from "jwt-decode"
   import YAML from 'json-to-pretty-yaml'
+   import Services from '../services/services'
   export default {
     components: {
       Card
     },
+    mixins: [Services],
     data () {
       return {
         username:'',
@@ -534,11 +539,18 @@
             if (obj.hasOwnProperty(key)) size++;
         }
         return size;
+      },
+      checkauthCallBack(response){
+        if(response.status == 401){
+           this.$router.push({name:"logout"})
+        }else{
+          this.username = response;
+        }
       }
 
     },
     created(){
-
+       this.checkauthCall(this.checkauthCallBack);
       var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos)
       for (let i = 0; i < sizeRepos; i++) {
         this.config.all_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]=this.$store.state.config_yaml.config.project_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]
@@ -571,28 +583,7 @@
         this.showEnv = true
       }
 
-      var session = JSON.parse(localStorage.getItem("session"));
-      var token = session.user.access_token;
-      var decode = jwtDecode(token)
-      var _this = this
-
-      $.ajax({
-        url: this.env.url_user_info,
-        type: 'POST',
-        contentType: 'application/json',
-        headers: {
-          'Authorization': 'Bearer ' + token
-			},
-			success: function (result) {
-        // CallBack(result);
-
-        _this.username = result
-			},
-			error: function (error) {
-
-			}
-        });
-      },
+     },
       mounted(){
         this.$nextTick(function(){
           $('#select_service').selectpicker({

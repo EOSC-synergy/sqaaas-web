@@ -1,3 +1,4 @@
+import jwtDecode from "jwt-decode"
 export default {
   data(){
     return {
@@ -5,6 +6,28 @@ export default {
     }
   },
   methods: {
+      checkauthCall(callBackHandler){
+        var session = JSON.parse(localStorage.getItem("session"));
+        var token = session.user.access_token;
+        var decode = jwtDecode(token)
+        var _this = this
+        $.ajax({
+          url: this.env.url_user_info,
+          type: 'POST',
+          contentType: 'application/json',
+          headers: {
+            'Authorization': 'Bearer ' + token
+        },
+          success: function (result) {
+            // CallBack(result);
+            console.log("here")
+            callBackHandler(result)
+          },
+          error: function (error) {
+            callBackHandler(error)
+          }
+        });
+      },
       createPipelineCall(data, callBackHandler) {
           axios({
               method: 'post',
@@ -79,6 +102,42 @@ export default {
         });
 
 
-    }
+    },
+    getConfigCall(id,callBackHandler){
+         axios({
+          method: 'get',
+          url: this.env.api +'/'+id+'/config',
+        }).then(response => {
+            return callBackHandler(response);
+        })
+        .catch(error => {
+            return callBackHandler(error.response);
+        });
+
+    },
+    getComposerCall(id,callBackHandler){
+         axios({
+          method: 'get',
+          url: this.env.api +'/'+id+'/composer',
+        }).then(response => {
+            return callBackHandler(response);
+        })
+        .catch(error => {
+            return callBackHandler(error.response);
+        });
+
+    },
+    getJenkCall(id,callBackHandler){
+         axios({
+          method: 'get',
+          url: this.env.api +'/'+id+'/jenkinsfile',
+        }).then(response => {
+            return callBackHandler(response);
+        })
+        .catch(error => {
+            return callBackHandler(error.response);
+        });
+
+    },
   }
 }
