@@ -156,7 +156,7 @@
           </div>
         </div>
 
-        <!-- <div class="row">
+        <div class="row">
           <div class="col-12">
             <card class="strpied-tabled-with-hover"
                     body-classes=""
@@ -188,12 +188,8 @@
                       <div class="col-12" style="padding-top:2rem;padding-left:1rem;">
                         <button class="btn  btn-primary btn-simple" @click="downloadConfig()">Download</button>
                       </div>
-                      <div class="col-12" style="height:25vh;overflow-y: auto;">
-                        <code>
-                          <pre>
-                            {{yamlConfig}}
-                          </pre>
-                        </code>
+                      <div class="col-12" style="height:30vh;overflow-y: auto;">
+                         <editor editor-id="editorA" lang="yaml" :content="yamlConfig" v-on:change-content="changeContentA"></editor>
                       </div>
                     </div>
                     <div class="tab-pane" id="tabs-2" role="tabpanel">
@@ -201,12 +197,7 @@
                         <button class="btn  btn-primary btn-simple" @click="downloadComposer()">Download</button>
                       </div>
                       <div class="col-12" style="height:25vh;overflow-y: auto;">
-                        <pre>
-                          <code>
-                           {{yamlComposer}}
-                          </code>
-                        </pre>
-
+                          <editor editor-id="editorB" lang="yaml" :content="yamlComposer" v-on:change-content="changeContentA"></editor>
                       </div>
                     </div>
                     <div class="tab-pane" id="tabs-3" role="tabpanel">
@@ -214,18 +205,14 @@
                         <button class="btn  btn-primary btn-simple" @click="downloadJenkinsfile()">Download</button>
                       </div>
                       <div class="col-12" style="height:25vh;overflow-y: auto;">
-                        <pre>
-                          <code>
-                           {{yamlJenkinsfile}}
-                          </code>
-                        </pre>
+                          <editor editor-id="editorC" lang='json' :content="yamlJenkinsfile" ></editor>
                       </div>
                     </div>
                   </div>
                 </template>
             </card>
           </div>
-        </div> -->
+        </div>
 
 
 
@@ -270,11 +257,13 @@
   import LTable from 'src/components/Table.vue'
   import Card from 'src/components/Cards/Card.vue'
   import Services from 'src/services/services.js'
-  import FileSaver from 'file-saver'
+  import FileSaver from 'file-saver';
+  import Editor from './AceEditor'
   export default {
     components: {
 		LTable,
-		Card
+		Card,
+    'editor': Editor,
     },
     mixins: [Services],
     data () {
@@ -305,7 +294,8 @@
         disable_status: true,
         yamlConfig:'',
         yamlComposer:'',
-        yamlJenkinsfile:''
+        yamlJenkinsfile:'',
+        editor: ''
 		}
     },
     watch:{
@@ -316,6 +306,9 @@
       }
     },
     methods:{
+      changeContentA (val) {
+    	console.log(val)
+    },
       deletePipeline(){
         this.loading = true;
           this.deletePipelineCall(this.pipeline_id,this.deletePipelineCallBack)
@@ -571,8 +564,8 @@
       getJenkCallBack(response){
         console.log(response)
         if(response.status == 200){
-           this.yamlJenkinsfile= response.data;
-        }
+          this.yamlJenkinsfile= JSON.stringify(response.data, null, '\t');
+          }
       },
       download(filename, text) {
           var element = document.createElement('a');
@@ -588,6 +581,12 @@
         },
       downloadConfig(){
           this.download("Config.yaml",this.yamlConfig)
+      },
+      downloadComposer(){
+          this.download("docker-compose.yaml",this.yamlComposer)
+      },
+      downloadJenkinsfile(){
+          this.download("Jenkinsfile",this.yamlJenkinsfile)
       },
       // syntaxHighlight(json) {
       //   json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -615,11 +614,11 @@
     var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
     if(sizeCriteria == 0){
       this.notifyVue("Error", "You must add at least one sqa criteria.",'nc-icon nc-simple-remove','danger')
-      this.$router.push({name:"SQACriteria"})
+      // this.$router.push({name:"SQACriteria"})
     }
 
     this.pipeline_id = this.$store.state.pipeline_id;
-    // this.pipeline_id = "4e46b117-fe19-4336-9d9b-e62eb715092b"
+    this.pipeline_id = "c6d79449-98d7-476c-89ea-addf082a1c05"
 
     this.getConfigCall(this.pipeline_id,this.getConfigCallBack);
     this.getComposerCall(this.pipeline_id,this.getComposerCallBack);
@@ -648,6 +647,17 @@
         this.showStatus = true;
         this.disable_status = false;
       }
+  },
+  mounted(){
+    // this.editor = window.ace.edit("editorYaml");
+    // this.editor.setTheme("ace/theme/monokai");
+    // this.editor.getSession().setMode("ace/mode/javascript");
+    // this.editor.setValue('Hello')
+  //     this.editor.getSession().setValue(`key:
+  //   - 1
+  // test: 2`)
+
+  console.log(this.editor)
   }
 }
 </script>
