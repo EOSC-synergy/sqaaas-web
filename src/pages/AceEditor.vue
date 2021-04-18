@@ -4,10 +4,11 @@
 
 
 <script>
+ import YAML from 'json-to-pretty-yaml'
 
 export default ({
   name:'Editor',
-  props: ['editorId', 'content', 'lang', 'theme'],
+  props: ['editorId', 'content', 'lang', 'theme','resize'],
   data () {
     return {
       editor: Object,
@@ -17,18 +18,29 @@ export default ({
   watch: {
     'content' (value) {
     	if (this.beforeContent !== value) {
-      	this.editor.setValue(value, 1)
+        if(value.content){
+          this.editor.setValue(value.content, 1)
+
+        }else{
+          this.editor.setValue(value, 1)
+
+        }
       }
+    },
+    'resize' (value){
+      console.log(value)
+      window.ace.resize(true)
     }
   },
   mounted () {
   	const lang = this.lang || 'text'
     const theme = this.theme || 'github'
 
+    console.log(this.content)
+    console.log(this.editorId)
 		this.editor = window.ace.edit(this.editorId)
-    this.editor.setValue(this.content, 1)
+    this.editor.setValue(this.content,1)
     this.editor.setReadOnly(true);
-
 
     // mode-xxx.js or theme-xxx.jsがある場合のみ有効
     this.editor.getSession().setMode(`ace/mode/${lang}`)

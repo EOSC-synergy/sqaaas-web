@@ -40,6 +40,19 @@ export default {
               return callBackHandler(error.response);
           });
       },
+      updatePipelineCall(id, data,callBackHandler) {
+          axios({
+              method: 'put',
+              url: this.env.api+id,
+              data:data
+
+          }).then(response => {
+              return callBackHandler(response);
+          })
+          .catch(error => {
+              return callBackHandler(error.response);
+          });
+      },
       deletePipelineCall(data, callBackHandler) {
           axios({
               method: 'delete',
@@ -106,7 +119,7 @@ export default {
     getConfigCall(id,callBackHandler){
          axios({
           method: 'get',
-          url: this.env.api +'/'+id+'/config',
+          url: this.env.api +'/'+id+'/config/jepl',
         }).then(response => {
             return callBackHandler(response);
         })
@@ -118,7 +131,7 @@ export default {
     getComposerCall(id,callBackHandler){
          axios({
           method: 'get',
-          url: this.env.api +'/'+id+'/composer',
+          url: this.env.api +'/'+id+'/composer/jepl',
         }).then(response => {
             return callBackHandler(response);
         })
@@ -130,7 +143,7 @@ export default {
     getJenkCall(id,callBackHandler){
          axios({
           method: 'get',
-          url: this.env.api +'/'+id+'/jenkinsfile',
+          url: this.env.api +'/'+id+'/jenkinsfile/jepl',
         }).then(response => {
             return callBackHandler(response);
         })

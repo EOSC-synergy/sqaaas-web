@@ -137,7 +137,7 @@
                               v-for="(env,key) in service.envs"
                               :key="key"
                             >
-                            {{key}}:{{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnvCompose(key)"><i class="fa fa-minus"></i></button></span>
+                            {{key}} : {{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnvCompose(key)"><i class="fa fa-minus"></i></button></span>
 
                             </li>
 
@@ -151,11 +151,10 @@
                     </div>
 
 
-                    <div class="row" v-show='push_image.yes' style="padding-left:10px;margin-bottom: 2rem;">
+                    <div class="row" v-show='push_image.yes == true' style="padding-left:10px;margin-bottom: 2rem;">
                       <div class="col-12" style="padding-left:30px;padding-right:30px;">
-                        <p style="color:red;text-align:justify" >Attention: Before proceeding you will need to provide the ID of the credentials created in Jenkins or <a target="blank" href="https://jenkins.eosc-synergy.eu/"> go now</a> and create them. </p>
-                        <!-- <div>
-                          <label style="display: block;margin-top: 2rem;">Select service</label>
+                        <p style="color:#C79804;text-align:justify" ><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Before proceeding you will need to provide the ID of the credentials created in Jenkins or <a target="blank" href="https://jenkins.eosc-synergy.eu/"> go now</a> and create them. You also need to provide the path to a Dockerfile. </p>
+                        <div>
                           <select class="selectpicker" id="select_service"  multiple title="Please select ..." >
                             <option value="" selected disabled>Please select</option>
                             <option :value="index" v-for="(service, index) in $store.state.docker_compose.services" :key="index">
@@ -163,7 +162,7 @@
                             </option>
 
                           </select>
-                        </div> -->
+                        </div>
                         <div style="margin-top:2rem;padding-left:0px;padding-right:0px;" class="col-12 col-md-12 text-left">
                           <base-input type="text" class="no-margin"
                                 label="Enter the ID of the Jenkins credentials."
@@ -174,18 +173,70 @@
                           <div class="col-12 text-right">
                               <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
                           </div>
-                          <base-input style="padding-top:1rem;" type="text" class="no-margin"
+                           <base-input style="padding-top:1rem;" type="text" class="no-margin"
                                 label="Enter the url of the registry"
                                 :disabled="false"
-                                placeholder="userpass"
+                                placeholder=""
                                 v-model="url_service">
                           </base-input>
+                          <base-input style="padding-top:1rem;" type="text" class="no-margin"
+                                label="Path to Dockerfile"
+                                :disabled="false"
+                                placeholder="./"
+                                v-model="path_dockerfile">
+                          </base-input>
+                           <div class="col-12 text-right">
+                              <span v-show="showErrorPathDockerfile" style="color:red;font-size:12px;">This field is required</span>
+                          </div>
+                          <base-input style="padding-top:1rem;" type="text" class="no-margin"
+                                label="context (optional)"
+                                :disabled="false"
+                                placeholder="./"
+                                v-model="context">
+                          </base-input>
+                          <!-- <base-input style="padding-top:1rem;" type="text" class="no-margin"
+                                label="cache_from (optional)"
+                                :disabled="false"
+                                placeholder="cache_from"
+                                v-model="cache">
+                          </base-input> -->
+                           <label for="" style="padding-top:20px;">ARG (OPTIONAL)</label>
+                          <div class="row" >
 
+
+                            <base-input class="col-12 col-md-5" type="text"
+                                  label="Key"
+                                  :disabled="false"
+                                  placeholder="Debug"
+                                  v-model="arg.key">
+                            </base-input>
+                            <base-input class="col-12 col-md-5" type="text"
+                                  label="value"
+                                  :disabled="false"
+                                  placeholder="1"
+                                  v-model="arg.value">
+                            </base-input>
+
+
+                            <div style="margin-bottom:10px;width:95%;padding-top:30px;" class="text-right col-12 col-md-2">
+                              <button type="button" class="btn-simple btn btn-xs btn-info" @click="addArg()"><i class="fa fa-plus"></i>ADD</button>
+                            </div>
+                          </div>
+                          <div v-show="showArg" style="padding-top:20px;padding-bottom:20px;">
+                            <!-- <span class="custom-label">Env Vars</span> -->
+                            <ul class="list-group">
+                              <li class="list-group-item d-flex justify-content-between"
+                                v-for="(env,key) in arg_push"
+                                :key="key"
+                              >
+                              {{key}} : {{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeArg(key)"><i class="fa fa-minus"></i></button></span>
+
+                              </li>
+
+                            </ul>
+                          </div>
                         </div>
-
                       </div>
-
-
                     </div>
                   </div>
                 </div>
@@ -196,16 +247,21 @@
               </div>
 
               <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;padding-left:20px;">
-                  <span class="custom-label">Services</span>
+                <div class="row" style="padding: 0.75rem 1.25rem;">
+                    <span class="custom-label col-4">Services</span>
+                    <span class="custom-label text-right col-4">Remove</span>
+                    <span class="custom-label text-right col-4" style="padding-right: 40px;">Push</span>
+
+                </div>
                 <ul class="list-group" style="border:1px solid #ced4da;">
                   <li class="list-group-item d-flex justify-content-between" style="border:none;"
                     v-for="(env,key) in services"
                     :key="key"
                   >
-                    {{key}}
-                  <div class="row">
-                    <span><button type="button" title="Remove Service" class="btn-simple btn btn-xs btn-info" @click="removeService(key)"><i class="fa fa-minus"></i></button></span>
-                    <!-- <base-checkbox title= "Push images" disabled="true" :checked="($store.state.docker_compose.services[key].image.registry.push == true) ? true : false" style="top: -5px;" :id="'service_'+ key" name="workpace"></base-checkbox> -->
+                  <div class="row col-12" style="padding:0px">
+                    <span class="col-4">{{key}}</span>
+                    <span class="col-4 text-right"><button type="button" title="Remove Service" class="btn-simple btn btn-xs btn-info" @click="removeService(key)"><i class="fa fa-minus"></i></button></span>
+                    <base-checkbox class="col-4 text-right" title= "Push images" disabled="true" :checked="($store.state.docker_compose.services[key] && $store.state.docker_compose.services[key].image.registry.push == true) ? true : false" style="top: -5px;" :id="'service_'+ key" name="workpace"></base-checkbox>
                   </div>
 
                   </li>
@@ -248,6 +304,7 @@
         oneshot: false,
         showVolumes:false,
         showEnvCompose:false,
+        showArg:false,
         showServices:false,
         showErrorCredID:false,
         disable_done:true,
@@ -255,6 +312,7 @@
         checked: true,
         id_cred_service:'',
         showErrorImageName: false,
+        showErrorPathDockerfile: false,
         showErrorContName: false,
         url_service:'https://hub.docker.com/',
         service:{
@@ -276,6 +334,10 @@
           key:'',
           value:''
         },
+        arg:{
+          key:'',
+          value:''
+        },
         services:{},
         volume:{
           type:'bind',
@@ -284,6 +346,10 @@
         },
         volumes:{},
         count:0,
+        cache:'',
+        context:'',
+        path_dockerfile:'',
+        arg_push:{}
 
 
 
@@ -295,34 +361,23 @@
           this.showErrorImageName = false;
         }
       },
+       'path_dockerfile'(val){
+        if(val != ''){
+          this.showErrorPathDockerfile = false;
+        }
+      },
       'service.container_name'(val){
         if(val != ''){
-          console.log('active')
           this.showErrorContName = false;
         }
       },
       'id_cred_service'(val){
         if(val != ''){
           this.showErrorCredID = false;
-          var all_services = [];
-          all_services = Object.keys(this.$store.state.docker_compose.services);
-          for (let i = 0; i < all_services.length; i++) {
-            var service_name = all_services[i]
-            this.$store.state.docker_compose.services[service_name].image.registry.credential_id = this.id_cred_service;
-          }
-        }else{
-          this.showErrorCredID = true;
-
         }
       },
       'url_service'(val){
         if(val != ''){
-          var all_services = [];
-          all_services = Object.keys(this.$store.state.docker_compose.services);
-          for (let i = 0; i < all_services.length; i++) {
-            var service_name = all_services[i]
-            this.$store.state.docker_compose.services[service_name].image.registry.url = this.url_service;
-          }
         }
       },
       'envComposeYesNo.yes'(val){
@@ -343,16 +398,13 @@
       },
       'push_image.yes'(val){
         if(val==true){
-
           this.push_image.no = false;
         }else{
-
           this.push_image.no = true;
         }
       },
       'push_image.no'(val){
          if(val==true){
-
           this.push_image.yes = false;
         }else{
           this.push_image.yes = true;
@@ -362,25 +414,14 @@
     },
     methods:{
        next(){
-         if(this.push_image.yes == true){
-           if(this.id_cred_service == ''){
-            this.showErrorCredID = true;
-            }else{
-              this.showErrorCredID = false;
-              this.$router.push({name: 'SQACriteria'});
-            }
-         }else{
-           this.showErrorCredID = false;
-           this.$router.push({name: 'SQACriteria'});
-         }
-
+         this.$router.push({name: 'SQACriteria'});
       },
       back(){
          this.$router.push({name: 'general'});
       },
       track(){
         this.$ga.event('button','add','repository',0)
-        console.log(this.$ga)
+        // console.log(this.$ga)
       },
       notifyVue (message) {
 
@@ -402,7 +443,6 @@
 				var value = this.envCompose.value.replace(" ", "")
         envVars[key]=value
         this.service.envs[key]= value
-        console.log(this.service.envs)
         this.showEnvCompose = true;
         this.cleanEnvCompose()
 
@@ -446,6 +486,26 @@
         this.volume.source = '';
         this.volume.target = '';
       },
+      addArg(){
+        var key= this.arg.key.replace(" ", "")
+				var value = this.arg.value.replace(" ", "")
+        console.log(key,value)
+        this.arg_push[key]= value
+        console.log(this.arg_push)
+        this.showArg = true;
+        this.cleanArg()
+
+      },
+      removeArg(item){
+        this.$delete(this.arg_push,item)
+        if (this.isEmpty(this.arg_push)) {
+          this.showArg = false;
+        }
+      },
+      cleanArg(){
+        this.arg.key = '';
+        this.arg.value = '';
+      },
       addService(){
         if(this.service.image == '' || this.service.container_name == ''){
           if(this.service.container_name == ''){
@@ -455,20 +515,23 @@
             this.showErrorImageName =  true;
           }
 
-        }else{
+         }else{
           if(this.oneshot== true){
             this.services[this.service.container_name]={
-              // image: {
-              //   name: this.service.image,
-              //   registry:{
-              //     url: '',
-              //     push: false,
-              //     credential_id:''
+              image: {
+                name: this.service.image,
+                registry:{
+                  url: '',
+                  push: false,
+                  credential_id:''
 
-              //   }
-              // },
-              image:this.service.image,
-              container_name: this.service.container_name,
+                }
+              },
+              build:{
+                  dockerfile:'',
+                  context: '',
+                  args: {}
+              },
               hostname: this.service.hostname,
               volumes: this.service.volumes,
               command: 'sleep infinity',
@@ -478,35 +541,47 @@
             this.showErrorImageName = false;
             this.showErrorContName = false;
             this.services[this.service.container_name]={
-              //  image: {
-              //   name: this.service.image,
-              //   registry:{
-              //     url: '',
-              //     push: false,
-              //     credential_id:''
+               image: {
+                name: this.service.image,
+                registry:{
+                  url: '',
+                  push: false,
+                  credential_id:''
 
-              //   }
-              // },
-              image:this.service.image,
-              container_name: this.service.container_name,
+                }
+              },
+              build:{
+                  dockerfile:'',
+                  context: '',
+                  args: {}
+              },
               hostname: this.service.hostname,
               volumes: this.service.volumes,
               environment: this.service.envs
             }
           }
           if(this.push_image.yes == true){
-            if(this.id_cred_service == ""){
+             if(this.id_cred_service == ""){
               this.showErrorCredID = true;
+            }else if(this.path_dockerfile == ""){
+              this.showErrorPathDockerfile = true;
             }else{
               this.showErrorCredID = false;
-              // this.services[this.service.container_name].image.registry.push = true;
-              // this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
-              // this.services[this.service.container_name].image.registry.url = this.url_service;
+              this.showErrorPathDockerfile = false;
+              this.services[this.service.container_name].image.registry.push = true;
+              this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
+              this.services[this.service.container_name].image.registry.url = this.url_service;
+              this.services[this.service.container_name].build.dockerfile = this.path_dockerfile;
+              this.services[this.service.container_name].build.context = this.context;
+              this.services[this.service.container_name].build.args = this.arg_push;
               this.showServices = true;
               // $("#select_service").append('<option value="'+this.service.container_name+'">'+this.service.container_name+'</option>');
               // $("#select_service").selectpicker("refresh");
               this.disable_done = false;
               this.$store.state.docker_compose.services = this.services;
+              if($('#accordionBodyGeneral').hasClass('show')){
+                $('#link_accordion').click();
+              }
               this.cleanService();
             }
           }else{
@@ -517,10 +592,8 @@
               this.$store.state.docker_compose.services = this.services;
               if($('#accordionBodyGeneral').hasClass('show')){
                 $('#link_accordion').click();
-
               }
               this.cleanService();
-
           }
         }
       },
@@ -558,6 +631,15 @@
         if (this.isEmpty(this.service.volumes)) {
           this.showVolumes = false;
         }
+
+        this.path_dockerfile = '';
+        this.context = '';
+        this.cleanArg();
+        this.arg_push = {};
+        this.showArg = false;
+        this.url_service = '';
+        this.id_cred_service = '';
+        this.showErrorCredID = false;
       },
       isEmpty(obj) {
         for(var key in obj) {
@@ -585,7 +667,6 @@
     },
     created(){
       var _this = this;
-      console.log(this.$store.state.docker_compose.services)
        var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
       if(sizeRepos == 0){
         this.notifyVue("Error you must add at least one repository",'nc-icon nc-simple-remove','danger')

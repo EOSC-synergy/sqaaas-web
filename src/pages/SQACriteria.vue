@@ -13,7 +13,7 @@
                   <div class="col-12 col-md-6" >
                     <base-input type="text" class="no-margin"
                               label="Pipeline Name"
-                              :disabled="false"
+                              :disabled="$store.state.pipeline_id != ''"
                               placeholder="Name of the pipeline. Exmaple: worsica"
                               v-model="pipelineName">
                       </base-input>
@@ -58,16 +58,8 @@
                     <span v-show="showErrorService" style="color:red; font-size:12px;">You must select a service</span>
                   </div>
                 </div>
-              </template>
-            </card>
-
-            <div class="row">
-              <div class="col-md-6">
-                <card style="height:33vh;overflow-y: auto;" >
-                  <template slot="header">
-                    <h4 class="card-title text-center">Tox Tool</h4>
-                  </template>
-                  <div class="row">
+                <h4 class="card-title text-center">Tox Tool</h4>
+                <div class="row">
                     <div class="col-12 col-md-6">
 
                       <base-input type="text" class="col-10 no-margin"
@@ -94,32 +86,23 @@
 
                     </div>
 
-                  </div>
-                  <div v-show="show_tool_tox" style="padding-top:20px;margin-bottom:2rem;">
-                    <span class="custom-label">Test Env</span>
+                </div>
+                <div v-show="show_tool_tox" style="padding-top:20px;margin-bottom:2rem;">
+                  <span class="custom-label">Test Env</span>
 
-                    <ul class="list-group">
-                      <li style="padding-left:40px;" class="list-group-item d-flex justify-content-between"
-                        v-for="(env,key) in testenv"
-                        :key="key"
-                      >
-                      {{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removetestEnv(key)"><i class="fa fa-minus"></i></button></span>
+                  <ul class="list-group">
+                    <li style="padding-left:40px;" class="list-group-item d-flex justify-content-between"
+                      v-for="(env,key) in testenv"
+                      :key="key"
+                    >
+                    {{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removetestEnv(key)"><i class="fa fa-minus"></i></button></span>
 
-                      </li>
+                    </li>
 
-                    </ul>
-                  </div>
-
-                  <template>
-                  </template>
-                </card>
-              </div>
-              <div class="col-md-6">
-                <card style="height:33vh;overflow-y: auto;">
-                  <template slot="header">
-                    <h4 class="card-title text-center">Add Comands</h4>
-                  </template>
-                  <div class="row">
+                  </ul>
+                </div>
+                <h4 class="card-title text-center">Add Comands</h4>
+                <div class="row">
                     <div class="display:grid;">
                       <base-input style="padding-left:40px;" type="text" class="no-margin"
                               label="Command"
@@ -148,27 +131,178 @@
 
                     </ul>
                   </div>
-                  <template>
-                  </template>
-                </card>
-              </div>
-            </div>
+                  <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
+                  <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
+                </div>
+              </template>
+            </card>
+
+
             <card>
               <template slot="header">
                 <!-- <h4 class="card-title text-center">ADD Criteria</h4> -->
               </template>
-                <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
+                <!-- <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
                   <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
-                </div>
+                </div> -->
               <template>
                 <div v-show="showCriteria" style="padding-top:20px;margin-bottom:2rem;">
-                    <span class="custom-label">Criterias</span>
+                    <span class="custom-label">Configured Criterias</span>
+
+                    <div class="table-responsive">
+                    <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Criteria</th>
+                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repos</th>
+                            <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Customize Workspace</th>
+                            <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
+                        </thead>
+                        <tbody v-for="(repo, index) in selected_criteria" :key="index">
+                                <tr
+                                    style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                    <td
+                                        style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        <div style="text-align:left;">
+                                            {{index}}
+                                        </div>
+                                    </td>
+                                    <td
+                                        style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        {{Object.keys(repo.repos)}}
+                                    </td>
+                                    <td
+                                        style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        <base-checkbox name="workpace" @input="customize_criteria(index)"></base-checkbox>
+                                    </td>
+                                    <td
+                                        style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCriteria(key)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                  <div :id="'criteria_'+index" class="row col-12" style="padding-top:20px;display:none;">
+                                    <div class="col-12 col-md-4" style="padding-top:28px;">
+                                      <select class="custom-select" :id="'select_when_'+index" @change="selectWhen(index)">
+                                        <!-- <option value="default"></option> -->
+                                        <option value="branch">branch</option>
+                                        <!-- <option value="tag">tag</option> -->
+                                        <option value="building_tag">building tag</option>
+                                      </select>
+
+
+                                    </div>
+                                    <!-- <div class="col-12 col-md-4" style="padding-top:28px;">
+                                      <select class="custom-select" :id="'select_comp_'+key" >
+                                        <option value="default"></option>
+                                        <option value="anyOf">anyOf</option>
+                                        <option value="allOf">allOf</option>
+                                        <option value="not">not</option>
+                                      </select>
+                                    </div> -->
+                                    <div class="col-12 col-md-4">
+                                      <div class="row">
+                                        <div class="display:grid;">
+                                          <base-input type="text"  class="no-margin"
+                                                  :label="'Branch'"
+                                                  placeholder="master"
+                                                  :id="'select_branch_'+key"
+                                                  @input="getBranch(key)"
+                                                  v-model="branches[key]"
+                                                  >
+                                          </base-input>
+                                          <span v-show="showErrorCommand" style="color:red; font-size:12px;">This field is required</span>
+
+                                        </div>
+                                        <!-- <div style="padding-top:30px;">
+                                          <button type="button" :id="'button_branch_'+key" class="btn-simple btn btn-xs btn-info" @click="addExecute(key)"><i class="fa fa-plus"></i>ADD</button>
+                                        </div> -->
+
+
+                                      </div>
+                                    </div>
+
+
+                                  </div>
+
+                                </tr>
+
+                        </tbody>
+                    </table>
+                    </div>
+
+
+
                     <ul class="list-group">
-                      <li class="list-group-item d-flex justify-content-between"
+                      <li class=" row list-group-item d-flex justify-content-between" style="margin-left:20px;margin-right:20px;"
                         v-for="(val,key) in selected_criteria"
                         :key="key"
                       >
-                      {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCriteria(key)"><i class="fa fa-minus"></i></button></span>
+                        <div class="row col-12" style="width:100%;">
+                          <div class="col-12 col-md-6 row">
+                            <div class="col-12 col-md-6">
+                              <span style="width:50%;">{{key}}</span>
+                              <span style="width:50%;">{{key['repos']}}</span>
+
+                            </div>
+                            <div class="col-12 col-md-6 text-right">
+                              <span style="width:50%;">
+                                <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCriteria(key)"><i class="fa fa-minus"></i>
+                                </button>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="col-12 col-md-6" style="display: flex;justify-content: flex-end;">
+                            <span class="custom-label">Customize when execute?</span><base-checkbox name="workpace" @input="customize_criteria(key)"></base-checkbox>
+
+                          </div>
+
+                        </div>
+
+                        <div :id="'criteria_'+key" class="row col-12" style="padding-top:20px;display:none;">
+                          <div class="col-12 col-md-4" style="padding-top:28px;">
+                            <select class="custom-select" :id="'select_when_'+key" @change="selectWhen(key)">
+                              <!-- <option value="default"></option> -->
+                              <option value="branch">branch</option>
+                              <!-- <option value="tag">tag</option> -->
+                              <option value="building_tag">building tag</option>
+                            </select>
+
+
+                          </div>
+                          <!-- <div class="col-12 col-md-4" style="padding-top:28px;">
+                            <select class="custom-select" :id="'select_comp_'+key" >
+                              <option value="default"></option>
+                              <option value="anyOf">anyOf</option>
+                              <option value="allOf">allOf</option>
+                              <option value="not">not</option>
+                            </select>
+                          </div> -->
+                          <div class="col-12 col-md-4">
+                            <div class="row">
+                              <div class="display:grid;">
+                                <base-input type="text"  class="no-margin"
+                                        :label="'Branch'"
+                                        placeholder="master"
+                                        :id="'select_branch_'+key"
+                                        @input="getBranch(key)"
+                                        v-model="branches[key]"
+                                        >
+                                </base-input>
+                                <span v-show="showErrorCommand" style="color:red; font-size:12px;">This field is required</span>
+
+                              </div>
+                              <!-- <div style="padding-top:30px;">
+                                <button type="button" :id="'button_branch_'+key" class="btn-simple btn btn-xs btn-info" @click="addExecute(key)"><i class="fa fa-plus"></i>ADD</button>
+                              </div> -->
+
+
+                            </div>
+                          </div>
+
+
+                        </div>
 
                       </li>
 
@@ -233,6 +367,11 @@
         showErrorEnv:false,
         showErrorPipeline:false,
         disable_done: true,
+        when_types:false,
+        cust_exec:false,
+        branches:[],
+        store_criteria:{},
+        criterias_store:{}
 
       }
     },
@@ -273,7 +412,120 @@
         }
     },
     methods:{
+      getBranch(item){
+        console.log($('#select_branch_'+item).val())
+        this.criterias_store[item]={
+          building_tag: false,
+          pattern:$('#select_branch_'+item).val()
+        }
+        // this.$store.state.config_yaml.sqa_criteria[item]['when']={
+
+        //     'branch':{
+        //       "pattern": $('#select_branch_'+item).val()
+        //     },
+        //     'building_tag':false,
+
+        // };
+        // console.log(this.$store.state.config_yaml.sqa_criteria)
+        console.log(this.criterias_store)
+      },
+      // addExecute(item){
+      //    if($('#select_when_'+item).val() == 'branch'){
+      //     var branch = {
+      //       comparator: $('#select_comp_'+item).val(),
+      //       type: 'branch'
+      //     }
+      //     var branch_name =  $('#select_branch_'+item).val();
+      //     this.$store.state.config_yaml.sqa_criteria[item]['when']['branch'][branch_name] = branch;
+      //    }
+      //   console.log( this.$store.state.config_yaml.sqa_criteria[item])
+      // },
+      selectWhen(item){
+        console.log(item)
+        if($('#select_when_'+item).val() == 'building_tag'){
+          $('#select_comp_'+item).prop('disabled', true);
+          $('#select_branch_'+item).prop('disabled', true);
+          $('#button_branch_'+item).prop('disabled', true);
+          // this.criterias.when.building_tag = true;
+          // for(var i in _this.store_criteria ){
+          //   console.log(_this.store_criteria[i])
+          //   if(i == item){
+          //     console.log('here')
+          //     // this.store_criteria[i].when.building_tag = true
+          //     // this.store_criteria[i]={}
+          //     _this.store_criteria[item]['when']={
+          //       'building_tag':true
+          //     }
+          //   }
+          // }
+          this.criterias_store[item]={
+            'building_tag': true,
+            'pattern': ''
+          }
+          // if(this.$store.state.config_yaml.sqa_criteria[item]){
+          //   // this.$store.state.config_yaml.sqa_criteria[item]['when']['building_tag']=true
+          //   this.$store.state.config_yaml.sqa_criteria[item]['when']={
+          //       'branch':{
+          //         "pattern": ""
+          //       },
+          //       'building_tag':true,
+          //   };
+          // }
+          console.log(this.criterias_store)
+
+        }else{
+            $('#select_comp_'+item).prop('disabled', false);
+            $('#select_branch_'+item).prop('disabled', false);
+            $('#button_branch_'+item).prop('disabled', false);
+              this.criterias_store[item]={
+              'building_tag': false,
+              'pattern': ''
+            }
+            // if(this.$store.state.config_yaml.sqa_criteria[item]){
+            //   this.$store.state.config_yaml.sqa_criteria[item]['when']={
+            //       'branch':{
+            //         "pattern": ""
+            //       },
+            //       'building_tag':false,
+            //   };
+            // }
+        }
+      },
+      customize_criteria(key){
+        console.log(this.$store.state.config_yaml.sqa_criteria)
+        $('#criteria_'+key).toggleClass('open-criteria',500);
+
+        // if($('#criteria_'+key).hasClass('open-criteria') == false){
+        //     this.$store.state.config_yaml.sqa_criteria[key]['when']={
+        //           'branch':{
+        //             "pattern": ""
+        //           },
+        //           'building_tag':false,
+        //       };
+        // }
+
+      },
        next(){
+         console.log(this.criterias_store)
+        //  console.log(this.$store.state.config_yaml.sqa_criteria)
+
+         for(const index in this.criterias_store ){
+           console.log(index)
+           if(Object.hasOwnProperty.call(this.$store.state.config_yaml.sqa_criteria, index)){
+             this.$store.state.config_yaml.sqa_criteria[index]['when'] = Object.assign({},this.$store.state.config_yaml.sqa_criteria[index]['when'], {
+               building_tag: this.criterias_store[index].building_tag,
+               branch:{
+                 pattern:this.criterias_store[index].pattern
+               } })
+            //  this.$store.state.config_yaml.sqa_criteria[i]['when']['building_tag']= this.criterias_store[i].building_tag
+            //  this.$store.state.config_yaml.sqa_criteria[i]['when']['branch']['pattern']= this.criterias_store[i].pattern
+            console.log(this.criterias_store[index].building_tag,this.criterias_store[index].pattern)
+            console.log(this.$store.state.config_yaml.sqa_criteria[index])
+           }
+
+
+          }
+          console.log(this.$store.state.config_yaml.sqa_criteria)
          this.$router.push({name: 'Files'});
       },
       back(){
@@ -345,14 +597,31 @@
                 tox
           }
 
-          this.repos.repos[this.repository]=repo
+          this.repos.repos[this.repository]=Object.assign({},repo)
           this.selected_criteria[this.criteria]=this.repos
-          this.$store.state.config_yaml.sqa_criteria = this.selected_criteria;
+          // console.log(this.selected_criteria)
+          // this.store_criteria = this.selected_criteria;
+          // var _this = this
+          // setTimeout(function(){
+          //   _this.selectWhen(_this.criteria);
+
+          // },200)
+          this.$store.state.config_yaml.sqa_criteria[this.criteria] = Object.assign({}, this.$store.state.config_yaml.sqa_criteria[this.criteria], this.repos)
+          // // if(this.$store.state.config_yaml.sqa_criteria[this.criteria]['when'] == undefined){
+            this.$store.state.config_yaml.sqa_criteria[this.criteria]['when']={
+              branch:{
+                pattern:''
+              },
+              building_tag:false
+            }
+
+          // }
           this.$store.state.name = this.pipelineName;
           this.commands=[];
           this.tox.file='';
           this.testenv=[];
-
+          // console.log(this.$store.state.config_yaml.sqa_criteria)
+          console.log( this.$store.state.config_yaml.sqa_criteria)
         }
       },
       removeCriteria(key){
@@ -437,35 +706,36 @@
 
     },
     created(){
+
       this.checkauthCall(this.checkauthCallBack);
-      console.log(this.$store.state.docker_compose.services)
-      console.log(this.$store.state.config_yaml)
-        this.pipelineName = this.$store.state.name
-        var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
-        var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
-        if(sizeRepos == 0 || sizeServices == 0){
-          this.notifyVue("Error you must add at least one service")
-          this.$router.push({name:"composer"})
-        }else if(this.$store.state.docker_compose.push_services.length > 0 && this.$store.state.docker_compose.id_cred_service == ""){
-          this.notifyVue("Error you must enter the ID of the credential in Jenkins.")
-          this.$router.push({name:"composer"})
+      console.log(this.$store.state.pipeline_id)
+      this.pipelineName = this.$store.state.name
+      var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
+      var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
+      if(sizeRepos == 0 || sizeServices == 0){
+        this.notifyVue("Error you must add at least one service")
+        this.$router.push({name:"composer"})
 
-        }else{
-          var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
-          var getCriteria = this.$store.state.config_yaml.sqa_criteria
-          for (var i in getCriteria){
-            this.selected_criteria[i] = getCriteria[i];
-          }
-          if(sizeCriteria != 0){
-            this.showCriteria = true;
-            this.disable_done = false;
-          }else{
-            this.showCriteria = false;
-            this.disable_done = true;
-          }
+      // }else if(this.$store.state.docker_compose.id_cred_service == ""){
+      //   this.notifyVue("Error you must enter the ID of the credential in Jenkins.")
+      //   this.$router.push({name:"composer"})
+
+      }else{
+        var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
+        var getCriteria = this.$store.state.config_yaml.sqa_criteria
+        for (var i in getCriteria){
+          this.selected_criteria[i] = getCriteria[i];
         }
-
+        if(sizeCriteria != 0){
+          this.showCriteria = true;
+          this.disable_done = false;
+        }else{
+          this.showCriteria = false;
+          this.disable_done = true;
+        }
       }
+
+    }
   }
 </script>
 <style scoped>
@@ -507,6 +777,10 @@ input[type=number]::-webkit-inner-spin-button {
 .btn-info {
     border-color: #1185EB;
     color: #1185EB;
+}
+
+.open-criteria{
+  display: flex!important;
 }
 
 </style>

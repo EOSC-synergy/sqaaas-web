@@ -42,42 +42,38 @@
 
                 </div>
 
-                <div class="row" style="padding-left:20px;margin-bottom:1rem;">
+                <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
                   <div style="display:contents" class="col-12 col-md-6">
-                    <span class="custom-label">Customize workspace:</span>
-                    <div class="custom-div-append">
-                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
-                          <i class="fa fa-question-circle"></i>
-                        </button>
-                      </div>
+                    <span class="custom-label">Do you want the pipeline to react to all changes?</span>
+                    <!-- <div class="custom-div-append">
+                      <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                        <i class="fa fa-question-circle"></i>
+                      </button>
+                    </div> -->
                   </div>
                   <div style="display:contents" class="col-12 col-md-6">
                     <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="config.workspace.yes"></base-checkbox>
                     <span class="custom-label">No</span><base-checkbox name="workspace" v-model="config.workspace.no"></base-checkbox>
                   </div>
                 </div>
-                <div v-show='config.workspace.yes' style="padding-left:30px;">
+                <div v-show='config.workspace.no' style="padding-left:10px;">
                   <!-- <base-input type="text"
                         label="Node Agent"
                         :disabled="false"
                         placeholder="docker-compose"
                         v-model="config.repo.agent">
                   </base-input> -->
-                  <base-input type="text"
-                        label="Path Deploy Template"
-                        :disabled="false"
-                        placeholder=".sqa/docker-compose.yml"
-                        v-model="repo.path">
-                  </base-input>
 
-                  <div class="row">
 
-                    <base-input class="col-md-4" type="text"
+
+
+                    <base-input class="col-md-6" type="text"
                         label="Branch"
                         :disabled="false"
                         placeholder="master"
                         v-model="repo.branch">
                     </base-input>
+                    <span v-show="showBranchError" style="color:red;font-size:12px;padding-left:20px;">This field is required</span>
                     <!-- <base-input class="col-md-4" type="text"
                         label="Image"
                         :disabled="false"
@@ -90,7 +86,7 @@
                         placeholder="latest"
                         v-model="repo.tag">
                     </base-input> -->
-                  </div>
+
                 </div>
 
                 <div class="text-right" style="padding-right: 20px;">
@@ -129,6 +125,12 @@
                     <div id="accordionBodyGeneralOptions" class="collapse" role="tabpanel" aria-labelledby="accordionHeadingGeneralOptions" aria-expanded="false" data-parent="accordion_general_options">
                       <div class="card-block col-12">
                         <!-- <p>Accordion Item 1 - Body</p> -->
+                        <base-input style="padding-left:20px;padding-right:20px;" type="text"
+                            label="Path Deploy Template"
+                            :disabled="false"
+                            placeholder=".sqa/docker-compose.yml"
+                            v-model="repo.path">
+                      </base-input>
                         <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem;">
                           <span class="custom-label">Add Credentials:</span>
                           <span class="custom-label">Yes</span><base-checkbox name="credentials" v-model="config.credentials.yes"></base-checkbox>
@@ -218,7 +220,7 @@
                             v-for="(env,key) in config.all_envs"
                             :key="key"
                           >
-                          {{key}}:{{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnv(key)"><i class="fa fa-minus"></i></button></span>
+                          {{key}} : {{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnv(key)"><i class="fa fa-minus"></i></button></span>
 
                           </li>
 
@@ -287,8 +289,8 @@
         config:{
           all_repos:{},
           workspace:{
-            yes:false,
-            no:true
+            yes:true,
+            no:false
           },
           credentials:{
             yes:false,
@@ -313,6 +315,7 @@
         showErrorRepoName:false,
         showErrorRepoUrl:false,
         disable_done: true,
+        showBranchError: false
 
       }
     },
@@ -376,11 +379,17 @@
         if(val != ''){
           this.showErrorRepoName = false;
         }
+      },
+      'repo.branch'(val){
+        if(val != ''){
+          this.showBranchError = false;
+        }
       }
 
     },
     methods:{
       next(){
+         this.$store.state.config_yaml.config.deploy_template = this.repo.path.trim()
          this.$router.push({name: 'composer'});
       },
       back(){
@@ -407,9 +416,10 @@
         if(this.repo.path == ''){
           this.repo.path = '.sqa/docker-compose.yml'
         }
-        if(this.repo.branch == ''){
-          this.repo.branch = 'master'
-        }
+        // if(this.repo.branch == ''){
+        //   this.repo.branch = 'master'
+        // }
+          console.log(this.config.workspace.yes)
         if(this.repo.name == '' || this.repo.url == ''){
           if(this.repo.name == ''){
             this.showErrorRepoName = true;
@@ -417,9 +427,15 @@
           if(this.repo.url == ''){
             this.showErrorRepoUrl = true;
           }
+        }else if(this.config.workspace.yes == false && this.repo.branch == ''){
+          this.showBranchError = true;
+
         }else{
           this.showErrorRepoName = false;
           this.showErrorRepoUrl = false;
+          if(this.config.workspace.yes == true){
+            this.repo.branch = ''
+          }
           this.config.all_repos[this.repo.name.trim()]={
             'repo':this.repo.url.trim(),
             'branch':this.repo.branch.trim(),
@@ -428,6 +444,7 @@
           this.showRepo = true;
           this.config.workspace.no = true;
           this.$store.state.config_yaml.config.project_repos = this.config.all_repos
+
           this.disable_done = false;
           this.cleanWorkspace()
 
@@ -448,6 +465,8 @@
         this.repo.path = '',
         this.repo.url = '';
         this.repo.branch = '';
+        this.config.workspace.yes = true;
+        this.config.workspace.no = false;
       },
       addCred(){
         if(this.credentials.type == "default" || this.credentials.id=="" || this.credentials.username_var=="" || this.credentials.password_var == ""){

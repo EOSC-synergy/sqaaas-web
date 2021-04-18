@@ -77,7 +77,7 @@
                                     </td>
                                     <td
                                         style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        {{service.image}}
+                                        {{service.image.name}}
                                     </td>
                                     <td
                                         style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
@@ -85,7 +85,7 @@
                                     </td>
                                     <td
                                         style="text-align:center;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        <!-- {{service.image.registry.push}} -->
+                                        {{service.image.registry.push}}
                                     </td>
 
                                 </tr>
@@ -155,8 +155,32 @@
             </card>
           </div>
         </div>
+        <!-- <div>
+               <div class="row">
+                <div class="col-3">
+                  <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Home</a>
+                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a>
+                    <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</a>
+                    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</a>
+                  </div>
+                </div>
+                <div class="col-9">
+                  <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
 
-        <div class="row">
+
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">...</div>
+                    <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">...</div>
+                    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
+                  </div>
+                </div>
+              </div>
+        </div> -->
+
+
+        <div v-show="showFiles" class="row">
           <div class="col-12">
             <card class="strpied-tabled-with-hover"
                     body-classes=""
@@ -165,7 +189,7 @@
                   <div class="row" style="justify-content: center;">
 
                     <h4 class="card-title text-center" style="padding-top:5px;">Files</h4>
-                    <button class="btn  btn-primary btn-simple " style="margin-bottom:5px;" @click="downloadAll()">(Download All)</button>
+                    <!-- <button class="btn  btn-primary btn-simple " style="margin-bottom:5px;" @click="downloadAll()">(Download All)</button> -->
 
 
                   </div>
@@ -185,26 +209,43 @@
                   </ul>
                   <div class="tab-content">
                     <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                      <div class="col-12" style="padding-top:2rem;padding-left:1rem;">
-                        <button class="btn  btn-primary btn-simple" @click="downloadConfig()">Download</button>
-                      </div>
-                      <div class="col-12" style="height:30vh;overflow-y: auto;">
-                         <editor editor-id="editorA" lang="yaml" :content="yamlConfig" v-on:change-content="changeContentA"></editor>
+
+                      <div class="nav-vertical" style="padding-top:20px;">
+                        <ul class="nav nav-tabs nav-left nav-border-left" role="tablist">
+                          <li  v-for="(yaml,index) in yamlConfig"
+                            :key="index" class="nav-item">
+                            <a class="nav-link file-config" :class="{'active':index==0}" :id="'file-config-'+index" data-toggle="tab" aria-controls="tabVerticalLeft11" :href="'#tabs-config-'+index" role="tab" aria-selected="true" @click="get_data_config(index)">{{(yaml.file_name.length > 10) ? yaml.file_name.substring(0, 10)+'...' : yaml.file_name}}</a>
+                          </li>
+
+                        </ul>
+                        <div class="tab-content px-1" >
+                          <div v-for="(yaml,index) in yamlConfig" style="border-left: 1px solid #cccc;"
+                            :key="index" class="tab-pane tab-config" :class="{'active':index==0}" :id="'tabs-config-'+index" role="tabpanel" aria-labelledby="baseVerticalLeft1-tab1">
+                            <span><b> File name:</b> {{yaml.file_name}}</span>
+                            <div class="col-12" style="padding-top:10px;padding-left:1rem;">
+                              <button class="btn  btn-primary btn-simple" @click="downloadConfig(yaml)" :key="'button'+index+uuid" >Download</button>
+                            </div>
+                            <div class="col-12" style="height:40vh;overflow-y: auto;">
+                              <editor :editor-id="'editor'+index" lang="yaml" :content="yaml.content" v-on:change-content="changeContentA"  :key="'editor'+index+uuid" ></editor>
+                            </div>
+                          </div>
+
+                        </div>
                       </div>
                     </div>
                     <div class="tab-pane" id="tabs-2" role="tabpanel">
                       <div class="col-12" style="padding-top:2rem;padding-left:1rem;">
                         <button class="btn  btn-primary btn-simple" @click="downloadComposer()">Download</button>
                       </div>
-                      <div class="col-12" style="height:25vh;overflow-y: auto;">
-                          <editor editor-id="editorB" lang="yaml" :content="yamlComposer" v-on:change-content="changeContentA"></editor>
+                      <div class="col-12" style="height:40vh;overflow-y: auto;">
+                          <editor editor-id="editorB" lang="yaml" :content="yamlComposer" ></editor>
                       </div>
                     </div>
                     <div class="tab-pane" id="tabs-3" role="tabpanel">
                       <div class="col-12" style="padding-top:2rem;padding-left:1rem;">
                         <button class="btn  btn-primary btn-simple" @click="downloadJenkinsfile()">Download</button>
                       </div>
-                      <div class="col-12" style="height:25vh;overflow-y: auto;">
+                      <div class="col-12" style="height:40vh;overflow-y: auto;">
                           <editor editor-id="editorC" lang='json' :content="yamlJenkinsfile" ></editor>
                       </div>
                     </div>
@@ -213,38 +254,16 @@
             </card>
           </div>
         </div>
-
-
-
-        <div class="row">
-          <div class="col-12">
-
-            <card class="strpied-tabled-with-hover"
-                  body-classes=""
-            >
-              <template slot="header">
-                <h4 class="card-title text-center">Pipeline</h4>
-              </template>
-
-              <template >
-                <div class="row text-center">
-
-                  <div class="col-12 col-md-6" style="padding-bottom:20px;padding-left:15px;">
-                    <button class="btn  btn-primary btn-fill" :disabled='disabled_button' @click="createPipeline()">Create Pipeline</button>
-
-                  </div>
-                  <div class="col-12 col-md-6" style="padding-bottom:20px;padding-left:15px;">
-                    <button class="btn  btn-primary btn-fill" :disabled='!disabled_button' @click="deletePipeline()">Delete Pipeline</button>
-
-                  </div>
-                </div>
-                <div class="text-center" v-show="pipeline_id != ''">
-                  <span>Pipeline ID: {{pipeline_id}}</span>
-                </div>
-              </template>
-            </card>
+        <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
+            <div class="col-12 col-md-12 text-center">
+                <button @click="back()" type="button" class="btn btn-next-back btn-back" >
+                    BACK
+                </button>
+                <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
+                    NEXT
+                </button>
+            </div>
           </div>
-        </div>
       </div>
   	</div>
 </template>
@@ -295,7 +314,12 @@
         yamlConfig:'',
         yamlComposer:'',
         yamlJenkinsfile:'',
-        editor: ''
+        editor: '',
+        showFiles:false,
+        disable_done: true,
+        show_accordion: false,
+        config_data: {},
+        uuid: this.guidGenerator()
 		}
     },
     watch:{
@@ -306,6 +330,28 @@
       }
     },
     methods:{
+      guidGenerator() {
+        var S4 = function () {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        };
+        return (S4() + S4() + S4() + S4() + S4() + Date.now());
+      },
+      get_data_config(index){
+        $('.tab-config').removeClass('active');
+        $('.file-config').removeClass('active');
+        $('#tabs-config-'+index).addClass('active');
+        $('#file-config-'+index).addClass('active');
+
+
+
+        this.uuid=this.guidGenerator();
+      },
+      next(){
+         this.$router.push({name: 'Pipeline'});
+      },
+      back(){
+         this.$router.push({name: 'SQACriteria'});
+      },
       changeContentA (val) {
     	console.log(val)
     },
@@ -380,7 +426,35 @@
                       }
 
         this.loading = true;
-        this.createPipelineCall(data,this.createPipelineCallBack)
+
+        console.log(this.$store.state)
+
+        if(this.pipeline_id != ''){
+          this.updatePipelineCall(this.pipeline_id,data,this.updatePipelineCallBack)
+        }else{
+          this.createPipelineCall(data,this.createPipelineCallBack)
+        }
+      },
+      updatePipelineCallBack(response){
+        if(response.status == 204){
+            this.showCard = true;
+            this.disabled_button = true;
+            this.showFiles = true;
+            this.getConfigCall(this.pipeline_id,this.getConfigCallBack);
+            this.getComposerCall(this.pipeline_id,this.getComposerCallBack);
+            this.getJenkCall(this.pipeline_id,this.getJenkCallBack);
+            this.notifyVue("Success","Pipeline updated successfully.",'nc-icon nc-check-2','info');
+            this.disable_done = false;
+        }else{
+           if(response.status == 403){
+            this.disabled_button = false;
+            this.$router.replace(this.$route.query.redirect || "/logout");
+          }else{
+            this.notifyVue("Error", response.status +":" + response.data.detail,'nc-icon nc-simple-remove','danger')
+          }
+        }
+        this.loading = false;
+
       },
       createPipelineCallBack(response){
         if(response.status == 201){
@@ -389,10 +463,12 @@
             this.$store.state.pipeline_id = this.pipeline_id;
             this.showCard = true;
             this.disabled_button = true;
-            this.notifyVue("Success","Pipeline created successfully.",'nc-icon nc-check-2','info');
+            this.showFiles = true;
             this.getConfigCall(this.pipeline_id,this.getConfigCallBack);
             this.getComposerCall(this.pipeline_id,this.getComposerCallBack);
             this.getJenkCall(this.pipeline_id,this.getJenkCallBack);
+            this.disable_done = false;
+            this.notifyVue("Success","Pipeline created successfully.",'nc-icon nc-check-2','info');
           }
         }else{
            if(response.status == 403){
@@ -472,10 +548,6 @@
           this.showStatus = false;
           this.notifyVue("Error ", response.status +":" +  response.data.reason,'nc-icon nc-simple-remove','danger')
         }
-
-
-
-
       },
       pullrequest(){
         if(this.repo_pull_request == ''){
@@ -550,24 +622,33 @@
       getConfigCallBack(response){
         console.log(response)
         if(response.status == 200){
-           this.yamlConfig= YAML.stringify(response.data, undefined, 2)
+          //  this.yamlConfig= YAML.stringify(response.data, undefined, 2)
+           this.yamlConfig= response.data;
+           for (var i in this.yamlConfig){
+             var parts = this.yamlConfig[i].file_name.split("/");
+             this.yamlConfig[i].file_name = parts[parts.length - 1];
+             this.yamlConfig[i].content = YAML.stringify(this.yamlConfig[i].content, undefined, 2)
+           }
+           console.log(this.yamlConfig)
+          //  this.config_data[this.yamlConfig[0].file_name] = this.yamlConfig[0].content
+           this.config_data[this.yamlConfig[0].file_name] = YAML.stringify(this.yamlConfig[0].content, undefined, 2)
           //  this.yamlConfig=  JSON.stringify(response.data, undefined, 2);
         }
       },
       getComposerCallBack(response){
         console.log(response)
         if(response.status == 200){
-           this.yamlComposer= YAML.stringify(response.data)
+           this.yamlComposer= YAML.stringify(response.data.content)
           //  this.yamlComposer= response.data
         }
       },
       getJenkCallBack(response){
-        console.log(response)
         if(response.status == 200){
-          this.yamlJenkinsfile= JSON.stringify(response.data, null, '\t');
+          this.yamlJenkinsfile= response.data.content;
           }
       },
       download(filename, text) {
+        console.log(filename)
           var element = document.createElement('a');
           element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
           element.setAttribute('download', filename);
@@ -579,8 +660,9 @@
 
           document.body.removeChild(element);
         },
-      downloadConfig(){
-          this.download("Config.yaml",this.yamlConfig)
+      downloadConfig(yaml){
+          console.log(yaml)
+          this.download(yaml.file_name,yaml.content)
       },
       downloadComposer(){
           this.download("docker-compose.yaml",this.yamlComposer)
@@ -588,41 +670,19 @@
       downloadJenkinsfile(){
           this.download("Jenkinsfile",this.yamlJenkinsfile)
       },
-      // syntaxHighlight(json) {
-      //   json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      //   return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-      //       var cls = 'number';
-      //       if (/^"/.test(match)) {
-      //           if (/:$/.test(match)) {
-      //               cls = 'key';
-      //           } else {
-      //               cls = 'string';
-      //           }
-      //       } else if (/true|false/.test(match)) {
-      //           cls = 'boolean';
-      //       } else if (/null/.test(match)) {
-      //           cls = 'null';
-      //       }
-      //       return '<span class="' + cls + '">' + match + '</span>';
-      //   });
-    //}
-
   },
   created(){
     this.checkauthCall(this.checkauthCallBack);
-    console.log(this.$store.state)
+    this.$store.state.status = '';
+    this.$store.state.build_url = '';
     var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
     if(sizeCriteria == 0){
       this.notifyVue("Error", "You must add at least one sqa criteria.",'nc-icon nc-simple-remove','danger')
-      // this.$router.push({name:"SQACriteria"})
+      this.$router.push({name:"SQACriteria"})
     }
-
+    // this.$store.state.pipeline_id = "bd93a679-3c91-4692-a346-176e062b2607";
     this.pipeline_id = this.$store.state.pipeline_id;
-    this.pipeline_id = "c6d79449-98d7-476c-89ea-addf082a1c05"
-
-    this.getConfigCall(this.pipeline_id,this.getConfigCallBack);
-    this.getComposerCall(this.pipeline_id,this.getComposerCallBack);
-    this.getJenkCall(this.pipeline_id,this.getJenkCallBack);
+    this.createPipeline();
 
     this.pull_request_url = this.$store.state.pull_request_url;
     this.build_url = this.$store.state.build_url;
@@ -649,15 +709,8 @@
       }
   },
   mounted(){
-    // this.editor = window.ace.edit("editorYaml");
-    // this.editor.setTheme("ace/theme/monokai");
-    // this.editor.getSession().setMode("ace/mode/javascript");
-    // this.editor.setValue('Hello')
-  //     this.editor.getSession().setValue(`key:
-  //   - 1
-  // test: 2`)
 
-  console.log(this.editor)
+
   }
 }
 </script>
@@ -690,5 +743,90 @@
 
 .table td {
     border-top: 0px!important;
+}
+
+.btn-next {
+    background-color: #1DC7EA !important;
+    color: black !important;
+    padding:1rem 0 1rem 0;
+    font-weight: bold;
+    border: 2px solid black;
+  }
+
+  .btn-next-back{
+    width: 10%!important;
+  }
+
+.btn-back{
+  padding:1rem 0 1rem 0;
+  background-color:#ccc!important;
+  margin-right:10%;
+  font-weight: bold;
+  border: 2px solid black;
+
+}
+
+.btn-info {
+    border-color: #1185EB;
+    color: #1185EB;
+}
+
+.accordion-head i{
+    font-size: 1.5em;
+    float: right;
+}
+
+.accordion-head > .collapsed > i:before{
+    content: "\f105";
+}
+
+.nav-vertical .nav-left.nav-tabs {
+    float: left;
+    border-bottom: 0;
+    border-radius: 0;
+    display: table;
+}
+
+.nav-vertical .nav-left.nav-tabs li.nav-item {
+    float: none;
+    margin: 0 -1px 0 0;
+}
+
+.nav-vertical .nav-left~.tab-content {
+    margin-left: 45px;
+}
+
+.nav-vertical .nav-left~.tab-content .tab-pane.active {
+    display: block;
+}
+
+.nav-vertical .nav-left~.tab-content .tab-pane {
+    display: none;
+    background-color: #FFF;
+    padding: 0 0 .6rem 1rem;
+    overflow-y: auto;
+}
+
+
+.nav-vertical .nav-left.nav-tabs li.nav-item a.nav-link.active {
+    border: 1px solid #DDD;
+    border-right: 0;
+    border-radius: .25rem 0 0 .25rem;
+}
+
+.nav-vertical .nav-left.nav-tabs li.nav-item a.nav-link {
+    min-width: 6.5rem;
+    border-right: 1px solid #DDD;
+}
+
+.nav.nav-tabs .nav-item .nav-link.active {
+    background-color: #FFF;
+    border-radius: .25rem .25rem 0 0;
+}
+.nav-vertical .nav-left.nav-tabs.nav-border-left li.nav-item a.nav-link.active {
+    border-left: 3px solid #FF7588;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    color: #555;
 }
 </style>

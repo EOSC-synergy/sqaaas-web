@@ -15,15 +15,15 @@ export default new Vuex.Store({
    config_yaml:{
      config:{
        project_repos:{},
+       deploy_template:'',
        credentials:[]
      },
      sqa_criteria:{},
      environment:{},
-     timeout:"600"
+     timeout:600
    },
    docker_compose:{
      version:"3.7",
-     push_services:[],
      id_cred_service:"",
      services:{
 

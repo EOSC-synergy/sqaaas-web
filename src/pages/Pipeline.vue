@@ -5,6 +5,36 @@
           <span class="fas fa-spinner fa-3x fa-spin"></span>
         </div>
 
+         <div class="row">
+          <div class="col-12">
+
+            <card class="strpied-tabled-with-hover"
+                  body-classes=""
+            >
+              <template slot="header">
+                <h4 class="card-title text-center">Pipeline</h4>
+              </template>
+
+              <template >
+                <div class="row text-center">
+
+                  <div class="col-12 col-md-6" style="padding-bottom:20px;padding-left:15px;">
+                    <!-- <button class="btn  btn-primary btn-fill" :disabled='disabled_button' @click="createPipeline()">Create Pipeline</button> -->
+
+                  </div>
+                  <div class="col-12 col-md-6" style="padding-bottom:20px;padding-left:15px;">
+                    <button class="btn  btn-primary btn-fill" :disabled='!disabled_button' @click="deletePipeline()">Delete Pipeline</button>
+
+                  </div>
+                </div>
+                <div class="text-center" v-show="pipeline_id != ''">
+                    <span>Pipeline ID: {{pipeline_id}}</span>
+                </div>
+              </template>
+            </card>
+          </div>
+        </div>
+
         <div class="row">
           <div class="col-12">
 
@@ -73,7 +103,7 @@
                       <div class="col-12 col-md-6" v-show="showStatus" style="padding-top:15px;">
                         <span>Status: </span>
                         <span style="text-transform: uppercase;padding-right:10px;">{{build_status}}</span>
-                        <i v-if="build_status == 'success'" style="color:green;" class="fa fa-check" aria-hidden="true"></i>
+                        <i v-if="build_status == 'SUCCESS'" style="color:green;" class="fa fa-check" aria-hidden="true"></i>
                         <i v-else-if ="build_status == 'FAILURE'" style="color:red;" class="fa fa-times" aria-hidden="true"></i>
                         <i v-else style="color:red;" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                       </div>
@@ -331,6 +361,13 @@
         }else if(response.status == 403){
           this.showStatus = false;
           this.$router.replace(this.$route.query.redirect || "/logout");
+        }else if (response.status == 422){
+          this.showStatus = false;
+          this.showBuildUrl = false;
+          this.$store.state.status = '';
+          this.$store.state.build_url = '';
+          this.notifyVue("Error ", response.status +": Pipeline has not been execute",'nc-icon nc-simple-remove','danger')
+
         }else{
           this.showStatus = false;
           this.notifyVue("Error ", response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
