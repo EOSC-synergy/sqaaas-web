@@ -11,6 +11,7 @@ import UserProfile from 'src/pages/UserProfile.vue'
 import Files from 'src/pages/Files.vue'
 import Pipeline from 'src/pages/Pipeline.vue'
 import SelectOption from 'src/pages/SelectOption.vue'
+import PipelineName from 'src/pages/PipelineName.vue'
 import FullAssessment from 'src/pages/FullAssessment.vue'
 
 function requireAuth (to, from, next) {
@@ -76,6 +77,12 @@ const routes = [
         name: 'SelectOption',
         beforeEnter: requireAuth,
         component: SelectOption
+      },
+      {
+        path: 'pipeline-name',
+        name: 'PipelineName',
+        beforeEnter: requireAuth,
+        component: PipelineName
       },
       {
         path: 'sqa-criteria',

@@ -44,7 +44,13 @@
 
                 <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
                   <div style="display:contents" class="col-12 col-md-6">
-                    <span class="custom-label">Do you want the pipeline to react to all changes?</span>
+                    <span class="custom-label">Pipeline react to all changes:</span>
+                    <div class="custom-div-append">
+                      <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                        <i class="fa fa-question-circle"></i>
+                      </button>
+                    </div>
+                    <!-- <span class="custom-label">Do you want the pipeline to react to all changes?</span> -->
                     <!-- <div class="custom-div-append">
                       <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
                         <i class="fa fa-question-circle"></i>
@@ -94,17 +100,33 @@
                 </div>
 
                 <div v-show="showRepo" style="padding-top:20px;padding-left:20px;">
-                  <span class="custom-label">Repositories</span>
-                  <ul class="list-group" style="border:1px solid #ced4da;">
-                    <li class="list-group-item d-flex justify-content-between" style="border:none;"
-                      v-for="(repo,key) in config.all_repos"
-                      :key="key"
-                    >
-                    {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeRepo(key)"><i class="fa fa-minus"></i></button></span>
+                  <span class="custom-label">Configured Repositories</span>
+                  <div class="table-responsive">
+                    <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repo</th>
+                            <th style="text-align:center;justify-content: center;,padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
+                        </thead>
+                        <tbody v-for="(repo, index) in $store.state.config_yaml.config.project_repos" :key="index">
+                                <tr
+                                    style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                    <td
+                                        style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        <div style="text-align:left;">
+                                            {{repo.repo}}
+                                        </div>
+                                    </td>
 
-                    </li>
+                                    <td
+                                        style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeRepo(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
 
-                  </ul>
+                                </tr>
+                        </tbody>
+                    </table>
+                  </div>
                 </div>
 
                 <div class="col-12" id="accordion_general_options" role="tablist" aria-multiselectable="true" style="padding-left:20px;margin-top:2rem;padding-right:0px;">
@@ -129,10 +151,23 @@
                             label="Path Deploy Template"
                             :disabled="false"
                             placeholder=".sqa/docker-compose.yml"
+                            :help="true"
+                            link = 'https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#deploy-template'
+                            message = 'Path where the docker compose file is.'
                             v-model="repo.path">
                       </base-input>
+                      <!-- <div class="custom-div-append">
+                          <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                            <i class="fa fa-question-circle"></i>
+                          </button>
+                      </div> -->
                         <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem;">
                           <span class="custom-label">Add Credentials:</span>
+                          <div class="custom-div-append">
+                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                              <i class="fa fa-question-circle"></i>
+                            </button>
+                        </div>
                           <span class="custom-label">Yes</span><base-checkbox name="credentials" v-model="config.credentials.yes"></base-checkbox>
                           <span class="custom-label">No</span><base-checkbox name="credentials" v-model="config.credentials.no"></base-checkbox>
                         </div>
@@ -240,7 +275,7 @@
                     <button @click="back()" type="button" class="btn btn-next-back btn-back" >
                         BACK
                     </button>
-                    <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
+                    <button @click="next()" type="button" class="btn btn-next btn-next-back">
                         NEXT
                     </button>
                 </div>
@@ -287,7 +322,7 @@
         },
         all_credentials:[],
         config:{
-          all_repos:{},
+          all_repos:[],
           workspace:{
             yes:true,
             no:false
@@ -389,11 +424,13 @@
     },
     methods:{
       next(){
-         this.$store.state.config_yaml.config.deploy_template = this.repo.path.trim()
+        if(this.repo.path != ''){
+          this.$store.state.config_yaml.config.deploy_template = this.repo.path.trim()
+        }
          this.$router.push({name: 'composer'});
       },
       back(){
-         this.$router.push({name: 'SelectOption'});
+         this.$router.push({name: 'PipelineName'});
       },
       track(){
         this.$ga.event('button','add','repository',0)
@@ -420,10 +457,7 @@
         //   this.repo.branch = 'master'
         // }
           console.log(this.config.workspace.yes)
-        if(this.repo.name == '' || this.repo.url == ''){
-          if(this.repo.name == ''){
-            this.showErrorRepoName = true;
-          }
+        if(this.repo.url == ''){
           if(this.repo.url == ''){
             this.showErrorRepoUrl = true;
           }
@@ -431,16 +465,19 @@
           this.showBranchError = true;
 
         }else{
-          this.showErrorRepoName = false;
+          // this.showErrorRepoName = false;
           this.showErrorRepoUrl = false;
           if(this.config.workspace.yes == true){
             this.repo.branch = ''
           }
-          this.config.all_repos[this.repo.name.trim()]={
+          var push_repos = {
+
             'repo':this.repo.url.trim(),
             'branch':this.repo.branch.trim(),
-            'deploy_template':this.repo.path.trim()
+            // 'deploy_template':this.repo.path.trim()
+
           }
+          this.config.all_repos.push(push_repos)
           this.showRepo = true;
           this.config.workspace.no = true;
           this.$store.state.config_yaml.config.project_repos = this.config.all_repos
@@ -452,10 +489,11 @@
 
       },
       removeRepo(item){
-        this.$delete(this.config.all_repos,item)
-        this.$store.state.config_yaml.config.project_repos = this.config.all_repos;
+        console.log(item)
+        this.$delete(this.$store.state.config_yaml.config.project_repos,item)
+        // this.$store.state.config_yaml.config.project_repos = this.config.all_repos;
         this.$store.state.config_yaml.sqa_criteria={};
-        if (this.isEmpty(this.config.all_repos)) {
+        if (this.isEmpty(this.$store.state.config_yaml.config.project_repos)) {
           this.showRepo = false;
           this.disable_done = true;
         }
@@ -608,6 +646,8 @@
           $('#select_service').selectpicker({
 
           });
+          this.$eventHub.$emit('steps', 1);
+
 
         });
         $(function () {
@@ -632,7 +672,10 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .custom-append-button {
-  padding: 0.375rem 0.75rem;
+  padding-top: 0px !important;
+  padding-bottom: 0.38rem !important;
+  padding-left:0.75rem !important;
+  padding-right:0.75rem !important;
     margin-bottom: 0;
     font-size: 1rem;
     font-weight: 400;

@@ -14,7 +14,7 @@ export default new Vuex.Store({
    pull_request_url:'',
    config_yaml:{
      config:{
-       project_repos:{},
+       project_repos:[],
        deploy_template:'',
        credentials:[]
      },

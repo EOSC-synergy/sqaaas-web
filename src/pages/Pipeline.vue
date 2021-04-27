@@ -165,6 +165,24 @@
             </div>
           </div>
         </div>
+
+        <div class="row" v-show="showBadge == false">
+          <div class="col-12 col-md-6">
+            <card  class="strpied-tabled-with-hover"
+                  body-classes=""
+            >
+              <template slot="header" >
+                <h4 class="card-title text-center" style="padding-bottom:4rem;">Bagde</h4>
+              </template>
+
+              <template >
+                <div class="row" id="badge" style="padding-bottom:20px;padding-left:15px;padding-bottom: 3rem;">
+
+                </div>
+              </template>
+            </card>
+          </div>
+        </div>
       </div>
   	</div>
 </template>
@@ -210,6 +228,8 @@
         showErrorPullRequest:false,
         pull_request_url: '',
         disable_status: true,
+        showBadge: false,
+        stop_interval:false
 		}
     },
     watch:{
@@ -358,6 +378,9 @@
             this.showBuildUrl = true;
           }
 
+          this.getBadgeCallPOST(this.pipeline_id,this.getBadgeCallPOSTBack)
+
+
         }else if(response.status == 403){
           this.showStatus = false;
           this.$router.replace(this.$route.query.redirect || "/logout");
@@ -477,132 +500,7 @@
                 saveAs(blob, "sqa_files.zip");
           });
       },
-      // commitGithub(rendered){
-      //   var _this = this
-      //   var auth={
-      //     username:'dianamariand92',
-      //     password:'',
-      //     repository:'test',
-      //     branchName:'master'
-      //   }
-      //   this.filesToCommitNew = [
-      //     {content: rendered, path: '.sqa/config.yaml'},
-      //     // {content: 'May the Force be with you', path: 'jedi.txt'}
 
-      //   ]
-      //   this.GithubAPI(auth)
-      // },
-      // GithubAPI(auth) {
-      //     // let repo;
-
-      //     let gh = new GitHub(auth);
-
-      //     this.repo =  gh.getRepo('dianamariand92', 'test');
-      //       var _this = this
-
-      //     this.setBranch('master').then(function(response){
-      //       console.log(response)
-      //       _this.pushFiles('Making a commit to test',_this.filesToCommitNew)
-      //         .then(function() {
-      //           console.log('Files committed!');
-      //       });
-
-      //     }
-
-      //     )
-      // },
-      // pushFiles(message,files){
-      //   var _this = this
-      //   if (!this.repo) {
-      //         throw 'Repository is not initialized';
-      //     }
-      //     if (!this.currentBranch.hasOwnProperty('name')) {
-      //         throw 'Branch is not set';
-      //     }
-
-      //     return _this.getCurrentCommitSHA()
-      //         .then(_this.getCurrentTreeSHA)
-      //         .then( () => _this.createFiles(files) )
-      //         .then(_this.createTree)
-      //         .then( () => _this.createCommit(message) )
-      //         .then(_this.updateHead)
-      //         .catch((e) => {
-      //             console.error(e);
-      //         });
-
-
-      // },
-      // setBranch(branchName) {
-      //   var _this = this
-      //     if (!this.repo) {
-      //         throw 'Repository is not initialized';
-      //     }
-
-      //     return this.repo.listBranches().then((branches) => {
-
-      //         let branchExists = branches.data.find( branch => branch.name === branchName );
-      //         if (!branchExists) {
-      //             return _this.repo.createBranch('master', branchName)
-      //                 .then(() => {
-      //                     return _this.currentBranch.name = branchName;
-      //                 });
-      //         } else {
-      //             return _this.currentBranch.name = branchName;
-      //         }
-      //     });
-      // },
-
-      // getCurrentCommitSHA() {
-      //   var _this=this
-      //   return this.repo.getRef('heads/' + _this.currentBranch.name)
-      //     .then((ref) => {
-      //       _this.currentBranch.commitSHA = ref.data.object.sha;
-      //     });
-      // },
-      // getCurrentTreeSHA() {
-      //   var _this=this
-      //   return this.repo.getCommit(_this.currentBranch.commitSHA)
-      //     .then((commit) => {
-      //       _this.currentBranch.treeSHA = commit.data.tree.sha;
-      //     });
-      // },
-      // createFiles(filesInfo) {
-      //   var _this=this
-      //   let promises = [];
-      //   let length = filesInfo.length;
-      //   for (let i = 0; i < length; i++) {
-      //     promises.push(_this.createFile(filesInfo[i]));
-      //   }
-      //   return Promise.all(promises);
-      // },
-      // createFile(file) {
-      //   var _this=this
-      //   return this.repo.createBlob(file.content)
-      //   .then((blob) => {
-      //     _this.filesToCommit.push({sha: blob.data.sha,path: file.path,mode: '100644',type: 'blob'});
-      //     });
-      // },
-      // createTree() {
-      //   var _this=this
-      //   console.log(_this.filesToCommit)
-      //   console.log(_this.currentBranch.treeSHA)
-      //   return this.repo.createTree(_this.filesToCommit, _this.currentBranch.treeSHA)
-      //   .then((tree) => {
-      //     console.log(tree)
-      //       _this.newCommit.treeSHA = tree.data.sha;
-      //     });
-      // },
-      // createCommit(message) {
-      //   var _this=this
-      //   return this.repo.commit(_this.currentBranch.commitSHA, _this.newCommit.treeSHA, message)
-      //       .then((commit) => {
-      //           _this.newCommit.sha = commit.data.sha;
-      //     });
-      // },
-      // updateHead() {
-      //   var _this=this
-      //   return this.repo.updateHead('heads/' + _this.currentBranch.name,_this.newCommit.sha);
-      // },
       objectSize(obj){
         var size = 0, key;
         for (key in obj) {
@@ -628,18 +526,50 @@
         }else{
           this.username = response;
         }
+      },
+      getBadgeCallPOSTBack(response){
+        console.log(response)
+        if(response.status == 200){
+          this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
+
+        }
+        console.log(response)
+      },
+      getBadgeCallBackGET(response){
+        if(response.status == 200){
+          this.showBadge = true;
+          $( "#badge" ).append(response.data);
+          this.stop_interval = true;
+
+        }
+        console.log(response)
       }
   },
+  mounted(){
+     this.$eventHub.$emit('steps', 5);
+     this.$nextTick(function () {
+       this.checkStatus();
+            // window.setInterval(() => {
+            //   if(this.stop_interval == false){
+            //     // this.checkStatus();
+            //   }
+            // },1000);
+        })
+
+
+  },
   created(){
+
     this.checkauthCall(this.checkauthCallBack);
     console.log(this.$store.state)
     var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
     if(this.$store.state.pipeline_id == ''){
       this.notifyVue("Error", "You must create the pipeline",'nc-icon nc-simple-remove','danger')
-      this.$router.push({name:"Files"})
+      // this.$router.push({name:"Files"})
     }
 
     this.pipeline_id = this.$store.state.pipeline_id;
+    this.pipeline_id = 'a1ed8439-0260-40bb-85d8-13d4157fa044';
     this.pull_request_url = this.$store.state.pull_request_url;
     this.build_url = this.$store.state.build_url;
     this.build_status = this.$store.state.status;

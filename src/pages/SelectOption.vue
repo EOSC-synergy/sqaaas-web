@@ -61,7 +61,7 @@
     },
     methods:{
       gotoCustomized(){
-        this.$router.push({name: 'general'});
+        this.$router.push({name: 'PipelineName'});
       },
       gotoFull(){
         this.$router.push({name: 'full_assessment'});

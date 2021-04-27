@@ -17,7 +17,8 @@ body > .navbar-collapse{
         position: relative;
         max-height: calc(100vh - 75px);
         min-height: 100%;
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
         width: 260px;
         z-index: 4;
         padding-bottom: 20px;
@@ -103,7 +104,7 @@ body > .navbar-collapse{
             .nav-link{
                 color: $white-color;
                 margin: 5px 15px;
-                opacity: .86;
+                opacity: 1;
                 border-radius: 4px;
                 display: block;
                 padding: 10px 15px;
@@ -177,7 +178,7 @@ body > .navbar-collapse{
         .nav-link{
             color: $white-color;
             margin: 5px 15px;
-            opacity: .86;
+            opacity: 1;
             border-radius: 4px;
             text-transform: uppercase;
             line-height: 30px;

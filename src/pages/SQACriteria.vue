@@ -8,19 +8,9 @@
                 <h4 class="card-title text-center" style="padding-top:2rem;">SQA CRITERIA</h4>
               </template>
               <template class="card-body">
-                <div class="row" style="margin:0px 1rem 2rem 1rem;">
-
-                  <div class="col-12 col-md-6" >
-                    <base-input type="text" class="no-margin"
-                              label="Pipeline Name"
-                              :disabled="$store.state.pipeline_id != ''"
-                              placeholder="Name of the pipeline. Exmaple: worsica"
-                              v-model="pipelineName">
-                      </base-input>
-                      <span v-show="showErrorPipeline" style="color:red; font-size:12px;">This field is required.</span>
-                  </div>
-                  <div class="col-12 col-md-6" style="display:grid;">
-                    <div>
+                <div style="margin:0px 1rem 2rem 1rem;">
+                  <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;">
+                    <div class="col-12 col-md-6">
                       <label> Choose a criteria</label>
                       <select class="custom-select" id="sqacriteria" v-model='criteria' >
                         <option value="default">Select ...</option>
@@ -30,27 +20,28 @@
                         <option value="qc_security">qc_security</option>
                         <option value="qc_doc">qc_doc</option>
                       </select>
-                      <div class="text-right">
-                        <a style="text-decoration: underline;" v-show="show_link" :href="criteria_link" target="_blank">Criteria Information</a>
-
-                      </div>
                     </div>
+                    <div class="col-12 col-md-6" style="padding-top:40px;">
+                      <a style="text-decoration: underline;" v-show="show_link" :href="criteria_link" target="_blank">Criteria Information</a>
+                    </div>
+                  </div>
+                  <div >
                     <span v-show="showErrorCriteria" style="color:red; font-size:12px;">You must select a valid criteria</span>
                   </div>
                 </div>
                 <div class="row" style="margin:0px 1rem 2rem 1rem;">
 
                   <div v-show="showSelect" class="col-12 col-md-6" style="display:grid;">
-                    <span>Select a repository</span>
+                    <label>Select a repository</label>
                     <select class="custom-select" id="respository" v-model='repository' >
-                      <option value="default">Choose a repository...</option>
+                      <option value="">Choose a repository...</option>
                       <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="key">{{key}}</option>
                     </select>
                     <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
                   </div>
 
                   <div v-show="showSelect" class="col-12 col-md-6" style="display:grid;">
-                    <span>Select a service</span>
+                    <label>Select a service</label>
                     <select class="custom-select" id="service" v-model='service' >
                       <option value="default">Choose a service...</option>
                       <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
@@ -58,6 +49,7 @@
                     <span v-show="showErrorService" style="color:red; font-size:12px;">You must select a service</span>
                   </div>
                 </div>
+
                 <h4 class="card-title text-center">Tox Tool</h4>
                 <div class="row">
                     <div class="col-12 col-md-6">
@@ -148,166 +140,103 @@
               <template>
                 <div v-show="showCriteria" style="padding-top:20px;margin-bottom:2rem;">
                     <span class="custom-label">Configured Criterias</span>
-
                     <div class="table-responsive">
-                    <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
-                        <thead>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Criteria</th>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repos</th>
-                            <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Customize Workspace</th>
-                            <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
-                        </thead>
-                        <tbody v-for="(repo, index) in selected_criteria" :key="index">
-                                <tr
-                                    style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
-                                    <td
-                                        style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        <div style="text-align:left;">
-                                            {{index}}
-                                        </div>
-                                    </td>
-                                    <td
-                                        style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        {{Object.keys(repo.repos)}}
-                                    </td>
-                                    <td
-                                        style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        <base-checkbox name="workpace" @input="customize_criteria(index)"></base-checkbox>
-                                    </td>
-                                    <td
-                                        style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCriteria(key)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
-                                        </button>
-                                    </td>
+                      <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                          <thead>
+                              <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Criteria</th>
+                              <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repos</th>
+                              <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Services</th>
+                              <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Customize Workspace</th>
+                              <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
+                          </thead>
+                          <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
+                          <tbody v-for="(repo, index) in selected_criteria" :key="index">
+                                  <tr
+                                      style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                      <td
+                                          style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                          <div style="text-align:left;">
+                                              {{index}}
+                                          </div>
+                                      </td>
+                                      <td
+                                          style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                          <!-- {{Object.keys(repo.repos)}} -->
+                                          {{get_string_repos(repo)}}
+                                      </td>
+                                      <td
+                                          style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                          {{get_string_services(repo)}}
+                                      </td>
+                                      <td
+                                          style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                          <base-checkbox name="workpace" @input="customize_criteria(index)"></base-checkbox>
+                                      </td>
+                                      <td
+                                          style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                          <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCriteria(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                          </button>
+                                      </td>
 
-                                </tr>
-                                <tr>
-                                  <div :id="'criteria_'+index" class="row col-12" style="padding-top:20px;display:none;">
-                                    <div class="col-12 col-md-4" style="padding-top:28px;">
-                                      <select class="custom-select" :id="'select_when_'+index" @change="selectWhen(index)">
-                                        <!-- <option value="default"></option> -->
-                                        <option value="branch">branch</option>
-                                        <!-- <option value="tag">tag</option> -->
-                                        <option value="building_tag">building tag</option>
-                                      </select>
+                                  </tr>
+                                  <tr>
 
+                                    <td colspan="5">
+                                      <div :id="'criteria_'+index" class="row col-12" style="padding-top:20px;display:none;">
+                                        <div class="col-12 col-md-4" style="padding-top:28px;">
+                                          <select class="custom-select" :id="'select_when_'+index" @change="selectWhen(index)">
+                                            <!-- <option value="default"></option> -->
+                                            <option value="branch">branch</option>
+                                            <!-- <option value="tag">tag</option> -->
+                                            <option value="building_tag">building tag</option>
+                                          </select>
 
-                                    </div>
-                                    <!-- <div class="col-12 col-md-4" style="padding-top:28px;">
-                                      <select class="custom-select" :id="'select_comp_'+key" >
-                                        <option value="default"></option>
-                                        <option value="anyOf">anyOf</option>
-                                        <option value="allOf">allOf</option>
-                                        <option value="not">not</option>
-                                      </select>
-                                    </div> -->
-                                    <div class="col-12 col-md-4">
-                                      <div class="row">
-                                        <div class="display:grid;">
-                                          <base-input type="text"  class="no-margin"
-                                                  :label="'Branch'"
-                                                  placeholder="master"
-                                                  :id="'select_branch_'+key"
-                                                  @input="getBranch(key)"
-                                                  v-model="branches[key]"
-                                                  >
-                                          </base-input>
-                                          <span v-show="showErrorCommand" style="color:red; font-size:12px;">This field is required</span>
 
                                         </div>
-                                        <!-- <div style="padding-top:30px;">
-                                          <button type="button" :id="'button_branch_'+key" class="btn-simple btn btn-xs btn-info" @click="addExecute(key)"><i class="fa fa-plus"></i>ADD</button>
+                                        <!-- <div class="col-12 col-md-4" style="padding-top:28px;">
+                                          <select class="custom-select" :id="'select_comp_'+key" >
+                                            <option value="default"></option>
+                                            <option value="anyOf">anyOf</option>
+                                            <option value="allOf">allOf</option>
+                                            <option value="not">not</option>
+                                          </select>
                                         </div> -->
+                                        <div class="col-12 col-md-4">
+                                          <div class="row">
+                                            <div class="display:grid;">
+                                              <base-input type="text"  class="no-margin"
+                                                      :label="'Branch'"
+                                                      placeholder="master"
+                                                      :id="'select_branch_'+index"
+                                                      @input="getBranch(index)"
+                                                      v-model="branches[index]"
+                                                      >
+                                              </base-input>
+                                              <span v-show="showErrorCommand" style="color:red; font-size:12px;">This field is required</span>
+
+                                            </div>
+                                            <!-- <div style="padding-top:30px;">
+                                              <button type="button" :id="'button_branch_'+key" class="btn-simple btn btn-xs btn-info" @click="addExecute(key)"><i class="fa fa-plus"></i>ADD</button>
+                                            </div> -->
+
+
+                                          </div>
+                                        </div>
 
 
                                       </div>
-                                    </div>
 
+                                    </td>
+                                    <td style="display: none;"></td>
+                                    <td style="display: none;"></td>
+                                    <td style="display: none;"></td>
+                                    <td style="display: none;"></td>
 
-                                  </div>
+                                  </tr>
 
-                                </tr>
-
-                        </tbody>
-                    </table>
+                          </tbody>
+                      </table>
                     </div>
-
-
-
-                    <ul class="list-group">
-                      <li class=" row list-group-item d-flex justify-content-between" style="margin-left:20px;margin-right:20px;"
-                        v-for="(val,key) in selected_criteria"
-                        :key="key"
-                      >
-                        <div class="row col-12" style="width:100%;">
-                          <div class="col-12 col-md-6 row">
-                            <div class="col-12 col-md-6">
-                              <span style="width:50%;">{{key}}</span>
-                              <span style="width:50%;">{{key['repos']}}</span>
-
-                            </div>
-                            <div class="col-12 col-md-6 text-right">
-                              <span style="width:50%;">
-                                <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCriteria(key)"><i class="fa fa-minus"></i>
-                                </button>
-                              </span>
-                            </div>
-                          </div>
-                          <div class="col-12 col-md-6" style="display: flex;justify-content: flex-end;">
-                            <span class="custom-label">Customize when execute?</span><base-checkbox name="workpace" @input="customize_criteria(key)"></base-checkbox>
-
-                          </div>
-
-                        </div>
-
-                        <div :id="'criteria_'+key" class="row col-12" style="padding-top:20px;display:none;">
-                          <div class="col-12 col-md-4" style="padding-top:28px;">
-                            <select class="custom-select" :id="'select_when_'+key" @change="selectWhen(key)">
-                              <!-- <option value="default"></option> -->
-                              <option value="branch">branch</option>
-                              <!-- <option value="tag">tag</option> -->
-                              <option value="building_tag">building tag</option>
-                            </select>
-
-
-                          </div>
-                          <!-- <div class="col-12 col-md-4" style="padding-top:28px;">
-                            <select class="custom-select" :id="'select_comp_'+key" >
-                              <option value="default"></option>
-                              <option value="anyOf">anyOf</option>
-                              <option value="allOf">allOf</option>
-                              <option value="not">not</option>
-                            </select>
-                          </div> -->
-                          <div class="col-12 col-md-4">
-                            <div class="row">
-                              <div class="display:grid;">
-                                <base-input type="text"  class="no-margin"
-                                        :label="'Branch'"
-                                        placeholder="master"
-                                        :id="'select_branch_'+key"
-                                        @input="getBranch(key)"
-                                        v-model="branches[key]"
-                                        >
-                                </base-input>
-                                <span v-show="showErrorCommand" style="color:red; font-size:12px;">This field is required</span>
-
-                              </div>
-                              <!-- <div style="padding-top:30px;">
-                                <button type="button" :id="'button_branch_'+key" class="btn-simple btn btn-xs btn-info" @click="addExecute(key)"><i class="fa fa-plus"></i>ADD</button>
-                              </div> -->
-
-
-                            </div>
-                          </div>
-
-
-                        </div>
-
-                      </li>
-
-                    </ul>
-
                   </div>
               </template>
               <div class="row" style="margin-top:2rem; margin-bottom:2rem;">
@@ -341,7 +270,7 @@
       return {
         pipelineName:'',
         criteria:'default',
-        repository:'default',
+        repository:'',
         service:'default',
         repos:{"repos":{}},
         command:'',
@@ -412,8 +341,34 @@
         }
     },
     methods:{
+      get_string_repos(repos){
+        var all_repos = ''
+        for (let i = 0; i < repos.repos.length; i++) {
+          if(repos.repos[i].repo_url){
+            all_repos = all_repos.concat(repos.repos[i].repo_url)
+            if(i != repos.repos.length -1){
+              all_repos = all_repos.concat(', ');
+            }
+          }
+
+        }
+        return(all_repos)
+      },
+      get_string_services(repos){
+        var all_repos = ''
+        for (let i = 0; i < repos.repos.length; i++) {
+          if(repos.repos[i].container){
+            all_repos = all_repos.concat(repos.repos[i].container)
+            if(i != repos.repos.length -1){
+              all_repos = all_repos.concat(', ');
+            }
+          }
+
+        }
+        return(all_repos)
+      },
+
       getBranch(item){
-        console.log($('#select_branch_'+item).val())
         this.criterias_store[item]={
           building_tag: false,
           pattern:$('#select_branch_'+item).val()
@@ -441,7 +396,6 @@
       //   console.log( this.$store.state.config_yaml.sqa_criteria[item])
       // },
       selectWhen(item){
-        console.log(item)
         if($('#select_when_'+item).val() == 'building_tag'){
           $('#select_comp_'+item).prop('disabled', true);
           $('#select_branch_'+item).prop('disabled', true);
@@ -492,35 +446,26 @@
         }
       },
       customize_criteria(key){
-        console.log(this.$store.state.config_yaml.sqa_criteria)
         $('#criteria_'+key).toggleClass('open-criteria',500);
-
-        // if($('#criteria_'+key).hasClass('open-criteria') == false){
-        //     this.$store.state.config_yaml.sqa_criteria[key]['when']={
-        //           'branch':{
-        //             "pattern": ""
-        //           },
-        //           'building_tag':false,
-        //       };
-        // }
-
       },
        next(){
-         console.log(this.criterias_store)
-        //  console.log(this.$store.state.config_yaml.sqa_criteria)
-
          for(const index in this.criterias_store ){
            console.log(index)
            if(Object.hasOwnProperty.call(this.$store.state.config_yaml.sqa_criteria, index)){
-             this.$store.state.config_yaml.sqa_criteria[index]['when'] = Object.assign({},this.$store.state.config_yaml.sqa_criteria[index]['when'], {
-               building_tag: this.criterias_store[index].building_tag,
-               branch:{
-                 pattern:this.criterias_store[index].pattern
-               } })
-            //  this.$store.state.config_yaml.sqa_criteria[i]['when']['building_tag']= this.criterias_store[i].building_tag
-            //  this.$store.state.config_yaml.sqa_criteria[i]['when']['branch']['pattern']= this.criterias_store[i].pattern
-            console.log(this.criterias_store[index].building_tag,this.criterias_store[index].pattern)
-            console.log(this.$store.state.config_yaml.sqa_criteria[index])
+             if(this.criterias_store[index].pattern != ''){
+               this.$store.state.config_yaml.sqa_criteria[index]['when'] = Object.assign({},this.$store.state.config_yaml.sqa_criteria[index]['when'], {
+                 building_tag: this.criterias_store[index].building_tag,
+                 branch:{
+                   pattern:this.criterias_store[index].pattern
+                 } })
+             }else{
+               this.$store.state.config_yaml.sqa_criteria[index]['when'] = Object.assign({},this.$store.state.config_yaml.sqa_criteria[index]['when'], {
+                 building_tag: this.criterias_store[index].building_tag,
+                //  branch:{
+                //    pattern:this.criterias_store[index].pattern
+                //  }
+                 })
+             }
            }
 
 
@@ -545,24 +490,26 @@
           })
       },
       addCriteria(){
-        if(this.criteria == 'default' || this.repository == 'default' || this.service == "default" || this.pipelineName==''){
+        if(this.criteria == 'default' || this.service == "default"){
           // this.error_message = "Error: you must select a valid criteria";
           if(this.criteria == 'default'){
             this.showErrorCriteria = true;
-          }else if(this.repository == 'default' || this.service == "default"){
-            this.showErrorRepo = true;
+          }else if(this.service == "default"){
+            // this.showErrorRepo = true;
             this.showErrorService = true;
           }
-          if(this.pipelineName == ''){
-             this.showErrorPipeline = true;
-          }else{
-            this.showErrorPipeline = false;
-          }
+          // if(this.pipelineName == ''){
+          //    this.showErrorPipeline = true;
+          // }else{
+          //   this.showErrorPipeline = false;
+          // }
           // this.notifyVue(this.error_message)
         }else{
-          var commands = {}
+          var commands = {
+            commands : this.commands
+          }
           var tox = {}
-          commands=this.commands
+          // commands=this.commands
           tox={
             tox_file:this.tox.file,
             testenv: this.testenv
@@ -575,52 +522,33 @@
           this.showErrorService = false;
           this.showErrorCriteria = false;
           this.show_tool_tox = false;
-          this.clearTox();
+
+          this.repos["repos"]=[];
           var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria)
           if(sizeCriteria > 0){
             var sizeSelectCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria[this.criteria])
              if(sizeSelectCriteria > 0){
                this.repos["repos"] = this.$store.state.config_yaml.sqa_criteria[this.criteria]["repos"]
              }
-
-          }else{
-            this.repos["repos"]={};
           }
-          // this.repos.repos[this.repository] = this.$store.state.config_yaml.sqa_criteria[this.criteria];
-
-          var repoName = this.repository
-          var service = this.service
           var repo = {}
           repo={
-                container:service,
-                commands,
-                tox
-          }
-
-          this.repos.repos[this.repository]=Object.assign({},repo)
-          this.selected_criteria[this.criteria]=this.repos
-          // console.log(this.selected_criteria)
-          // this.store_criteria = this.selected_criteria;
-          // var _this = this
-          // setTimeout(function(){
-          //   _this.selectWhen(_this.criteria);
-
-          // },200)
-          this.$store.state.config_yaml.sqa_criteria[this.criteria] = Object.assign({}, this.$store.state.config_yaml.sqa_criteria[this.criteria], this.repos)
-          // // if(this.$store.state.config_yaml.sqa_criteria[this.criteria]['when'] == undefined){
-            this.$store.state.config_yaml.sqa_criteria[this.criteria]['when']={
-              branch:{
-                pattern:''
-              },
-              building_tag:false
+                  repo_url: this.repository,
+                  container: this.service,
             }
-
-          // }
-          this.$store.state.name = this.pipelineName;
+          if (this.commands.length > 0){
+            repo=Object.assign(repo, commands)
+          }
+           if (this.testenv.length > 0){
+            repo=Object.assign(repo, tox)
+          }
+          this.repos["repos"].push(repo)
+          this.selected_criteria[this.criteria]=this.repos
+          this.$store.state.config_yaml.sqa_criteria[this.criteria] = Object.assign({}, this.$store.state.config_yaml.sqa_criteria[this.criteria], this.repos)
+          this.clearTox();
           this.commands=[];
           this.tox.file='';
           this.testenv=[];
-          // console.log(this.$store.state.config_yaml.sqa_criteria)
           console.log( this.$store.state.config_yaml.sqa_criteria)
         }
       },
@@ -705,14 +633,18 @@
 
 
     },
+    mounted(){
+       this.$eventHub.$emit('steps', 3);
+    },
     created(){
 
       this.checkauthCall(this.checkauthCallBack);
-      console.log(this.$store.state.pipeline_id)
-      this.pipelineName = this.$store.state.name
+      // this.pipelineName = this.$store.state.name
       var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
       var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
-      if(sizeRepos == 0 || sizeServices == 0){
+      console.log(this.$store.state.docker_compose.services)
+      // if(sizeRepos == 0 || sizeServices == 0){
+      if(sizeServices == 0){
         this.notifyVue("Error you must add at least one service")
         this.$router.push({name:"composer"})
 

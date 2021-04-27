@@ -19,8 +19,6 @@ export default {
             'Authorization': 'Bearer ' + token
         },
           success: function (result) {
-            // CallBack(result);
-            console.log("here")
             callBackHandler(result)
           },
           error: function (error) {
@@ -144,6 +142,30 @@ export default {
          axios({
           method: 'get',
           url: this.env.api +'/'+id+'/jenkinsfile/jepl',
+        }).then(response => {
+            return callBackHandler(response);
+        })
+        .catch(error => {
+            return callBackHandler(error.response);
+        });
+
+    },
+    getBadgeCallPOST(id,callBackHandler){
+         axios({
+          method: 'post',
+          url: this.env.api + id+ '/badge',
+        }).then(response => {
+            return callBackHandler(response);
+        })
+        .catch(error => {
+            return callBackHandler(error.response);
+        });
+
+    },
+    getBadgeCallGET(id,callBackHandler){
+         axios({
+          method: 'get',
+          url: this.env.api + id+ '/badge?share=html',
         }).then(response => {
             return callBackHandler(response);
         })

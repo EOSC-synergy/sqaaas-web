@@ -61,13 +61,25 @@
                         label="Hostname"
                         :disabled="false"
                         placeholder="Container hostname. Example: processing"
+                         :help="true"
+                          link = 'https://docs.docker.com/compose/'
+                          message = 'Docker compose oficial documentation'
                         v-model="service.hostname">
                       </base-input>
                       <div class="row" style="padding-left:5px;">
                         <div class="col-12 col-md-4" >
-                          <label class="control-label">
-                            Volume Type
-                          </label>
+                          <div class="row">
+                            <label class="control-label">
+                              Volume Type
+                            </label>
+                            <!-- <span class="custom-label">Volume Type</span> -->
+                            <div class="custom-div-append">
+                              <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                                <i class="fa fa-question-circle"></i>
+                              </button>
+                            </div>
+
+                          </div>
                             <select class="custom-select" id="sqacriteria" v-model='volume.type' >
                               <option value="bind">bind</option>
                               <option disabled value="volume">volume</option>
@@ -106,6 +118,11 @@
                       </div>
                       <div class="row" style="padding-left:5px;margin-bottom:1rem;margin-top:2rem;">
                         <span class="custom-label">Environment variables:</span>
+                        <!-- <div class="custom-div-append">
+                              <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                                <i class="fa fa-question-circle"></i>
+                              </button>
+                            </div> -->
                         <span class="custom-label">Yes</span><base-checkbox name="env" v-model="envComposeYesNo.yes"></base-checkbox>
                         <span class="custom-label">No</span><base-checkbox name="env" v-model="envComposeYesNo.no"></base-checkbox>
                       </div>
@@ -146,6 +163,11 @@
                     </div>
                     <div  class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
                       <span class="custom-label">Push Image to Docker Registry?</span>
+                      <div class="custom-div-append">
+                              <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Push the docker-compose service image to the Docker Registry <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html?highlight=push#environment' title='test add link'>More info</a>">
+                                <i class="fa fa-question-circle"></i>
+                              </button>
+                            </div>
                       <span class="custom-label">Yes</span><base-checkbox name="env" v-model="push_image.yes"></base-checkbox>
                       <span class="custom-label">No</span><base-checkbox name="env" v-model="push_image.no"></base-checkbox>
                     </div>
@@ -154,15 +176,6 @@
                     <div class="row" v-show='push_image.yes == true' style="padding-left:10px;margin-bottom: 2rem;">
                       <div class="col-12" style="padding-left:30px;padding-right:30px;">
                         <p style="color:#C79804;text-align:justify" ><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Before proceeding you will need to provide the ID of the credentials created in Jenkins or <a target="blank" href="https://jenkins.eosc-synergy.eu/"> go now</a> and create them. You also need to provide the path to a Dockerfile. </p>
-                        <div>
-                          <select class="selectpicker" id="select_service"  multiple title="Please select ..." >
-                            <option value="" selected disabled>Please select</option>
-                            <option :value="index" v-for="(service, index) in $store.state.docker_compose.services" :key="index">
-                              {{index}}
-                            </option>
-
-                          </select>
-                        </div>
                         <div style="margin-top:2rem;padding-left:0px;padding-right:0px;" class="col-12 col-md-12 text-left">
                           <base-input type="text" class="no-margin"
                                 label="Enter the ID of the Jenkins credentials."
@@ -247,32 +260,41 @@
               </div>
 
               <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;padding-left:20px;">
-                <div class="row" style="padding: 0.75rem 1.25rem;">
-                    <span class="custom-label col-4">Services</span>
-                    <span class="custom-label text-right col-4">Remove</span>
-                    <span class="custom-label text-right col-4" style="padding-right: 40px;">Push</span>
+                <span class="custom-label">Configured Services</span>
+                <div class="table-responsive">
+                  <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <thead>
+                          <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Services</th>
+                          <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Remove</th>
+                          <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Push</th>
+                      </thead>
+                      <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
+                      <tbody v-for="(repo, index) in services" :key="index">
+                              <tr
+                                  style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                  <td
+                                      style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <div style="text-align:left;">
+                                          {{index}}
+                                      </div>
+                                  </td>
 
+                                  <td
+                                      style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeService(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                      </button>
+                                  </td>
+                                  <td
+                                      style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <i style="color:#1BC10B;" v-show="$store.state.docker_compose.services[index] && $store.state.docker_compose.services[index].image.registry.push == true" class="fa fa-check-circle" aria-hidden="true"></i>
+                                  </td>
+
+                              </tr>
+                      </tbody>
+                  </table>
                 </div>
-                <ul class="list-group" style="border:1px solid #ced4da;">
-                  <li class="list-group-item d-flex justify-content-between" style="border:none;"
-                    v-for="(env,key) in services"
-                    :key="key"
-                  >
-                  <div class="row col-12" style="padding:0px">
-                    <span class="col-4">{{key}}</span>
-                    <span class="col-4 text-right"><button type="button" title="Remove Service" class="btn-simple btn btn-xs btn-info" @click="removeService(key)"><i class="fa fa-minus"></i></button></span>
-                    <base-checkbox class="col-4 text-right" title= "Push images" disabled="true" :checked="($store.state.docker_compose.services[key] && $store.state.docker_compose.services[key].image.registry.push == true) ? true : false" style="top: -5px;" :id="'service_'+ key" name="workpace"></base-checkbox>
-                  </div>
-
-                  </li>
-
-                </ul>
               </div>
-
-
             </template>
-
-
             <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
               <div class="col-12 col-md-12 text-center">
                   <button @click="back()" type="button" class="btn btn-next-back btn-back" >
@@ -668,17 +690,18 @@
     created(){
       var _this = this;
        var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
-      if(sizeRepos == 0){
-        this.notifyVue("Error you must add at least one repository",'nc-icon nc-simple-remove','danger')
-        this.$router.push({name:"general"})
-      }else{
+      // if(sizeRepos == 0){
+      //   // this.notifyVue("Error you must add at least one repository",'nc-icon nc-simple-remove','danger')
+      //   // this.$router.push({name:"general"})
+      // }else{
+        console.log(this.$store.state.docker_compose.services)
         var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
-        // if(sizeServices > 0){
-        //   var all_services = Object.keys(this.$store.state.docker_compose.services);
-        //    for (let i = 0; i < all_services.length; i++) {
-        //      var service_name = all_services[i];
-        //      this.$store.state.docker_compose.services[service_name].image.registry.push = false;
-        //    }
+        if(sizeServices > 0){
+          var all_services = Object.keys(this.$store.state.docker_compose.services);
+          //  for (let i = 0; i < all_services.length; i++) {
+          //    var service_name = all_services[i];
+          //   //  this.$store.state.docker_compose.services[service_name].image.registry.push = false;
+          //  }
         // }
         for (let i = 0; i < sizeServices; i++) {
           this.services[Object.keys(this.$store.state.docker_compose.services)[i]]=this.$store.state.docker_compose.services[Object.keys(this.$store.state.docker_compose.services)[i]]
@@ -699,6 +722,7 @@
       },
       mounted(){
         var _this = this
+         this.$eventHub.$emit('steps', 2);
         this.$nextTick(function(){
           // $('#select_service').selectpicker();
 
@@ -747,7 +771,10 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .custom-append-button {
-  padding: 0.375rem 0.75rem;
+  padding-top: 0px !important;
+  /* padding-bottom: 0.38rem !important; */
+  padding-left:0.75rem !important;
+  padding-right:0.75rem !important;
     margin-bottom: 0;
     font-size: 1rem;
     font-weight: 400;
@@ -755,16 +782,12 @@ input[type=number]::-webkit-inner-spin-button {
     color: #495057;
     /* text-align: center; */
     /* white-space: nowrap; */
-    background-color: #e9ecef;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    border: none;
     height: 40px;
 }
 
 .custom-div-append {
-  padding:27px 0px 0px 0px;
+  /* padding:27px 0px 0px 0px; */
   margin:0px;
   margin-left: -3px;
 }

@@ -63,7 +63,6 @@
                         <thead>
                             <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Name</th>
                             <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Image</th>
-                            <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Container Name</th>
                             <th style="text-align:center;justify-content:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Push Images</th>
                         </thead>
                         <tbody v-for="(service, index) in $store.state.docker_compose.services" :key="index">
@@ -80,12 +79,8 @@
                                         {{service.image.name}}
                                     </td>
                                     <td
-                                        style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        {{service.container_name}}
-                                    </td>
-                                    <td
                                         style="text-align:center;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        {{service.image.registry.push}}
+                                        <i style="color:#1BC10B;" v-show="service.image.registry.push == true" class="fa fa-check-circle" aria-hidden="true"></i>
                                     </td>
 
                                 </tr>
@@ -106,7 +101,8 @@
                     <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                         <thead>
                             <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Criteria</th>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Repository</th>
+                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repository and Service</th>
+                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">When</th>
                         </thead>
                         <tbody v-for="(criteria, index) in $store.state.config_yaml.sqa_criteria" :key="index">
                                 <tr
@@ -118,15 +114,15 @@
                                         </div>
                                     </td>
                                     <td
-                                        style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;display:block;">
+                                        style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                         <div v-for="(repo_criteria, index) in criteria.repos" :key="index" style="margin-top:1rem;">
                                           <div class="row">
                                             <div class="col-md-6">
                                               <p class="text-left" style="font-size:14px;margin-bottom:0px;">
-                                                <strong style="font-weight:bold;">Name:</strong> {{index}}
+                                                <strong style="font-weight:bold;">Name:</strong> {{repo_criteria.repo_url}}
                                               </p>
                                               <p class="text-left" style="font-size:14px;margin-bottom:0px;">
-                                                <strong style="font-weight:bold;">Container:</strong> {{repo_criteria.container}}
+                                                <strong style="font-weight:bold;">Service:</strong> {{repo_criteria.container}}
                                               </p>
                                             </div>
                                             <div class="col-md-6">
@@ -142,6 +138,15 @@
                                             </div>
                                           </div>
                                         </div>
+
+                                    </td>
+                                    <td style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <div v-if="criteria.when && criteria.when.building_tag && criteria.when.building_tag == true">
+                                        <p>On Tag Creation</p>
+                                      </div>
+                                      <div v-else-if="criteria.when && criteria.when.branch">
+                                        <p>Branch: {{(criteria.when) ? ((criteria.when.branch) ? criteria.when.branch.pattern : '') : ''}}</p>
+                                      </div>
 
                                     </td>
                                 </tr>
@@ -679,36 +684,39 @@
     if(sizeCriteria == 0){
       this.notifyVue("Error", "You must add at least one sqa criteria.",'nc-icon nc-simple-remove','danger')
       this.$router.push({name:"SQACriteria"})
+    }else{
+
+      // this.$store.state.pipeline_id = "bd93a679-3c91-4692-a346-176e062b2607";
+      this.pipeline_id = this.$store.state.pipeline_id;
+      this.createPipeline();
+
+      this.pull_request_url = this.$store.state.pull_request_url;
+      this.build_url = this.$store.state.build_url;
+      this.build_status = this.$store.state.status;
+
+        if(this.pipeline_id == ''){
+          this.showCard = false;
+          this.disabled_button = false;
+        }else{
+          this.disabled_button =true;
+          this.showCard = true;
+        }
+        if(this.build_url == ''){
+          this.showBuildUrl = false;
+        }else{
+          this.showBuildUrl = true;
+        }
+        if(this.build_status == ''){
+          this.showStatus = false;
+          this.disabled_status = true;
+        }else{
+          this.showStatus = true;
+          this.disable_status = false;
+        }
     }
-    // this.$store.state.pipeline_id = "bd93a679-3c91-4692-a346-176e062b2607";
-    this.pipeline_id = this.$store.state.pipeline_id;
-    this.createPipeline();
-
-    this.pull_request_url = this.$store.state.pull_request_url;
-    this.build_url = this.$store.state.build_url;
-    this.build_status = this.$store.state.status;
-
-      if(this.pipeline_id == ''){
-        this.showCard = false;
-        this.disabled_button = false;
-      }else{
-        this.disabled_button =true;
-        this.showCard = true;
-      }
-      if(this.build_url == ''){
-        this.showBuildUrl = false;
-      }else{
-        this.showBuildUrl = true;
-      }
-      if(this.build_status == ''){
-        this.showStatus = false;
-        this.disabled_status = true;
-      }else{
-        this.showStatus = true;
-        this.disable_status = false;
-      }
   },
   mounted(){
+    this.$eventHub.$emit('steps', 4);
 
 
   }
