@@ -186,12 +186,6 @@
                           <div class="col-12 text-right">
                               <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
                           </div>
-                           <base-input style="padding-top:1rem;" type="text" class="no-margin"
-                                label="Enter the url of the registry"
-                                :disabled="false"
-                                placeholder=""
-                                v-model="url_service">
-                          </base-input>
                           <base-input style="padding-top:1rem;" type="text" class="no-margin"
                                 label="Path to Dockerfile"
                                 :disabled="false"
@@ -201,6 +195,12 @@
                            <div class="col-12 text-right">
                               <span v-show="showErrorPathDockerfile" style="color:red;font-size:12px;">This field is required</span>
                           </div>
+                           <base-input style="padding-top:1rem;" type="text" class="no-margin"
+                                label="Enter the url of the registry (Optional)"
+                                :disabled="false"
+                                placeholder="https://hub.docker.com/"
+                                v-model="url_service">
+                          </base-input>
                           <base-input style="padding-top:1rem;" type="text" class="no-margin"
                                 label="context (optional)"
                                 :disabled="false"
@@ -336,7 +336,7 @@
         showErrorImageName: false,
         showErrorPathDockerfile: false,
         showErrorContName: false,
-        url_service:'https://hub.docker.com/',
+        url_service:'',
         service:{
           image:'',
           container_name:'',

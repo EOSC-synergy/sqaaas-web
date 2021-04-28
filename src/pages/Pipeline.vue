@@ -163,26 +163,28 @@
                   </card>
               </div>
             </div>
-          </div>
-        </div>
+              <div class="row" v-show="showBadge == true">
+                <div class="col-md-6">
+                  <card  class="strpied-tabled-with-hover"
+                        body-classes=""
+                  >
+                    <template slot="header" >
+                      <h4 class="card-title text-center" >Bagdr</h4>
+                    </template>
 
-        <div class="row" v-show="showBadge == false">
-          <div class="col-12 col-md-6">
-            <card  class="strpied-tabled-with-hover"
-                  body-classes=""
-            >
-              <template slot="header" >
-                <h4 class="card-title text-center" style="padding-bottom:4rem;">Bagde</h4>
-              </template>
+                    <template >
+                      <div class="" id="badge" style="padding-bottom:20px;padding-left:15px;">
 
-              <template >
-                <div class="row" id="badge" style="padding-bottom:20px;padding-left:15px;padding-bottom: 3rem;">
 
+                      </div>
+                    </template>
+                  </card>
                 </div>
-              </template>
-            </card>
+              </div>
           </div>
         </div>
+
+
       </div>
   	</div>
 </template>
@@ -538,6 +540,7 @@
       getBadgeCallBackGET(response){
         if(response.status == 200){
           this.showBadge = true;
+          console.log(response.data)
           $( "#badge" ).append(response.data);
           this.stop_interval = true;
 

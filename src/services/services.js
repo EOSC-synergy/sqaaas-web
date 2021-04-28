@@ -153,7 +153,7 @@ export default {
     getBadgeCallPOST(id,callBackHandler){
          axios({
           method: 'post',
-          url: this.env.api + id+ '/badge',
+          url: this.env.api +'/'+ id+ '/badge',
         }).then(response => {
             return callBackHandler(response);
         })
@@ -165,7 +165,7 @@ export default {
     getBadgeCallGET(id,callBackHandler){
          axios({
           method: 'get',
-          url: this.env.api + id+ '/badge?share=html',
+          url: this.env.api +'/'+ id+ '/badge?share=html',
         }).then(response => {
             return callBackHandler(response);
         })

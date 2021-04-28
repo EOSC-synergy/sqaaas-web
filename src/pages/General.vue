@@ -6,12 +6,12 @@
         <div class="col-12 col-md-10 col-lg-8 col-xl-6" style="margin:auto;padding:0px;">
             <card style="height:75vh;overflow-y: auto;">
               <template slot="header">
-                <h4 class="card-title text-center">GENERAL OPTIONS</h4>
+                <h4 class="card-title text-center">REPOS OPTIONS</h4>
               </template>
 
               <template>
                 <!-- <div class="col-12"> -->
-                  <div class="col-12"  style="padding-left:20px;margin-bottom:1rem;">
+                  <!-- <div class="col-12"  style="padding-left:20px;margin-bottom:1rem;">
 
                     <base-input style="margin-bottom:0px;" type="text"
                               label="Repository Name"
@@ -24,7 +24,7 @@
                       <span v-show="showErrorRepoName" style="color:red; font-size:12px;">This field is required.</span>
 
                     </div>
-                  </div>
+                  </div> -->
 
                   <div class="col-12"  style="padding-left:20px;">
 
