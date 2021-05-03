@@ -181,8 +181,8 @@
                           </base-input>
                           <span v-show="showErrorCredId" style="color:red;font-size:12px;">This field is required</span>
 
-                          <div class="row" style="margin-bottom:10px;">
-                            <div class="col-md-6" style="display:grid;">
+                          <!-- <div class="row" style="margin-bottom:10px;">
+                             <div class="col-md-6" style="display:grid;">
                               <base-input  type="text" class="no-margin"
                                   label="Username Var"
                                   :disabled="false"
@@ -200,30 +200,63 @@
                               </base-input>
                               <span v-show="showErrorCredPass" style="color:red;font-size:12px;">This field is required</span>
                             </div>
-                          </div>
-                          <select class="custom-select" id="cred" v-model='credentials.type' >
-                            <option value="default">Choose a type...</option>
-                            <option value="username_password">Username Password</option>
-                            <option value="certificate">Certificate</option>
-                            <option value="ssh_user_private-key">SSH User Private Key</option>
-                          </select>
-                          <span v-show="showErrorCredType" style="color:red;font-size:12px;">This field is required</span>
-                          <div class="text-right" style="padding-top:15px;">
-                            <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCred()"><i class="fa fa-plus"></i>ADD CREDENTIALS</button>
+                          </div> -->
+                          <div style="padding-top:20px;">
+
+                            <select  class="custom-select" id="cred" v-model='credentials.type' >
+                              <!-- <option value="default">Choose a type...</option> -->
+                              <option value="username_password">Username Password</option>
+                              <option disabled value="certificate">Certificate</option>
+                              <option disabled value="ssh_user_private-key">SSH User Private Key</option>
+                            </select>
+                            <span v-show="showErrorCredType" style="color:red;font-size:12px;">This field is required</span>
+                            <div class="text-right" style="padding-top:15px;">
+                              <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCred()"><i class="fa fa-plus"></i>ADD CREDENTIALS</button>
+                            </div>
                           </div>
                         </div>
-                        <div v-show="showCred" style="padding-top:20px;margin-bottom:2rem;padding-left:30px;">
+                        <div v-show="showCred" style="padding-top:20px;margin-bottom:2rem;">
                           <span class="custom-label">Credentials</span>
-                          <ul class="list-group" style="border:1px solid #ced4da;">
-                            <li class="list-group-item d-flex justify-content-between" style="border:none;"
-                              v-for="(cred,key) in all_credentials"
-                              :key="key"
-                            >
-                            {{cred.id}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCred(key)"><i class="fa fa-minus"></i></button></span>
+                          <div class="table-responsive">
+                            <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <thead>
+                                    <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">ID</th>
+                                    <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">USER</th>
+                                    <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">PASS</th>
+                                    <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">REMOVE</th>
+                                </thead>
+                                <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
+                                <tbody v-for="(cred, index) in all_credentials" :key="index">
+                                        <tr
+                                            style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                            <td
+                                                style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                                <div style="text-align:left;">
+                                                    {{cred.id}}
+                                                </div>
+                                            </td>
+                                            <td
+                                                style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                                <div style="text-align:center;">
+                                                    {{cred.username_var}}
+                                                </div>
+                                            </td>
+                                            <td
+                                                style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                                <div style="text-align:center;">
+                                                    {{cred.password_var}}
+                                                </div>
+                                            </td>
 
-                            </li>
-
-                          </ul>
+                                            <td
+                                                style="text-align:right;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                                <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCred(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                          </div>
                         </div>
                       <div class="row" style="padding-left:20px;margin-top:2rem;margin-bottom:2rem;">
                         <span class="custom-label">Environment variables:</span>
@@ -244,22 +277,44 @@
                               placeholder="GIT_USER"
                               v-model="env.value">
                         </base-input>
-                        <div style="margin-bottom:30px;width:95%;" class="text-right">
+                        <div style="margin-bottom:10px;width:95%;" class="text-right">
                           <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnv()"><i class="fa fa-plus"></i>ADD ENV VAR</button>
                         </div>
                       </div>
-                      <div v-show="showEnv" style="padding-top:20px;margin-bottom:1rem;padding-left:30px;">
+                      <div v-show="showEnv" style="padding-top:5px;margin-bottom:1rem;">
                         <span class="custom-label">Env Vars</span>
-                        <ul class="list-group" style="border:1px solid #ced4da;">
-                          <li class="list-group-item d-flex justify-content-between" style="border:none;"
-                            v-for="(env,key) in config.all_envs"
-                            :key="key"
-                          >
-                          {{key}} : {{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnv(key)"><i class="fa fa-minus"></i></button></span>
-
-                          </li>
-
-                        </ul>
+                        <div class="table-responsive">
+                          <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <thead>
+                                  <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">KEY</th>
+                                  <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">VALUE</th>
+                                  <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">REMOVE</th>
+                              </thead>
+                              <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
+                              <tbody v-for="(env, index) in config.all_envs" :key="index">
+                                      <tr
+                                          style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                          <td
+                                              style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              <div style="text-align:left;">
+                                                  {{index}}
+                                              </div>
+                                          </td>
+                                          <td
+                                              style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              <div style="text-align:center;">
+                                                  {{env}}
+                                              </div>
+                                          </td>
+                                          <td
+                                              style="text-align:right;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnv(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                              </button>
+                                          </td>
+                                      </tr>
+                              </tbody>
+                          </table>
+                        </div>
                       </div>
                       <div style="padding-left:5px;padding-bottom:5px;margin-bottom:2rem;margin-top:2rem;">
                         <span class="custom-label" for="timeout" style="padding-right:20px;">Timeout:</span>
@@ -507,7 +562,7 @@
         this.config.workspace.no = false;
       },
       addCred(){
-        if(this.credentials.type == "default" || this.credentials.id=="" || this.credentials.username_var=="" || this.credentials.password_var == ""){
+        if(this.credentials.type == "default" || this.credentials.id==""){
           if(this.credentials.type == "default"){
             this.showErrorCredType = true;
           }else{
@@ -518,26 +573,27 @@
           }else{
             this.showErrorCredId = false;
           }
-          if(this.credentials.password_var == ""){
-            this.showErrorCredPass = true;
-          }else{
-            this.showErrorCredPass = false;
-          }
-          if(this.credentials.username_var==""){
-            this.showErrorCredUser = true;
-          }else{
-            this.showErrorCredUser = false;
-          }
+          // if(this.credentials.password_var == ""){
+          //   this.showErrorCredPass = true;
+          // }else{
+          //   this.showErrorCredPass = false;
+          // }
+          // if(this.credentials.username_var==""){
+          //   this.showErrorCredUser = true;
+          // }else{
+          //   this.showErrorCredUser = false;
+          // }
 
         }else{
           this.showErrorCredId = false;
           this.showErrorCredPass = false;
           this.showErrorCredType = false;
           this.showErrorCredUser = false;
+          this.$store.state.count_cred =  this.$store.state.count_cred + 1;
           var cred = {
             id: this.credentials.id,
-            username_var: this.credentials.username_var,
-            password_var: this.credentials.password_var,
+            username_var: "GIT_USER_"+this.$store.state.count_cred,
+            password_var: "GIT_PASS_"+this.$store.state.count_cred,
             type: this.credentials.type
           }
           this.all_credentials.push(cred)
@@ -549,9 +605,10 @@
 
       },
       removeCred(item){
-        this.$delete(this.all_credentials,item)
-        this.$store.state.config_yaml.config.credentials = this.all_credentials;
-        if (this.isEmpty(this.all_credentials)) {
+        console.log(item)
+        this.$delete(this.$store.state.config_yaml.config.credentials,item)
+        // this.$store.state.config_yaml.config.credentials = this.all_credentials;
+        if (this.isEmpty(this.$store.state.config_yaml.config.credentials)) {
           this.showCred = false;
         }
       },

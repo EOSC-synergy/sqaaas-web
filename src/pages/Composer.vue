@@ -689,34 +689,34 @@
     },
     created(){
       var _this = this;
-       var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
-      // if(sizeRepos == 0){
-      //   // this.notifyVue("Error you must add at least one repository",'nc-icon nc-simple-remove','danger')
-      //   // this.$router.push({name:"general"})
-      // }else{
-        console.log(this.$store.state.docker_compose.services)
-        var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
-        if(sizeServices > 0){
-          var all_services = Object.keys(this.$store.state.docker_compose.services);
-          //  for (let i = 0; i < all_services.length; i++) {
-          //    var service_name = all_services[i];
-          //   //  this.$store.state.docker_compose.services[service_name].image.registry.push = false;
-          //  }
-        // }
-        for (let i = 0; i < sizeServices; i++) {
-          this.services[Object.keys(this.$store.state.docker_compose.services)[i]]=this.$store.state.docker_compose.services[Object.keys(this.$store.state.docker_compose.services)[i]]
-        }
-
-        if(this.isEmpty(this.services)){
-          this.showServices = false;
-          this.disable_done = true;
-        }else {
-          this.disable_done = false;
-          this.showServices = true
-        }
+      var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
+      if(this.$store.state.name == ''){
+        this.notifyVue("Please define the name of the pipeline",'nc-icon nc-simple-remove','danger')
+        this.$router.push({name:"PipelineName"})
+      }
+      console.log(this.$store.state.docker_compose.services)
+      var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
+      if(sizeServices > 0){
+        var all_services = Object.keys(this.$store.state.docker_compose.services);
+        //  for (let i = 0; i < all_services.length; i++) {
+        //    var service_name = all_services[i];
+        //   //  this.$store.state.docker_compose.services[service_name].image.registry.push = false;
+        //  }
+      // }
+      for (let i = 0; i < sizeServices; i++) {
+        this.services[Object.keys(this.$store.state.docker_compose.services)[i]]=this.$store.state.docker_compose.services[Object.keys(this.$store.state.docker_compose.services)[i]]
       }
 
-      this.checkauthCall(this.checkauthCallBack);
+      if(this.isEmpty(this.services)){
+        this.showServices = false;
+        this.disable_done = true;
+      }else {
+        this.disable_done = false;
+        this.showServices = true
+      }
+    }
+
+    this.checkauthCall(this.checkauthCallBack);
 
 
       },

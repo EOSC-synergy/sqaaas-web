@@ -62,9 +62,8 @@
                 </div>
               </template>
             </card> -->
-
             <div class="row">
-              <div class="col-12 col-md-6">
+              <div class="col-12">
                 <card  class="strpied-tabled-with-hover"
                       body-classes=""
                 >
@@ -83,12 +82,53 @@
                         </div>
                       <!-- </div> -->
                     </div>
+                    <div v-show="showFieldsPipeline">
+                      <base-input type="text" class="no-margin"
+                        label="URL"
+                        :disabled="false"
+                        placeholder="https://github.com/EOSC-synergy/sqaaas-web.git"
+                        v-model="repo_url_mimic">
+                    </base-input>
+                    <base-input type="text" class="no-margin"
+                        label="Branch (Optional)"
+                        :disabled="false"
+                        placeholder="master"
+                        v-model="repo_branch_mimic">
+                    </base-input>
+                    </div>
+                  </template>
+                </card>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <card  class="strpied-tabled-with-hover" style="height:319px;"
+                      body-classes=""
+                >
+                  <template slot="header" >
+                    <h4 class="card-title text-center" style="padding-bottom:20px;">Bagdr</h4>
+                  </template>
+
+                  <template>
+                    <div v-show="showBadge == false" class="text-center">
+                      <i class="fa fa-info" style="padding-bottom:10px;color:#3472F7;font-size:30px;" aria-hidden="true"></i>
+                      <p>The badgr will be displayed when the pipeline has execute successfully. </p>
+
+
+                    </div>
+
+                    <div v-show="showBadge == true" class="" id="badge" style="padding-bottom:20px;padding-left:15px;">
+
+
+                    </div>
                   </template>
                 </card>
               </div>
 
               <div class="col-12 col-md-6">
-                <card  class="strpied-tabled-with-hover"
+                <card  class="strpied-tabled-with-hover" style="height:319px;"
                       body-classes=""
                 >
                   <template slot="header" >
@@ -163,24 +203,7 @@
                   </card>
               </div>
             </div>
-              <div class="row" v-show="showBadge == true">
-                <div class="col-md-6">
-                  <card  class="strpied-tabled-with-hover"
-                        body-classes=""
-                  >
-                    <template slot="header" >
-                      <h4 class="card-title text-center" >Bagdr</h4>
-                    </template>
 
-                    <template >
-                      <div class="" id="badge" style="padding-bottom:20px;padding-left:15px;">
-
-
-                      </div>
-                    </template>
-                  </card>
-                </div>
-              </div>
           </div>
         </div>
 
@@ -231,7 +254,10 @@
         pull_request_url: '',
         disable_status: true,
         showBadge: false,
-        stop_interval:false
+        stop_interval:false,
+        repo_url_mimic: '',
+        repo_branch_mimic:'',
+        showFieldsPipeline: false
 		}
     },
     watch:{
@@ -336,8 +362,26 @@
 
       },
       runPipeline(){
-        this.loading = true;
-        this.runPipelineCall(this.pipeline_id,this.runPipelineCallBack)
+        console.log(this.$store.state.config_yaml)
+        for (var criteria in this.$store.state.config_yaml.sqa_criteria){
+          for (let i = 0; i < this.$store.state.config_yaml.sqa_criteria[criteria].repos.length; i++) {
+            if(this.$store.state.config_yaml.sqa_criteria[criteria].repos[i].repo_url == ''){
+              this.showFieldsPipeline = true
+            }
+
+          }
+
+        }
+        if(this.showFieldsPipeline == false){
+          this.loading = true;
+          this.runPipelineCall(this.pipeline_id,this.runPipelineCallBack)
+        }else if(this.showFieldsPipeline == true && this.repo_url_mimic == ''){
+          this.notifyVue("Error", "Please add the URL of the repository",'nc-icon nc-simple-remove','danger')
+        }else{
+          this.loading = true;
+          this.runPipelineCall(this.pipeline_id,this.runPipelineCallBack)
+        }
+        // console.log()
       },
       runPipelineCallBack(response){
         if(response.status == 200){
@@ -541,22 +585,22 @@
         if(response.status == 200){
           this.showBadge = true;
           console.log(response.data)
-          $( "#badge" ).append(response.data);
-          this.stop_interval = true;
-
+          if($("#badge").has("blockquote").length == 0){
+            $( "#badge" ).append(response.data);
+            this.stop_interval = true;
+          }
         }
-        console.log(response)
       }
   },
   mounted(){
      this.$eventHub.$emit('steps', 5);
      this.$nextTick(function () {
-       this.checkStatus();
-            // window.setInterval(() => {
-            //   if(this.stop_interval == false){
-            //     // this.checkStatus();
-            //   }
-            // },1000);
+
+            window.setInterval(() => {
+              if(this.stop_interval == false){
+                this.checkStatus();
+              }
+            },5000);
         })
 
 

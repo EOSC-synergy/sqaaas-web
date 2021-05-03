@@ -44,7 +44,7 @@
                 <li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-668" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-668 nav-item"><a title="About" href="https://www.eosc-synergy.eu/about/" class="nav-link text-white">About</a></li>
                 <li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-47" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-47 nav-item"><a title="Partners" href="https://www.eosc-synergy.eu/partners/" class="nav-link text-white">Partners</a></li>
                 <li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-790" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-790 nav-item"><a title="Contact us" href="https://www.eosc-synergy.eu/contact-us/" class="nav-link text-white">Contact us</a></li>
-                <li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-668" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-668 nav-item"> <button type="button" class=" btn btn-simple btn-login" @click="login_egi()">Login</button></li>
+                <li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-668" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-668 nav-item"> <button type="button" class=" btn btn-outline btn-login" @click="login_egi()">Sign In</button></li>
                 </ul></div>										</div><!-- .container -->
 
                         </nav><!-- .site-navigation -->
@@ -54,9 +54,12 @@
 			</header>
 
 
-    <div class="container" style="min-height:60vh;">
-      <h2 >EOSC Synergy Software Quality Assurance</h2>
-      <div class="entry-content">
+    <div class="container back-login"  >
+      <h2 style="text-transform: uppercase;font-size: 45px;" >Your service to improve,<br/>promote and reward<br/>the quality of your<br/>data repositories.</h2>
+      <div style="padding-top:4rem;">
+        <button style type="button" class="btn-outline btn" ><i style="color:black; margin-right:10px;" class="fa fa-play-circle" aria-hidden="true"></i>SEE IN ACTION</button>
+      </div>
+      <!-- <div class="entry-content">
         <p>
           Quality is a&nbsp;fundamental aspect for&nbsp; a successful uptake of EOSC services
           and data repositories by the European research communities. EOSC Synergy is developing
@@ -92,7 +95,7 @@
           </p>
         </div>
 
-      </div>
+      </div> -->
 
       <div>
 
@@ -169,6 +172,13 @@ export default {
 </script>
 <style scoped>
 
+.back-login {
+  min-height:70vh;
+  /* background-image: url('./../../public/img/back-login.png') !important; */
+  /* background-repeat: no-repeat, repeat; */
+  /* width: 100%; */
+}
+
 .topbar {
     border-bottom: 1px solid rgba(255,255,255,.3);
     padding: 6px 0;
@@ -210,22 +220,23 @@ export default {
 }
 
 .btn-login {
-  color: #be2832;
-  border:none;
+  color: #fff;
+  /* border:none; */
   font-weight: 700;
-  border: 1px solid transparent;
+  border: 1px solid #fff;
   padding: .375rem 2rem;
   font-size: 1.25rem;
   line-height: 1.6;
-  border-radius: 0;
+  border-radius: 5px;
 
 
 }
 
 .btn-login:hover {
-    color: #212529;
-    background-color: #aab224;
-    border-color: #a0a822;
+   color: #AB0720;
+    /* background-color: #aab224; */
+    border-color: #AB0720;
+    border-radius: 5px;
 }
 
 /* // .column {
