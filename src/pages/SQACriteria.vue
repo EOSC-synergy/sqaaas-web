@@ -35,7 +35,7 @@
                     <label>Select a repository</label>
                     <select class="custom-select" id="respository" v-model='repository' >
                       <option value="">Choose a repository...</option>
-                      <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="key">{{repo.repo}}</option>
+                      <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="repo.repo">{{repo.repo}}</option>
                     </select>
                     <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
                   </div>
@@ -191,7 +191,7 @@
                               <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Services</th>
                               <!-- <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Builder</th> -->
                               <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Customize Workspace</th>
-                              <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
+                              <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
                           </thead>
                           <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
                           <tbody v-for="(repo, index) in selected_criteria" :key="index">

@@ -1,6 +1,6 @@
 <template>
 	<div class="auth-layout">
-    <header class="bg-blue text-white">
+    <header class="bg-blue text-white" id="myheader">
       <!-- <div class="bg-primary" id="navbar-sticky"> -->
         <div class="topbar" id="top">
           <div class="container">
@@ -33,8 +33,8 @@
             <div class="container">
 
                 <!-- Your site title as branding in the menu -->
-              <a href="https://www.eosc-synergy.eu/" class="navbar-brand custom-logo-link" rel="home"><img src="../../public/img/logo-eosc-synergy-png.png" class="img-fluid" alt="EOSC synergy"></a><!-- end custom logo -->
-
+              <a href="https://www.eosc-synergy.eu/" class="navbar-brand" rel="home"><img src="../../public/img/logo-eosc-synergy-png.png" class="img-fluid" style="height: 50px;" alt="EOSC synergy"></a><!-- end custom logo -->
+              <p style="font-size:40px; margin-bottom: 0px;">SQAaaS</p>
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -51,13 +51,19 @@
 
               </div><!-- #wrapper-navbar end -->
       <!-- </div> -->
-			</header>
+		</header>
 
 
     <div class="container back-login"  >
-      <h2 style="text-transform: uppercase;font-size: 45px;" >Your service to improve,<br/>promote and reward<br/>the quality of your<br/>data repositories.</h2>
+      <p style="text-transform: uppercase;margin-bottom:0px;font-weight: 700;font-size:16px;">Committed to Software Quality in Research</p>
+      <div style="max-width: 792px;">
+        <h2 style="text-transform: uppercase;font-size: 44px;font-weight: 700;line-height: 1.25;margin-bottom:2rem;" >The Researcher’s Toolkit to Streamline the Adoption of Novel Software Engineering Practicesand Receive Credit for It</h2>
+        <p style="font-size:18px;">The adoption of quality-based practices is one common struggle when it comes to developing software in research environments. The SQAaaS platform provides researchers with ready-to-use CI/CD pipelines that cross-check the relevant quality criteria any software project ought to fulfill in order to meet the Open Science values, and thus be sustainable, reliable, usable, reusable and discoverable in the long term. Additionally, the SQAaaS features an assessment tool that acknowledges the quality attributes of the software, which ultimately verifiable and shareable</p>
+        <p><a href="">What is CI/CD?</a></p>
+
+      </div>
       <div style="padding-top:4rem;">
-        <button style type="button" class="btn-outline btn" ><i style="color:black; margin-right:10px;" class="fa fa-play-circle" aria-hidden="true"></i>SEE IN ACTION</button>
+        <button style type="button" class="btn-outline btn" ><i style="color:black; margin-right:10px;" class="fa fa-play-circle" aria-hidden="true"></i>See SQAaaS in Action</button>
       </div>
       <!-- <div class="entry-content">
         <p>
@@ -173,7 +179,8 @@ export default {
 <style scoped>
 
 .back-login {
-  min-height:70vh;
+  min-height:80vh;
+  margin-top:200px;
   /* background-image: url('./../../public/img/back-login.png') !important; */
   /* background-repeat: no-repeat, repeat; */
   /* width: 100%; */
@@ -304,7 +311,7 @@ h1,h2,h3{
 }
 
 
-/* @media (min-width: 1200px){
+@media (min-width: 1200px){
   .container {
       max-width: 1240px;
   }
@@ -312,17 +319,24 @@ h1,h2,h3{
 }
 
 @media (min-width: 992px){
-  .container {
-      max-width: 960px;
-  }
+
 
 }
 
 @media (min-width: 768px){
-  .container {
-      max-width: 720px;
-  }
 
-} */
+
+}
+
+#myheader {
+  position:fixed; /* fixing the position takes it out of html flow - knows
+                   nothing about where to locate itself except by browser
+                   coordinates */
+  left:0;           /* top left corner should start at leftmost spot */
+  top:0;            /* top left corner should start at topmost spot */
+  width:100vw;      /* take up the full browser width */
+  z-index:200;  /* high z index so other content scrolls underneath */
+  height:100px;     /* define height for content */
+}
 
 </style>

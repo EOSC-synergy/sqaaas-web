@@ -138,7 +138,8 @@
                           <a data-toggle="collapse" data-parent="#accordion_general_options" href="#accordionBodyGeneralOptions" aria-expanded="false" aria-controls="accordionBodyGeneral"
                             class="collapsed ">
                             <i class="fa fa-angle-down" aria-hidden="true"></i>
-                            <p>ADVANCED OPTIONS</p>
+                            <p style="margin-bottom: 0px;">ADVANCED OPTIONS</p>
+                            <p>(Path deploy, Credencials, Env Vars, Timeout)</p>
                           </a>
                         </div>
                       </div>
