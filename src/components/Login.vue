@@ -62,7 +62,7 @@
         <p><a href="">What is CI/CD?</a></p>
 
       </div>
-      <div style="padding-top:4rem;">
+      <div style="padding-top:4rem; padding-bottom:4rem;">
         <button style type="button" class="btn-outline btn" ><i style="color:black; margin-right:10px;" class="fa fa-play-circle" aria-hidden="true"></i>See SQAaaS in Action</button>
       </div>
       <!-- <div class="entry-content">
