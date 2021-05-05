@@ -41,7 +41,7 @@ export default {
       updatePipelineCall(id, data,callBackHandler) {
           axios({
               method: 'put',
-              url: this.env.api+id,
+              url: this.env.api+'/'+id,
               data:data
 
           }).then(response => {

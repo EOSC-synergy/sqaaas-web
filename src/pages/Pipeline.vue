@@ -257,7 +257,8 @@
         stop_interval:false,
         repo_url_mimic: '',
         repo_branch_mimic:'',
-        showFieldsPipeline: false
+        showFieldsPipeline: false,
+        intervalID: ''
 		}
     },
     watch:{
@@ -407,7 +408,7 @@
         this.loading = false;
       },
       checkStatus(){
-        this.loading = true;
+        // this.loading = true;
         this.checkStatusCall(this.pipeline_id,this.checkStatusCallBack)
       },
       checkStatusCallBack(response){
@@ -425,6 +426,8 @@
           }
 
           this.getBadgeCallPOST(this.pipeline_id,this.getBadgeCallPOSTBack)
+          console.log(this.intervalID)
+          window.clearInterval(this.intervalID)
 
 
         }else if(response.status == 403){
@@ -441,7 +444,7 @@
           this.showStatus = false;
           this.notifyVue("Error ", response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
         }
-        this.loading = false;
+        // this.loading = false;
       },
       generateFiles(){
         this.downloadFileCall(this.pipeline_id,this.downloadFileCallBack);
@@ -587,26 +590,24 @@
           console.log(response.data)
           if($("#badge").has("blockquote").length == 0){
             $( "#badge" ).append(response.data);
-            this.stop_interval = true;
           }
         }
-      }
+      },
   },
   mounted(){
      this.$eventHub.$emit('steps', 5);
+     var _this = this
      this.$nextTick(function () {
 
-            window.setInterval(() => {
-              if(this.stop_interval == false){
-                this.checkStatus();
-              }
-            },5000);
+       window.clearInterval()
+            // window.setInterval(() => {
+            //     this.checkStatus();
+            // },5000);
         })
-
 
   },
   created(){
-
+    window.clearInterval()
     this.checkauthCall(this.checkauthCallBack);
     console.log(this.$store.state)
     var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
@@ -616,7 +617,6 @@
     }
 
     this.pipeline_id = this.$store.state.pipeline_id;
-    this.pipeline_id = 'a1ed8439-0260-40bb-85d8-13d4157fa044';
     this.pull_request_url = this.$store.state.pull_request_url;
     this.build_url = this.$store.state.build_url;
     this.build_status = this.$store.state.status;
