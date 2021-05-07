@@ -299,6 +299,7 @@
           }
         }else if(response.status == 204){
           this.disable_status = false;
+          this.autoRefresh = true;
           this.notifyVue("Info","Waiting for scan organization.",'nc-icon nc-simple-remove','warning')
 
         }else if(response.status == 403){
@@ -327,11 +328,9 @@
             this.$store.state.build_url = this.build_url;
             this.showBuildUrl = true;
           }
-          if(this.build_status == "SUCCESS"){
+          if(response.data.openbadge_id != null){
             this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
           }
-
-
 
         }else if(response.status == 403){
           this.showStatus = false;
