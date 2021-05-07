@@ -83,8 +83,8 @@
 
 
               </div>
-              <div class="row" style="margin-bottom:80px;    justify-content: center;">
-                <div class="col-12 col-md-6 text-center">
+              <div class="row" style="justify-content: center;">
+                <div class="col-12 col-md-6 text-center" style="height: 200px;">
                   <p style="font-size:40px;">Start now composing your CI/CD pipeline</p>
                     <base-input type="text" class="no-margin"
                               label=""
@@ -92,13 +92,13 @@
                               placeholder="Name of the pipeline. Exmaple: worsica"
                               v-model="pipelineName">
                       </base-input>
-                      <span v-show="showErrorPipeline" style="color:red; font-size:12px;">This field is required.</span>
+                      <span v-show="showErrorPipeline" style="color:red; font-size:12px;">Error: Invalid character.</span>
                   </div>
               </div>
-              <div class="row" style="margin-top:2rem; margin-bottom:2rem;">
+              <div class="row" style="margin-top:2rem; margin-bottom:3rem;">
                 <div class="col-12 text-center">
 
-                    <button @click="next()" type="button" :disabled="pipelineName == ''"  class="btn btn-next btn-next-back">
+                    <button @click="next()" type="button" :disabled="disabled_next"  class="btn btn-next btn-next-back">
                         Create CI/CD pipeline
                     </button>
                 </div>
@@ -124,8 +124,24 @@
       return {
        pipelineName:'',
        showErrorPipeline:false,
-       current_step:1
-
+       current_step:1,
+       disabled_next: true,
+      }
+    },
+    watch:{
+      'pipelineName'(val){
+        var regex = new RegExp("(^$)|^[a-zA-Z0-9_.-]+$");
+        console.log(val)
+        if(regex.test(this.pipelineName) ==  false){
+            this.showErrorPipeline= true;
+          }else{
+            this.showErrorPipeline = false;
+          }
+        if(val == '' || regex.test(this.pipelineName) ==  false){
+          this.disabled_next = true;
+        }else{
+          this.disabled_next = false;
+        }
       }
     },
     methods:{
