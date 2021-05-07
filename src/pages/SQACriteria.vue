@@ -1,304 +1,311 @@
 <template>
   <div class="content" style="background-color:#f8f9fa;">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-12" style="margin-top:30px;">
-            <card >
-              <template slot="header">
-                <h4 class="card-title text-center" style="padding-top:2rem;">SQA CRITERIA</h4>
-              </template>
-              <template class="card-body">
-                <div style="margin:0px 0px 2rem 0px;">
-                  <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;">
-                    <div class="col-12 col-md-6">
-                      <label> Choose a criteria</label>
-                      <select class="custom-select" id="sqacriteria" v-model='criteria' >
-                        <option value="default">Select ...</option>
-                        <option value="qc_style">qc_style</option>
-                        <option value="qc_coverage">qc_coverage</option>
-                        <option value="qc_functional">qc_functional</option>
-                        <option value="qc_security">qc_security</option>
-                        <option value="qc_doc">qc_doc</option>
-                      </select>
-                    </div>
-                    <div class="col-12 col-md-6" style="padding-top:40px;">
-                      <a style="text-decoration: underline;" v-show="show_link" :href="criteria_link" target="_blank">Criteria Information</a>
-                    </div>
-                  </div>
-                  <div >
-                    <span v-show="showErrorCriteria" style="color:red; font-size:12px;">You must select a valid criteria</span>
-                  </div>
+      <div class="col-12 col-sm-12 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
+        <h4 style="margin-top:0px;" class="card-title text-center">CRITERIAS</h4>
+        <card >
+          <template slot="header">
+            <div class="text-center" style="padding-left:20px;padding-top:20px;">
+              <p style="font-weight:700;">The quality criteria allows you to define the work expected of the CI/CD pipeline. It is then the underpinning part where the pipeline’s purpose takes shape.</p>
+              <p>Use the dropdown list to select the specific criterion you would like to fulfill. Then fill in the requested data.</p>
+            </div>
+          </template>
+          <template class="card-body">
+            <div style="margin:0px 0px 2rem 0px;">
+              <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;">
+                <div class="col-12 col-md-6">
+                  <label> Choose a criteria</label>
+                  <select class="custom-select" id="sqacriteria" v-model='criteria' style="font-family: consola;font-weight: 700;" >
+                    <option value="default">Select ...</option>
+                    <option value="qc_style">QC.Sty</option>
+                    <option value="qc_coverage">QC.Uni</option>
+                    <option value="qc_functional">QC.Fun</option>
+                    <option value="qc_security">QC.Sec</option>
+                    <option value="qc_doc">QC.Doc</option>
+                  </select>
                 </div>
-                <div class="row" style="margin:0px 0px 2rem 0px;">
+                <div v-show="criteria != 'default'" class="col-12 col-md-6" style="padding-top:20px;">
+                  <p style="margin-bottom:0px; list-style: disc outside none; display: list-item;">{{(info[criteria]) ? info[criteria].p1 : ''}}</p>
+                  <p style="margin-bottom:0px;list-style: disc outside none; display: list-item;"><i><u>Improves:</u></i> {{(info[criteria]) ? info[criteria].p2 : ''}}</p>
+                  <a style="text-decoration: underline;list-style: disc outside none; display: list-item;" :href="(info[criteria]) ? info[criteria]['link'] : ''" target="_blank">See More</a>
+                </div>
+              </div>
+              <div >
+                <span v-show="showErrorCriteria" style="color:red; font-size:12px;">You must select a valid criteria</span>
+              </div>
+            </div>
+            <div class="row" style="margin:0px 0px 2rem 0px;">
 
-                  <div v-show="showSelect" class="col-12 col-md-6" style="display:grid;">
-                    <label>Select a repository</label>
-                    <select class="custom-select" id="respository" v-model='repository' >
-                      <option value="">Choose a repository...</option>
-                      <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="repo.repo">{{repo.repo}}</option>
-                    </select>
-                    <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
-                  </div>
+              <div v-show="showSelect" class="col-12 col-md-6" style="display:grid;">
+                <label>Select a repository</label>
+                <select class="custom-select" id="respository" v-model='repository'  >
+                  <option value="">Choose a repository...</option>
+                  <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="repo.repo">{{repo.repo}}</option>
+                </select>
+                <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
+              </div>
 
-                  <div v-show="showSelect" class="col-12 col-md-6" style="display:grid;">
-                    <label>Select a service</label>
-                    <select class="custom-select" id="service" v-model='service' >
-                      <option value="default">Choose a service...</option>
-                      <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
-                    </select>
-                    <span v-show="showErrorService" style="color:red; font-size:12px;">You must select a service</span>
+              <div v-show="showSelect" class="col-12 col-md-6" style="display:grid;">
+                <label>Select a service</label>
+                <select class="custom-select" id="service" v-model='service' >
+                  <option value="default">Choose a service...</option>
+                  <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
+                </select>
+                <span v-show="showErrorService" style="color:red; font-size:12px;">You must select a service</span>
+              </div>
+            </div>
+
+            <div v-show="showCredInfo" style="padding-top:20px;margin-bottom:2rem;">
+              <span class="custom-label">Credentials</span>
+              <div class="table-responsive">
+                <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <thead>
+                        <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">ID</th>
+                        <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">USER</th>
+                        <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">PASS</th>
+                    </thead>
+                    <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
+                    <tbody v-for="(cred, index) in $store.state.config_yaml.config.credentials" :key="index">
+                            <tr
+                                style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                <td
+                                    style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                    <div style="text-align:left;">
+                                        {{cred.id}}
+                                    </div>
+                                </td>
+                                <td
+                                    style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                    <div style="text-align:center;">
+                                        {{cred.username_var}}
+                                    </div>
+                                </td>
+                                <td
+                                    style="padding-right: 10px; justify-content:center; padding-left: 10px; padding-top: 5px;">
+                                    <div style="text-align:center;">
+                                        {{cred.password_var}}
+                                    </div>
+                                </td>
+                            </tr>
+                    </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
+              <h4 style="font-weight:700;padding-left:15px;">Builder settings</h4>
+              <p style="padding-left:15px;">According to the programming language in use, you can choose between builders. As a catch-all builder you might prefer to use the list of commands that you commonly use for carrying out the work aligned with the given criterion.</p>
+              <div class="col-12 col-md-6">
+                <label> Choose a builder tool</label>
+                <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
+                  <option value="default">Select ...</option>
+                  <option value="tox">TOX</option>
+                  <option value="command">COMMANDS</option>
+                </select>
+              </div>
+            </div>
+            <div class="row" style="padding-top:20px;" v-show="showToxBuilder">
+                <div class="col-12 col-md-6">
+
+                  <base-input type="text" class="col-10 no-margin"
+                          label="Tox file"
+                          :disabled="false"
+                          placeholder="/myrepo-testing/tox.ini"
+                          v-model="tox.file">
+                  </base-input>
+                  <span v-show="showErrorFile" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
+                </div>
+                <div class="col-12 col-md-6" style="display:grid;">
+                  <div style="display:flex;">
+                    <base-input type="text" class="col-10 no-margin"
+                            label="Test env"
+                            :disabled="false"
+                            placeholder="stylecheck"
+                            v-model="tox.env">
+                    </base-input>
+                    <div class="col-2"  style="padding-top:30px;padding-left:0px;">
+                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="addTestEnv()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD</button>
+                    </div>
                   </div>
+                  <span v-show="showErrorEnv" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
+
                 </div>
 
-                <div v-show="showCredInfo" style="padding-top:20px;margin-bottom:2rem;">
-                  <span class="custom-label">Credentials</span>
-                  <div class="table-responsive">
-                    <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
-                        <thead>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">ID</th>
-                            <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">USER</th>
-                            <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">PASS</th>
-                        </thead>
-                        <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
-                        <tbody v-for="(cred, index) in $store.state.config_yaml.config.credentials" :key="index">
-                                <tr
-                                    style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
-                                    <td
-                                        style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        <div style="text-align:left;">
-                                            {{cred.id}}
+            </div>
+            <div v-show="show_tool_tox" style="padding-top:20px;padding-right:15px;margin-bottom:2rem;">
+              <span class="custom-label">Test Env</span>
+
+              <ul class="list-group">
+                <li style="padding-left:40px;" class="list-group-item d-flex justify-content-between"
+                  v-for="(env,key) in testenv"
+                  :key="key"
+                >
+                {{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removetestEnv(key)"><i class="fa fa-minus"></i></button></span>
+
+                </li>
+
+              </ul>
+            </div>
+            <div class="row" style="padding-top:20px;" v-show="showCommandBuilder">
+              <div class="col-12 row">
+                <div class="col-10">
+                  <base-input style="padding-left:15px;" type="text" class="no-margin"
+                          label="Command"
+                          :disabled="false"
+                          placeholder="npm install"
+                          v-model="command">
+                  </base-input>
+                  <span v-show="showErrorCommand" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
+
+                </div>
+                <div class="col-2" style="padding-top:30px;">
+                  <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCommand()"><i class="fa fa-plus"></i>ADD</button>
+                </div>
+              </div>
+            </div>
+            <div v-show="showCommands" style="padding-top:20px;padding-right:15px;margin-bottom:2rem;">
+              <span class="custom-label">Commands</span>
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between"
+                  v-for="(command,key) in commands"
+                  :key="key"
+                >
+                {{command}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCommand(key)"><i class="fa fa-minus"></i></button></span>
+
+                </li>
+
+              </ul>
+            </div>
+            <div class="text-right" style="padding-top:4rem;padding-bottom:10px;">
+              <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
+            </div>
+          </template>
+        </card>
+        <card>
+          <template slot="header">
+            <!-- <h4 class="card-title text-center">ADD Criteria</h4> -->
+          </template>
+            <!-- <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
+              <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
+            </div> -->
+          <template>
+            <div v-show="showCriteria" style="padding-top:20px;margin-bottom:2rem;">
+                <span class="custom-label">Configured Criterias</span>
+                <div class="table-responsive">
+                  <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <thead>
+                          <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Criteria</th>
+                          <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repos</th>
+                          <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Services</th>
+                          <!-- <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Builder</th> -->
+                          <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Customize Workspace</th>
+                          <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
+                      </thead>
+                      <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
+                      <tbody v-for="(repo, index) in selected_criteria" :key="index">
+                              <tr
+                                  style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                  <td
+                                      style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <div style="text-align:left;">
+                                          {{index}}
+                                      </div>
+                                  </td>
+                                  <td
+                                      style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <!-- {{Object.keys(repo.repos)}} -->
+                                      {{get_string_repos(repo)}}
+                                  </td>
+                                  <td
+                                      style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      {{get_string_services(repo)}}
+                                  </td>
+                                  <!-- <td
+                                      style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      {{get_string_builder(repo)}}
+                                  </td> -->
+                                  <td
+                                      style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <base-checkbox name="workpace" @input="customize_criteria(index)"></base-checkbox>
+                                  </td>
+                                  <td
+                                      style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCriteria(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                      </button>
+                                  </td>
+
+                              </tr>
+                              <tr>
+
+                                <td colspan="5">
+                                  <div :id="'criteria_'+index" class="row col-12" style="padding-top:20px;display:none;">
+                                    <div class="col-12 col-md-4" style="padding-top:28px;">
+                                      <select class="custom-select" :id="'select_when_'+index" @change="selectWhen(index)">
+                                        <!-- <option value="default"></option> -->
+                                        <option value="branch">branch</option>
+                                        <!-- <option value="tag">tag</option> -->
+                                        <option value="building_tag">building tag</option>
+                                      </select>
+
+
+                                    </div>
+                                    <!-- <div class="col-12 col-md-4" style="padding-top:28px;">
+                                      <select class="custom-select" :id="'select_comp_'+key" >
+                                        <option value="default"></option>
+                                        <option value="anyOf">anyOf</option>
+                                        <option value="allOf">allOf</option>
+                                        <option value="not">not</option>
+                                      </select>
+                                    </div> -->
+                                    <div class="col-12 col-md-4">
+                                      <div class="row">
+                                        <div class="display:grid;">
+                                          <base-input type="text"  class="no-margin"
+                                                  :label="'Branch'"
+                                                  placeholder="master"
+                                                  :id="'select_branch_'+index"
+                                                  @input="getBranch(index)"
+                                                  v-model="branches[index]"
+                                                  >
+                                          </base-input>
+                                          <span v-show="showErrorCommand" style="color:red; font-size:12px;">This field is required</span>
+
                                         </div>
-                                    </td>
-                                    <td
-                                        style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        <div style="text-align:center;">
-                                            {{cred.username_var}}
-                                        </div>
-                                    </td>
-                                    <td
-                                        style="padding-right: 10px; justify-content:center; padding-left: 10px; padding-top: 5px;">
-                                        <div style="text-align:center;">
-                                            {{cred.password_var}}
-                                        </div>
-                                    </td>
-                                </tr>
-                        </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;">
-                  <div class="col-12 col-md-6">
-                    <label> Choose a builder tool</label>
-                    <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
-                      <option value="default">Select ...</option>
-                      <option value="tox">TOX</option>
-                      <option value="command">COMMANDS</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="row" style="padding-top:20px;" v-show="showToxBuilder">
-                    <div class="col-12 col-md-6">
-
-                      <base-input type="text" class="col-10 no-margin"
-                              label="Tox file"
-                              :disabled="false"
-                              placeholder="/myrepo-testing/tox.ini"
-                              v-model="tox.file">
-                      </base-input>
-                      <span v-show="showErrorFile" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
-                    </div>
-                    <div class="col-12 col-md-6" style="display:grid;">
-                      <div style="display:flex;">
-                        <base-input type="text" class="col-10 no-margin"
-                                label="Test env"
-                                :disabled="false"
-                                placeholder="stylecheck"
-                                v-model="tox.env">
-                        </base-input>
-                        <div class="col-2"  style="padding-top:30px;padding-left:0px;">
-                          <button type="button" class="btn-simple btn btn-xs btn-info" @click="addTestEnv()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD</button>
-                        </div>
-                      </div>
-                      <span v-show="showErrorEnv" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
-
-                    </div>
-
-                </div>
-                <div v-show="show_tool_tox" style="padding-top:20px;padding-right:15px;margin-bottom:2rem;">
-                  <span class="custom-label">Test Env</span>
-
-                  <ul class="list-group">
-                    <li style="padding-left:40px;" class="list-group-item d-flex justify-content-between"
-                      v-for="(env,key) in testenv"
-                      :key="key"
-                    >
-                    {{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removetestEnv(key)"><i class="fa fa-minus"></i></button></span>
-
-                    </li>
-
-                  </ul>
-                </div>
-                <div class="row" style="padding-top:20px;" v-show="showCommandBuilder">
-                  <div class="col-12 row">
-                    <div class="col-10">
-                      <base-input style="padding-left:15px;" type="text" class="no-margin"
-                              label="Command"
-                              :disabled="false"
-                              placeholder="npm install"
-                              v-model="command">
-                      </base-input>
-                      <span v-show="showErrorCommand" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
-
-                    </div>
-                    <div class="col-2" style="padding-top:30px;">
-                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCommand()"><i class="fa fa-plus"></i>ADD</button>
-                    </div>
-                  </div>
-                </div>
-                <div v-show="showCommands" style="padding-top:20px;padding-right:15px;margin-bottom:2rem;">
-                  <span class="custom-label">Commands</span>
-                  <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between"
-                      v-for="(command,key) in commands"
-                      :key="key"
-                    >
-                    {{command}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCommand(key)"><i class="fa fa-minus"></i></button></span>
-
-                    </li>
-
-                  </ul>
-                </div>
-                <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
-                  <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
-                </div>
-              </template>
-            </card>
-            <card>
-              <template slot="header">
-                <!-- <h4 class="card-title text-center">ADD Criteria</h4> -->
-              </template>
-                <!-- <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
-                  <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
-                </div> -->
-              <template>
-                <div v-show="showCriteria" style="padding-top:20px;margin-bottom:2rem;">
-                    <span class="custom-label">Configured Criterias</span>
-                    <div class="table-responsive">
-                      <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
-                          <thead>
-                              <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Criteria</th>
-                              <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repos</th>
-                              <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Services</th>
-                              <!-- <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Builder</th> -->
-                              <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Customize Workspace</th>
-                              <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
-                          </thead>
-                          <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
-                          <tbody v-for="(repo, index) in selected_criteria" :key="index">
-                                  <tr
-                                      style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
-                                      <td
-                                          style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                          <div style="text-align:left;">
-                                              {{index}}
-                                          </div>
-                                      </td>
-                                      <td
-                                          style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                          <!-- {{Object.keys(repo.repos)}} -->
-                                          {{get_string_repos(repo)}}
-                                      </td>
-                                      <td
-                                          style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                          {{get_string_services(repo)}}
-                                      </td>
-                                      <!-- <td
-                                          style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                          {{get_string_builder(repo)}}
-                                      </td> -->
-                                      <td
-                                          style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                          <base-checkbox name="workpace" @input="customize_criteria(index)"></base-checkbox>
-                                      </td>
-                                      <td
-                                          style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                          <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCriteria(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
-                                          </button>
-                                      </td>
-
-                                  </tr>
-                                  <tr>
-
-                                    <td colspan="5">
-                                      <div :id="'criteria_'+index" class="row col-12" style="padding-top:20px;display:none;">
-                                        <div class="col-12 col-md-4" style="padding-top:28px;">
-                                          <select class="custom-select" :id="'select_when_'+index" @change="selectWhen(index)">
-                                            <!-- <option value="default"></option> -->
-                                            <option value="branch">branch</option>
-                                            <!-- <option value="tag">tag</option> -->
-                                            <option value="building_tag">building tag</option>
-                                          </select>
-
-
-                                        </div>
-                                        <!-- <div class="col-12 col-md-4" style="padding-top:28px;">
-                                          <select class="custom-select" :id="'select_comp_'+key" >
-                                            <option value="default"></option>
-                                            <option value="anyOf">anyOf</option>
-                                            <option value="allOf">allOf</option>
-                                            <option value="not">not</option>
-                                          </select>
+                                        <!-- <div style="padding-top:30px;">
+                                          <button type="button" :id="'button_branch_'+key" class="btn-simple btn btn-xs btn-info" @click="addExecute(key)"><i class="fa fa-plus"></i>ADD</button>
                                         </div> -->
-                                        <div class="col-12 col-md-4">
-                                          <div class="row">
-                                            <div class="display:grid;">
-                                              <base-input type="text"  class="no-margin"
-                                                      :label="'Branch'"
-                                                      placeholder="master"
-                                                      :id="'select_branch_'+index"
-                                                      @input="getBranch(index)"
-                                                      v-model="branches[index]"
-                                                      >
-                                              </base-input>
-                                              <span v-show="showErrorCommand" style="color:red; font-size:12px;">This field is required</span>
-
-                                            </div>
-                                            <!-- <div style="padding-top:30px;">
-                                              <button type="button" :id="'button_branch_'+key" class="btn-simple btn btn-xs btn-info" @click="addExecute(key)"><i class="fa fa-plus"></i>ADD</button>
-                                            </div> -->
-
-
-                                          </div>
-                                        </div>
 
 
                                       </div>
+                                    </div>
 
-                                    </td>
-                                    <td style="display: none;"></td>
-                                    <td style="display: none;"></td>
-                                    <td style="display: none;"></td>
-                                    <td style="display: none;"></td>
 
-                                  </tr>
+                                  </div>
 
-                          </tbody>
-                      </table>
-                    </div>
-                  </div>
-              </template>
-              <div class="row" style="margin-top:2rem; margin-bottom:2rem;">
-                <div class="col-12 col-md-12 text-center">
-                    <button @click="back()" type="button" class="btn btn-next-back btn-back" >
-                        BACK
-                    </button>
-                    <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
-                        NEXT
-                    </button>
+                                </td>
+                                <td style="display: none;"></td>
+                                <td style="display: none;"></td>
+                                <td style="display: none;"></td>
+                                <td style="display: none;"></td>
+
+                              </tr>
+
+                      </tbody>
+                  </table>
                 </div>
               </div>
-            </card>
-        </div>
+          </template>
+          <div class="row" style="margin-top:2rem; margin-bottom:2rem;">
+            <div class="col-12 col-md-12 text-center">
+                <button @click="back()" type="button" class="btn btn-next-back btn-back" >
+                    BACK
+                </button>
+                <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
+                    NEXT
+                </button>
+            </div>
+          </div>
+        </card>
+      <!-- </div> -->
       </div>
     </div>
   </div>
@@ -353,6 +360,33 @@
         builder_tool: 'default',
         showToxBuilder:false,
         showCommandBuilder:false,
+        info:{
+          'qc_style':{
+            'p1':'Use code style standards to guide your code writing so you let others  understand it.',
+            'p2':'readability, reusability',
+            'link':'https://indigo-dc.github.io/sqa-baseline/#code-style-qc.sty'
+          },
+          'qc_coverage':{
+            'p1':'Test the behaviour of segments or units within your code (e.g. conditionals, loops, functions).',
+            'p2':'design, bug detection',
+            'link':'https://indigo-dc.github.io/sqa-baseline/#unit-testing-qc.uni'
+          },
+          'qc_functional':{
+            'p1':'Ensure compliance with the functional requirements to meet your users’ expectations.',
+            'p2':'end-user satisfaction',
+            'link':'https://indigo-dc.github.io/sqa-baseline/#functional-testing-qc.fun'
+          },
+          'qc_security':{
+            'p1':'Secure your software by finding (statically) common issues associated to the programming language in use and look for disclosed security vulnerabilities.',
+            'p2':'security issues detection',
+            'link':'https://indigo-dc.github.io/sqa-baseline/#security-qc.sec'
+          },
+          'qc_doc':{
+            'p1':'Treat documentation as code by using markup languages to automatically build and place it in online repositories.',
+            'p2':'outreach capacity, documentation maintenance',
+            'link':'https://indigo-dc.github.io/sqa-baseline/#documentation-qc.doc'
+          }
+        }
 
       }
     },
@@ -709,7 +743,7 @@
        this.$eventHub.$emit('steps', 3);
     },
     created(){
-
+      console.log(this.info)
       this.checkauthCall(this.checkauthCallBack);
       if(this.$store.state.config_yaml.config.credentials.length > 0){
         this.showCredInfo = true;
@@ -789,5 +823,13 @@ input[type=number]::-webkit-inner-spin-button {
 .open-criteria{
   display: flex!important;
 }
+@media (min-width: 992px){
+    .col-lg-10 {
+        -ms-flex: 0 0 83.333333%;
+        -webkit-box-flex: 0;
+        flex: 0 0 83.333333%;
+        max-width: 100%;
+  }
+ }
 
 </style>

@@ -31,7 +31,7 @@
 
                     </div>
                     <div class="col-10 col-md-10">
-                      <h2 class="custom-title">Online Quality Assessment</h2>
+                      <h2 class="custom-title">Quality Assessment & Awarding</h2>
                       <span style="color:white;">Evaluates the level of compliance of a source code repository or running service according to the quality criteria from the Software & Service baseline.</span>
                     </div>
                   </div>

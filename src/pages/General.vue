@@ -2,11 +2,15 @@
   <div class="content">
     <div class="container-fluid">
 			<!-- <span>User: {{username}}</span> -->
-      <div style="margin-top:30px;">
-        <div class="col-12 col-md-10 col-lg-8 col-xl-6" style="margin:auto;padding:0px;">
-            <card style="height:75vh;overflow-y: auto;">
-              <template slot="header">
-                <h4 class="card-title text-center">REPOS OPTIONS</h4>
+      <div class="col-12 col-lg-10 mx-auto" >
+        <div class="" style="margin:auto;">
+            <h4 style="margin-top:0px;" class="card-title text-center">REPOS OPTIONS</h4>
+            <card style="height:90vh;overflow-y: auto;">
+              <template slot="header" >
+                <div class="text-center" style="padding-left:20px;padding-top:20px;">
+                  <p style="font-weight:700;">Code repositories are the substrate for the CI/CD pipeline work.</p>
+                  <p>CI/CD pipelines are commonly located next to the code, so they can react instantly to code changes. Nonetheless, alternative approaches maintain the pipelines in individual code repositories. Here you will be able to customize your CI/CD pipeline to adequate to one or both approaches (git code repositories only).</p>
+                </div>
               </template>
 
               <template>
@@ -26,7 +30,7 @@
                     </div>
                   </div> -->
 
-                  <div class="col-12"  style="padding-left:20px;">
+                  <div class="col-12"  style="padding-left:20px;padding-top:20px;">
 
                     <base-input style="margin-bottom:0px;"  type="text"
                               label="Repository URL"
@@ -139,7 +143,7 @@
                             class="collapsed ">
                             <i class="fa fa-angle-down" aria-hidden="true"></i>
                             <p style="margin-bottom: 0px;">ADVANCED OPTIONS</p>
-                            <p>(Path deploy, Credencials, Env Vars, Timeout)</p>
+                            <p>(Credencials, Env Vars)</p>
                           </a>
                         </div>
                       </div>
@@ -148,7 +152,7 @@
                     <div id="accordionBodyGeneralOptions" class="collapse" role="tabpanel" aria-labelledby="accordionHeadingGeneralOptions" aria-expanded="false" data-parent="accordion_general_options">
                       <div class="card-block col-12">
                         <!-- <p>Accordion Item 1 - Body</p> -->
-                        <base-input style="padding-left:20px;padding-right:20px;" type="text"
+                        <!-- <base-input style="padding-left:20px;padding-right:20px;" type="text"
                             label="Path Deploy Template"
                             :disabled="false"
                             placeholder=".sqa/docker-compose.yml"
@@ -156,7 +160,7 @@
                             link = 'https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#deploy-template'
                             message = 'Path where the docker compose file is.'
                             v-model="repo.path">
-                      </base-input>
+                      </base-input> -->
                       <!-- <div class="custom-div-append">
                           <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
                             <i class="fa fa-question-circle"></i>
@@ -317,17 +321,18 @@
                           </table>
                         </div>
                       </div>
-                      <div style="padding-left:5px;padding-bottom:5px;margin-bottom:2rem;margin-top:2rem;">
+                      <!-- <div style="padding-left:5px;padding-bottom:5px;margin-bottom:2rem;margin-top:2rem;">
                         <span class="custom-label" for="timeout" style="padding-right:20px;">Timeout:</span>
                         <input style="width:80px;" type="number" id="timeout" value="600" step="100" v-model="$store.state.config_yaml.timeout">
-                      </div>
+                      </div> -->
                       </div>
                     </div>
                   </div>
                 </div>
               </template>
-              <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
-                <div class="col-12 col-md-12 text-center">
+              <div class="row" style="margin-top:2rem;">
+                <!-- style="position:absolute;bottom:40px;" -->
+                <div class="col-12 col-md-12 text-center" style="margin-bottom:2rem;" >
                     <button @click="back()" type="button" class="btn btn-next-back btn-back" >
                         BACK
                     </button>
@@ -370,7 +375,7 @@
           id:'',
           username_var:'',
           password_var:'',
-          type:"default"
+          type:"username_password"
         },
         env:{
           key:'',
@@ -798,5 +803,14 @@ input[type=number]::-webkit-inner-spin-button {
 .accordion-head > .collapsed > i:before{
     content: "\f105";
 }
+
+@media (min-width: 992px){
+    .col-lg-10 {
+        -ms-flex: 0 0 83.333333%;
+        -webkit-box-flex: 0;
+        flex: 0 0 83.333333%;
+        max-width: 100%;
+  }
+ }
 
 </style>

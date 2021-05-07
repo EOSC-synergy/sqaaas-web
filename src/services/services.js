@@ -65,7 +65,8 @@ export default {
       runPipelineCall(data, callBackHandler){
         axios({
           method: 'post',
-          url: this.env.api +'/'+data+'/run',
+          // url: this.env.api +'/'+data.id+'/run?repo_url='+data.url+'&repo_branch='+data.branch,
+          url: this.env.api +'/'+data.id+'/run',
         }).then(response => {
             return callBackHandler(response);
         })

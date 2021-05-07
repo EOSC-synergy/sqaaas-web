@@ -1,44 +1,15 @@
 <template>
   	<div class="content">
       <div class="container-fluid">
-        <div  v-show="loading" class="loading-overlay is-active">
+        <!-- <div  v-show="loading" class="loading-overlay is-active">
           <span class="fas fa-spinner fa-3x fa-spin"></span>
-        </div>
-
-         <div class="row">
+        </div> -->
+        <div class="col-12 col-sm-12 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
+          <h4 style="margin-top:0px;" class="card-title text-center">Pipeline</h4>
+          <!-- <div class="row">
           <div class="col-12">
 
             <card class="strpied-tabled-with-hover"
-                  body-classes=""
-            >
-              <template slot="header">
-                <h4 class="card-title text-center">Pipeline</h4>
-              </template>
-
-              <template >
-                <div class="row text-center">
-
-                  <div class="col-12 col-md-6" style="padding-bottom:20px;padding-left:15px;">
-                    <!-- <button class="btn  btn-primary btn-fill" :disabled='disabled_button' @click="createPipeline()">Create Pipeline</button> -->
-
-                  </div>
-                  <div class="col-12 col-md-6" style="padding-bottom:20px;padding-left:15px;">
-                    <button class="btn  btn-primary btn-fill" :disabled='!disabled_button' @click="deletePipeline()">Delete Pipeline</button>
-
-                  </div>
-                </div>
-                <div class="text-center" v-show="pipeline_id != ''">
-                    <span>Pipeline ID: {{pipeline_id}}</span>
-                </div>
-              </template>
-            </card>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-12">
-
-            <!-- <card class="strpied-tabled-with-hover"
                   body-classes=""
             >
               <template slot="header">
@@ -58,156 +29,127 @@
                   </div>
                 </div>
                 <div class="text-center" v-show="pipeline_id != ''">
-                  <span>Pipeline ID: {{pipeline_id}}</span>
+                    <span>Pipeline ID: {{pipeline_id}}</span>
                 </div>
               </template>
-            </card> -->
-            <div class="row">
-              <div class="col-12">
-                <card  class="strpied-tabled-with-hover"
-                      body-classes=""
-                >
-                  <template slot="header" >
-                    <h4 class="card-title text-center" style="padding-bottom:4rem;">Execute Pipeline</h4>
-                  </template>
+            </card>
+          </div>
+        </div> -->
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <card  class="strpied-tabled-with-hover" style="height:75vh;"
+                        body-classes=""
+                  >
+              <template slot="header" >
+                <h4 class="card-title text-center" style="padding-bottom:1rem;">EXECUTE</h4>
+              </template>
 
-                  <template >
-                    <div class="row" style="padding-bottom:20px;padding-left:15px;padding-bottom: 3rem;">
-                      <!-- <div class="col-12 text-center" > -->
-                        <div class="col-12 col-md-6 text-center">
-                          <button class="btn  btn-primary btn-fill" @click="runPipeline()">Run pipeline</button>
-                        </div>
-                        <div class="col-12 col-md-6 text-center" style="padding-top:15px;" v-show="showBuildUrl">
-                          <span>Build URL:  </span><a style="text-decoration: underline;" :href="build_url" target="_blank">Click here</a>
-                        </div>
-                      <!-- </div> -->
+              <template >
+                <div style="padding-bottom:20px;padding-bottom: 3rem;padding-left:20px;padding-right:20px;">
+                    <div v-show="showBadge == false" class="text-center">
+                      <img src="../../public/img/rocket.jpg" class="rounded img-fluid mx-auto" style="max-width: 20%" alt="...">
+                      <p style="padding-top:20px;">Some text</p>
+                      <p>Some other text</p>
                     </div>
+                     <div v-show="showBadge == true" class="" id="badge" style="padding-bottom:20px;padding-left:15px;">
+
+
+                    </div>
+
+
                     <div v-show="showFieldsPipeline">
                       <base-input type="text" class="no-margin"
                         label="URL"
                         :disabled="false"
                         placeholder="https://github.com/EOSC-synergy/sqaaas-web.git"
                         v-model="repo_url_mimic">
-                    </base-input>
-                    <base-input type="text" class="no-margin"
-                        label="Branch (Optional)"
-                        :disabled="false"
-                        placeholder="master"
-                        v-model="repo_branch_mimic">
-                    </base-input>
-                    </div>
-                  </template>
-                </card>
-              </div>
-
-            </div>
-
-            <div class="row">
-              <div class="col-12 col-md-6">
-                <card  class="strpied-tabled-with-hover" style="height:319px;"
-                      body-classes=""
-                >
-                  <template slot="header" >
-                    <h4 class="card-title text-center" style="padding-bottom:20px;">Bagdr</h4>
-                  </template>
-
-                  <template>
-                    <div v-show="showBadge == false" class="text-center">
-                      <i class="fa fa-info" style="padding-bottom:10px;color:#3472F7;font-size:30px;" aria-hidden="true"></i>
-                      <p>The badgr will be displayed when the pipeline has execute successfully. </p>
-
-
+                      </base-input>
+                      <base-input type="text" class="no-margin"
+                          label="Branch (Optional)"
+                          :disabled="false"
+                          placeholder="master"
+                          v-model="repo_branch_mimic">
+                      </base-input>
                     </div>
 
-                    <div v-show="showBadge == true" class="" id="badge" style="padding-bottom:20px;padding-left:15px;">
-
-
-                    </div>
-                  </template>
-                </card>
-              </div>
-
-              <div class="col-12 col-md-6">
-                <card  class="strpied-tabled-with-hover" style="height:319px;"
-                      body-classes=""
-                >
-                  <template slot="header" >
-                    <h4 class="card-title text-center" style="padding-bottom:4rem;">Check Status of Pipeline</h4>
-                  </template>
-
-                  <template >
-                    <div class="row" style="padding-bottom:20px;padding-left:15px;padding-bottom: 3rem;">
-                      <div class="col-12 col-md-6 text-center">
-                        <button  class="btn  btn-primary btn-fill" :disabled="disable_status" @click="checkStatus()">Check status</button>
+                    <div style="position: absolute; bottom:40px;left: 0; right: 0; margin-left: auto; margin-right: auto; width: 100%;">
+                      <div class="text-center" style="padding-top:15px;" v-show="showBuildUrl">
+                        <span>Build URL:  </span><a style="text-decoration: underline;" :href="build_url" target="_blank">Click here!</a>
                       </div>
-                      <div class="col-12 col-md-6" v-show="showStatus" style="padding-top:15px;">
-                        <span>Status: </span>
-                        <span style="text-transform: uppercase;padding-right:10px;">{{build_status}}</span>
+                      <div style="padding-bottom:15px;" class="text-center" v-show="showStatus">
+                        {{build_status}}
                         <i v-if="build_status == 'SUCCESS'" style="color:green;" class="fa fa-check" aria-hidden="true"></i>
                         <i v-else-if ="build_status == 'FAILURE'" style="color:red;" class="fa fa-times" aria-hidden="true"></i>
                         <i v-else style="color:red;" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                       </div>
+                      <div v-show="!loading" class="text-center">
+                        <button class="btn  btn-primary btn-fill" @click="runPipeline()">Run pipeline</button>
+                      </div>
+                      <div v-show="loading" class="text-center" >
+                        <button type="button" class="btn btn-simple" disabled>
+                            <span style="padding-right:5px;" class="btn-label"><i style="color:black;" class="fa fa-cog fa-spin fa-1x fa-fw"></i></span>Executing Pipeline...</button>
                     </div>
-                  </template>
-                </card>
-              </div>
+                    </div>
+                </div>
+
+              </template>
+            </card>
+
+
             </div>
+            <div class="col-12 col-md-6">
+              <card  class="strpied-tabled-with-hover"
+              body-classes=""  style="height:75vh;"
+              >
+              <template slot="header" >
+                <h4 class="card-title text-center" style="padding-bottom:1rem;">GET</h4>
+              </template>
 
-
-            <div class="row">
-              <div class="col-12 col-md-6">
-                <card  class="strpied-tabled-with-hover"
-                body-classes=""  style="height:228px;"
-                >
-                <template slot="header" >
-                  <h4 class="card-title text-center" style="padding-bottom:2rem;">Generate Files to JePL</h4>
-                </template>
-
-                <template >
-
-                  <div class="row" style="padding-bottom:20px;padding-left:15px;">
+              <template >
+                <div style="padding-bottom:20px;padding-bottom: 3rem;padding-left:20px;padding-right:20px;">
+                  <div v-show="showBadge == false" class="text-center">
+                        <img src="../../public/img/get_file.png" class="rounded img-fluid mx-auto" style="max-width: 20%" alt="...">
+                        <p style="padding-top:20px;">Some text</p>
+                        <p>Some other text</p>
+                      </div>
+                  <div class="row" style="padding-top:40px;padding-bottom:20px;padding-left:15px;">
                     <div class="col-12 text-center">
-                      <button class="btn  btn-primary btn-fill" @click="generateFiles()">Generate Files</button>
+
+                      <button type="button" class="btn btn-simple btn-primary" @click="generateFiles()">
+                          <span class="btn-label"><i class="fa fa-file-text" aria-hidden="true"></i></span>sqaaas.zip
+                          <span style="margin-left:10px;" class="fa-stack fa-sm">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i style="width: 85%;" class="fa fa-download fa-stack-1x fa-inverse"></i>
+                          </span>
+                          </button>
                     </div>
                   </div>
-                </template>
-                </card>
-              </div>
-              <div class="col-12 col-md-6">
-                  <card  class="strpied-tabled-with-hover"
-                  body-classes="" style="height:228px;"
-                  >
-                    <template slot="header" >
-                      <h4 class="card-title text-center" style="padding-bottom:2rem;">Pull Request</h4>
-                    </template>
 
-                    <template >
-                      <div class="row" style="padding-bottom:20px;padding-left:15px;">
-                        <div class="col-12 col-md-6">
-                          <base-input type="text" class="no-margin"
-                              label="Repository"
-                              :disabled="false"
-                              placeholder="https://github.com/EOSC-synergy/sqaaas-web.git"
-                              v-model="repo_pull_request">
-                          </base-input>
-                          <span v-show="showErrorPullRequest" style="color:red; font-size:12px;">This field is required.</span>
-                        </div>
-                        <div class="col-12 col-md-6 text-center" style="margin-top:20px;">
-                          <button  class="btn  btn-primary btn-fill" @click="pullrequest()">Pull Request</button>
-                        </div>
+                  <div style="padding-bottom:20px;">
+                    <div style=" position: absolute; bottom:40px;left: 0; right: 0; margin-left: auto; margin-right: auto; width: 100%;">
+                      <div style="margin-left:25px;margin-right:25px;">
+                        <base-input type="text" class="no-margin"
+                            label="Repository"
+                            :disabled="false"
+                            placeholder="https://github.com/EOSC-synergy/sqaaas-web.git"
+                            v-model="repo_pull_request">
+                        </base-input>
                       </div>
-                      <div>
-                        <a :href="pull_request_url" target="_blank">{{pull_request_url}}</a>
+                      <span v-show="showErrorPullRequest" style="padding-left:30px;color:red; font-size:12px;">This field is required.</span>
+                      <div v-show="showURL" class="text-center" style="text-decoration: underline;">
+                        <a :href="pull_request_url" target="_blank">URL</a>
                       </div>
-                    </template>
-                  </card>
-              </div>
+                      <div class="text-center" style="margin-top:20px;">
+                        <button  class="btn  btn-primary btn-fill" @click="pullrequest()">Pull Request</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              </card>
             </div>
-
           </div>
         </div>
-
-
       </div>
   	</div>
 </template>
@@ -258,13 +200,28 @@
         repo_url_mimic: '',
         repo_branch_mimic:'',
         showFieldsPipeline: false,
-        intervalID: ''
+        execute_pipeline: true,
+        intervalID: '',
+        autoRefresh:false,
+        t:'',
+        showURL:false,
+
 		}
     },
     watch:{
       "repo_pull_request"(val){
         if(val != ''){
           this.showErrorPullRequest = false;
+        }
+
+      },
+      "autoRefresh"(val) {
+        if (val) {
+            this.t = setInterval(() => {
+                this.checkStatus()
+            }, 10 * 1000)
+        } else {
+            clearInterval(this.t)
         }
       }
     },
@@ -299,69 +256,7 @@
         this.loading = false;
       },
 
-      createPipeline(){
-        var data =
-                      {
-                          "name": this.$store.state.name,
-                          "composer_data": {
-                              "services": this.$store.state.docker_compose.services,
-                              "version": "3.7"
-                          },
-                          "config_data": [
-                              {
-                                  "config":{
-                                    "project_repos": this.$store.state.config_yaml.config.project_repos,
-                                    "credentials" : this.$store.state.config_yaml.config.credentials,
-                                  },
-                                  "environment" : this.$store.state.config_yaml.environment,
-                                  "sqa_criteria": this.$store.state.config_yaml.sqa_criteria,
-                                  "timeout": this.$store.state.config_yaml.timeout
 
-                              }
-                          ],
-                          "jenkinsfile_data": {
-                              "stages": [
-                                  {
-                                      "pipeline_config": {
-                                          "base_branch": "https://github.com/jenkins-docs/simple-java-maven-app",
-                                          "base_repository": "master",
-                                          "config_file": "./.sqa/config.yml",
-                                          "credentials_id": "userpass_dockerhub",
-                                          "jepl_validator_docker_image": "eoscsynergy/jpl-validator:1.1.0"
-                                      },
-                                      "when": {
-                                          "branches": [
-                                              "master"
-                                          ]
-                                      }
-                                  }
-                              ]
-                          }
-                      }
-
-        this.loading = true;
-        this.createPipelineCall(data,this.createPipelineCallBack)
-      },
-      createPipelineCallBack(response){
-        if(response.status == 201){
-          if (response.data.id && response.data.id != 0){
-            this.pipeline_id = response.data.id;
-            this.$store.state.pipeline_id = this.pipeline_id;
-            this.showCard = true;
-            this.disabled_button = true;
-            this.notifyVue("Success","Pipeline created successfully.",'nc-icon nc-check-2','info');
-          }
-        }else{
-           if(response.status == 403){
-            this.disabled_button = false;
-            this.$router.replace(this.$route.query.redirect || "/logout");
-          }else{
-            this.notifyVue("Error", response.status +":" + response.data.detail,'nc-icon nc-simple-remove','danger')
-          }
-        }
-        this.loading = false;
-
-      },
       runPipeline(){
         console.log(this.$store.state.config_yaml)
         for (var criteria in this.$store.state.config_yaml.sqa_criteria){
@@ -373,14 +268,21 @@
           }
 
         }
+
+        var data = {
+          id:this.pipeline_id,
+          url:this.repo_url_mimic,
+          branch:this.repo_branch_mimic
+        }
         if(this.showFieldsPipeline == false){
           this.loading = true;
-          this.runPipelineCall(this.pipeline_id,this.runPipelineCallBack)
+
+          this.runPipelineCall(data,this.runPipelineCallBack)
         }else if(this.showFieldsPipeline == true && this.repo_url_mimic == ''){
           this.notifyVue("Error", "Please add the URL of the repository",'nc-icon nc-simple-remove','danger')
         }else{
           this.loading = true;
-          this.runPipelineCall(this.pipeline_id,this.runPipelineCallBack)
+          this.runPipelineCall(data,this.runPipelineCallBack)
         }
         // console.log()
       },
@@ -392,6 +294,7 @@
             this.build_url = response.data.build_url;
             this.$store.state.build_url = this.build_url;
             this.showBuildUrl = true;
+            this.autoRefresh = true;
             this.notifyVue("Success","Pipeline executed successfully.",'nc-icon nc-check-2','info');
           }
         }else if(response.status == 204){
@@ -424,10 +327,10 @@
             this.$store.state.build_url = this.build_url;
             this.showBuildUrl = true;
           }
+          if(this.build_status == "SUCCESS"){
+            this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
+          }
 
-          this.getBadgeCallPOST(this.pipeline_id,this.getBadgeCallPOSTBack)
-          console.log(this.intervalID)
-          window.clearInterval(this.intervalID)
 
 
         }else if(response.status == 403){
@@ -484,6 +387,7 @@
             this.repo_pull_request = ''
             this.pull_request_url = response.data.pull_request_url;
             this.$store.state.pull_request_url = this.pull_request_url;
+            this.showURL = true;
           }
         }else if(response.status == 403){
           this.$router.replace(this.$route.query.redirect || "/logout");
@@ -576,18 +480,11 @@
           this.username = response;
         }
       },
-      getBadgeCallPOSTBack(response){
-        console.log(response)
-        if(response.status == 200){
-          this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
-
-        }
-        console.log(response)
-      },
       getBadgeCallBackGET(response){
         if(response.status == 200){
           this.showBadge = true;
-          console.log(response.data)
+          this.autoRefresh = false;
+
           if($("#badge").has("blockquote").length == 0){
             $( "#badge" ).append(response.data);
           }
@@ -599,7 +496,7 @@
      var _this = this
      this.$nextTick(function () {
 
-       window.clearInterval()
+
             // window.setInterval(() => {
             //     this.checkStatus();
             // },5000);
@@ -607,7 +504,7 @@
 
   },
   created(){
-    window.clearInterval()
+
     this.checkauthCall(this.checkauthCallBack);
     console.log(this.$store.state)
     var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
@@ -644,6 +541,15 @@
 }
 </script>
 <style>
+
+@media (min-width: 992px){
+    .col-lg-10 {
+        -ms-flex: 0 0 83.333333%;
+        -webkit-box-flex: 0;
+        flex: 0 0 83.333333%;
+        max-width: 100%;
+  }
+ }
 
 .loading-overlay {
   display: none;

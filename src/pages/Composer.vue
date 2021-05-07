@@ -1,12 +1,15 @@
 <template>
   <div class="content">
     <div class="container-fluid">
-			<!-- <span>User: {{username}}</span> -->
-      <div style="margin-top: 30px;">
-        <div class="col-12 col-md-10 col-lg-8 col-xl-6" style="margin:auto;padding:0px;">
-          <card style="height:75vh;overflow-y: auto;">
+      <div class="col-12 col-sm-12 col-lg-10 mx-auto" >
+        <div class="" style="margin:auto;padding:0px;">
+          <h4 style="margin-top:0px;" class="card-title text-center">COMPOSER OPTIONS</h4>
+          <card style="height:90vh;overflow-y: auto;">
             <template slot="header">
-              <h4 class="card-title text-center">COMPOSER OPTIONS</h4>
+              <div class="text-center" style="padding-left:20px;padding-top:20px;">
+                <p style="font-weight:700;">Services are deployed as Docker containers that will make up the building and testing environment.</p>
+                <p>Here you will be able to compose your testing environment by either obtaining Docker images from explicit registries (defaults to Docker Hub) or building your own images through Dockerfiles. The latter will allow you to push the resultant image to the remote Docker registry.</p>
+              </div>
             </template>
 
             <template>
@@ -49,6 +52,7 @@
                           class="collapsed ">
                           <i class="fa fa-angle-down" aria-hidden="true"></i>
                           <p>ADVANCED OPTIONS</p>
+                           <p>(Volumes, Env Vars, Docker Registry)</p>
                         </a>
                       </div>
                     </div>
@@ -69,10 +73,7 @@
                       <div class="row" style="padding-left:5px;">
                         <div class="col-12 col-md-4" >
                           <div class="row">
-                            <label class="control-label">
-                              Volume Type
-                            </label>
-                            <!-- <span class="custom-label">Volume Type</span> -->
+                            <span class="custom-label" style="font-size: 12px;text-transform: uppercase;padding-top:10px;">Volume Type</span>
                             <div class="custom-div-append">
                               <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
                                 <i class="fa fa-question-circle"></i>
@@ -90,12 +91,18 @@
                                 label="Volume Source"
                                 :disabled="false"
                                 placeholder="worsica_web_products"
+                                :help="true"
+                                link = 'https://docs.docker.com/compose/'
+                                message = 'Docker compose oficial documentation'
                                 v-model="volume.source">
                         </base-input>
                         <base-input class="col-12 col-md-4" type="text"
                                 label="Volume target"
                                 :disabled="false"
                                 placeholder="/usr/local/worsica_web_products"
+                                :help="true"
+                                link = 'https://docs.docker.com/compose/'
+                                message = 'Docker compose oficial documentation'
                                 v-model="volume.target">
                         </base-input>
 
@@ -772,7 +779,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 .custom-append-button {
   padding-top: 0px !important;
-  /* padding-bottom: 0.38rem !important; */
+  padding-bottom: 5px !important;
   padding-left:0.75rem !important;
   padding-right:0.75rem !important;
     margin-bottom: 0;
@@ -797,8 +804,15 @@ input[type=number]::-webkit-inner-spin-button {
     padding-left: 0px!important;
     padding-right: 0px!important;
   }
+ }
 
-
+ @media (min-width: 992px){
+    .col-lg-10 {
+        -ms-flex: 0 0 83.333333%;
+        -webkit-box-flex: 0;
+        flex: 0 0 83.333333%;
+        max-width: 100%;
+  }
  }
 
  .btn-info {

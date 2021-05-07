@@ -4,23 +4,22 @@
         <div  v-show="loading" class="loading-overlay is-active">
           <span class="fas fa-spinner fa-3x fa-spin"></span>
         </div>
-        <div class="row">
-          <div class="col-12">
-
+        <div class="col-12 col-sm-12 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
+          <h4 style="margin-top:0px;" class="card-title text-center">Information Summary</h4>
           <card
                   body-classes=""
             >
               <template slot="header">
-                <h4 class="card-title text-center">Information Summary</h4>
+                <!-- <h4 class="card-title text-center">Information Summary</h4> -->
               </template>
 
               <template >
                 <div class="row text-center" style="padding: 0px 40px 0px 40px;">
                   <div class="col-12 col-md-8">
-                     <p class="text-left" style="font-size:14px;margin-bottom:1rem;">
+                    <p class="text-left" style="font-size:14px;margin-bottom:1rem;">
                       <strong style="font-weight:bold;">Pipeline name:</strong> {{($store.state.name) ? $store.state.name : ''}}
                     </p>
-                     <p class="text-left" style="font-size:14px;">
+                    <p class="text-left" style="font-size:14px;">
                       <strong style="font-weight:bold;">Repositories:</strong> {{ ''}}
                     </p>
                   </div>
@@ -28,18 +27,11 @@
                     <div class="table-responsive">
                     <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                         <thead>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Name</th>
                             <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">URL</th>
                         </thead>
                         <tbody v-for="(repo, index) in $store.state.config_yaml.config.project_repos" :key="index">
                                 <tr
                                     style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
-                                    <td
-                                        style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        <div style="text-align:left;">
-                                            {{index}}
-                                        </div>
-                                    </td>
                                     <td
                                         style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                         {{repo.repo}}
@@ -157,118 +149,93 @@
                   </div>
                 </div>
               </template>
-            </card>
-          </div>
-        </div>
-        <!-- <div>
-               <div class="row">
-                <div class="col-3">
-                  <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Home</a>
-                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a>
-                    <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</a>
-                    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</a>
-                  </div>
-                </div>
-                <div class="col-9">
-                  <div class="tab-content" id="v-pills-tabContent">
-                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+          </card>
+          <div v-show="showFiles" class="row">
+            <div class="col-12">
+              <h4 class="card-title text-center" style="padding-top:5px;">Files</h4>
+              <card class="strpied-tabled-with-hover"
+                      body-classes=""
+                >
+                  <template slot="header">
+                    <div class="row" style="justify-content: center;">
+
+                      <!--  -->
+                      <!-- <button class="btn  btn-primary btn-simple " style="margin-bottom:5px;" @click="downloadAll()">(Download All)</button> -->
 
 
                     </div>
-                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">...</div>
-                    <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">...</div>
-                    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
-                  </div>
-                </div>
-              </div>
-        </div> -->
+                  </template>
 
+                  <template >
+                    <ul class="nav nav-tabs nav-fill" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Main Configuration</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Composer</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Jenkinsfile</a>
+                      </li>
+                    </ul>
+                    <div class="tab-content">
+                      <div class="tab-pane active" id="tabs-1" role="tabpanel">
 
-        <div v-show="showFiles" class="row">
-          <div class="col-12">
-            <card class="strpied-tabled-with-hover"
-                    body-classes=""
-              >
-                <template slot="header">
-                  <div class="row" style="justify-content: center;">
+                        <div class="nav-vertical" style="padding-top:20px;">
+                          <ul class="nav nav-tabs nav-left nav-border-left" role="tablist">
+                            <li  v-for="(yaml,index) in yamlConfig"
+                              :key="index" class="nav-item">
+                              <a class="nav-link file-config" :class="{'active':index==0}" :id="'file-config-'+index" data-toggle="tab" aria-controls="tabVerticalLeft11" :href="'#tabs-config-'+index" role="tab" aria-selected="true" @click="get_data_config(index)">{{(yaml.file_name.length > 10) ? yaml.file_name.substring(0, 10)+'...' : yaml.file_name}}</a>
+                            </li>
 
-                    <h4 class="card-title text-center" style="padding-top:5px;">Files</h4>
-                    <!-- <button class="btn  btn-primary btn-simple " style="margin-bottom:5px;" @click="downloadAll()">(Download All)</button> -->
-
-
-                  </div>
-                </template>
-
-                <template >
-                  <ul class="nav nav-tabs nav-fill" role="tablist">
-                    <li class="nav-item">
-                      <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Main Configuration</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Composer</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Jenkinsfile</a>
-                    </li>
-                  </ul>
-                  <div class="tab-content">
-                    <div class="tab-pane active" id="tabs-1" role="tabpanel">
-
-                      <div class="nav-vertical" style="padding-top:20px;">
-                        <ul class="nav nav-tabs nav-left nav-border-left" role="tablist">
-                          <li  v-for="(yaml,index) in yamlConfig"
-                            :key="index" class="nav-item">
-                            <a class="nav-link file-config" :class="{'active':index==0}" :id="'file-config-'+index" data-toggle="tab" aria-controls="tabVerticalLeft11" :href="'#tabs-config-'+index" role="tab" aria-selected="true" @click="get_data_config(index)">{{(yaml.file_name.length > 10) ? yaml.file_name.substring(0, 10)+'...' : yaml.file_name}}</a>
-                          </li>
-
-                        </ul>
-                        <div class="tab-content px-1" >
-                          <div v-for="(yaml,index) in yamlConfig" style="border-left: 1px solid #cccc;"
-                            :key="index" class="tab-pane tab-config" :class="{'active':index==0}" :id="'tabs-config-'+index" role="tabpanel" aria-labelledby="baseVerticalLeft1-tab1">
-                            <span><b> File name:</b> {{yaml.file_name}}</span>
-                            <div class="col-12" style="padding-top:10px;padding-left:1rem;">
-                              <button class="btn  btn-primary btn-simple" @click="downloadConfig(yaml)" :key="'button'+index+uuid" >Download</button>
+                          </ul>
+                          <div class="tab-content px-1" >
+                            <div v-for="(yaml,index) in yamlConfig" style="border-left: 1px solid #cccc;"
+                              :key="index" class="tab-pane tab-config" :class="{'active':index==0}" :id="'tabs-config-'+index" role="tabpanel" aria-labelledby="baseVerticalLeft1-tab1">
+                              <span><b> File name:</b> {{yaml.file_name}}</span>
+                              <div class="col-12" style="padding-top:10px;padding-left:1rem;">
+                                <button class="btn  btn-primary btn-simple" @click="downloadConfig(yaml)" :key="'button'+index+uuid" >Download</button>
+                              </div>
+                              <div class="col-12" style="height:40vh;overflow-y: auto;">
+                                <editor :editor-id="'editor'+index" lang="yaml" :content="yaml.content" v-on:change-content="changeContentA"  :key="'editor'+index+uuid" ></editor>
+                              </div>
                             </div>
-                            <div class="col-12" style="height:40vh;overflow-y: auto;">
-                              <editor :editor-id="'editor'+index" lang="yaml" :content="yaml.content" v-on:change-content="changeContentA"  :key="'editor'+index+uuid" ></editor>
-                            </div>
+
                           </div>
-
+                        </div>
+                      </div>
+                      <div class="tab-pane" id="tabs-2" role="tabpanel">
+                        <div class="col-12" style="padding-top:2rem;padding-left:1rem;">
+                          <button class="btn  btn-primary btn-simple" @click="downloadComposer()">Download</button>
+                        </div>
+                        <div class="col-12" style="height:40vh;overflow-y: auto;">
+                            <editor editor-id="editorB" lang="yaml" :content="yamlComposer" ></editor>
+                        </div>
+                      </div>
+                      <div class="tab-pane" id="tabs-3" role="tabpanel">
+                        <div class="col-12" style="padding-top:2rem;padding-left:1rem;">
+                          <button class="btn  btn-primary btn-simple" @click="downloadJenkinsfile()">Download</button>
+                        </div>
+                        <div class="col-12" style="height:40vh;overflow-y: auto;">
+                            <editor editor-id="editorC" lang='json' :content="yamlJenkinsfile" ></editor>
                         </div>
                       </div>
                     </div>
-                    <div class="tab-pane" id="tabs-2" role="tabpanel">
-                      <div class="col-12" style="padding-top:2rem;padding-left:1rem;">
-                        <button class="btn  btn-primary btn-simple" @click="downloadComposer()">Download</button>
-                      </div>
-                      <div class="col-12" style="height:40vh;overflow-y: auto;">
-                          <editor editor-id="editorB" lang="yaml" :content="yamlComposer" ></editor>
-                      </div>
-                    </div>
-                    <div class="tab-pane" id="tabs-3" role="tabpanel">
-                      <div class="col-12" style="padding-top:2rem;padding-left:1rem;">
-                        <button class="btn  btn-primary btn-simple" @click="downloadJenkinsfile()">Download</button>
-                      </div>
-                      <div class="col-12" style="height:40vh;overflow-y: auto;">
-                          <editor editor-id="editorC" lang='json' :content="yamlJenkinsfile" ></editor>
-                      </div>
-                    </div>
-                  </div>
-                </template>
-            </card>
-          </div>
-        </div>
-        <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
-            <div class="col-12 col-md-12 text-center">
-                <button @click="back()" type="button" class="btn btn-next-back btn-back" >
-                    BACK
-                </button>
-                <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
-                    NEXT
-                </button>
+                  </template>
+              </card>
             </div>
           </div>
+          <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
+              <div class="col-12 col-md-12 text-center">
+                  <button @click="back()" type="button" class="btn btn-next-back btn-back" >
+                      BACK
+                  </button>
+                  <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
+                      NEXT
+                  </button>
+              </div>
+          </div>
+        </div>
       </div>
   	</div>
 </template>
@@ -723,6 +690,15 @@
 }
 </script>
 <style scoped>
+
+@media (min-width: 992px){
+    .col-lg-10 {
+        -ms-flex: 0 0 83.333333%;
+        -webkit-box-flex: 0;
+        flex: 0 0 83.333333%;
+        max-width: 100%;
+  }
+ }
 
 .loading-overlay {
   display: none;
