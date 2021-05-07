@@ -4,42 +4,34 @@
         <div  v-show="loading" class="loading-overlay is-active">
           <span class="fas fa-spinner fa-3x fa-spin"></span>
         </div>
-        <div class="row">
-          <div class="col-12">
-
+        <div class="col-12 col-sm-12 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
+          <h4 style="margin-top:0px;" class="card-title text-center">Information Summary</h4>
           <card
                   body-classes=""
             >
               <template slot="header">
-                <h4 class="card-title text-center">Information Summary</h4>
+                <!-- <h4 class="card-title text-center">Information Summary</h4> -->
               </template>
 
               <template >
                 <div class="row text-center" style="padding: 0px 40px 0px 40px;">
                   <div class="col-12 col-md-8">
-                     <p class="text-left" style="font-size:14px;margin-bottom:1rem;">
+                    <p class="text-left" style="font-size:14px;margin-bottom:1rem;">
                       <strong style="font-weight:bold;">Pipeline name:</strong> {{($store.state.name) ? $store.state.name : ''}}
                     </p>
-                     <p class="text-left" style="font-size:14px;">
-                      <strong style="font-weight:bold;">Repository:</strong> {{ ''}}
+                    <p class="text-left" style="font-size:14px;">
+                      <strong style="font-weight:bold;">Repositories:</strong> {{ ''}}
                     </p>
                   </div>
                   <div v-if="Object.keys($store.state.config_yaml.config.project_repos).length > 0" class="col-12 col-md-12">
                     <div class="table-responsive">
                     <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                         <thead>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Name</th>
                             <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">URL</th>
                         </thead>
                         <tbody v-for="(repo, index) in $store.state.config_yaml.config.project_repos" :key="index">
                                 <tr
                                     style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
-                                    <td
-                                        style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        <div style="text-align:left;">
-                                            {{index}}
-                                        </div>
-                                    </td>
                                     <td
                                         style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                         {{repo.repo}}
@@ -62,8 +54,8 @@
                     <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                         <thead>
                             <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Name</th>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Image</th>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Container Name</th>
+                            <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Image</th>
+                            <th style="text-align:center;justify-content:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Push Images</th>
                         </thead>
                         <tbody v-for="(service, index) in $store.state.docker_compose.services" :key="index">
                                 <tr
@@ -75,12 +67,12 @@
                                         </div>
                                     </td>
                                     <td
-                                        style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        {{service.image}}
+                                        style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        {{service.image.name}}
                                     </td>
                                     <td
-                                        style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        {{service.container_name}}
+                                        style="text-align:center;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        <i style="color:#1BC10B;" v-show="service.image.registry.push == true" class="fa fa-check-circle" aria-hidden="true"></i>
                                     </td>
 
                                 </tr>
@@ -101,7 +93,8 @@
                     <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                         <thead>
                             <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Criteria</th>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Repository</th>
+                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repository and Service</th>
+                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">When</th>
                         </thead>
                         <tbody v-for="(criteria, index) in $store.state.config_yaml.sqa_criteria" :key="index">
                                 <tr
@@ -113,15 +106,15 @@
                                         </div>
                                     </td>
                                     <td
-                                        style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;display:block;">
+                                        style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                         <div v-for="(repo_criteria, index) in criteria.repos" :key="index" style="margin-top:1rem;">
                                           <div class="row">
                                             <div class="col-md-6">
                                               <p class="text-left" style="font-size:14px;margin-bottom:0px;">
-                                                <strong style="font-weight:bold;">Name:</strong> {{index}}
+                                                <strong style="font-weight:bold;">Name:</strong> {{repo_criteria.repo_url}}
                                               </p>
                                               <p class="text-left" style="font-size:14px;margin-bottom:0px;">
-                                                <strong style="font-weight:bold;">Container:</strong> {{repo_criteria.container}}
+                                                <strong style="font-weight:bold;">Service:</strong> {{repo_criteria.container}}
                                               </p>
                                             </div>
                                             <div class="col-md-6">
@@ -139,6 +132,15 @@
                                         </div>
 
                                     </td>
+                                    <td style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <div v-if="criteria.when && criteria.when.building_tag && criteria.when.building_tag == true">
+                                        <p>On Tag Creation</p>
+                                      </div>
+                                      <div v-else-if="criteria.when && criteria.when.branch">
+                                        <p>Branch: {{(criteria.when) ? ((criteria.when.branch) ? criteria.when.branch.pattern : '') : ''}}</p>
+                                      </div>
+
+                                    </td>
                                 </tr>
 
                         </tbody>
@@ -147,137 +149,91 @@
                   </div>
                 </div>
               </template>
-            </card>
+          </card>
+          <div v-show="showFiles" class="row">
+            <div class="col-12">
+              <h4 class="card-title text-center" style="padding-top:5px;">Files</h4>
+              <card class="strpied-tabled-with-hover"
+                      body-classes=""
+                >
+                  <template slot="header">
+                    <div class="row" style="justify-content: center;">
+
+                      <!--  -->
+                      <!-- <button class="btn  btn-primary btn-simple " style="margin-bottom:5px;" @click="downloadAll()">(Download All)</button> -->
+
+
+                    </div>
+                  </template>
+
+                  <template >
+                    <ul class="nav nav-tabs nav-fill" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Main Configuration</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Composer</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Jenkinsfile</a>
+                      </li>
+                    </ul>
+                    <div class="tab-content">
+                      <div class="tab-pane active" id="tabs-1" role="tabpanel">
+
+                        <div class="nav-vertical" style="padding-top:20px;">
+                          <ul class="nav nav-tabs nav-left nav-border-left" role="tablist">
+                            <li  v-for="(yaml,index) in yamlConfig"
+                              :key="index" class="nav-item">
+                              <a class="nav-link file-config" :class="{'active':index==0}" :id="'file-config-'+index" data-toggle="tab" aria-controls="tabVerticalLeft11" :href="'#tabs-config-'+index" role="tab" aria-selected="true" @click="get_data_config(index)">{{(yaml.file_name.length > 10) ? yaml.file_name.substring(0, 10)+'...' : yaml.file_name}}</a>
+                            </li>
+
+                          </ul>
+                          <div class="tab-content px-1" >
+                            <div v-for="(yaml,index) in yamlConfig" style="border-left: 1px solid #cccc;"
+                              :key="index" class="tab-pane tab-config" :class="{'active':index==0}" :id="'tabs-config-'+index" role="tabpanel" aria-labelledby="baseVerticalLeft1-tab1">
+                              <span><b> File name:</b> {{yaml.file_name}}</span>
+                              <div class="col-12" style="padding-top:10px;padding-left:1rem;">
+                                <button class="btn  btn-primary btn-simple" @click="downloadConfig(yaml)" :key="'button'+index+uuid" >Download</button>
+                              </div>
+                              <div class="col-12" style="height:40vh;overflow-y: auto;">
+                                <editor :editor-id="'editor'+index" lang="yaml" :content="yaml.content" v-on:change-content="changeContentA"  :key="'editor'+index+uuid" ></editor>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="tab-pane" id="tabs-2" role="tabpanel">
+                        <div class="col-12" style="padding-top:2rem;padding-left:1rem;">
+                          <button class="btn  btn-primary btn-simple" @click="downloadComposer()">Download</button>
+                        </div>
+                        <div class="col-12" style="height:40vh;overflow-y: auto;">
+                            <editor editor-id="editorB" lang="yaml" :content="yamlComposer" ></editor>
+                        </div>
+                      </div>
+                      <div class="tab-pane" id="tabs-3" role="tabpanel">
+                        <div class="col-12" style="padding-top:2rem;padding-left:1rem;">
+                          <button class="btn  btn-primary btn-simple" @click="downloadJenkinsfile()">Download</button>
+                        </div>
+                        <div class="col-12" style="height:40vh;overflow-y: auto;">
+                            <editor editor-id="editorC" lang='json' :content="yamlJenkinsfile" ></editor>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+              </card>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-
-            <card class="strpied-tabled-with-hover"
-                  body-classes=""
-            >
-              <template slot="header">
-                <h4 class="card-title text-center">Pipeline</h4>
-              </template>
-
-              <template >
-                <div class="row text-center">
-
-                  <div class="col-12 col-md-6" style="padding-bottom:20px;padding-left:15px;">
-                    <button class="btn  btn-primary btn-fill" :disabled='disabled_button' @click="createPipeline()">Create Pipeline</button>
-
-                  </div>
-                  <div class="col-12 col-md-6" style="padding-bottom:20px;padding-left:15px;">
-                    <button class="btn  btn-primary btn-fill" :disabled='!disabled_button' @click="deletePipeline()">Delete Pipeline</button>
-
-                  </div>
-                </div>
-                <div class="text-center" v-show="pipeline_id != ''">
-                  <span>Pipeline ID: {{pipeline_id}}</span>
-                </div>
-              </template>
-            </card>
-
-            <div class="row">
-              <div class="col-12 col-md-6">
-                <card v-show="showCard" class="strpied-tabled-with-hover"
-                      body-classes=""
-                >
-                  <template slot="header" >
-                    <h4 class="card-title text-center" style="padding-bottom:4rem;">Execute Pipeline</h4>
-                  </template>
-
-                  <template >
-                    <div class="row" style="padding-bottom:20px;padding-left:15px;padding-bottom: 3rem;">
-                      <!-- <div class="col-12 text-center" > -->
-                        <div class="col-12 col-md-6 text-center">
-                          <button class="btn  btn-primary btn-fill" @click="runPipeline()">Run pipeline</button>
-                        </div>
-                        <div class="col-12 col-md-6 text-center" style="padding-top:15px;" v-show="showBuildUrl">
-                          <span>Build URL:  </span><a style="text-decoration: underline;" :href="build_url" target="_blank">Click here</a>
-                        </div>
-                      <!-- </div> -->
-                    </div>
-                  </template>
-                </card>
+          <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
+              <div class="col-12 col-md-12 text-center">
+                  <button @click="back()" type="button" class="btn btn-next-back btn-back" >
+                      BACK
+                  </button>
+                  <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
+                      NEXT
+                  </button>
               </div>
-
-              <div class="col-12 col-md-6">
-                <card v-show="showCard" class="strpied-tabled-with-hover"
-                      body-classes=""
-                >
-                  <template slot="header" >
-                    <h4 class="card-title text-center" style="padding-bottom:4rem;">Check Status of Pipeline</h4>
-                  </template>
-
-                  <template >
-                    <div class="row" style="padding-bottom:20px;padding-left:15px;padding-bottom: 3rem;">
-                      <div class="col-12 col-md-6 text-center">
-                        <button  class="btn  btn-primary btn-fill" :disabled="disable_status" @click="checkStatus()">Check status</button>
-                      </div>
-                      <div class="col-12 col-md-6" v-show="showStatus" style="padding-top:15px;">
-                        <span>Status: </span>
-                        <span style="text-transform: uppercase;padding-right:10px;">{{build_status}}</span>
-                        <i v-if="build_status == 'success'" style="color:green;" class="fa fa-check" aria-hidden="true"></i>
-                        <i v-else-if ="build_status == 'FAILURE'" style="color:red;" class="fa fa-times" aria-hidden="true"></i>
-                        <i v-else style="color:red;" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                      </div>
-                    </div>
-                  </template>
-                </card>
-              </div>
-            </div>
-
-
-            <div class="row">
-              <div class="col-12 col-md-6">
-                <card v-show="showCard" class="strpied-tabled-with-hover"
-                body-classes=""  style="height:228px;"
-                >
-                <template slot="header" >
-                  <h4 class="card-title text-center" style="padding-bottom:2rem;">Generate Files to JePL</h4>
-                </template>
-
-                <template >
-
-                  <div class="row" style="padding-bottom:20px;padding-left:15px;">
-                    <div class="col-12 text-center">
-                      <button class="btn  btn-primary btn-fill" @click="generateFiles()">Generate Files</button>
-                    </div>
-                  </div>
-                </template>
-                </card>
-              </div>
-              <div class="col-12 col-md-6">
-                  <card v-show="showCard" class="strpied-tabled-with-hover"
-                  body-classes="" style="height:228px;"
-                  >
-                    <template slot="header" >
-                      <h4 class="card-title text-center" style="padding-bottom:2rem;">Pull Request</h4>
-                    </template>
-
-                    <template >
-                      <div class="row" style="padding-bottom:20px;padding-left:15px;">
-                        <div class="col-12 col-md-6">
-                          <base-input type="text" class="no-margin"
-                              label="Repository"
-                              :disabled="false"
-                              placeholder="https://github.com/EOSC-synergy/sqaaas-web.git"
-                              v-model="repo_pull_request">
-                          </base-input>
-                          <span v-show="showErrorPullRequest" style="color:red; font-size:12px;">This field is required.</span>
-                        </div>
-                        <div class="col-12 col-md-6 text-center" style="margin-top:20px;">
-                          <button  class="btn  btn-primary btn-fill" @click="pullrequest()">Pull Request</button>
-                        </div>
-                      </div>
-                      <div>
-                        <a :href="pull_request_url" target="_blank">{{pull_request_url}}</a>
-                      </div>
-                    </template>
-                  </card>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -292,11 +248,13 @@
   import LTable from 'src/components/Table.vue'
   import Card from 'src/components/Cards/Card.vue'
   import Services from 'src/services/services.js'
-  import FileSaver from 'file-saver'
+  import FileSaver from 'file-saver';
+  import Editor from './AceEditor'
   export default {
     components: {
 		LTable,
-		Card
+		Card,
+    'editor': Editor,
     },
     mixins: [Services],
     data () {
@@ -325,6 +283,15 @@
         showErrorPullRequest:false,
         pull_request_url: '',
         disable_status: true,
+        yamlConfig:'',
+        yamlComposer:'',
+        yamlJenkinsfile:'',
+        editor: '',
+        showFiles:false,
+        disable_done: true,
+        show_accordion: false,
+        config_data: {},
+        uuid: this.guidGenerator()
 		}
     },
     watch:{
@@ -335,6 +302,31 @@
       }
     },
     methods:{
+      guidGenerator() {
+        var S4 = function () {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        };
+        return (S4() + S4() + S4() + S4() + S4() + Date.now());
+      },
+      get_data_config(index){
+        $('.tab-config').removeClass('active');
+        $('.file-config').removeClass('active');
+        $('#tabs-config-'+index).addClass('active');
+        $('#file-config-'+index).addClass('active');
+
+
+
+        this.uuid=this.guidGenerator();
+      },
+      next(){
+         this.$router.push({name: 'Pipeline'});
+      },
+      back(){
+         this.$router.push({name: 'SQACriteria'});
+      },
+      changeContentA (val) {
+    	console.log(val)
+    },
       deletePipeline(){
         this.loading = true;
           this.deletePipelineCall(this.pipeline_id,this.deletePipelineCallBack)
@@ -406,7 +398,35 @@
                       }
 
         this.loading = true;
-        this.createPipelineCall(data,this.createPipelineCallBack)
+
+        console.log(this.$store.state)
+
+        if(this.pipeline_id != ''){
+          this.updatePipelineCall(this.pipeline_id,data,this.updatePipelineCallBack)
+        }else{
+          this.createPipelineCall(data,this.createPipelineCallBack)
+        }
+      },
+      updatePipelineCallBack(response){
+        if(response.status == 204){
+            this.showCard = true;
+            this.disabled_button = true;
+            this.showFiles = true;
+            this.getConfigCall(this.pipeline_id,this.getConfigCallBack);
+            this.getComposerCall(this.pipeline_id,this.getComposerCallBack);
+            this.getJenkCall(this.pipeline_id,this.getJenkCallBack);
+            this.notifyVue("Success","Pipeline updated successfully.",'nc-icon nc-check-2','info');
+            this.disable_done = false;
+        }else{
+           if(response.status == 403){
+            this.disabled_button = false;
+            this.$router.replace(this.$route.query.redirect || "/logout");
+          }else{
+            this.notifyVue("Error", response.status +":" + response.data.detail,'nc-icon nc-simple-remove','danger')
+          }
+        }
+        this.loading = false;
+
       },
       createPipelineCallBack(response){
         if(response.status == 201){
@@ -415,6 +435,11 @@
             this.$store.state.pipeline_id = this.pipeline_id;
             this.showCard = true;
             this.disabled_button = true;
+            this.showFiles = true;
+            this.getConfigCall(this.pipeline_id,this.getConfigCallBack);
+            this.getComposerCall(this.pipeline_id,this.getComposerCallBack);
+            this.getJenkCall(this.pipeline_id,this.getJenkCallBack);
+            this.disable_done = false;
             this.notifyVue("Success","Pipeline created successfully.",'nc-icon nc-check-2','info');
           }
         }else{
@@ -495,10 +520,6 @@
           this.showStatus = false;
           this.notifyVue("Error ", response.status +":" +  response.data.reason,'nc-icon nc-simple-remove','danger')
         }
-
-
-
-
       },
       pullrequest(){
         if(this.repo_pull_request == ''){
@@ -530,187 +551,20 @@
 
       },
 
-      renderTemplate(value){
-          if(value=="zip"){
-            this.generateZip(this.$store.state)
-          }else if(value == "git"){
-            this.commitGithub(rendered)
-          }
-      },
-      generateZip(rendered){
-        var jenkinsfile = `
-        @Library(['github.com/indigo-dc/jenkins-pipeline-library@release/2.1.0']) _
 
-        def projectConfig
+      downloadAll(){
 
-        pipeline {
-            agent any
-
-            stages {
-                stage('SQA baseline dynamic stages') {
-                    when {
-                        anyOf {
-                            branch 'master'
-                        }
-                    }
-                    steps {
-                        script {
-                            projectConfig = pipelineConfig()
-                            buildStages(projectConfig)
-                        }
-                    }
-                    post {
-                        cleanup {
-                            cleanWs()
-                        }
-                    }
-                }
-            }
-        }`
         var zip = new JSZip();
+        zip.folder(".sqa").file("config.yml",this.yamlConfig, {binary:true});
+        zip.folder(".sqa").file("docker-compose.yml", this.yamlComposer, {binary:true});
+        zip.file("Jenkinsfile",this.yamlJenkinsfile)
 
-        var files_names=["config.yaml","docker-compose.yaml"]
-        var yamlTextConfig= YAML.stringify(rendered.config_yaml)
-        var yamlTextCompose= YAML.stringify(rendered.docker_compose)
-        // for (let i = 0; i < files_names.length; i++) {
-
-        zip.folder(".sqa").file("config.yml",yamlTextConfig, {binary:true});
-        zip.folder(".sqa").file("docker-compose.yml", yamlTextCompose, {binary:true});
-        zip.file("Jenkinsfile",jenkinsfile)
-
-        // }
         zip.generateAsync({type:"blob"})
             .then(function(blob) {
                 // see FileSaver.js
-                saveAs(blob, "sqa_files.zip");
+                saveAs(blob, "sqaaas_files.zip");
           });
       },
-      // commitGithub(rendered){
-      //   var _this = this
-      //   var auth={
-      //     username:'dianamariand92',
-      //     password:'',
-      //     repository:'test',
-      //     branchName:'master'
-      //   }
-      //   this.filesToCommitNew = [
-      //     {content: rendered, path: '.sqa/config.yaml'},
-      //     // {content: 'May the Force be with you', path: 'jedi.txt'}
-
-      //   ]
-      //   this.GithubAPI(auth)
-      // },
-      // GithubAPI(auth) {
-      //     // let repo;
-
-      //     let gh = new GitHub(auth);
-
-      //     this.repo =  gh.getRepo('dianamariand92', 'test');
-      //       var _this = this
-
-      //     this.setBranch('master').then(function(response){
-      //       console.log(response)
-      //       _this.pushFiles('Making a commit to test',_this.filesToCommitNew)
-      //         .then(function() {
-      //           console.log('Files committed!');
-      //       });
-
-      //     }
-
-      //     )
-      // },
-      // pushFiles(message,files){
-      //   var _this = this
-      //   if (!this.repo) {
-      //         throw 'Repository is not initialized';
-      //     }
-      //     if (!this.currentBranch.hasOwnProperty('name')) {
-      //         throw 'Branch is not set';
-      //     }
-
-      //     return _this.getCurrentCommitSHA()
-      //         .then(_this.getCurrentTreeSHA)
-      //         .then( () => _this.createFiles(files) )
-      //         .then(_this.createTree)
-      //         .then( () => _this.createCommit(message) )
-      //         .then(_this.updateHead)
-      //         .catch((e) => {
-      //             console.error(e);
-      //         });
-
-
-      // },
-      // setBranch(branchName) {
-      //   var _this = this
-      //     if (!this.repo) {
-      //         throw 'Repository is not initialized';
-      //     }
-
-      //     return this.repo.listBranches().then((branches) => {
-
-      //         let branchExists = branches.data.find( branch => branch.name === branchName );
-      //         if (!branchExists) {
-      //             return _this.repo.createBranch('master', branchName)
-      //                 .then(() => {
-      //                     return _this.currentBranch.name = branchName;
-      //                 });
-      //         } else {
-      //             return _this.currentBranch.name = branchName;
-      //         }
-      //     });
-      // },
-
-      // getCurrentCommitSHA() {
-      //   var _this=this
-      //   return this.repo.getRef('heads/' + _this.currentBranch.name)
-      //     .then((ref) => {
-      //       _this.currentBranch.commitSHA = ref.data.object.sha;
-      //     });
-      // },
-      // getCurrentTreeSHA() {
-      //   var _this=this
-      //   return this.repo.getCommit(_this.currentBranch.commitSHA)
-      //     .then((commit) => {
-      //       _this.currentBranch.treeSHA = commit.data.tree.sha;
-      //     });
-      // },
-      // createFiles(filesInfo) {
-      //   var _this=this
-      //   let promises = [];
-      //   let length = filesInfo.length;
-      //   for (let i = 0; i < length; i++) {
-      //     promises.push(_this.createFile(filesInfo[i]));
-      //   }
-      //   return Promise.all(promises);
-      // },
-      // createFile(file) {
-      //   var _this=this
-      //   return this.repo.createBlob(file.content)
-      //   .then((blob) => {
-      //     _this.filesToCommit.push({sha: blob.data.sha,path: file.path,mode: '100644',type: 'blob'});
-      //     });
-      // },
-      // createTree() {
-      //   var _this=this
-      //   console.log(_this.filesToCommit)
-      //   console.log(_this.currentBranch.treeSHA)
-      //   return this.repo.createTree(_this.filesToCommit, _this.currentBranch.treeSHA)
-      //   .then((tree) => {
-      //     console.log(tree)
-      //       _this.newCommit.treeSHA = tree.data.sha;
-      //     });
-      // },
-      // createCommit(message) {
-      //   var _this=this
-      //   return this.repo.commit(_this.currentBranch.commitSHA, _this.newCommit.treeSHA, message)
-      //       .then((commit) => {
-      //           _this.newCommit.sha = commit.data.sha;
-      //     });
-      // },
-      // updateHead() {
-      //   var _this=this
-      //   return this.repo.updateHead('heads/' + _this.currentBranch.name,_this.newCommit.sha);
-      // },
       objectSize(obj){
         var size = 0, key;
         for (key in obj) {
@@ -730,43 +584,121 @@
             type: color,
           })
       },
+      checkauthCallBack(response){
+        if(response.status == 401){
+           this.$router.push({name:"logout"})
+        }else{
+          this.username = response;
+        }
+      },
+      getConfigCallBack(response){
+        console.log(response)
+        if(response.status == 200){
+          //  this.yamlConfig= YAML.stringify(response.data, undefined, 2)
+           this.yamlConfig= response.data;
+           for (var i in this.yamlConfig){
+             var parts = this.yamlConfig[i].file_name.split("/");
+             this.yamlConfig[i].file_name = parts[parts.length - 1];
+             this.yamlConfig[i].content = YAML.stringify(this.yamlConfig[i].content, undefined, 2)
+           }
+           console.log(this.yamlConfig)
+          //  this.config_data[this.yamlConfig[0].file_name] = this.yamlConfig[0].content
+           this.config_data[this.yamlConfig[0].file_name] = YAML.stringify(this.yamlConfig[0].content, undefined, 2)
+          //  this.yamlConfig=  JSON.stringify(response.data, undefined, 2);
+        }
+      },
+      getComposerCallBack(response){
+        console.log(response)
+        if(response.status == 200){
+           this.yamlComposer= YAML.stringify(response.data.content)
+          //  this.yamlComposer= response.data
+        }
+      },
+      getJenkCallBack(response){
+        if(response.status == 200){
+          this.yamlJenkinsfile= response.data.content;
+          }
+      },
+      download(filename, text) {
+        console.log(filename)
+          var element = document.createElement('a');
+          element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+          element.setAttribute('download', filename);
+
+          element.style.display = 'none';
+          document.body.appendChild(element);
+
+          element.click();
+
+          document.body.removeChild(element);
+        },
+      downloadConfig(yaml){
+          console.log(yaml)
+          this.download(yaml.file_name,yaml.content)
+      },
+      downloadComposer(){
+          this.download("docker-compose.yaml",this.yamlComposer)
+      },
+      downloadJenkinsfile(){
+          this.download("Jenkinsfile",this.yamlJenkinsfile)
+      },
   },
   created(){
-    console.log(this.$store.state)
+    this.checkauthCall(this.checkauthCallBack);
+    this.$store.state.status = '';
+    this.$store.state.build_url = '';
     var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
     if(sizeCriteria == 0){
       this.notifyVue("Error", "You must add at least one sqa criteria.",'nc-icon nc-simple-remove','danger')
       this.$router.push({name:"SQACriteria"})
+    }else{
+
+      // this.$store.state.pipeline_id = "bd93a679-3c91-4692-a346-176e062b2607";
+      this.pipeline_id = this.$store.state.pipeline_id;
+      this.createPipeline();
+
+      this.pull_request_url = this.$store.state.pull_request_url;
+      this.build_url = this.$store.state.build_url;
+      this.build_status = this.$store.state.status;
+
+        if(this.pipeline_id == ''){
+          this.showCard = false;
+          this.disabled_button = false;
+        }else{
+          this.disabled_button =true;
+          this.showCard = true;
+        }
+        if(this.build_url == ''){
+          this.showBuildUrl = false;
+        }else{
+          this.showBuildUrl = true;
+        }
+        if(this.build_status == ''){
+          this.showStatus = false;
+          this.disabled_status = true;
+        }else{
+          this.showStatus = true;
+          this.disable_status = false;
+        }
     }
+  },
+  mounted(){
+    this.$eventHub.$emit('steps', 4);
 
-    this.pipeline_id = this.$store.state.pipeline_id;
-    this.pull_request_url = this.$store.state.pull_request_url;
-    this.build_url = this.$store.state.build_url;
-    this.build_status = this.$store.state.status;
 
-      if(this.pipeline_id == ''){
-        this.showCard = false;
-        this.disabled_button = false;
-      }else{
-        this.disabled_button =true;
-        this.showCard = true;
-      }
-      if(this.build_url == ''){
-        this.showBuildUrl = false;
-      }else{
-        this.showBuildUrl = true;
-      }
-      if(this.build_status == ''){
-        this.showStatus = false;
-        this.disabled_status = true;
-      }else{
-        this.showStatus = true;
-        this.disable_status = false;
-      }
   }
 }
 </script>
-<style>
+<style scoped>
+
+@media (min-width: 992px){
+    .col-lg-10 {
+        -ms-flex: 0 0 83.333333%;
+        -webkit-box-flex: 0;
+        flex: 0 0 83.333333%;
+        max-width: 100%;
+  }
+ }
 
 .loading-overlay {
   display: none;
@@ -795,5 +727,90 @@
 
 .table td {
     border-top: 0px!important;
+}
+
+.btn-next {
+    background-color: #1DC7EA !important;
+    color: black !important;
+    padding:1rem 0 1rem 0;
+    font-weight: bold;
+    border: 2px solid black;
+  }
+
+  .btn-next-back{
+    width: 10%!important;
+  }
+
+.btn-back{
+  padding:1rem 0 1rem 0;
+  background-color:#ccc!important;
+  margin-right:10%;
+  font-weight: bold;
+  border: 2px solid black;
+
+}
+
+.btn-info {
+    border-color: #1185EB;
+    color: #1185EB;
+}
+
+.accordion-head i{
+    font-size: 1.5em;
+    float: right;
+}
+
+.accordion-head > .collapsed > i:before{
+    content: "\f105";
+}
+
+.nav-vertical .nav-left.nav-tabs {
+    float: left;
+    border-bottom: 0;
+    border-radius: 0;
+    display: table;
+}
+
+.nav-vertical .nav-left.nav-tabs li.nav-item {
+    float: none;
+    margin: 0 -1px 0 0;
+}
+
+.nav-vertical .nav-left~.tab-content {
+    margin-left: 45px;
+}
+
+.nav-vertical .nav-left~.tab-content .tab-pane.active {
+    display: block;
+}
+
+.nav-vertical .nav-left~.tab-content .tab-pane {
+    display: none;
+    background-color: #FFF;
+    padding: 0 0 .6rem 1rem;
+    overflow-y: auto;
+}
+
+
+.nav-vertical .nav-left.nav-tabs li.nav-item a.nav-link.active {
+    border: 1px solid #DDD;
+    border-right: 0;
+    border-radius: .25rem 0 0 .25rem;
+}
+
+.nav-vertical .nav-left.nav-tabs li.nav-item a.nav-link {
+    min-width: 6.5rem;
+    border-right: 1px solid #DDD;
+}
+
+.nav.nav-tabs .nav-item .nav-link.active {
+    background-color: #FFF;
+    border-radius: .25rem .25rem 0 0;
+}
+.nav-vertical .nav-left.nav-tabs.nav-border-left li.nav-item a.nav-link.active {
+    border-left: 3px solid #FF7588;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    color: #555;
 }
 </style>

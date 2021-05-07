@@ -9,7 +9,9 @@ import Composer from 'src/pages/Composer.vue'
 import SQACriteria from 'src/pages/SQACriteria.vue'
 import UserProfile from 'src/pages/UserProfile.vue'
 import Files from 'src/pages/Files.vue'
+import Pipeline from 'src/pages/Pipeline.vue'
 import SelectOption from 'src/pages/SelectOption.vue'
+import PipelineName from 'src/pages/PipelineName.vue'
 import FullAssessment from 'src/pages/FullAssessment.vue'
 
 function requireAuth (to, from, next) {
@@ -77,6 +79,12 @@ const routes = [
         component: SelectOption
       },
       {
+        path: 'pipeline-name',
+        name: 'PipelineName',
+        beforeEnter: requireAuth,
+        component: PipelineName
+      },
+      {
         path: 'sqa-criteria',
         name: 'SQACriteria',
         beforeEnter: requireAuth,
@@ -100,8 +108,15 @@ const routes = [
         beforeEnter: requireAuth,
         component: Files
       },
+      {
+        path: 'pipeline-execution',
+        name: 'Pipeline',
+        beforeEnter: requireAuth,
+        component: Pipeline
+      },
 
       { path: '/logout',
+        name: "logout",
         beforeEnter (to, from, next) {
           next('/login')
           // localStorage.removeItem('session');

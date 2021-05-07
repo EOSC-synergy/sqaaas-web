@@ -56,7 +56,7 @@
             <a class="dropdown-item" href="#">Separated link</a>
           </base-dropdown> -->
           <li class="nav-item">
-            <button class="btn btn-primary btn-simple nav-link" @click="logOut()">Log Out</button>
+            <button style="font-size:18px;" class="btn btn-primary btn-simple nav-link" @click="logOut()">Log Out<i style="padding-left:10px" class="nc-icon nc-button-power"></i></button>
           </li>
         </ul>
       </div>

@@ -2,79 +2,88 @@
   <div class="content">
     <div class="container-fluid">
 			<!-- <span>User: {{username}}</span> -->
-      <div style="margin-top:30px;">
-        <div class="col-12 col-md-10 col-lg-8 col-xl-6" style="margin:auto;padding:0px;">
-            <card style="height:75vh;overflow-y: auto;">
-              <template slot="header">
-                <h4 class="card-title text-center">GENERAL OPTIONS</h4>
+      <div class="col-12 col-lg-10 mx-auto" >
+        <div class="" style="margin:auto;">
+            <h4 style="margin-top:0px;" class="card-title text-center">REPOS OPTIONS</h4>
+            <card style="height:90vh;overflow-y: auto;">
+              <template slot="header" >
+                <div class="text-center" style="padding-left:20px;padding-top:20px;">
+                  <p style="font-weight:700;">Code repositories are the substrate for the CI/CD pipeline work.</p>
+                  <p>CI/CD pipelines are commonly located next to the code, so they can react instantly to code changes. Nonetheless, alternative approaches maintain the pipelines in individual code repositories. Here you will be able to customize your CI/CD pipeline to adequate to one or both approaches (git code repositories only).</p>
+                </div>
               </template>
 
               <template>
                 <!-- <div class="col-12"> -->
-                  <div class="row"  style="padding-left:20px;margin-bottom:1rem;">
+                  <!-- <div class="col-12"  style="padding-left:20px;margin-bottom:1rem;">
 
-                    <base-input class="col-12" type="text"
+                    <base-input style="margin-bottom:0px;" type="text"
                               label="Repository Name"
                               :disabled="false"
-                              placeholder="worsica-processing"
+                              placeholder="Identifier of the repository name. Example: worsica-processing"
                               v-model="repo.name"
                               >
                     </base-input>
+                    <div class="col-12 text-right">
+                      <span v-show="showErrorRepoName" style="color:red; font-size:12px;">This field is required.</span>
 
+                    </div>
+                  </div> -->
 
+                  <div class="col-12"  style="padding-left:20px;padding-top:20px;">
 
-                  <span v-show="showErrorRepoName" style="color:red; font-size:12px;">This field is required.</span>
-                  </div>
-
-                  <div class="row"  style="padding-left:20px;margin-bottom:1rem;">
-
-                    <base-input class="col-12" type="text"
+                    <base-input style="margin-bottom:0px;"  type="text"
                               label="Repository URL"
                               :disabled="false"
-                              placeholder="https://github.com/WORSICA/worsica-processing.git"
+                              placeholder="The URL you can use to clone the project."
                               v-model="repo.url"
                               >
                     </base-input>
-                    <span v-show="showErrorRepoUrl" style="color:red; font-size:12px;">This field is required.</span>
+                    <div class="col-12 text-right">
+                      <span v-show="showErrorRepoUrl" style="color:red; font-size:12px;">This field is required.</span>
+
+                    </div>
 
                 </div>
 
-                <div class="row" style="padding-left:20px;margin-bottom:1rem;">
+                <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
                   <div style="display:contents" class="col-12 col-md-6">
-                    <span class="custom-label">Customize workspace:</span>
+                    <span class="custom-label">Pipeline react to all changes:</span>
                     <div class="custom-div-append">
-                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
-                          <i class="fa fa-question-circle"></i>
-                        </button>
-                      </div>
+                      <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                        <i class="fa fa-question-circle"></i>
+                      </button>
+                    </div>
+                    <!-- <span class="custom-label">Do you want the pipeline to react to all changes?</span> -->
+                    <!-- <div class="custom-div-append">
+                      <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                        <i class="fa fa-question-circle"></i>
+                      </button>
+                    </div> -->
                   </div>
                   <div style="display:contents" class="col-12 col-md-6">
                     <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="config.workspace.yes"></base-checkbox>
                     <span class="custom-label">No</span><base-checkbox name="workspace" v-model="config.workspace.no"></base-checkbox>
                   </div>
                 </div>
-                <div v-show='config.workspace.yes' style="padding-left:30px;">
+                <div v-show='config.workspace.no' style="padding-left:10px;">
                   <!-- <base-input type="text"
                         label="Node Agent"
                         :disabled="false"
                         placeholder="docker-compose"
                         v-model="config.repo.agent">
                   </base-input> -->
-                  <base-input type="text"
-                        label="Path Deploy Template"
-                        :disabled="false"
-                        placeholder=".sqa/docker-compose.yml"
-                        v-model="repo.path">
-                  </base-input>
 
-                  <div class="row">
 
-                    <base-input class="col-md-4" type="text"
+
+
+                    <base-input class="col-md-6" type="text"
                         label="Branch"
                         :disabled="false"
                         placeholder="master"
                         v-model="repo.branch">
                     </base-input>
+                    <span v-show="showBranchError" style="color:red;font-size:12px;padding-left:20px;">This field is required</span>
                     <!-- <base-input class="col-md-4" type="text"
                         label="Image"
                         :disabled="false"
@@ -87,7 +96,7 @@
                         placeholder="latest"
                         v-model="repo.tag">
                     </base-input> -->
-                  </div>
+
                 </div>
 
                 <div class="text-right" style="padding-right: 20px;">
@@ -95,17 +104,33 @@
                 </div>
 
                 <div v-show="showRepo" style="padding-top:20px;padding-left:20px;">
-                  <span class="custom-label">Repositories</span>
-                  <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between"
-                      v-for="(repo,key) in config.all_repos"
-                      :key="key"
-                    >
-                    {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeRepo(key)"><i class="fa fa-minus"></i></button></span>
+                  <span class="custom-label">Configured Repositories</span>
+                  <div class="table-responsive">
+                    <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repo</th>
+                            <th style="text-align:center;justify-content: center;,padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
+                        </thead>
+                        <tbody v-for="(repo, index) in $store.state.config_yaml.config.project_repos" :key="index">
+                                <tr
+                                    style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                    <td
+                                        style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        <div style="text-align:left;">
+                                            {{repo.repo}}
+                                        </div>
+                                    </td>
 
-                    </li>
+                                    <td
+                                        style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeRepo(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
 
-                  </ul>
+                                </tr>
+                        </tbody>
+                    </table>
+                  </div>
                 </div>
 
                 <div class="col-12" id="accordion_general_options" role="tablist" aria-multiselectable="true" style="padding-left:20px;margin-top:2rem;padding-right:0px;">
@@ -117,7 +142,8 @@
                           <a data-toggle="collapse" data-parent="#accordion_general_options" href="#accordionBodyGeneralOptions" aria-expanded="false" aria-controls="accordionBodyGeneral"
                             class="collapsed ">
                             <i class="fa fa-angle-down" aria-hidden="true"></i>
-                            <p>ADVANCED OPTIONS</p>
+                            <p style="margin-bottom: 0px;">ADVANCED OPTIONS</p>
+                            <p>(Credencials, Env Vars)</p>
                           </a>
                         </div>
                       </div>
@@ -126,8 +152,27 @@
                     <div id="accordionBodyGeneralOptions" class="collapse" role="tabpanel" aria-labelledby="accordionHeadingGeneralOptions" aria-expanded="false" data-parent="accordion_general_options">
                       <div class="card-block col-12">
                         <!-- <p>Accordion Item 1 - Body</p> -->
+                        <!-- <base-input style="padding-left:20px;padding-right:20px;" type="text"
+                            label="Path Deploy Template"
+                            :disabled="false"
+                            placeholder=".sqa/docker-compose.yml"
+                            :help="true"
+                            link = 'https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#deploy-template'
+                            message = 'Path where the docker compose file is.'
+                            v-model="repo.path">
+                      </base-input> -->
+                      <!-- <div class="custom-div-append">
+                          <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                            <i class="fa fa-question-circle"></i>
+                          </button>
+                      </div> -->
                         <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem;">
                           <span class="custom-label">Add Credentials:</span>
+                          <div class="custom-div-append">
+                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                              <i class="fa fa-question-circle"></i>
+                            </button>
+                        </div>
                           <span class="custom-label">Yes</span><base-checkbox name="credentials" v-model="config.credentials.yes"></base-checkbox>
                           <span class="custom-label">No</span><base-checkbox name="credentials" v-model="config.credentials.no"></base-checkbox>
                         </div>
@@ -141,8 +186,8 @@
                           </base-input>
                           <span v-show="showErrorCredId" style="color:red;font-size:12px;">This field is required</span>
 
-                          <div class="row" style="margin-bottom:10px;">
-                            <div class="col-md-6" style="display:grid;">
+                          <!-- <div class="row" style="margin-bottom:10px;">
+                             <div class="col-md-6" style="display:grid;">
                               <base-input  type="text" class="no-margin"
                                   label="Username Var"
                                   :disabled="false"
@@ -160,30 +205,63 @@
                               </base-input>
                               <span v-show="showErrorCredPass" style="color:red;font-size:12px;">This field is required</span>
                             </div>
-                          </div>
-                          <select class="custom-select" id="cred" v-model='credentials.type' >
-                            <option value="default">Choose a type...</option>
-                            <option value="username_password">Username Password</option>
-                            <option value="certificate">Certificate</option>
-                            <option value="ssh_user_private-key">SSH User Private Key</option>
-                          </select>
-                          <span v-show="showErrorCredType" style="color:red;font-size:12px;">This field is required</span>
-                          <div class="text-right" style="padding-top:15px;">
-                            <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCred()"><i class="fa fa-plus"></i>ADD CREDENTIALS</button>
+                          </div> -->
+                          <div style="padding-top:20px;">
+
+                            <select  class="custom-select" id="cred" v-model='credentials.type' >
+                              <!-- <option value="default">Choose a type...</option> -->
+                              <option value="username_password">Username Password</option>
+                              <option disabled value="certificate">Certificate</option>
+                              <option disabled value="ssh_user_private-key">SSH User Private Key</option>
+                            </select>
+                            <span v-show="showErrorCredType" style="color:red;font-size:12px;">This field is required</span>
+                            <div class="text-right" style="padding-top:15px;">
+                              <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCred()"><i class="fa fa-plus"></i>ADD CREDENTIALS</button>
+                            </div>
                           </div>
                         </div>
-                        <div v-show="showCred" style="padding-top:20px;margin-bottom:2rem;padding-left:30px;">
+                        <div v-show="showCred" style="padding-top:20px;margin-bottom:2rem;">
                           <span class="custom-label">Credentials</span>
-                          <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between"
-                              v-for="(cred,key) in all_credentials"
-                              :key="key"
-                            >
-                            {{cred.id}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCred(key)"><i class="fa fa-minus"></i></button></span>
+                          <div class="table-responsive">
+                            <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <thead>
+                                    <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">ID</th>
+                                    <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">USER</th>
+                                    <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">PASS</th>
+                                    <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">REMOVE</th>
+                                </thead>
+                                <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
+                                <tbody v-for="(cred, index) in all_credentials" :key="index">
+                                        <tr
+                                            style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                            <td
+                                                style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                                <div style="text-align:left;">
+                                                    {{cred.id}}
+                                                </div>
+                                            </td>
+                                            <td
+                                                style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                                <div style="text-align:center;">
+                                                    {{cred.username_var}}
+                                                </div>
+                                            </td>
+                                            <td
+                                                style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                                <div style="text-align:center;">
+                                                    {{cred.password_var}}
+                                                </div>
+                                            </td>
 
-                            </li>
-
-                          </ul>
+                                            <td
+                                                style="text-align:right;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                                <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCred(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                          </div>
                         </div>
                       <div class="row" style="padding-left:20px;margin-top:2rem;margin-bottom:2rem;">
                         <span class="custom-label">Environment variables:</span>
@@ -204,38 +282,61 @@
                               placeholder="GIT_USER"
                               v-model="env.value">
                         </base-input>
-                        <div style="margin-bottom:30px;width:95%;" class="text-right">
+                        <div style="margin-bottom:10px;width:95%;" class="text-right">
                           <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnv()"><i class="fa fa-plus"></i>ADD ENV VAR</button>
                         </div>
                       </div>
-                      <div v-show="showEnv" style="padding-top:20px;margin-bottom:1rem;padding-left:30px;">
+                      <div v-show="showEnv" style="padding-top:5px;margin-bottom:1rem;">
                         <span class="custom-label">Env Vars</span>
-                        <ul class="list-group">
-                          <li class="list-group-item d-flex justify-content-between"
-                            v-for="(env,key) in config.all_envs"
-                            :key="key"
-                          >
-                          {{key}}:{{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnv(key)"><i class="fa fa-minus"></i></button></span>
-
-                          </li>
-
-                        </ul>
+                        <div class="table-responsive">
+                          <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <thead>
+                                  <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">KEY</th>
+                                  <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">VALUE</th>
+                                  <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">REMOVE</th>
+                              </thead>
+                              <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
+                              <tbody v-for="(env, index) in config.all_envs" :key="index">
+                                      <tr
+                                          style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                          <td
+                                              style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              <div style="text-align:left;">
+                                                  {{index}}
+                                              </div>
+                                          </td>
+                                          <td
+                                              style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              <div style="text-align:center;">
+                                                  {{env}}
+                                              </div>
+                                          </td>
+                                          <td
+                                              style="text-align:right;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnv(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                              </button>
+                                          </td>
+                                      </tr>
+                              </tbody>
+                          </table>
+                        </div>
                       </div>
-                      <div style="padding-left:5px;padding-bottom:5px;margin-bottom:2rem;margin-top:2rem;">
+                      <!-- <div style="padding-left:5px;padding-bottom:5px;margin-bottom:2rem;margin-top:2rem;">
                         <span class="custom-label" for="timeout" style="padding-right:20px;">Timeout:</span>
                         <input style="width:80px;" type="number" id="timeout" value="600" step="100" v-model="$store.state.config_yaml.timeout">
-                      </div>
+                      </div> -->
                       </div>
                     </div>
                   </div>
                 </div>
               </template>
-              <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
-                <div class="col-12 col-md-12 text-center">
+              <div class="row" style="margin-top:2rem;">
+                <!-- style="position:absolute;bottom:40px;" -->
+                <div class="col-12 col-md-12 text-center" style="margin-bottom:2rem;" >
                     <button @click="back()" type="button" class="btn btn-next-back btn-back" >
                         BACK
                     </button>
-                    <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
+                    <button @click="next()" type="button" class="btn btn-next btn-next-back">
                         NEXT
                     </button>
                 </div>
@@ -251,10 +352,12 @@
   import Card from 'src/components/Cards/Card.vue'
   import jwtDecode from "jwt-decode"
   import YAML from 'json-to-pretty-yaml'
+   import Services from '../services/services'
   export default {
     components: {
       Card
     },
+    mixins: [Services],
     data () {
       return {
         username:'',
@@ -272,7 +375,7 @@
           id:'',
           username_var:'',
           password_var:'',
-          type:"default"
+          type:"username_password"
         },
         env:{
           key:'',
@@ -280,10 +383,10 @@
         },
         all_credentials:[],
         config:{
-          all_repos:{},
+          all_repos:[],
           workspace:{
-            yes:false,
-            no:true
+            yes:true,
+            no:false
           },
           credentials:{
             yes:false,
@@ -308,6 +411,7 @@
         showErrorRepoName:false,
         showErrorRepoUrl:false,
         disable_done: true,
+        showBranchError: false
 
       }
     },
@@ -371,15 +475,23 @@
         if(val != ''){
           this.showErrorRepoName = false;
         }
+      },
+      'repo.branch'(val){
+        if(val != ''){
+          this.showBranchError = false;
+        }
       }
 
     },
     methods:{
       next(){
+        if(this.repo.path != ''){
+          this.$store.state.config_yaml.config.deploy_template = this.repo.path.trim()
+        }
          this.$router.push({name: 'composer'});
       },
       back(){
-         this.$router.push({name: 'SelectOption'});
+         this.$router.push({name: 'PipelineName'});
       },
       track(){
         this.$ga.event('button','add','repository',0)
@@ -402,27 +514,35 @@
         if(this.repo.path == ''){
           this.repo.path = '.sqa/docker-compose.yml'
         }
-        if(this.repo.branch == ''){
-          this.repo.branch = 'master'
-        }
-        if(this.repo.name == '' || this.repo.url == ''){
-          if(this.repo.name == ''){
-            this.showErrorRepoName = true;
-          }
+        // if(this.repo.branch == ''){
+        //   this.repo.branch = 'master'
+        // }
+          console.log(this.config.workspace.yes)
+        if(this.repo.url == ''){
           if(this.repo.url == ''){
             this.showErrorRepoUrl = true;
           }
+        }else if(this.config.workspace.yes == false && this.repo.branch == ''){
+          this.showBranchError = true;
+
         }else{
-          this.showErrorRepoName = false;
+          // this.showErrorRepoName = false;
           this.showErrorRepoUrl = false;
-          this.config.all_repos[this.repo.name.trim()]={
+          if(this.config.workspace.yes == true){
+            this.repo.branch = ''
+          }
+          var push_repos = {
+
             'repo':this.repo.url.trim(),
             'branch':this.repo.branch.trim(),
-            'deploy_template':this.repo.path.trim()
+            // 'deploy_template':this.repo.path.trim()
+
           }
+          this.config.all_repos.push(push_repos)
           this.showRepo = true;
           this.config.workspace.no = true;
           this.$store.state.config_yaml.config.project_repos = this.config.all_repos
+
           this.disable_done = false;
           this.cleanWorkspace()
 
@@ -430,10 +550,11 @@
 
       },
       removeRepo(item){
-        this.$delete(this.config.all_repos,item)
-        this.$store.state.config_yaml.config.project_repos = this.config.all_repos;
+        console.log(item)
+        this.$delete(this.$store.state.config_yaml.config.project_repos,item)
+        // this.$store.state.config_yaml.config.project_repos = this.config.all_repos;
         this.$store.state.config_yaml.sqa_criteria={};
-        if (this.isEmpty(this.config.all_repos)) {
+        if (this.isEmpty(this.$store.state.config_yaml.config.project_repos)) {
           this.showRepo = false;
           this.disable_done = true;
         }
@@ -443,9 +564,11 @@
         this.repo.path = '',
         this.repo.url = '';
         this.repo.branch = '';
+        this.config.workspace.yes = true;
+        this.config.workspace.no = false;
       },
       addCred(){
-        if(this.credentials.type == "default" || this.credentials.id=="" || this.credentials.username_var=="" || this.credentials.password_var == ""){
+        if(this.credentials.type == "default" || this.credentials.id==""){
           if(this.credentials.type == "default"){
             this.showErrorCredType = true;
           }else{
@@ -456,26 +579,27 @@
           }else{
             this.showErrorCredId = false;
           }
-          if(this.credentials.password_var == ""){
-            this.showErrorCredPass = true;
-          }else{
-            this.showErrorCredPass = false;
-          }
-          if(this.credentials.username_var==""){
-            this.showErrorCredUser = true;
-          }else{
-            this.showErrorCredUser = false;
-          }
+          // if(this.credentials.password_var == ""){
+          //   this.showErrorCredPass = true;
+          // }else{
+          //   this.showErrorCredPass = false;
+          // }
+          // if(this.credentials.username_var==""){
+          //   this.showErrorCredUser = true;
+          // }else{
+          //   this.showErrorCredUser = false;
+          // }
 
         }else{
           this.showErrorCredId = false;
           this.showErrorCredPass = false;
           this.showErrorCredType = false;
           this.showErrorCredUser = false;
+          this.$store.state.count_cred =  this.$store.state.count_cred + 1;
           var cred = {
             id: this.credentials.id,
-            username_var: this.credentials.username_var,
-            password_var: this.credentials.password_var,
+            username_var: "GIT_USER_"+this.$store.state.count_cred,
+            password_var: "GIT_PASS_"+this.$store.state.count_cred,
             type: this.credentials.type
           }
           this.all_credentials.push(cred)
@@ -487,9 +611,10 @@
 
       },
       removeCred(item){
-        this.$delete(this.all_credentials,item)
-        this.$store.state.config_yaml.config.credentials = this.all_credentials;
-        if (this.isEmpty(this.all_credentials)) {
+        console.log(item)
+        this.$delete(this.$store.state.config_yaml.config.credentials,item)
+        // this.$store.state.config_yaml.config.credentials = this.all_credentials;
+        if (this.isEmpty(this.$store.state.config_yaml.config.credentials)) {
           this.showCred = false;
         }
       },
@@ -534,11 +659,18 @@
             if (obj.hasOwnProperty(key)) size++;
         }
         return size;
+      },
+      checkauthCallBack(response){
+        if(response.status == 401){
+           this.$router.push({name:"logout"})
+        }else{
+          this.username = response;
+        }
       }
 
     },
     created(){
-
+       this.checkauthCall(this.checkauthCallBack);
       var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos)
       for (let i = 0; i < sizeRepos; i++) {
         this.config.all_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]=this.$store.state.config_yaml.config.project_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]
@@ -571,33 +703,14 @@
         this.showEnv = true
       }
 
-      var session = JSON.parse(localStorage.getItem("session"));
-      var token = session.user.access_token;
-      var decode = jwtDecode(token)
-      var _this = this
-
-      $.ajax({
-        url: this.env.url_user_info,
-        type: 'POST',
-        contentType: 'application/json',
-        headers: {
-          'Authorization': 'Bearer ' + token
-			},
-			success: function (result) {
-        // CallBack(result);
-
-        _this.username = result
-			},
-			error: function (error) {
-
-			}
-        });
-      },
+     },
       mounted(){
         this.$nextTick(function(){
           $('#select_service').selectpicker({
 
           });
+          this.$eventHub.$emit('steps', 1);
+
 
         });
         $(function () {
@@ -622,7 +735,10 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .custom-append-button {
-  padding: 0.375rem 0.75rem;
+  padding-top: 0px !important;
+  padding-bottom: 0.38rem !important;
+  padding-left:0.75rem !important;
+  padding-right:0.75rem !important;
     margin-bottom: 0;
     font-size: 1rem;
     font-weight: 400;
@@ -687,5 +803,14 @@ input[type=number]::-webkit-inner-spin-button {
 .accordion-head > .collapsed > i:before{
     content: "\f105";
 }
+
+@media (min-width: 992px){
+    .col-lg-10 {
+        -ms-flex: 0 0 83.333333%;
+        -webkit-box-flex: 0;
+        flex: 0 0 83.333333%;
+        max-width: 100%;
+  }
+ }
 
 </style>

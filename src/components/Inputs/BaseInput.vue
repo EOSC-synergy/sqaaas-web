@@ -8,6 +8,13 @@
       <label v-if="label" class="control-label">
         {{label}}
       </label>
+        <!-- <div class="custom-div-append"> -->
+            <button v-if="help == true" style="padding: 0.3rem 0.75rem;margin-bottom: 0 !important;font-size: 1rem !important;font-weight: 400 !important;color: #495057 !important;border: none !important;
+                                        height: 40px !important;"
+            type="button" class="btn" data-toggle="tooltip" data-html="true" data-placement="top" :title="message + ' ' + '<a target=`blank` href=' + link + '>More info</a>'">
+              <i class="fa fa-question-circle"></i>
+            </button>
+          <!-- </div> -->
     </slot>
     <slot name="addonLeft">
       <span v-if="addonLeftIcon" class="input-group-prepend">
@@ -43,6 +50,15 @@
         type: String,
         description: "Input label"
       },
+      help:{
+        type: Boolean,
+      },
+      message:{
+        type: String,
+      },
+      link:{
+        type: String,
+      },
       value: {
         type: [String, Number],
         description: "Input value"
@@ -62,7 +78,8 @@
     },
     data() {
       return {
-        focused: false
+        focused: false,
+        set_title:''
       }
     },
     computed: {
@@ -89,9 +106,10 @@
       onBlur() {
         this.focused = false;
       }
-    }
+    },
+
   }
 </script>
-<style>
+<style scoped>
 
 </style>
