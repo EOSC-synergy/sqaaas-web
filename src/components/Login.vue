@@ -146,7 +146,7 @@
                 </a>
             </span>
             <h4 style="font-weight: 700;">GitHub</h4>
-            <p>Open Source (LGPL License)</p>
+            <p>Open Source (GPLv3 License)</p>
 
           </div>
           <div class="col-12 col-md-4 text-center">
