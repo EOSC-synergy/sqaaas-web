@@ -57,7 +57,7 @@
     <div class="container back-login" >
       <p style="text-transform: uppercase;margin-bottom:0px;font-weight: 700;font-size:16px;">Committed to Software Quality in Research</p>
       <div style="max-width: 792px;">
-        <h2 style="text-transform: uppercase;font-size: 44px;font-weight: 700;line-height: 1.25;margin-bottom:2rem;" >The Researcher’s Toolkit to Streamline the Adoption of Novel Software Engineering Practicesand Receive Credit for It</h2>
+        <h2 style="text-transform: uppercase;font-size: 44px;font-weight: 700;line-height: 1.25;margin-bottom:2rem;" >Streamline the Adoption of Novel Software Engineering Practices in Research and Receive Credit for It</h2>
         <p style="font-size:18px;">The adoption of quality-based practices is one common struggle when it comes to developing software in research environments. The SQAaaS platform provides researchers with ready-to-use CI/CD pipelines that cross-check the relevant quality criteria any software project ought to fulfill in order to meet the Open Science values, and thus be sustainable, reliable, usable, reusable and discoverable in the long term. Additionally, the SQAaaS features an assessment tool that acknowledges the quality attributes of the software, which ultimately verifiable and shareable</p>
         <!-- <p><a href="#" @click="goTo()">What is CI/CD?</a></p> -->
         <p>
