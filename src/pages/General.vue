@@ -345,6 +345,32 @@
         </div>
 
       </div>
+
+
+       <!-- The Modal -->
+      <div class="modal" id="myModal">
+        <div class="modal-dialog">
+
+          <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Please Confirm</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p>The selected repository has been associated with any of the defined criteria, do you want to proceed and remove the repository?</p>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button class="btn btn-danger" @click="removeConfirmRepo()" data-dismiss="modal">Delete</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -411,7 +437,9 @@
         showErrorRepoName:false,
         showErrorRepoUrl:false,
         disable_done: true,
-        showBranchError: false
+        showBranchError: false,
+        idToRemove:'',
+        criteriaToRemove:''
 
       }
     },
@@ -549,11 +577,37 @@
         }
 
       },
+      openModal(item){
+        $('.confirm-delete').addClass('hide');
+        $('#myModal .modal-header, .modal-footer, .modal-body').removeClass('hide');
+        $('#myModal').modal('show');
+      },
       removeRepo(item){
-        console.log(item)
-        this.$delete(this.$store.state.config_yaml.config.project_repos,item)
-        // this.$store.state.config_yaml.config.project_repos = this.config.all_repos;
-        this.$store.state.config_yaml.sqa_criteria={};
+        this.idToRemove = item;
+        var check_repo = false
+        for (var criteria in this.$store.state.config_yaml.sqa_criteria){
+          for (let i = 0; i < this.$store.state.config_yaml.sqa_criteria[criteria].repos.length; i++) {
+            if(this.$store.state.config_yaml.sqa_criteria[criteria].repos[i].repo_url == this.$store.state.config_yaml.config.project_repos[i].repo){
+              this.criteriaToRemove = criteria;
+              check_repo = true;
+            }else{
+              this.criteriaToRemove = '';
+              check_repo = false;
+            }
+          }
+        }
+        if(check_repo == true){
+          this.openModal();
+        }else{
+          this.removeConfirmRepo()
+        }
+      },
+      removeConfirmRepo(){
+        console.log(this.idToRemove)
+        this.$delete(this.$store.state.config_yaml.config.project_repos, this.idToRemove)
+        if(this.criteriaToRemove != ''){
+          this.$delete( this.$store.state.config_yaml.sqa_criteria, this.criteriaToRemove)
+        }
         if (this.isEmpty(this.$store.state.config_yaml.config.project_repos)) {
           this.showRepo = false;
           this.disable_done = true;

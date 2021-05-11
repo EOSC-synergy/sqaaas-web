@@ -31,7 +31,7 @@
                 </div>
               </div>
               <div >
-                <span v-show="showErrorCriteria" style="color:red; font-size:12px;">You must select a valid criteria</span>
+                <span v-show="showErrorCriteria" style="color:red; font-size:12px;padding-left:20px;">You must select a valid criteria</span>
               </div>
             </div>
             <div class="row" style="margin:0px 0px 2rem 0px;">
@@ -103,6 +103,9 @@
                 </select>
               </div>
             </div>
+            <div>
+                <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a builder tool.</span>
+              </div>
             <div class="row" style="padding-top:20px;" v-show="showToxBuilder">
                 <div class="col-12 col-md-6">
 
@@ -360,6 +363,7 @@
         builder_tool: 'default',
         showToxBuilder:false,
         showCommandBuilder:false,
+        showErrorBuilderTool:false,
         info:{
           'qc_style':{
             'p1':'Use code style standards to guide your code writing so you let others  understand it.',
@@ -404,8 +408,11 @@
           this.showCommandBuilder = false;
         }
         if(val=='default'){
-          this.showToxBuilder = true;
-          this.showCommandBuilder = true;
+          this.showToxBuilder = false;
+          this.showCommandBuilder = false;
+          this.showErrorBuilderTool = true;
+        }else{
+          this.showErrorBuilderTool = false;
         }
       },
         'criteria'(val){
@@ -441,6 +448,13 @@
             this.showErrorService = false;
           }
 
+        },
+        'tox.file'(val){
+          if(val != ''){
+            this.showErrorFile = false;
+          }else{
+            this.showErrorFile = true;
+          }
         }
     },
     methods:{
@@ -596,7 +610,9 @@
           })
       },
       addCriteria(){
-        if(this.criteria == 'default' || this.service == "default"){
+        console.log(this.commands)
+        console.log(this.testenv)
+        if(this.criteria == 'default' || this.service == "default" || this.commands.length == 0 && this.testenv.length == 0){
           // this.error_message = "Error: you must select a valid criteria";
           if(this.criteria == 'default'){
             this.showErrorCriteria = true;
@@ -604,12 +620,18 @@
             // this.showErrorRepo = true;
             this.showErrorService = true;
           }
-          // if(this.pipelineName == ''){
-          //    this.showErrorPipeline = true;
-          // }else{
-          //   this.showErrorPipeline = false;
-          // }
-          // this.notifyVue(this.error_message)
+          if(this.commands.length == 0 && this.testenv.length == 0){
+            if(this.builder_tool != 'default'){
+              if(this.builder_tool == 'command'){
+                this.addCommand();
+              }else if(this.builder_tool == 'tox'){
+                this.addTestEnv();
+              }
+            }else{
+              this.showErrorBuilderTool = true;
+            }
+          }
+
         }else{
           var commands = {
             commands : this.commands
@@ -649,7 +671,7 @@
             repo=Object.assign(repo, tox)
           }
           this.repos["repos"].push(repo)
-          this.selected_criteria[this.criteria]=this.repos
+          this.selected_criteria[this.criteria]=Object.assign({}, this.selected_criteria[this.criteria], this.repos)
           this.$store.state.config_yaml.sqa_criteria[this.criteria] = Object.assign({}, this.$store.state.config_yaml.sqa_criteria[this.criteria], this.repos)
           this.clearTox();
           this.commands=[];
