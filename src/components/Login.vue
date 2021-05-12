@@ -62,11 +62,11 @@
         features an assessment tool that acknowledges the quality attributes of the software, <b>enabling proper recognition through shareable and verifiable <em>digital badges</em></b></p>
         <!-- <p><a href="#" @click="goTo()">What are CI/CD pipelines?</a></p> -->
         <p>
-          <button style="color: #1DC7EA;padding-left:0px;bargin-bottom:40px;" type="button" class=" btn btn-simple" @click="goTo()">What is CI/CD?</button>
+          <button style="color: #1DC7EA;padding-left:0px;bargin-bottom:40px;" type="button" class=" btn btn-simple" @click="goTo('cicd')">What is CI/CD?</button>
 
         </p>
         <p>
-          <button style="color: #1DC7EA;padding-left:0px;bargin-bottom:40px;" type="button" class=" btn btn-simple" @click="goTo()">How can software in research benefit from digital badges?</button>
+          <button style="color: #1DC7EA;padding-left:0px;bargin-bottom:40px;" type="button" class=" btn btn-simple" @click="goTo('badges')">What are SQAaaS <em>digital badges</em> all about?</button>
 
         </p>
 
@@ -77,7 +77,7 @@
     </div>
 
     <section class="section-style">
-        <div class="container" style="" id="cicd">
+        <div class="container" style="" id="cicd" ref="cicd">
           <h2 style="font-weight: 700;color:#73bbdc;margin-top: 0px;">What are <em>CI/CD pipelines</em>?</h2>
           <p>CI/CD stands for Continuous Integration and Continuous Delivery, respectively. They are common practices in software engineering that aim at improving the overall quality of the software during the development life cycle. CI/CD encompass both the verification and validation (V&V) processes, and thus they not only act at the code level, but also assess the operational part of the software. Consequently, CI/CD helps developers to meet both the functional (behavior-driven) and non-functional (usability-oriented) requirements that the software is intended to provide to their users.</p>
           <h4 style="font-weight: 700;color:#73bbdc;margin-top: 0px;">What about the <em>Pipelines</em>?</h4>
@@ -85,10 +85,10 @@
         </div>
     </section>
     <section class="section-style">
-        <div class="container" style="" id="badges">
-          <h2 style="font-weight: 700;color:#73bbdc;margin-top: 0px;">How can software in research benefit from <em>digital badges</em>?</h2>
+        <div class="container" style="" id="badges" ref="badges">
+          <h2 style="font-weight: 700;color:#73bbdc;margin-top: 0px;">What are SQAaaS <em>digital badges</em> all about?</h2>
           <p>Badges are commonly used by earners for proving the attainment of certain achievements. Digital badges complement traditional badging by providing virtual certification with built-in features for online sharing, verification, portability and trustworthiness. The SQAaaS platform harnesses the potential of the Open Badges specification to issue digital badges for particular versions of the software. Each badge issued by SQAaaS has associated metadata that includes the software quality criteria being fulfilled and the applicable evidence in the form of build logs, reports and/or binary artefacts.</p>
-          <h4 style="font-weight: 700;color:#73bbdc;margin-top: 0px;">What to do with the badges issued by SQAaaS?</h4>
+          <h4 style="font-weight: 700;color:#73bbdc;margin-top: 0px;">How can software in research benefit from badges?</h4>
           <p>The resultant badge can then be shared and verified by external bodies, thus significantly impacting the visibility and adoption of the software. In research ecosystems, such a quality badge definitely contributes to usability, reputation-building and crediting, as well as improving the reusability and reproducibility of the awarded software version</p>
         </div>
     </section>
@@ -122,7 +122,7 @@
     <section class="bg-blue section-style">
       <div class="container">
         <h2 style="font-weight: 700;color:#ffff;padding-bottom:2rem;margin-top: 0px;text-align: center;">Deploy your own SQAaaS platform</h2>
-        <h4 style="font-weight: 700;padding-bottom:0.2rem;">Get the SQAaaS on your premises with the click of a button!</h4>
+        <h4 style="font-weight: 700;padding-bottom:0.2rem;">Get the SQAaaS on your premises at the drop of a hat!</h4>
         <p>The SQAaaS platform relies on a set of services to provide its functionality. We deliver an Infrastructure as Code solution that makes the on-premise deployment straightforward for any individual researcher or scientific community. This approach is useful for use cases with privative source code where unrestricted access to the repositories is not granted.</p>
         <div class="text-center" style="padding-top:20px;padding-bottom:20px;">
           <button type="button" class=" btn btn-outline btn-login" >Try it out!</button>
@@ -133,7 +133,7 @@
 
     <section class="section-style">
       <div class="container">
-        <h2 style="text-transform: uppercase;text-align:center;padding-bottom:40px;">Compose your pipeline in minutes</h2>
+            <h2 style="text-align:center;padding-bottom:40px;">Learn more about SQAaaS</h2>
         <div class="row">
           <div class="col-12 col-md-4 text-center">
             <span class="fa-stack fa-3x">
@@ -200,8 +200,11 @@ export default {
 		};
     },
     methods: {
-      goTo(){
-        window.scrollTo(0, 500); // Scroll 100px to the right
+      goTo(refName){
+        var element = this.$refs[refName];
+        var top = element.offsetTop;
+
+        window.scrollTo(0, top);
       },
         login_egi(){
             var url =
