@@ -1,13 +1,13 @@
 <template>
   <div class="content" style="background-color:#f8f9fa;">
     <div class="container-fluid">
-      <div class="col-12 col-sm-12 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
-        <h4 style="margin-top:0px;" class="card-title text-center">CRITERIAS</h4>
+      <div class="col-12 col-sm-12 col-lg-8 mx-auto" style="margin:auto;padding:0px;">
+        <h4 style="margin-top:0px;font-weight:700;" class="card-title text-center">The quality criteria allows you to define the work expected of the CI/CD pipeline. It is then the underpinning part where the pipeline’s purpose takes shape.</h4>
         <card >
           <template slot="header">
             <div class="text-center" style="padding-left:20px;padding-top:20px;">
-              <p style="font-weight:700;">The quality criteria allows you to define the work expected of the CI/CD pipeline. It is then the underpinning part where the pipeline’s purpose takes shape.</p>
-              <p>Use the dropdown list to select the specific criterion you would like to fulfill. Then fill in the requested data.</p>
+              <!-- <p style="font-weight:700;">The quality criteria allows you to define the work expected of the CI/CD pipeline. It is then the underpinning part where the pipeline’s purpose takes shape.</p> -->
+              <p><i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i> Use the dropdown list to select the specific criterion you would like to fulfill. Then fill in the requested data.</p>
             </div>
           </template>
           <template class="card-body">
@@ -109,7 +109,7 @@
             <div class="row" style="padding-top:20px;" v-show="showToxBuilder">
                 <div class="col-12 col-md-6">
 
-                  <base-input type="text" class="col-10 no-margin"
+                  <base-input type="text" class="col-12 no-margin"
                           label="Tox file"
                           :disabled="false"
                           placeholder="/myrepo-testing/tox.ini"
@@ -157,7 +157,7 @@
                           placeholder="npm install"
                           v-model="command">
                   </base-input>
-                  <span v-show="showErrorCommand" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
+                  <span v-show="showErrorCommand" style="padding-left:20px;color:red; font-size:12px;">This field is required</span>
 
                 </div>
                 <div class="col-2" style="padding-top:30px;">
@@ -415,26 +415,53 @@
           this.showErrorBuilderTool = false;
         }
       },
-
-        'repository'(val){
-          if(val != "default"){
-            this.showErrorRepo = false;
+      'criteria'(val){
+        if(val != "default"){
+          this.show_link = true;
+          this.showSelect = true;
+          this.showErrorCriteria = false;
+          if(val == "qc_style"){
+            this.criteria_link = ""
+          }else if(val == "qc_coverage"){
+            this.criteria_link=""
+          }else if(val == "qc_functional"){
+            this.criteria_link = ""
+          }else if(val == "qc_security"){
+            this.criteria_link = ""
+          }else if(val == "qc_doc"){
+            this.criteria_link == ""
           }
-
-        },
-        'service'(val){
-          if(val != "default"){
-            this.showErrorService = false;
-          }
-
-        },
-        'tox.file'(val){
-          if(val != ''){
-            this.showErrorFile = false;
-          }else{
-            this.showErrorFile = true;
-          }
+        }else{
+          this.show_link = false;
+          this.showSelect = false;
+          this.showErrorCriteria = true;
         }
+      },
+      'repository'(val){
+        if(val != "default"){
+          this.showErrorRepo = false;
+        }
+      },
+
+      'repository'(val){
+        if(val != "default"){
+          this.showErrorRepo = false;
+        }
+
+      },
+      'service'(val){
+        if(val != "default"){
+          this.showErrorService = false;
+        }
+
+      },
+      'tox.file'(val){
+        if(val != ''){
+          this.showErrorFile = false;
+        }else{
+          this.showErrorFile = true;
+        }
+      }
     },
     methods:{
       // get_string_builder(repos){
@@ -470,7 +497,7 @@
       getBranch(item){
         this.criterias_store[item]={
           building_tag: false,
-          pattern:$('#select_branch_'+item).val()
+          pattern:$('#select_branch_'+item.replace(/\./g,"\\.")).val()
         }
         // this.$store.state.config_yaml.sqa_criteria[item]['when']={
 
@@ -495,10 +522,10 @@
       //   console.log( this.$store.state.config_yaml.sqa_criteria[item])
       // },
       selectWhen(item){
-        if($('#select_when_'+item).val() == 'building_tag'){
-          $('#select_comp_'+item).prop('disabled', true);
-          $('#select_branch_'+item).prop('disabled', true);
-          $('#button_branch_'+item).prop('disabled', true);
+        if($('#select_when_'+item.replace(/\./g,"\\.")).val() == 'building_tag'){
+          $('#select_comp_'+item.replace(/\./g,"\\.")).prop('disabled', true);
+          $('#select_branch_'+item.replace(/\./g,"\\.")).prop('disabled', true);
+          $('#button_branch_'+item.replace(/\./g,"\\.")).prop('disabled', true);
           // this.criterias.when.building_tag = true;
           // for(var i in _this.store_criteria ){
           //   console.log(_this.store_criteria[i])
@@ -545,7 +572,8 @@
         }
       },
       customize_criteria(key){
-        $('#criteria_'+key).toggleClass('open-criteria',500);
+        console.log(key.replace(/\./g,"\\."))
+        $('#criteria_'+key.replace(/\./g,"\\.")).toggleClass('open-criteria',500);
       },
        next(){
          for(const index in this.criterias_store ){
@@ -600,11 +628,21 @@
             this.showErrorService = true;
           }
           if(this.commands.length == 0 && this.testenv.length == 0){
+            console.log('here')
             if(this.builder_tool != 'default'){
               if(this.builder_tool == 'command'){
-                this.addCommand();
+                if(this.command == ''){
+                  this.showErrorCommand = true;
+                }
               }else if(this.builder_tool == 'tox'){
-                this.addTestEnv();
+                if(this.tox.env == '' || this.tox.file == ''){
+                  if(this.tox.env == '' ){
+                    this.showErrorEnv = true
+                  }
+                  if(this.tox.file == '' ){
+                    this.showErrorFile = true
+                  }
+                }
               }
             }else{
               this.showErrorBuilderTool = true;
@@ -656,6 +694,7 @@
           this.commands=[];
           this.tox.file='';
           this.testenv=[];
+          this.showErrorFile = false;
           console.log( this.$store.state.config_yaml.sqa_criteria)
         }
       },
@@ -825,12 +864,21 @@ input[type=number]::-webkit-inner-spin-button {
   display: flex!important;
 }
 @media (min-width: 992px){
-    .col-lg-10 {
+    .col-lg-8 {
         -ms-flex: 0 0 83.333333%;
         -webkit-box-flex: 0;
         flex: 0 0 83.333333%;
         max-width: 100%;
   }
  }
+
+ @media (min-width: 1200px) {
+    .col-lg-8 {
+        -ms-flex: 0 0 83.333333%;
+        -webkit-box-flex: 0;
+        flex: 0 0 83.333333%;
+        max-width: 70%;
+    }
+  }
 
 </style>

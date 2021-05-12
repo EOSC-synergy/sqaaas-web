@@ -1,14 +1,14 @@
 <template>
   <div class="content">
     <div class="container-fluid">
-      <div class="col-12 col-sm-12 col-lg-10 mx-auto" >
+      <div class="col-12 col-sm-12 col-lg-8 mx-auto" >
         <div class="" style="margin:auto;padding:0px;">
-          <h4 style="margin-top:0px;" class="card-title text-center">COMPOSER OPTIONS</h4>
+          <h4 style="margin-top:0px;font-weight:700;" class="card-title text-center">Services are deployed as Docker containers that will make up the building and testing environment.</h4>
           <card style="height:90vh;overflow-y: auto;">
             <template slot="header">
               <div class="text-center" style="padding-left:20px;padding-top:20px;">
-                <p style="font-weight:700;">Services are deployed as Docker containers that will make up the building and testing environment.</p>
-                <p>Here you will be able to compose your testing environment by either obtaining Docker images from explicit registries (defaults to Docker Hub) or building your own images through Dockerfiles. The latter will allow you to push the resultant image to the remote Docker registry.</p>
+                <!-- <p style="font-weight:700;">Services are deployed as Docker containers that will make up the building and testing environment.</p> -->
+                <p><i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i> Here you will be able to compose your testing environment by either obtaining Docker images from explicit registries (defaults to Docker Hub) or building your own images through Dockerfiles. The latter will allow you to push the resultant image to the remote Docker registry.</p>
               </div>
             </template>
 
@@ -52,7 +52,7 @@
                           class="collapsed ">
                           <i class="fa fa-angle-down" aria-hidden="true"></i>
                           <p>ADVANCED OPTIONS</p>
-                           <p>(Volumes, Env Vars, Docker Registry)</p>
+                           <p>(Volumes, Env Vars, Registry)</p>
                         </a>
                       </div>
                     </div>
@@ -111,25 +111,53 @@
                         <button type="button" class="btn-simple btn btn-xs btn-info" @click="addVolume()"><i class="fa fa-plus"></i>ADD VOLUME</button>
                       </div>
                       <div v-show="showVolumes" style="padding-top:20px;">
-                        <span class="custom-label">Volume</span>
-                        <ul class="list-group">
-                          <li class="list-group-item d-flex justify-content-between"
-                            v-for="(vol,key) in volumes"
-                            :key="key"
-                          >
-                          {{key}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeVolume(vol,key)"><i class="fa fa-minus"></i></button></span>
+                        <div class="table-responsive">
+                          <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <thead>
+                                  <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Type</th>
+                                  <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Source</th>
+                                  <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Source</th>
+                                  <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
+                              </thead>
+                              <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
+                              <tbody v-for="(vol, index) in volumes" :key="index">
+                                      <tr
+                                          style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                          <td
+                                              style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              <div style="text-align:left;">
+                                                  {{vol.type}}
+                                              </div>
+                                          </td>
 
-                          </li>
+                                          <td
+                                              style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              <div style="text-align:center;">
+                                                  {{vol.source}}
+                                              </div>
+                                          </td>
 
-                        </ul>
+                                          <td
+                                              style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              <div style="text-align:center;">
+                                                  {{vol.target}}
+                                              </div>
+                                          </td>
+
+                                          <td
+                                              style="text-align:right;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeService(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                              </button>
+                                          </td>
+
+
+                                      </tr>
+                              </tbody>
+                          </table>
+                        </div>
                       </div>
                       <div class="row" style="padding-left:5px;margin-bottom:1rem;margin-top:2rem;">
                         <span class="custom-label">Environment variables:</span>
-                        <!-- <div class="custom-div-append">
-                              <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
-                                <i class="fa fa-question-circle"></i>
-                              </button>
-                            </div> -->
                         <span class="custom-label">Yes</span><base-checkbox name="env" v-model="envComposeYesNo.yes"></base-checkbox>
                         <span class="custom-label">No</span><base-checkbox name="env" v-model="envComposeYesNo.no"></base-checkbox>
                       </div>
@@ -169,7 +197,7 @@
                         </div>
                     </div>
                     <div  class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
-                      <span class="custom-label">Push Image to Docker Registry?</span>
+                      <span class="custom-label">Push Image to Registry?</span>
                       <div class="custom-div-append">
                               <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Push the docker-compose service image to the Docker Registry <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html?highlight=push#environment' title='test add link'>More info</a>">
                                 <i class="fa fa-question-circle"></i>
@@ -313,6 +341,26 @@
               </div>
             </div>
           </card>
+
+        </div>
+      </div>
+      <div class="modal" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header" style="border-bottom:1px solid #ccc;padding-bottom:20px;">
+              <h5 class="modal-title">Please Confirm</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" style="border-bottom:1px solid #ccc;padding-bottom:0px;">
+              <p>The selected service has been associated with any of the defined criteria, do you want to proceed and remove the service?</p>
+            </div>
+            <div class="modal-footer" style="padding-top:20px;">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-danger" @click="removeConfirmServ()" data-dismiss="modal">Delete</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -378,7 +426,9 @@
         cache:'',
         context:'',
         path_dockerfile:'',
-        arg_push:{}
+        arg_push:{},
+        idToRemove:'',
+        criteriaToRemove:''
 
 
 
@@ -442,6 +492,11 @@
 
     },
     methods:{
+      openModal(item){
+        $('.confirm-delete').addClass('hide');
+        // $('#myModal .modal-header, .modal-footer, .modal-body').removeClass('hide');
+        $('#myModal').modal('show');
+      },
        next(){
          this.$router.push({name: 'SQACriteria'});
       },
@@ -627,19 +682,53 @@
         }
       },
       removeService(item){
-        this.$delete(this.services,item);
-        // this.$store.state.docker_compose.push_services.splice(item,1)
-        // $("option[value='"+item+"']").remove();
-        // $("#select_service").selectpicker("refresh");
+        this.idToRemove = item;
+        var check_repo = false
+        for (var criteria in this.$store.state.config_yaml.sqa_criteria){
+          for (let i = 0; i < this.$store.state.config_yaml.sqa_criteria[criteria].repos.length; i++) {
+            for (var serv in this.$store.state.docker_compose.services ){
+                if(this.$store.state.config_yaml.sqa_criteria[criteria].repos[i].container == serv){
+                  this.criteriaToRemove = criteria;
+                  check_repo = true;
+                }
+            }
+          }
+
+        }
+        console.log(check_repo)
+        if(check_repo == true){
+          this.openModal();
+        }else{
+          this.removeConfirmServ()
+        }
+      },
+      removeConfirmServ(){
+        console.log(this.idToRemove)
+        this.$delete(this.services,this.idToRemove);
         this.$store.state.docker_compose.services = this.services;
-        this.$store.state.config_yaml.sqa_criteria={};
+        if(this.criteriaToRemove != ''){
+          this.$delete( this.$store.state.config_yaml.sqa_criteria, this.criteriaToRemove)
+        }
         if (this.isEmpty(this.services)) {
           this.showServices = false;
           this.disable_done = true;
           this.push_image.yes = false;
         }
-
       },
+      // removeService(){
+      //   this.$delete(this.services,this.idToRemove);
+      //   // this.$store.state.docker_compose.push_services.splice(item,1)
+      //   // $("option[value='"+item+"']").remove();
+      //   // $("#select_service").selectpicker("refresh");
+      //   this.$store.state.docker_compose.services = this.services;
+      //   this.$store.state.config_yaml.sqa_criteria={};
+      //   if (this.isEmpty(this.services)) {
+      //     this.showServices = false;
+      //     this.disable_done = true;
+      //     this.push_image.yes = false;
+      //   }
+
+      // },
       cleanService(){
         this.service.image='';
         this.service.container_name='';
@@ -807,13 +896,22 @@ input[type=number]::-webkit-inner-spin-button {
  }
 
  @media (min-width: 992px){
-    .col-lg-10 {
+    .col-lg-8 {
         -ms-flex: 0 0 83.333333%;
         -webkit-box-flex: 0;
         flex: 0 0 83.333333%;
         max-width: 100%;
   }
  }
+
+ @media (min-width: 1200px) {
+    .col-lg-8 {
+        -ms-flex: 0 0 83.333333%;
+        -webkit-box-flex: 0;
+        flex: 0 0 83.333333%;
+        max-width: 70%;
+    }
+  }
 
  .btn-info {
     border-color: #1185EB;

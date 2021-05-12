@@ -1,8 +1,8 @@
 <template>
-  <nav class="navbar navbar-expand-lg" style="background:#c9d22a;padding-bottom:2px;padding-top:3px">
+  <nav class="bg-blue navbar navbar-expand-lg" style="padding-bottom:2px;padding-top:3px">
     <div class="container-fluid">
-      <a class="navbar-brand res-size" href="#">Software Quality Assurance as a Service</a>
-      <button type="button"
+      <a class="navbar-brand res-size" style="color:white;" href="#">Software Quality Assurance as a Service</a>
+      <button style="color:white;" type="button"
               class="navbar-toggler navbar-toggler-right"
               :class="{toggled: $sidebar.showSidebar}"
               aria-controls="navigation-index"
@@ -56,7 +56,7 @@
             <a class="dropdown-item" href="#">Separated link</a>
           </base-dropdown> -->
           <li class="nav-item">
-            <button style="font-size:18px;" class="btn btn-primary btn-simple nav-link" @click="logOut()">Log Out<i style="padding-left:10px" class="nc-icon nc-button-power"></i></button>
+            <button style="font-size:18px; color:white;" class="btn btn-primary btn-simple nav-link" @click="logOut()">Log Out<i style="padding-left:10px" class="nc-icon nc-button-power"></i></button>
           </li>
         </ul>
       </div>
@@ -102,6 +102,9 @@
 <style scoped>
 .navbar{
 	color:black;
+}
+.bg-blue {
+    background-color: #73bbdc;
 }
 
 @media (max-width: 576px) {

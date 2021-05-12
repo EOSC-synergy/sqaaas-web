@@ -2,7 +2,7 @@
 	<div class="wrapper">
 		<side-bar v-show="$route.path != '/auth/pipeline-name' && $route.path != '/auth/select-option' && $route.path != '/auth/full-assessment' ">
 
-      <div class="widget-body">
+      <div class="widget-body ">
                 <p style="padding-left:20px;font-size: 30px;">Pipeline as a Service</p>
                 <p style="padding-left:20px;font-size: 15px;">Compose and test your own customized quality pipelines</p>
                 <div class="row">
@@ -120,6 +120,9 @@
 
 </script>
 <style scoped>
+.bg-blue {
+    background-color: #73bbdc;
+}
 /*Start vertical Wizard*/
 .sidebar .nav li .nav-link, body > .navbar-collapse .nav li .nav-link{
   opacity: 1!important;
@@ -197,8 +200,10 @@
 }
 
 .verticalwiz li .step {
-    background: #B2B5B9;
-    color: #fff;
+    /* background: #B2B5B9;
+    color: #fff; */
+    background: #c9d22a;
+    color: black;
     display: inline;
     font-size: 15px;
     font-weight: 700;

@@ -56,32 +56,19 @@
                         </ul>
                     </div>
                   </div>
-
-
-
               </div>
               <p class="text-center" style="font-size:40px;padding-top:20px;padding-bottom:40px;">Start composing your CI/CD pipeline</p>
-                <div style="height: 200px;">
-                  <div class="row text-center">
-                    <div class="col-12 col-md-4 offset-md-2">
-                      <base-input type="text" class="no-margin"
-                              label=""
-                              :disabled="$store.state.pipeline_id != ''"
-                              placeholder="Name of the pipeline. Exmaple: worsica"
-                              v-model="pipelineName">
-                      </base-input>
-
-                    </div>
-                    <div class="col-12 col-md-4">
-                      <button @click="next()" type="button" :disabled="disabled_next"  class="btn btn-next btn-next-back">
-                        Create CI/CD pipeline
-                      </button>
+              <div style="padding-bottom:40px;margin-top:2rem;">
+                <div class="col-12 col-md-6 mx-auto mb-3">
+                  <div class="input-group">
+                    <input type="text" style="height: 42px;border-right: 1px solid #AAAAAA;" class="form-control" placeholder="Name of the pipeline. Exmaple: worsica." aria-label="Name of the pipeline. Exmaple: worsica." aria-describedby="basic-addon2" v-model="pipelineName">
+                    <div class="input-group-append">
+                      <button class="btn btn-next btn-next-back" :disabled='disabled_next' style="border-width:1px; border-color:#000;color:#3472F7;" type="button" @click="next()">Create CI/CD pipeline</button>
                     </div>
                   </div>
-                  <span v-show="showErrorPipeline" style="color:red; font-size:12px;">Error: Invalid character.</span>
+                   <label  v-show="showErrorPipeline" style="color:red; font-size:12px;" >Error: Invalid character.</label>
                 </div>
-
-
+              </div>
 						</template>
 					</card>
 				</div>
@@ -512,7 +499,7 @@ input[type="checkbox"]:checked::before{
   }
 
   .btn-next-back{
-    width: 40%!important;
+    width: 200px!important;
   }
 
 .btn-back{

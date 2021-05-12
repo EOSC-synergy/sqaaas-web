@@ -2,14 +2,14 @@
   <div class="content">
     <div class="container-fluid">
 			<!-- <span>User: {{username}}</span> -->
-      <div class="col-12 col-lg-10 mx-auto" >
+      <div class="col-12 col-lg-8 mx-auto" >
         <div class="" style="margin:auto;">
-            <h4 style="margin-top:0px;" class="card-title text-center">REPOS OPTIONS</h4>
+            <h4 style="margin-top:0px;font-weight:700;" class="card-title text-center">Code repositories are the substrate for the CI/CD pipeline work</h4>
             <card style="height:90vh;overflow-y: auto;">
               <template slot="header" >
                 <div class="text-center" style="padding-left:20px;padding-top:20px;">
-                  <p style="font-weight:700;">Code repositories are the substrate for the CI/CD pipeline work.</p>
-                  <p>CI/CD pipelines are commonly located next to the code, so they can react instantly to code changes. Nonetheless, alternative approaches maintain the pipelines in individual code repositories. Here you will be able to customize your CI/CD pipeline to adequate to one or both approaches (git code repositories only).</p>
+                  <!-- <p style="font-weight:700;">Code repositories are the substrate for the CI/CD pipeline work.</p> -->
+                  <p><i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i> CI/CD pipelines are commonly located next to the code, so they can react instantly to code changes. Nonetheless, alternative approaches maintain the pipelines in individual code repositories. Here you will be able to customize your CI/CD pipeline to adequate to one or both approaches (git code repositories only).</p>
                 </div>
               </template>
 
@@ -346,28 +346,22 @@
 
       </div>
 
-
-       <!-- The Modal -->
-      <div class="modal" id="myModal">
-        <div class="modal-dialog">
-
+      <div class="modal" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-              <h4 class="modal-title">Please Confirm</h4>
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="modal-header" style="border-bottom:1px solid #ccc;padding-bottom:20px;">
+              <h5 class="modal-title">Please Confirm</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
+            <div class="modal-body" style="border-bottom:1px solid #ccc;padding-bottom:0px;">
               <p>The selected repository has been associated with any of the defined criteria, do you want to proceed and remove the repository?</p>
             </div>
-            <!-- Modal footer -->
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button class="btn btn-danger" @click="removeConfirmRepo()" data-dismiss="modal">Delete</button>
+            <div class="modal-footer" style="padding-top:20px;">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-danger" @click="removeConfirmRepo()" data-dismiss="modal">Delete</button>
             </div>
-
           </div>
         </div>
       </div>
@@ -579,7 +573,7 @@
       },
       openModal(item){
         $('.confirm-delete').addClass('hide');
-        $('#myModal .modal-header, .modal-footer, .modal-body').removeClass('hide');
+        // $('#myModal .modal-header, .modal-footer, .modal-body').removeClass('hide');
         $('#myModal').modal('show');
       },
       removeRepo(item){
@@ -587,12 +581,11 @@
         var check_repo = false
         for (var criteria in this.$store.state.config_yaml.sqa_criteria){
           for (let i = 0; i < this.$store.state.config_yaml.sqa_criteria[criteria].repos.length; i++) {
-            if(this.$store.state.config_yaml.sqa_criteria[criteria].repos[i].repo_url == this.$store.state.config_yaml.config.project_repos[i].repo){
-              this.criteriaToRemove = criteria;
-              check_repo = true;
-            }else{
-              this.criteriaToRemove = '';
-              check_repo = false;
+            for (let x = 0; x < this.$store.state.config_yaml.config.project_repos.length; x++){
+              if(this.$store.state.config_yaml.sqa_criteria[criteria].repos[i].repo_url == this.$store.state.config_yaml.config.project_repos[x].repo){
+                this.criteriaToRemove = criteria;
+                check_repo = true;
+              }
             }
           }
         }
@@ -859,12 +852,21 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 @media (min-width: 992px){
-    .col-lg-10 {
+    .col-lg-8 {
         -ms-flex: 0 0 83.333333%;
         -webkit-box-flex: 0;
         flex: 0 0 83.333333%;
         max-width: 100%;
   }
  }
+
+ @media (min-width: 1200px) {
+    .col-lg-8 {
+        -ms-flex: 0 0 83.333333%;
+        -webkit-box-flex: 0;
+        flex: 0 0 83.333333%;
+        max-width: 70%;
+    }
+  }
 
 </style>
