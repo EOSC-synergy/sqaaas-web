@@ -17,11 +17,11 @@
                   <label> Choose a criteria</label>
                   <select class="custom-select" id="sqacriteria" v-model='criteria' style="font-family: consola;font-weight: 700;" >
                     <option value="default">Select ...</option>
-                    <option value="qc_style">QC.Sty</option>
-                    <option value="qc_coverage">QC.Uni</option>
-                    <option value="qc_functional">QC.Fun</option>
-                    <option value="qc_security">QC.Sec</option>
-                    <option value="qc_doc">QC.Doc</option>
+                    <option value="QC.Sty">QC.Sty</option>
+                    <option value="QC.Uni">QC.Uni</option>
+                    <option value="QC.Fun">QC.Fun</option>
+                    <option value="QC.Sec">QC.Sec</option>
+                    <option value="QC.Doc">QC.Doc</option>
                   </select>
                 </div>
                 <div v-show="criteria != 'default'" class="col-12 col-md-6" style="padding-top:20px;">
@@ -365,27 +365,27 @@
         showCommandBuilder:false,
         showErrorBuilderTool:false,
         info:{
-          'qc_style':{
+          'QC.Sty':{
             'p1':'Use code style standards to guide your code writing so you let others  understand it.',
             'p2':'readability, reusability',
             'link':'https://indigo-dc.github.io/sqa-baseline/#code-style-qc.sty'
           },
-          'qc_coverage':{
+          'QC.Uni':{
             'p1':'Test the behaviour of segments or units within your code (e.g. conditionals, loops, functions).',
             'p2':'design, bug detection',
             'link':'https://indigo-dc.github.io/sqa-baseline/#unit-testing-qc.uni'
           },
-          'qc_functional':{
+          'QC.Fun':{
             'p1':'Ensure compliance with the functional requirements to meet your users’ expectations.',
             'p2':'end-user satisfaction',
             'link':'https://indigo-dc.github.io/sqa-baseline/#functional-testing-qc.fun'
           },
-          'qc_security':{
+          'QC.Sec':{
             'p1':'Secure your software by finding (statically) common issues associated to the programming language in use and look for disclosed security vulnerabilities.',
             'p2':'security issues detection',
             'link':'https://indigo-dc.github.io/sqa-baseline/#security-qc.sec'
           },
-          'qc_doc':{
+          'QC.Doc':{
             'p1':'Treat documentation as code by using markup languages to automatically build and place it in online repositories.',
             'p2':'outreach capacity, documentation maintenance',
             'link':'https://indigo-dc.github.io/sqa-baseline/#documentation-qc.doc'
@@ -415,28 +415,7 @@
           this.showErrorBuilderTool = false;
         }
       },
-        'criteria'(val){
-          if(val != "default"){
-            this.show_link = true;
-            this.showSelect = true;
-            this.showErrorCriteria = false;
-            if(val == "qc_style"){
-              this.criteria_link = ""
-            }else if(val == "qc_coverage"){
-              this.criteria_link=""
-            }else if(val == "qc_functional"){
-              this.criteria_link = ""
-            }else if(val == "qc_security"){
-              this.criteria_link = ""
-            }else if(val == "qc_doc"){
-              this.criteria_link == ""
-            }
-          }else{
-            this.show_link = false;
-            this.showSelect = false;
-            this.showErrorCriteria = true;
-          }
-        },
+
         'repository'(val){
           if(val != "default"){
             this.showErrorRepo = false;
