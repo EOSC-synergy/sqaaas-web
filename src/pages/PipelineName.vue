@@ -61,7 +61,7 @@
               <div style="padding-bottom:40px;margin-top:2rem;">
                 <div class="col-12 col-md-6 mx-auto mb-3">
                   <div class="input-group">
-                    <input type="text" style="height: 42px;border-right: 1px solid #AAAAAA;" class="form-control" placeholder="Name of the pipeline. Exmaple: worsica." aria-label="Name of the pipeline. Exmaple: worsica." aria-describedby="basic-addon2" v-model="pipelineName">
+                    <input type="text" style="height: 42px;border-right: 1px solid #000;" class="form-control" placeholder="Name of the pipeline. Exmaple: worsica." aria-label="Name of the pipeline. Exmaple: worsica." aria-describedby="basic-addon2" v-model="pipelineName">
                     <div class="input-group-append">
                       <button class="btn btn-next btn-next-back" :disabled='disabled_next' style="border-width:1px; border-color:#000;color:#3472F7;" type="button" @click="next()">Create CI/CD pipeline</button>
                     </div>

@@ -1,9 +1,20 @@
 <template>
   	<div class="content">
       <div class="container-fluid">
-        <!-- <div  v-show="loading" class="loading-overlay is-active">
-          <span class="fas fa-spinner fa-3x fa-spin"></span>
-        </div> -->
+        <div  v-show="loading" class="loading-overlay is-active">
+          <div>
+            <div style="vertical-align: middle;display: flex;">
+              <span class="fas fa-cog fa-3x fa-spin"></span>
+              <p style="padding-left: 10px;text-transform: uppercase;font-weight: 700;margin-bottom: 0px;margin-top: 15px;">Executing Pipeline ...</p>
+            </div>
+            <div>
+              <p>Please, wait for this process to finish.</p>
+            </div>
+            <div class="text-center">
+                <button class="btn  btn-danger btn-fill" @click="cancelExecution()">Cancel</button>
+              </div>
+            </div>
+        </div>
         <div class="col-12 col-sm-12 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
           <h4 style="margin-top:0px;" class="card-title text-center">Pipeline</h4>
           <!-- <div class="row">
@@ -54,7 +65,7 @@
                      <div v-show="showBadge == true" class="" id="badge" style="padding-bottom:20px;padding-left:15px;">
                     </div>
 
-                    <div v-show="showStatusBar">
+                    <!-- <div v-show="showStatusBar">
                       <div class="requestProgress">
                         <div class="bar">
                         </div>
@@ -63,7 +74,7 @@
                         <button type="button" class="btn btn-simple" disabled>
                               <span style="padding-right:5px;" class="btn-label"><i style="color:#00a77e;" class="fa fa-refresh fa-spin fa-1x fa-fw"></i></span>Loading the pipeline status</button>
                       </div>
-                    </div>
+                    </div> -->
 
 
                     <div v-show="showFieldsPipeline">
@@ -91,13 +102,13 @@
                         <i v-else-if ="build_status == 'FAILURE'" style="color:red;" class="fa fa-times" aria-hidden="true"></i>
                         <i v-else style="color:red;" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                       </div>
-                      <div v-show="!loading" class="text-center">
+                      <div class="text-center">
                         <button class="btn  btn-primary btn-fill" @click="runPipeline()">Run pipeline</button>
                       </div>
-                      <div v-show="loading" class="text-center" >
+                      <!-- <div v-show="loading_run" class="text-center" >
                         <button type="button" class="btn btn-simple" disabled>
                             <span style="padding-right:5px;" class="btn-label"><i style="color:black;" class="fa fa-cog fa-spin fa-1x fa-fw"></i></span>Executing Pipeline...</button>
-                    </div>
+                      </div> -->
                     </div>
                 </div>
 
@@ -149,6 +160,7 @@
         pipeline_id:'',
         disabled_button: false,
         loading: false,
+        loading_run: false,
         repo_pull_request:'',
         showErrorPullRequest:false,
         pull_request_url: '',
@@ -185,6 +197,11 @@
       }
     },
     methods:{
+      cancelExecution(){
+        console.log('here')
+        this.autoRefresh = false;
+        this.loading = false;
+      },
       deletePipeline(){
         this.loading = true;
           this.deletePipelineCall(this.pipeline_id,this.deletePipelineCallBack)
@@ -254,21 +271,22 @@
             this.$store.state.build_url = this.build_url;
             this.showBuildUrl = true;
             this.autoRefresh = true;
-            this.notifyVue("Success","Pipeline executed successfully.",'nc-icon nc-check-2','info');
+            // this.notifyVue("Success","Pipeline executed successfully.",'nc-icon nc-check-2','info');
           }
         }else if(response.status == 204){
           this.disable_status = false;
           this.autoRefresh = true;
-          this.notifyVue("Info","Waiting for scan organization.",'nc-icon nc-simple-remove','warning')
+          // this.notifyVue("Info","Waiting for scan organization.",'nc-icon nc-simple-remove','warning')
 
         }else if(response.status == 403){
           this.$router.replace(this.$route.query.redirect || "/logout");
+          this.loading = false;
         }else{
           this.showBuildUrl = false;
           this.showBuildUrl = false;
           this.notifyVue("Error ", response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
+          this.loading = false;
         }
-        this.loading = false;
       },
       checkStatus(){
         this.showStatusBar = true;
@@ -287,28 +305,35 @@
             this.$store.state.build_url = this.build_url;
             this.showBuildUrl = true;
           }
-          if(this.build_status != null){
+          if(this.build_status != null && this.build_status == 'FAILURE'){
             this.showStatusBar = false;
-          }
-          if(response.data.openbadge_id != null){
-            this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
+            if(response.data.openbadge_id != null){
+              this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
+            }
+              this.loading = false;
+              this.autoRefresh = false;
           }
 
         }else if(response.status == 403){
+          this.autoRefresh = false;
           this.showStatus = false;
+          this.loading = false;
           this.$router.replace(this.$route.query.redirect || "/logout");
         }else if (response.status == 422){
+          this.autoRefresh = false;
           this.showStatus = false;
           this.showBuildUrl = false;
           this.$store.state.status = '';
           this.$store.state.build_url = '';
+          this.loading = false;
           this.notifyVue("Error ", response.status +": Pipeline has not been execute",'nc-icon nc-simple-remove','danger')
 
         }else{
+          this.autoRefresh = false;
           this.showStatus = false;
           this.notifyVue("Error ", response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
+          this.loading = false;
         }
-        // this.loading = false;
       },
       generateFiles(){
         this.downloadFileCall(this.pipeline_id,this.downloadFileCallBack);
@@ -414,7 +439,6 @@
       getBadgeCallBackGET(response){
         if(response.status == 200){
           this.showBadge = true;
-          this.autoRefresh = false;
 
           if($("#badge").has("blockquote").length == 0){
             $( "#badge" ).append(response.data);
@@ -441,7 +465,7 @@
     var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
     if(this.$store.state.pipeline_id == ''){
       this.notifyVue("Error", "You must create the pipeline",'nc-icon nc-simple-remove','danger')
-      // this.$router.push({name:"Files"})
+      this.$router.push({name:"Files"})
     }
 
     this.pipeline_id = this.$store.state.pipeline_id;

@@ -120,7 +120,7 @@
                                   <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
                               </thead>
                               <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
-                              <tbody v-for="(vol, index) in volumes" :key="index">
+                              <tbody v-for="(vol, index) in service.volumes" :key="index">
                                       <tr
                                           style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
                                           <td
@@ -146,7 +146,7 @@
 
                                           <td
                                               style="text-align:right;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                              <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeService(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                              <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeVolume(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
                                               </button>
                                           </td>
 
@@ -358,7 +358,7 @@
             </div>
             <div class="modal-footer" style="padding-top:20px;">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-danger" @click="removeConfirmServ()" data-dismiss="modal">Delete</button>
+              <button type="button" class="btn btn-danger btn-fill" @click="removeConfirmServ()" data-dismiss="modal">Delete</button>
             </div>
           </div>
         </div>
@@ -370,6 +370,7 @@
   import Card from 'src/components/Cards/Card.vue'
   import YAML from 'json-to-pretty-yaml'
   import Services from '../services/services'
+import services from '../services/services'
   export default {
     components: {
       Card
@@ -545,17 +546,19 @@
         this.showVolumes = true;
         this.count +=1;
         var name = "volume "+this.count;
-        this.volumes[name]={
+        this.volumes={
           type:this.volume.type.trim(),
           source:this.volume.source.trim(),
           target:this.volume.target.trim()
         }
-        this.service.volumes.push(this.volumes[name])
+        this.service.volumes.push(this.volumes)
+        console.log(this.service.volumes)
         this.cleanVolume();
 
       },
-      removeVolume(item1,item2){
-        this.$delete(this.volumes,item2)
+      removeVolume(item1){
+        this.$delete(this.volumes,item1)
+        this.$delete(this.service.volumes,item1)
           if (this.isEmpty(this.service.volumes)) {
             this.showVolumes = false;
           }
@@ -566,7 +569,7 @@
         }
       },
       cleanVolume(){
-        this.volume.type = '';
+        this.volume.type = 'bind';
         this.volume.source = '';
         this.volume.target = '';
       },

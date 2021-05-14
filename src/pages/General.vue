@@ -360,7 +360,7 @@
             </div>
             <div class="modal-footer" style="padding-top:20px;">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-danger" @click="removeConfirmRepo()" data-dismiss="modal">Delete</button>
+              <button type="button" class="btn btn-danger btn-fill" @click="removeConfirmRepo()" data-dismiss="modal">Delete</button>
             </div>
           </div>
         </div>
@@ -718,36 +718,41 @@
     },
     created(){
        this.checkauthCall(this.checkauthCallBack);
-      var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos)
-      for (let i = 0; i < sizeRepos; i++) {
-        this.config.all_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]=this.$store.state.config_yaml.config.project_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]
-      }
-      for (let i = 0; i < this.$store.state.config_yaml.config.credentials.length; i++) {
-        this.all_credentials.push(this.$store.state.config_yaml.config.credentials[i])
-      }
+      if(this.$store.state.name == ''){
+        this.notifyVue("Please define the name of the pipeline",'nc-icon nc-simple-remove','danger')
+        this.$router.push({name:"PipelineName"})
+      }else{
+        var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos)
+        for (let i = 0; i < sizeRepos; i++) {
+          this.config.all_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]=this.$store.state.config_yaml.config.project_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]
+        }
+        for (let i = 0; i < this.$store.state.config_yaml.config.credentials.length; i++) {
+          this.all_credentials.push(this.$store.state.config_yaml.config.credentials[i])
+        }
 
-      this.config.all_envs = this.$store.state.config_yaml.environment
-      if(this.isEmpty(this.config.all_repos)){
-        this.showRepo = false;
-        this.disable_done = true;
-      }else {
-        this.showRepo = true;
-        this.disable_done = false;
-      }
-      if(this.isEmpty(this.services)){
-        this.showServices = false
-      }else {
-        this.showServices = true
-      }
-       if(this.isEmpty(this.all_credentials)){
-        this.showCred = false
-      }else {
-        this.showCred = true
-      }
-      if(this.isEmpty(this.config.all_envs)){
-        this.showEnv = false
-      }else {
-        this.showEnv = true
+        this.config.all_envs = this.$store.state.config_yaml.environment
+        if(this.isEmpty(this.config.all_repos)){
+          this.showRepo = false;
+          this.disable_done = true;
+        }else {
+          this.showRepo = true;
+          this.disable_done = false;
+        }
+        if(this.isEmpty(this.services)){
+          this.showServices = false
+        }else {
+          this.showServices = true
+        }
+         if(this.isEmpty(this.all_credentials)){
+          this.showCred = false
+        }else {
+          this.showCred = true
+        }
+        if(this.isEmpty(this.config.all_envs)){
+          this.showEnv = false
+        }else {
+          this.showEnv = true
+        }
       }
 
      },
