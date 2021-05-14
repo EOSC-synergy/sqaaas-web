@@ -47,12 +47,12 @@
                                   <p>The CI/CD pipeline is now ready to use. The SQAaaS provides further support for executing and/or downloaine. You could even push it directly to your own git repository.</p>
                                 </div>
                             </li>
-                            <li role="presentation" class="step5 general-step">
+                            <!-- <li role="presentation" class="step5 general-step">
                                 <a href="#step5" @click="menuChange('5')" data-toggle="tab" aria-controls="step5" role="tab"><span class="round-tab">5</span> <i style="font-size:16px;">PIPELINE</i></a>
                                  <div v-show="this.current_step==5" style="margin-top:40px;" >
                                   <p>The CI/CD pipeline is now ready to use. The SQAaaS provides further support for executing and/or downloaine. You could even push it directly to your own git repository.</p>
                                 </div>
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                   </div>
@@ -91,6 +91,8 @@
        showErrorPipeline:false,
        current_step:1,
        disabled_next: true,
+       autoMove: false,
+       m:''
       }
     },
     watch:{
@@ -107,25 +109,39 @@
         }else{
           this.disabled_next = false;
         }
+      },
+      "autoMove"(val) {
+        console.log('here')
+        if (val) {
+            this.m = setInterval(() => {
+              this.current_step = this.current_step + 1;
+              this.menuChange(this.current_step)
+            }, 10 * 1000)
+        } else {
+            clearInterval(this.m)
+        }
       }
     },
     methods:{
       next(){
+        this.autoMove = false;
         this.$store.state.name = this.pipelineName;
         this.$router.push({name: 'general'});
       },
       back(){
+        this.autoMove = false;
         this.$router.push({name: 'SelectOption'});
       },
       menuChange(step){
-        this.current_step = step
-        // console.log(step)
+        console.log(step)
+        this.current_step = step;
         $('.general-step').removeClass('active')
         $('.step'+step).addClass('active')
 
       },
       created(){
         console.log(this.pipelineName)
+
         this.pipelineName = this.$store.state.name;
 
 
@@ -134,10 +150,11 @@
         var _this=this
 
         this.$nextTick(function () {
-            window.setInterval(() => {
-               console.log('here')
-              _this.current_step = _this.current_step + 1;
-            },100);
+           _this.autoMove = true;
+            // window.setInterval(() => {
+            //    console.log('here')
+            //   _this.current_step = _this.current_step + 1;
+            // },100);
 
         })
 
@@ -199,7 +216,7 @@ button:focus,
     height: 2px;
     background: #e0e0e0;
     position: absolute;
-    width: 80%;
+    width: 75%;
     margin: 0 auto;
     left: 0;
     right: 0;
@@ -246,7 +263,7 @@ span.round-tab i{
 }
 
 .wizard .nav-tabs > li {
-    width: 20%;
+    width: 25%;
 }
 
 .wizard li:after {

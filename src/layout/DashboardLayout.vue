@@ -34,17 +34,15 @@
                                         <li data-target="#step4" class="" >
                                           <sidebar-link to="/auth/files">
                                             <!-- <i class="nc-icon nc-notes"></i> -->
-                                            <span class="step">4</span> <span class="title">Summary</span>
+                                            <span class="step">4</span> <span class="title">PIPELINE</span>
                                           </sidebar-link>
                                             <!-- <a href="#tab4" data-toggle="tab"> <span class="step">4</span> <span class="title">Save Form</span> </a> -->
                                         </li>
-                                        <li data-target="#step5" class="">
+                                        <!-- <li data-target="#step5" class="">
                                           <sidebar-link to="/auth/pipeline-execution">
-                                            <!-- <i class="nc-icon nc-preferences-circle-rotate"></i> -->
                                             <span class="step">5</span> <span class="title">Pipeline</span>
                                           </sidebar-link>
-                                            <!-- <a href="#tab4" data-toggle="tab"> <span class="step">4</span> <span class="title">Save Form</span> </a> -->
-                                        </li>
+                                        </li> -->
                                     </ul>
                                     <div class="clearfix"></div>
                                 </div>
