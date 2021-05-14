@@ -85,7 +85,7 @@
         </div>
     </section>
     <section class="section-style">
-        <div class="container" style="" id="badges" ref="badges">
+        <div class="container" style="padding-top:0px;" id="badges" ref="badges">
           <h2 style="font-weight: 700;color:#73bbdc;margin-top: 0px;">What are SQAaaS <em>digital badges</em> all about?</h2>
           <p>Badges are commonly used by earners for proving the attainment of certain achievements. Digital badges complement traditional badging by providing virtual certification with built-in features for online sharing, verification, portability and trustworthiness. The SQAaaS platform harnesses the potential of the Open Badges specification to issue digital badges for particular versions of the software. Each badge issued by SQAaaS has associated metadata that includes the software quality criteria being fulfilled and the applicable evidence in the form of build logs, reports and/or binary artefacts.</p>
           <h4 style="font-weight: 700;color:#73bbdc;margin-top: 0px;">How can software in research benefit from badges?</h4>
