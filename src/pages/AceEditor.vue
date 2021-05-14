@@ -41,6 +41,7 @@ export default ({
 		this.editor = window.ace.edit(this.editorId)
     this.editor.setValue(this.content,1)
     this.editor.setReadOnly(true);
+    // this.editor.setUseWorker(false);
 
     // mode-xxx.js or theme-xxx.jsがある場合のみ有効
     this.editor.getSession().setMode(`ace/mode/${lang}`)

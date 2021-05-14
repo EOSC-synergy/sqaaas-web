@@ -1,13 +1,13 @@
 <template>
   <div class="content" style="background-color:#f8f9fa;">
     <div class="container-fluid">
-      <div class="col-12 col-sm-12 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
-        <h4 style="margin-top:0px;" class="card-title text-center">CRITERIAS</h4>
+      <div class="col-12 col-sm-12 col-lg-8 mx-auto" style="margin:auto;padding:0px;">
+        <h4 style="margin-top:0px;font-weight:700;" class="card-title text-center">The quality criteria allows you to define the work expected of the CI/CD pipeline. It is then the underpinning part where the pipeline’s purpose takes shape.</h4>
         <card >
           <template slot="header">
             <div class="text-center" style="padding-left:20px;padding-top:20px;">
-              <p style="font-weight:700;">The quality criteria allows you to define the work expected of the CI/CD pipeline. It is then the underpinning part where the pipeline’s purpose takes shape.</p>
-              <p>Use the dropdown list to select the specific criterion you would like to fulfill. Then fill in the requested data.</p>
+              <!-- <p style="font-weight:700;">The quality criteria allows you to define the work expected of the CI/CD pipeline. It is then the underpinning part where the pipeline’s purpose takes shape.</p> -->
+              <p><i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i> Use the dropdown list to select the specific criterion you would like to fulfill. Then fill in the requested data.</p>
             </div>
           </template>
           <template class="card-body">
@@ -17,11 +17,11 @@
                   <label> Choose a criteria</label>
                   <select class="custom-select" id="sqacriteria" v-model='criteria' style="font-family: consola;font-weight: 700;" >
                     <option value="default">Select ...</option>
-                    <option value="qc_style">QC.Sty</option>
-                    <option value="qc_coverage">QC.Uni</option>
-                    <option value="qc_functional">QC.Fun</option>
-                    <option value="qc_security">QC.Sec</option>
-                    <option value="qc_doc">QC.Doc</option>
+                    <option value="QC.Sty">QC.Sty</option>
+                    <option value="QC.Uni">QC.Uni</option>
+                    <option value="QC.Fun">QC.Fun</option>
+                    <option value="QC.Sec">QC.Sec</option>
+                    <option value="QC.Doc">QC.Doc</option>
                   </select>
                 </div>
                 <div v-show="criteria != 'default'" class="col-12 col-md-6" style="padding-top:20px;">
@@ -31,7 +31,7 @@
                 </div>
               </div>
               <div >
-                <span v-show="showErrorCriteria" style="color:red; font-size:12px;">You must select a valid criteria</span>
+                <span v-show="showErrorCriteria" style="color:red; font-size:12px;padding-left:20px;">You must select a valid criteria</span>
               </div>
             </div>
             <div class="row" style="margin:0px 0px 2rem 0px;">
@@ -103,10 +103,13 @@
                 </select>
               </div>
             </div>
+            <div>
+                <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a builder tool.</span>
+              </div>
             <div class="row" style="padding-top:20px;" v-show="showToxBuilder">
                 <div class="col-12 col-md-6">
 
-                  <base-input type="text" class="col-10 no-margin"
+                  <base-input type="text" class="col-12 no-margin"
                           label="Tox file"
                           :disabled="false"
                           placeholder="/myrepo-testing/tox.ini"
@@ -154,7 +157,7 @@
                           placeholder="npm install"
                           v-model="command">
                   </base-input>
-                  <span v-show="showErrorCommand" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
+                  <span v-show="showErrorCommand" style="padding-left:20px;color:red; font-size:12px;">This field is required</span>
 
                 </div>
                 <div class="col-2" style="padding-top:30px;">
@@ -360,28 +363,29 @@
         builder_tool: 'default',
         showToxBuilder:false,
         showCommandBuilder:false,
+        showErrorBuilderTool:false,
         info:{
-          'qc_style':{
+          'QC.Sty':{
             'p1':'Use code style standards to guide your code writing so you let others  understand it.',
             'p2':'readability, reusability',
             'link':'https://indigo-dc.github.io/sqa-baseline/#code-style-qc.sty'
           },
-          'qc_coverage':{
+          'QC.Uni':{
             'p1':'Test the behaviour of segments or units within your code (e.g. conditionals, loops, functions).',
             'p2':'design, bug detection',
             'link':'https://indigo-dc.github.io/sqa-baseline/#unit-testing-qc.uni'
           },
-          'qc_functional':{
+          'QC.Fun':{
             'p1':'Ensure compliance with the functional requirements to meet your users’ expectations.',
             'p2':'end-user satisfaction',
             'link':'https://indigo-dc.github.io/sqa-baseline/#functional-testing-qc.fun'
           },
-          'qc_security':{
+          'QC.Sec':{
             'p1':'Secure your software by finding (statically) common issues associated to the programming language in use and look for disclosed security vulnerabilities.',
             'p2':'security issues detection',
             'link':'https://indigo-dc.github.io/sqa-baseline/#security-qc.sec'
           },
-          'qc_doc':{
+          'QC.Doc':{
             'p1':'Treat documentation as code by using markup languages to automatically build and place it in online repositories.',
             'p2':'outreach capacity, documentation maintenance',
             'link':'https://indigo-dc.github.io/sqa-baseline/#documentation-qc.doc'
@@ -404,44 +408,60 @@
           this.showCommandBuilder = false;
         }
         if(val=='default'){
-          this.showToxBuilder = true;
-          this.showCommandBuilder = true;
+          this.showToxBuilder = false;
+          this.showCommandBuilder = false;
+          this.showErrorBuilderTool = true;
+        }else{
+          this.showErrorBuilderTool = false;
         }
       },
-        'criteria'(val){
-          if(val != "default"){
-            this.show_link = true;
-            this.showSelect = true;
-            this.showErrorCriteria = false;
-            if(val == "qc_style"){
-              this.criteria_link = ""
-            }else if(val == "qc_coverage"){
-              this.criteria_link=""
-            }else if(val == "qc_functional"){
-              this.criteria_link = ""
-            }else if(val == "qc_security"){
-              this.criteria_link = ""
-            }else if(val == "qc_doc"){
-              this.criteria_link == ""
-            }
-          }else{
-            this.show_link = false;
-            this.showSelect = false;
-            this.showErrorCriteria = true;
+      'criteria'(val){
+        if(val != "default"){
+          this.show_link = true;
+          this.showSelect = true;
+          this.showErrorCriteria = false;
+          if(val == "qc_style"){
+            this.criteria_link = ""
+          }else if(val == "qc_coverage"){
+            this.criteria_link=""
+          }else if(val == "qc_functional"){
+            this.criteria_link = ""
+          }else if(val == "qc_security"){
+            this.criteria_link = ""
+          }else if(val == "qc_doc"){
+            this.criteria_link == ""
           }
-        },
-        'repository'(val){
-          if(val != "default"){
-            this.showErrorRepo = false;
-          }
-
-        },
-        'service'(val){
-          if(val != "default"){
-            this.showErrorService = false;
-          }
-
+        }else{
+          this.show_link = false;
+          this.showSelect = false;
+          this.showErrorCriteria = true;
         }
+      },
+      'repository'(val){
+        if(val != "default"){
+          this.showErrorRepo = false;
+        }
+      },
+
+      'repository'(val){
+        if(val != "default"){
+          this.showErrorRepo = false;
+        }
+
+      },
+      'service'(val){
+        if(val != "default"){
+          this.showErrorService = false;
+        }
+
+      },
+      'tox.file'(val){
+        if(val != ''){
+          this.showErrorFile = false;
+        }else{
+          this.showErrorFile = true;
+        }
+      }
     },
     methods:{
       // get_string_builder(repos){
@@ -477,7 +497,7 @@
       getBranch(item){
         this.criterias_store[item]={
           building_tag: false,
-          pattern:$('#select_branch_'+item).val()
+          pattern:$('#select_branch_'+item.replace(/\./g,"\\.")).val()
         }
         // this.$store.state.config_yaml.sqa_criteria[item]['when']={
 
@@ -502,10 +522,10 @@
       //   console.log( this.$store.state.config_yaml.sqa_criteria[item])
       // },
       selectWhen(item){
-        if($('#select_when_'+item).val() == 'building_tag'){
-          $('#select_comp_'+item).prop('disabled', true);
-          $('#select_branch_'+item).prop('disabled', true);
-          $('#button_branch_'+item).prop('disabled', true);
+        if($('#select_when_'+item.replace(/\./g,"\\.")).val() == 'building_tag'){
+          $('#select_comp_'+item.replace(/\./g,"\\.")).prop('disabled', true);
+          $('#select_branch_'+item.replace(/\./g,"\\.")).prop('disabled', true);
+          $('#button_branch_'+item.replace(/\./g,"\\.")).prop('disabled', true);
           // this.criterias.when.building_tag = true;
           // for(var i in _this.store_criteria ){
           //   console.log(_this.store_criteria[i])
@@ -552,7 +572,8 @@
         }
       },
       customize_criteria(key){
-        $('#criteria_'+key).toggleClass('open-criteria',500);
+        console.log(key.replace(/\./g,"\\."))
+        $('#criteria_'+key.replace(/\./g,"\\.")).toggleClass('open-criteria',500);
       },
        next(){
          for(const index in this.criterias_store ){
@@ -596,7 +617,9 @@
           })
       },
       addCriteria(){
-        if(this.criteria == 'default' || this.service == "default"){
+        console.log(this.commands)
+        console.log(this.testenv)
+        if(this.criteria == 'default' || this.service == "default" || this.commands.length == 0 && this.testenv.length == 0){
           // this.error_message = "Error: you must select a valid criteria";
           if(this.criteria == 'default'){
             this.showErrorCriteria = true;
@@ -604,12 +627,28 @@
             // this.showErrorRepo = true;
             this.showErrorService = true;
           }
-          // if(this.pipelineName == ''){
-          //    this.showErrorPipeline = true;
-          // }else{
-          //   this.showErrorPipeline = false;
-          // }
-          // this.notifyVue(this.error_message)
+          if(this.commands.length == 0 && this.testenv.length == 0){
+            console.log('here')
+            if(this.builder_tool != 'default'){
+              if(this.builder_tool == 'command'){
+                if(this.command == ''){
+                  this.showErrorCommand = true;
+                }
+              }else if(this.builder_tool == 'tox'){
+                if(this.tox.env == '' || this.tox.file == ''){
+                  if(this.tox.env == '' ){
+                    this.showErrorEnv = true
+                  }
+                  if(this.tox.file == '' ){
+                    this.showErrorFile = true
+                  }
+                }
+              }
+            }else{
+              this.showErrorBuilderTool = true;
+            }
+          }
+
         }else{
           var commands = {
             commands : this.commands
@@ -649,12 +688,13 @@
             repo=Object.assign(repo, tox)
           }
           this.repos["repos"].push(repo)
-          this.selected_criteria[this.criteria]=this.repos
+          this.selected_criteria[this.criteria]=Object.assign({}, this.selected_criteria[this.criteria], this.repos)
           this.$store.state.config_yaml.sqa_criteria[this.criteria] = Object.assign({}, this.$store.state.config_yaml.sqa_criteria[this.criteria], this.repos)
           this.clearTox();
           this.commands=[];
           this.tox.file='';
           this.testenv=[];
+          this.showErrorFile = false;
           console.log( this.$store.state.config_yaml.sqa_criteria)
         }
       },
@@ -824,12 +864,21 @@ input[type=number]::-webkit-inner-spin-button {
   display: flex!important;
 }
 @media (min-width: 992px){
-    .col-lg-10 {
+    .col-lg-8 {
         -ms-flex: 0 0 83.333333%;
         -webkit-box-flex: 0;
         flex: 0 0 83.333333%;
         max-width: 100%;
   }
  }
+
+ @media (min-width: 1200px) {
+    .col-lg-8 {
+        -ms-flex: 0 0 83.333333%;
+        -webkit-box-flex: 0;
+        flex: 0 0 83.333333%;
+        max-width: 70%;
+    }
+  }
 
 </style>

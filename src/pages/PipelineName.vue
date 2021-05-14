@@ -18,92 +18,57 @@
 						</template>
 
 						<template>
-              <div style="margin-top:4rem;">
+              <div style="margin-top:4rem;height:250px;">
                 <div class="wizard">
                     <div class="wizard-inner">
                         <div class="connecting-line"></div>
                         <ul class="nav nav-tabs" role="tablist">
                             <li role="presentation" class="active step1 general-step">
                                 <a href="#step1" @click="menuChange('1')" data-toggle="tab" aria-controls="step1" role="tab" aria-expanded="true"><span class="round-tab">1 </span> <i style="font-size:16px;">REPOS</i></a>
+                                <div v-show="this.current_step==1" style="margin-top:40px;" >
+                                  <p>Provide pointers to the repositories where the target code is available, and customize them as needed (add branches, tags, etc.).</p>
+                                </div>
                             </li>
                             <li role="presentation"  class="step2 general-step">
                                 <a href="#step2" @click="menuChange('2')" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false"><span class="round-tab">2</span> <i style="font-size:16px;">SERVICES</i></a>
+                                <div v-show="this.current_step==2" style="margin-top:40px;" >
+                                  <p>Define the set of services (via Docker containers) that are required for your testing environment.</p>
+                                </div>
                             </li>
                             <li role="presentation" class="step3 general-step">
                                 <a href="#step3" @click="menuChange('3')" data-toggle="tab" aria-controls="step3" role="tab"><span class="round-tab">3</span> <i style="font-size:16px;">CRITERIAS</i></a>
+                                 <div v-show="this.current_step==3" style="margin-top:40px;" >
+                                  <p>Arrange the pipeline steps according to the supported quality criteria. Each criterion will prompt you for the relevant details to get it done (e.g. build parameters).</p>
+                                </div>
                             </li>
                             <li role="presentation" class="step4 general-step">
                                 <a href="#step4" @click="menuChange('4')" data-toggle="tab" aria-controls="step4" role="tab"><span class="round-tab">4</span> <i style="font-size:16px;">SUMMARY</i></a>
+                                 <div v-show="this.current_step==4" style="margin-top:40px;" >
+                                  <p>The CI/CD pipeline is now ready to use. The SQAaaS provides further support for executing and/or downloaine. You could even push it directly to your own git repository.</p>
+                                </div>
                             </li>
                             <li role="presentation" class="step5 general-step">
                                 <a href="#step5" @click="menuChange('5')" data-toggle="tab" aria-controls="step5" role="tab"><span class="round-tab">5</span> <i style="font-size:16px;">PIPELINE</i></a>
+                                 <div v-show="this.current_step==5" style="margin-top:40px;" >
+                                  <p>The CI/CD pipeline is now ready to use. The SQAaaS provides further support for executing and/or downloaine. You could even push it directly to your own git repository.</p>
+                                </div>
                             </li>
                         </ul>
-                        <div v-show="this.current_step==1" class="tab-pane active text-center" role="tabpanel" id="step1">
-                            <h4 style="font-weight:700;font-size:18px;" class="text-center">REPOS</h4>
-                            <div class="col-12 col-md-6 mx-auto">
-                              <p>Provide pointers to the repositories where the target code is available, and customize them as needed (add branches, tags, etc.).</p>
-
-                            </div>
-
-                        </div>
-                        <div v-show="this.current_step==2" class="tab-pane " role="tabpanel" id="step2">
-                            <h4 style="font-weight:700;font-size:18px;" class="text-center">SERVICES</h4>
-                            <div class="col-12 col-md-6 mx-auto">
-                              <p>Define the set of services (via Docker containers) that are required for your testing environment.</p>
-
-                            </div>
-                        </div>
-                        <div v-show="this.current_step==3" class="tab-pane " role="tabpanel" id="step3">
-                           <h4 style="font-weight:700;font-size:18px;" class="text-center">CRITERIAS</h4>
-                            <div class="col-12 col-md-6 mx-auto">
-                              <p>Arrange the pipeline steps according to the supported quality criteria. Each criterion will prompt you for the relevant details to get it done (e.g. build parameters).</p>
-
-                            </div>
-
-                        </div>
-                        <div v-show="this.current_step==4" class="tab-pane " role="tabpanel" id="step2">
-                            <h4 style="font-weight:700;font-size:18px;" class="text-center">SUMMARY</h4>
-                            <div class="col-12 col-md-6 mx-auto">
-                              <p>The CI/CD pipeline is now ready to use. The SQAaaS provides further support for executing and/or downloaine. You could even push it directly to your own git repository.</p>
-
-                            </div>
-                        </div>
-                         <div v-show="this.current_step==5" class="tab-pane " role="tabpanel" id="step2">
-                             <h4 style="font-weight:700;font-size:18px;" class="text-center">PIPELINE</h4>
-                            <div class="col-12 col-md-6 mx-auto">
-                              <p>The CI/CD pipeline is now ready to use. The SQAaaS provides further support for executing and/or downloaine. You could even push it directly to your own git repository.</p>
-
-                            </div>
-                        </div>
-
                     </div>
                   </div>
-
-
-
               </div>
-              <div class="row" style="justify-content: center;">
-                <div class="col-12 col-md-6 text-center" style="height: 200px;">
-                  <p style="font-size:40px;">Start now composing your CI/CD pipeline</p>
-                    <base-input type="text" class="no-margin"
-                              label=""
-                              :disabled="$store.state.pipeline_id != ''"
-                              placeholder="Name of the pipeline. Exmaple: worsica"
-                              v-model="pipelineName">
-                      </base-input>
-                      <span v-show="showErrorPipeline" style="color:red; font-size:12px;">Error: Invalid character.</span>
+              <p class="text-center" style="font-size:40px;padding-top:20px;padding-bottom:40px;">Start composing your CI/CD pipeline</p>
+              <div style="padding-bottom:40px;margin-top:2rem;">
+                <div class="col-12 col-md-6 mx-auto mb-3">
+                  <div class="input-group">
+                    <input type="text" style="height: 42px;border-right: 1px solid #000;" class="form-control" placeholder="Name of the pipeline. Exmaple: worsica." aria-label="Name of the pipeline. Exmaple: worsica." aria-describedby="basic-addon2" v-model="pipelineName">
+                    <div class="input-group-append">
+                      <button class="btn btn-next btn-next-back" :disabled='disabled_next' style="border-width:1px; border-color:#000;color:#3472F7;" type="button" @click="next()">Create CI/CD pipeline</button>
+                    </div>
                   </div>
-              </div>
-              <div class="row" style="margin-top:2rem; margin-bottom:3rem;">
-                <div class="col-12 text-center">
-
-                    <button @click="next()" type="button" :disabled="disabled_next"  class="btn btn-next btn-next-back">
-                        Create CI/CD pipeline
-                    </button>
+                   <label  v-show="showErrorPipeline" style="color:red; font-size:12px;" >Error: Invalid character.</label>
                 </div>
               </div>
-
 						</template>
 					</card>
 				</div>
@@ -528,13 +493,13 @@ input[type="checkbox"]:checked::before{
 .btn-next {
     background-color: #1DC7EA !important;
     color: black !important;
-    padding:1rem 0 1rem 0;
+    /* padding:1rem 0 1rem 0; */
     font-weight: bold;
     border: 2px solid black;
   }
 
   .btn-next-back{
-    width: 30%!important;
+    width: 200px!important;
   }
 
 .btn-back{

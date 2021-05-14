@@ -277,6 +277,9 @@ body > .navbar-collapse{
     &[data-color="purple"]:after{
         @include icon-gradient($new-purple, $purple-color-bottom);
     }
+    &[data-color="custom1"]:after{
+        @include icon-gradient($new-custom1, $custom1-color-bottom);
+    }
 }
 
 

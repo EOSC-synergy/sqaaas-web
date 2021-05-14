@@ -2,14 +2,14 @@
   <div class="content">
     <div class="container-fluid">
 			<!-- <span>User: {{username}}</span> -->
-      <div class="col-12 col-lg-10 mx-auto" >
+      <div class="col-12 col-lg-8 mx-auto" >
         <div class="" style="margin:auto;">
-            <h4 style="margin-top:0px;" class="card-title text-center">REPOS OPTIONS</h4>
+            <h4 style="margin-top:0px;font-weight:700;" class="card-title text-center">Code repositories are the substrate for the CI/CD pipeline work</h4>
             <card style="height:90vh;overflow-y: auto;">
               <template slot="header" >
                 <div class="text-center" style="padding-left:20px;padding-top:20px;">
-                  <p style="font-weight:700;">Code repositories are the substrate for the CI/CD pipeline work.</p>
-                  <p>CI/CD pipelines are commonly located next to the code, so they can react instantly to code changes. Nonetheless, alternative approaches maintain the pipelines in individual code repositories. Here you will be able to customize your CI/CD pipeline to adequate to one or both approaches (git code repositories only).</p>
+                  <!-- <p style="font-weight:700;">Code repositories are the substrate for the CI/CD pipeline work.</p> -->
+                  <p><i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i> CI/CD pipelines are commonly located next to the code, so they can react instantly to code changes. Nonetheless, alternative approaches maintain the pipelines in individual code repositories. Here you will be able to customize your CI/CD pipeline to adequate to one or both approaches (git code repositories only).</p>
                 </div>
               </template>
 
@@ -345,6 +345,26 @@
         </div>
 
       </div>
+
+      <div class="modal" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header" style="border-bottom:1px solid #ccc;padding-bottom:20px;">
+              <h5 class="modal-title">Please Confirm</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" style="border-bottom:1px solid #ccc;padding-bottom:0px;">
+              <p>The selected repository has been associated with any of the defined criteria, do you want to proceed and remove the repository?</p>
+            </div>
+            <div class="modal-footer" style="padding-top:20px;">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-danger btn-fill" @click="removeConfirmRepo()" data-dismiss="modal">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -411,7 +431,9 @@
         showErrorRepoName:false,
         showErrorRepoUrl:false,
         disable_done: true,
-        showBranchError: false
+        showBranchError: false,
+        idToRemove:'',
+        criteriaToRemove:''
 
       }
     },
@@ -549,11 +571,36 @@
         }
 
       },
+      openModal(item){
+        $('.confirm-delete').addClass('hide');
+        // $('#myModal .modal-header, .modal-footer, .modal-body').removeClass('hide');
+        $('#myModal').modal('show');
+      },
       removeRepo(item){
-        console.log(item)
-        this.$delete(this.$store.state.config_yaml.config.project_repos,item)
-        // this.$store.state.config_yaml.config.project_repos = this.config.all_repos;
-        this.$store.state.config_yaml.sqa_criteria={};
+        this.idToRemove = item;
+        var check_repo = false
+        for (var criteria in this.$store.state.config_yaml.sqa_criteria){
+          for (let i = 0; i < this.$store.state.config_yaml.sqa_criteria[criteria].repos.length; i++) {
+            for (let x = 0; x < this.$store.state.config_yaml.config.project_repos.length; x++){
+              if(this.$store.state.config_yaml.sqa_criteria[criteria].repos[i].repo_url == this.$store.state.config_yaml.config.project_repos[x].repo){
+                this.criteriaToRemove = criteria;
+                check_repo = true;
+              }
+            }
+          }
+        }
+        if(check_repo == true){
+          this.openModal();
+        }else{
+          this.removeConfirmRepo()
+        }
+      },
+      removeConfirmRepo(){
+        console.log(this.idToRemove)
+        this.$delete(this.$store.state.config_yaml.config.project_repos, this.idToRemove)
+        if(this.criteriaToRemove != ''){
+          this.$delete( this.$store.state.config_yaml.sqa_criteria, this.criteriaToRemove)
+        }
         if (this.isEmpty(this.$store.state.config_yaml.config.project_repos)) {
           this.showRepo = false;
           this.disable_done = true;
@@ -671,36 +718,41 @@
     },
     created(){
        this.checkauthCall(this.checkauthCallBack);
-      var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos)
-      for (let i = 0; i < sizeRepos; i++) {
-        this.config.all_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]=this.$store.state.config_yaml.config.project_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]
-      }
-      for (let i = 0; i < this.$store.state.config_yaml.config.credentials.length; i++) {
-        this.all_credentials.push(this.$store.state.config_yaml.config.credentials[i])
-      }
+      if(this.$store.state.name == ''){
+        this.notifyVue("Please define the name of the pipeline",'nc-icon nc-simple-remove','danger')
+        this.$router.push({name:"PipelineName"})
+      }else{
+        var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos)
+        for (let i = 0; i < sizeRepos; i++) {
+          this.config.all_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]=this.$store.state.config_yaml.config.project_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]
+        }
+        for (let i = 0; i < this.$store.state.config_yaml.config.credentials.length; i++) {
+          this.all_credentials.push(this.$store.state.config_yaml.config.credentials[i])
+        }
 
-      this.config.all_envs = this.$store.state.config_yaml.environment
-      if(this.isEmpty(this.config.all_repos)){
-        this.showRepo = false;
-        this.disable_done = true;
-      }else {
-        this.showRepo = true;
-        this.disable_done = false;
-      }
-      if(this.isEmpty(this.services)){
-        this.showServices = false
-      }else {
-        this.showServices = true
-      }
-       if(this.isEmpty(this.all_credentials)){
-        this.showCred = false
-      }else {
-        this.showCred = true
-      }
-      if(this.isEmpty(this.config.all_envs)){
-        this.showEnv = false
-      }else {
-        this.showEnv = true
+        this.config.all_envs = this.$store.state.config_yaml.environment
+        if(this.isEmpty(this.config.all_repos)){
+          this.showRepo = false;
+          this.disable_done = true;
+        }else {
+          this.showRepo = true;
+          this.disable_done = false;
+        }
+        if(this.isEmpty(this.services)){
+          this.showServices = false
+        }else {
+          this.showServices = true
+        }
+         if(this.isEmpty(this.all_credentials)){
+          this.showCred = false
+        }else {
+          this.showCred = true
+        }
+        if(this.isEmpty(this.config.all_envs)){
+          this.showEnv = false
+        }else {
+          this.showEnv = true
+        }
       }
 
      },
@@ -805,12 +857,21 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 @media (min-width: 992px){
-    .col-lg-10 {
+    .col-lg-8 {
         -ms-flex: 0 0 83.333333%;
         -webkit-box-flex: 0;
         flex: 0 0 83.333333%;
         max-width: 100%;
   }
  }
+
+ @media (min-width: 1200px) {
+    .col-lg-8 {
+        -ms-flex: 0 0 83.333333%;
+        -webkit-box-flex: 0;
+        flex: 0 0 83.333333%;
+        max-width: 70%;
+    }
+  }
 
 </style>

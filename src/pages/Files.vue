@@ -5,12 +5,12 @@
           <span class="fas fa-spinner fa-3x fa-spin"></span>
         </div>
         <div class="col-12 col-sm-12 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
-          <h4 style="margin-top:0px;" class="card-title text-center">Information Summary</h4>
+          <!-- <h4 style="margin-top:0px;" class="card-title text-center">Information Summary</h4> -->
           <card
                   body-classes=""
             >
               <template slot="header">
-                <!-- <h4 class="card-title text-center">Information Summary</h4> -->
+                <h4 class="card-title text-center" style="font-weight:700;">Information Summary</h4>
               </template>
 
               <template >
@@ -98,16 +98,16 @@
                         </thead>
                         <tbody v-for="(criteria, index) in $store.state.config_yaml.sqa_criteria" :key="index">
                                 <tr
-                                    style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                    style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px;">
                                     <td
-                                        style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                        style="padding-right: 10px; padding-left: 10px; padding-top: 5px;vertical-align: top;">
                                         <div style="text-align:left;">
                                             {{index}}
                                         </div>
                                     </td>
                                     <td
                                         style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        <div v-for="(repo_criteria, index) in criteria.repos" :key="index" style="margin-top:1rem;">
+                                        <div v-for="(repo_criteria, index) in criteria.repos" :key="index" >
                                           <div class="row">
                                             <div class="col-md-6">
                                               <p class="text-left" style="font-size:14px;margin-bottom:0px;">
@@ -122,7 +122,7 @@
                                                 <strong style="font-weight:bold;">Commands: </strong>
                                               </p>
                                               <p style="margin-bottom:0;">
-                                                <span v-for="(command, index) in repo_criteria.commands" :key="index">
+                                                <span style="font-size:14px;" v-for="(command, index) in repo_criteria.commands" :key="index">
                                                   {{(index==repo_criteria.commands.length-1) ? command : command+','}}
                                                 </span>
                                               </p>
@@ -152,13 +152,12 @@
           </card>
           <div v-show="showFiles" class="row">
             <div class="col-12">
-              <h4 class="card-title text-center" style="padding-top:5px;">Files</h4>
               <card class="strpied-tabled-with-hover"
                       body-classes=""
                 >
                   <template slot="header">
                     <div class="row" style="justify-content: center;">
-
+                        <h4 class="card-title text-center" style="padding-top:5px;font-weight:700;">Pipeline files (JePL format)</h4>
                       <!--  -->
                       <!-- <button class="btn  btn-primary btn-simple " style="margin-bottom:5px;" @click="downloadAll()">(Download All)</button> -->
 
@@ -167,6 +166,18 @@
                   </template>
 
                   <template >
+
+                    <div class="row">
+                      <div class="col-12 text-center">
+
+                        <button type="button" class="btn btn-simple btn-primary" @click="generateFiles()">
+                            <i class="fa fa-file-text" aria-hidden="true"></i>Get as ZIP
+                              <i class="fa fa-download "></i>
+                            </button>
+                      </div>
+                    </div>
+
+
                     <ul class="nav nav-tabs nav-fill" role="tablist">
                       <li class="nav-item">
                         <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Main Configuration</a>
@@ -192,9 +203,9 @@
                           <div class="tab-content px-1" >
                             <div v-for="(yaml,index) in yamlConfig" style="border-left: 1px solid #cccc;"
                               :key="index" class="tab-pane tab-config" :class="{'active':index==0}" :id="'tabs-config-'+index" role="tabpanel" aria-labelledby="baseVerticalLeft1-tab1">
-                              <span><b> File name:</b> {{yaml.file_name}}</span>
-                              <div class="col-12" style="padding-top:10px;padding-left:1rem;">
-                                <button class="btn  btn-primary btn-simple" @click="downloadConfig(yaml)" :key="'button'+index+uuid" >Download</button>
+                              <span style="padding-left:15px;"><b> File name:</b> {{yaml.file_name}}</span>
+                              <div class="col-12" style="padding-top:10px;padding-left: 15px;">
+                                <button class="btn  btn-primary btn-simple" @click="downloadConfig(yaml)" :key="'button'+index+uuid" >Download <i class="fa fa-download" aria-hidden="true"></i></button>
                               </div>
                               <div class="col-12" style="height:40vh;overflow-y: auto;">
                                 <editor :editor-id="'editor'+index" lang="yaml" :content="yaml.content" v-on:change-content="changeContentA"  :key="'editor'+index+uuid" ></editor>
@@ -205,20 +216,38 @@
                         </div>
                       </div>
                       <div class="tab-pane" id="tabs-2" role="tabpanel">
-                        <div class="col-12" style="padding-top:2rem;padding-left:1rem;">
-                          <button class="btn  btn-primary btn-simple" @click="downloadComposer()">Download</button>
+                        <div class="col-12" style="padding-top:2rem;padding-left:0px;">
+                          <button class="btn  btn-primary btn-simple" @click="downloadComposer()">Download <i class="fa fa-download" aria-hidden="true"></i> </button>
                         </div>
                         <div class="col-12" style="height:40vh;overflow-y: auto;">
                             <editor editor-id="editorB" lang="yaml" :content="yamlComposer" ></editor>
                         </div>
                       </div>
                       <div class="tab-pane" id="tabs-3" role="tabpanel">
-                        <div class="col-12" style="padding-top:2rem;padding-left:1rem;">
-                          <button class="btn  btn-primary btn-simple" @click="downloadJenkinsfile()">Download</button>
+                        <div class="col-12" style="padding-top:2rem;padding-left:0px;">
+                          <button class="btn  btn-primary btn-simple" @click="downloadJenkinsfile()">Download <i class="fa fa-download" aria-hidden="true"></i></button>
                         </div>
                         <div class="col-12" style="height:40vh;overflow-y: auto;">
                             <editor editor-id="editorC" lang='json' :content="yamlJenkinsfile" ></editor>
                         </div>
+                      </div>
+                    </div>
+
+                    <div style="padding-bottom:20px;margin-top:2rem;">
+                      <p class="text-center" style="font-weight:700;">Pull Request</p>
+                      <div class="col-12 col-md-6 mx-auto mb-3">
+
+                        <label >Repository</label>
+                        <div class="input-group">
+                          <input type="text" style="height: 42px;border-right: 1px solid #AAAAAA;" class="form-control" placeholder="https://github.com/EOSC-synergy/sqaaas-web.git" aria-label="https://github.com/EOSC-synergy/sqaaas-web.git" aria-describedby="basic-addon2" v-model="repo_pull_request">
+                          <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" :disabled='showErrorPullRequest' style="border-width:1px; border-color:#3472F7;color:#3472F7;" type="button" @click="pullrequest()">Pull  <i class="fa fa-upload" aria-hidden="true"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- <span v-show="showErrorPullRequest==false" style="padding-left:30px;color:red; font-size:12px;">This field is required.</span> -->
+                      <div v-show="showURL" class="text-center" style="text-decoration: underline;">
+                        <a :href="pull_request_url" target="_blank">URL</a>
                       </div>
                     </div>
                   </template>
@@ -231,7 +260,7 @@
                       BACK
                   </button>
                   <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
-                      NEXT
+                      Run/Try Pipeline
                   </button>
               </div>
           </div>
@@ -280,7 +309,7 @@
         disabled_button: false,
         loading: false,
         repo_pull_request:'',
-        showErrorPullRequest:false,
+        showErrorPullRequest:true,
         pull_request_url: '',
         disable_status: true,
         yamlConfig:'',
@@ -291,13 +320,16 @@
         disable_done: true,
         show_accordion: false,
         config_data: {},
-        uuid: this.guidGenerator()
+        uuid: this.guidGenerator(),
+         showURL:false,
 		}
     },
     watch:{
       "repo_pull_request"(val){
         if(val != ''){
           this.showErrorPullRequest = false;
+        }else{
+          this.showErrorPullRequest = true;
         }
       }
     },
@@ -541,6 +573,7 @@
             this.repo_pull_request = ''
             this.pull_request_url = response.data.pull_request_url;
             this.$store.state.pull_request_url = this.pull_request_url;
+            this.showURL = true;
           }
         }else if(response.status == 403){
           this.$router.replace(this.$route.query.redirect || "/logout");
@@ -642,6 +675,7 @@
       downloadJenkinsfile(){
           this.download("Jenkinsfile",this.yamlJenkinsfile)
       },
+
   },
   created(){
     this.checkauthCall(this.checkauthCallBack);
@@ -738,7 +772,7 @@
   }
 
   .btn-next-back{
-    width: 10%!important;
+    width: 20%!important;
   }
 
 .btn-back{
