@@ -5,7 +5,7 @@
       <div class="col-12 col-lg-8 mx-auto" >
         <div class="" style="margin:auto;">
             <h4 style="margin-top:0px;font-weight:700;" class="card-title text-center">Code repositories are the substrate for the CI/CD pipeline work</h4>
-            <card style="height:90vh;overflow-y: auto;">
+            <card style="height:75vh;overflow-y: auto;">
               <template slot="header" >
                 <div class="text-center" style="padding-left:20px;padding-top:20px;">
                   <!-- <p style="font-weight:700;">Code repositories are the substrate for the CI/CD pipeline work.</p> -->
@@ -14,123 +14,116 @@
               </template>
 
               <template>
-                <!-- <div class="col-12"> -->
-                  <!-- <div class="col-12"  style="padding-left:20px;margin-bottom:1rem;">
-
-                    <base-input style="margin-bottom:0px;" type="text"
-                              label="Repository Name"
-                              :disabled="false"
-                              placeholder="Identifier of the repository name. Example: worsica-processing"
-                              v-model="repo.name"
-                              >
-                    </base-input>
-                    <div class="col-12 text-right">
-                      <span v-show="showErrorRepoName" style="color:red; font-size:12px;">This field is required.</span>
-
+                  <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
+                    <div style="display:contents" class="col-12 col-md-6">
+                      <span class="custom-label">Does your pipeline need code from adicional repository?</span>
+                      <div class="custom-div-append">
+                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                          <i class="fa fa-question-circle"></i>
+                        </button>
+                      </div>
                     </div>
-                  </div> -->
+                    <div style="display:contents" class="col-12 col-md-6">
+                      <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="add_external_repo.yes"></base-checkbox>
+                      <span class="custom-label">No</span><base-checkbox name="workspace" v-model="add_external_repo.no"></base-checkbox>
+                    </div>
+                  </div>
+
+                <div v-show="add_external_repo.yes">
 
                   <div class="col-12"  style="padding-left:20px;padding-top:20px;">
 
-                    <base-input style="margin-bottom:0px;"  type="text"
-                              label="Repository URL"
-                              :disabled="false"
-                              placeholder="The URL you can use to clone the project."
-                              v-model="repo.url"
-                              >
-                    </base-input>
-                    <div class="col-12 text-right">
-                      <span v-show="showErrorRepoUrl" style="color:red; font-size:12px;">This field is required.</span>
+                      <base-input style="margin-bottom:0px;"  type="text"
+                                label="Repository URL"
+                                :disabled="false"
+                                placeholder="The URL you can use to clone the project."
+                                v-model="repo.url"
+                                >
+                      </base-input>
+                      <div class="col-12 text-right">
+                        <span v-show="showErrorRepoUrl" style="color:red; font-size:12px;">This field is required.</span>
 
+                      </div>
+
+                  </div>
+
+                  <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
+                    <div style="display:contents" class="col-12 col-md-6">
+                      <span class="custom-label">Pipeline react to all changes:</span>
+                      <div class="custom-div-append">
+                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                          <i class="fa fa-question-circle"></i>
+                        </button>
+                      </div>
+                      <!-- <span class="custom-label">Do you want the pipeline to react to all changes?</span> -->
+                      <!-- <div class="custom-div-append">
+                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                          <i class="fa fa-question-circle"></i>
+                        </button>
+                      </div> -->
                     </div>
-
-                </div>
-
-                <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
-                  <div style="display:contents" class="col-12 col-md-6">
-                    <span class="custom-label">Pipeline react to all changes:</span>
-                    <div class="custom-div-append">
-                      <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
-                        <i class="fa fa-question-circle"></i>
-                      </button>
+                    <div style="display:contents" class="col-12 col-md-6">
+                      <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="config.workspace.yes"></base-checkbox>
+                      <span class="custom-label">No</span><base-checkbox name="workspace" v-model="config.workspace.no"></base-checkbox>
                     </div>
-                    <!-- <span class="custom-label">Do you want the pipeline to react to all changes?</span> -->
-                    <!-- <div class="custom-div-append">
-                      <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
-                        <i class="fa fa-question-circle"></i>
-                      </button>
-                    </div> -->
                   </div>
-                  <div style="display:contents" class="col-12 col-md-6">
-                    <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="config.workspace.yes"></base-checkbox>
-                    <span class="custom-label">No</span><base-checkbox name="workspace" v-model="config.workspace.no"></base-checkbox>
+                  <div v-show='config.workspace.no' style="padding-left:10px;">
+                      <base-input class="col-md-6" type="text"
+                          label="Branch"
+                          :disabled="false"
+                          placeholder="master"
+                          v-model="repo.branch">
+                      </base-input>
+                      <span v-show="showBranchError" style="color:red;font-size:12px;padding-left:20px;">This field is required</span>
+                      <!-- <base-input class="col-md-4" type="text"
+                          label="Image"
+                          :disabled="false"
+                          placeholder="worsica/worsica-processing"
+                          v-model="repo.image">
+                      </base-input>
+                      <base-input class="col-md-4" type="text"
+                          label="Tag"
+                          :disabled="false"
+                          placeholder="latest"
+                          v-model="repo.tag">
+                      </base-input> -->
+
                   </div>
-                </div>
-                <div v-show='config.workspace.no' style="padding-left:10px;">
-                  <!-- <base-input type="text"
-                        label="Node Agent"
-                        :disabled="false"
-                        placeholder="docker-compose"
-                        v-model="config.repo.agent">
-                  </base-input> -->
 
-
-
-
-                    <base-input class="col-md-6" type="text"
-                        label="Branch"
-                        :disabled="false"
-                        placeholder="master"
-                        v-model="repo.branch">
-                    </base-input>
-                    <span v-show="showBranchError" style="color:red;font-size:12px;padding-left:20px;">This field is required</span>
-                    <!-- <base-input class="col-md-4" type="text"
-                        label="Image"
-                        :disabled="false"
-                        placeholder="worsica/worsica-processing"
-                        v-model="repo.image">
-                    </base-input>
-                    <base-input class="col-md-4" type="text"
-                        label="Tag"
-                        :disabled="false"
-                        placeholder="latest"
-                        v-model="repo.tag">
-                    </base-input> -->
-
-                </div>
-
-                <div class="text-right" style="padding-right: 20px;">
-                  <button type="button" class="btn-outline btn btn-info" @click="addRepo();track()"><i class="fa fa-plus"></i>ADD REPOSITORY</button>
-                </div>
-
-                <div v-show="showRepo" style="padding-top:20px;padding-left:20px;">
-                  <span class="custom-label">Configured Repositories</span>
-                  <div class="table-responsive">
-                    <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
-                        <thead>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repo</th>
-                            <th style="text-align:center;justify-content: center;,padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
-                        </thead>
-                        <tbody v-for="(repo, index) in $store.state.config_yaml.config.project_repos" :key="index">
-                                <tr
-                                    style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
-                                    <td
-                                        style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        <div style="text-align:left;">
-                                            {{repo.repo}}
-                                        </div>
-                                    </td>
-
-                                    <td
-                                        style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeRepo(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
-                                        </button>
-                                    </td>
-
-                                </tr>
-                        </tbody>
-                    </table>
+                  <div class="text-right" style="padding-right: 20px;">
+                    <button type="button" class="btn-outline btn btn-info" @click="addRepo();track()"><i class="fa fa-plus"></i>ADD REPOSITORY</button>
                   </div>
+
+                  <div v-show="showRepo" style="padding-top:20px;padding-left:20px;">
+                    <span class="custom-label">Configured Repositories</span>
+                    <div class="table-responsive">
+                      <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                          <thead>
+                              <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repo</th>
+                              <th style="text-align:center;justify-content: center;,padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
+                          </thead>
+                          <tbody v-for="(repo, index) in $store.state.config_yaml.config.project_repos" :key="index">
+                                  <tr
+                                      style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                      <td
+                                          style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                          <div style="text-align:left;">
+                                              {{repo.repo}}
+                                          </div>
+                                      </td>
+
+                                      <td
+                                          style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                          <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeRepo(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                          </button>
+                                      </td>
+
+                                  </tr>
+                          </tbody>
+                      </table>
+                    </div>
+                  </div>
+
                 </div>
 
                 <div class="col-12" id="accordion_general_options" role="tablist" aria-multiselectable="true" style="padding-left:20px;margin-top:2rem;padding-right:0px;">
@@ -433,11 +426,33 @@
         disable_done: true,
         showBranchError: false,
         idToRemove:'',
-        criteriaToRemove:''
+        criteriaToRemove:'',
+        add_external_repo:{
+          yes:false,
+          no:true
+        },
 
       }
     },
     watch:{
+       'add_external_repo.yes'(val){
+        if(val==true){
+          this.add_external_repo.no = false;
+        }else{
+          this.add_external_repo.no = true;
+        }
+      },
+      'add_external_repo.no'(val){
+         if(val==true){
+          this.add_external_repo.yes = false;
+          this.$store.state.config_yaml.config.project_repos = [];
+          this.config.all_repos = [];
+          this.showRepo = false;
+
+        }else{
+          this.add_external_repo.yes = true;
+        }
+      },
       'config.workspace.yes'(val){
         if(val==true){
           this.config.workspace.no = false;

@@ -13,7 +13,7 @@
           <template class="card-body">
             <div style="margin:0px 0px 2rem 0px;">
               <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;">
-                <div class="col-12 col-md-6">
+                <div class="col-6">
                   <label> Choose a criteria</label>
                   <select class="custom-select" id="sqacriteria" v-model='criteria' style="font-family: consola;font-weight: 700;" >
                     <option value="default">Select ...</option>
@@ -24,10 +24,13 @@
                     <option value="QC.Doc">QC.Doc</option>
                   </select>
                 </div>
-                <div v-show="criteria != 'default'" class="col-12 col-md-6" style="padding-top:20px;">
-                  <p style="margin-bottom:0px; list-style: disc outside none; display: list-item;">{{(info[criteria]) ? info[criteria].p1 : ''}}</p>
-                  <p style="margin-bottom:0px;list-style: disc outside none; display: list-item;"><i><u>Improves:</u></i> {{(info[criteria]) ? info[criteria].p2 : ''}}</p>
-                  <a style="text-decoration: underline;list-style: disc outside none; display: list-item;" :href="(info[criteria]) ? info[criteria]['link'] : ''" target="_blank">See More</a>
+                <div v-show="criteria != 'default'" class="col-12" style="padding-top:20px;">
+                  <p style="margin-bottom:0px;">
+                    <span style="font-weight:700; font-family: consola;"> {{criteria}}: </span>
+                    <span style="font-style:italic;">{{(info[criteria]) ? info[criteria].p1 : ''}}</span>
+                    (<a style="text-decoration: underline" :href="(info[criteria]) ? info[criteria]['link'] : ''" target="_blank">See More</a>)
+                  </p>
+                  <p style="margin-bottom:0px"><i><u>Improves:</u></i> {{(info[criteria]) ? info[criteria].p2 : ''}}</p>
                 </div>
               </div>
               <div >
@@ -36,10 +39,10 @@
             </div>
             <div class="row" style="margin:0px 0px 2rem 0px;">
 
-              <div v-show="showSelect" class="col-12 col-md-6" style="display:grid;">
-                <label>Select a repository</label>
+              <div v-show="showSelect && objectSize($store.state.config_yaml.config.project_repos) > 0" class="col-12 col-md-6" style="display:grid;">
+                <label>Select an External Repository</label>
                 <select class="custom-select" id="respository" v-model='repository'  >
-                  <option value="">Choose a repository...</option>
+                  <option value="default">Choose a repository...</option>
                   <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="repo.repo">{{repo.repo}}</option>
                 </select>
                 <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
@@ -197,7 +200,7 @@
                   <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                       <thead>
                           <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Criteria</th>
-                          <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repos</th>
+                          <th v-show='$store.state.config_yaml.config.project_repos.length>0' style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">External Repos</th>
                           <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Services</th>
                           <!-- <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Builder</th> -->
                           <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Customize Workspace</th>
@@ -213,7 +216,7 @@
                                           {{index}}
                                       </div>
                                   </td>
-                                  <td
+                                  <td v-show='$store.state.config_yaml.config.project_repos.length>0'
                                       style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                       <!-- {{Object.keys(repo.repos)}} -->
                                       {{get_string_repos(repo)}}
@@ -328,7 +331,7 @@
       return {
         pipelineName:'',
         criteria:'default',
-        repository:'',
+        repository:'default',
         service:'default',
         repos:{"repos":{}},
         command:'',
@@ -619,16 +622,22 @@
       addCriteria(){
         console.log(this.commands)
         console.log(this.testenv)
-        if(this.criteria == 'default' || this.service == "default" || this.commands.length == 0 && this.testenv.length == 0){
+        // if(objectSize(this.$store.state.config_yaml.config.project_repos) < 1){
+
+        // }
+        if(this.criteria == 'default' || this.service == "default" || (this.commands.length == 0 && this.testenv.length == 0) || (this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0)){
           // this.error_message = "Error: you must select a valid criteria";
           if(this.criteria == 'default'){
             this.showErrorCriteria = true;
-          }else if(this.service == "default"){
-            // this.showErrorRepo = true;
+          }
+          if(this.service == "default"){
             this.showErrorService = true;
           }
+          if(this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0 ){
+            console.log('here here here')
+            this.showErrorRepo = true;
+          }
           if(this.commands.length == 0 && this.testenv.length == 0){
-            console.log('here')
             if(this.builder_tool != 'default'){
               if(this.builder_tool == 'command'){
                 if(this.command == ''){

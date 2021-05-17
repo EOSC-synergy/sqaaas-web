@@ -2,6 +2,20 @@
   	<div class="content">
       <div class="container-fluid">
         <div  v-show="loading" class="loading-overlay is-active">
+          <div>
+            <div style="vertical-align: middle;display: flex;">
+              <span class="fas fa-cog fa-3x fa-spin"></span>
+              <p style="padding-left: 10px;text-transform: uppercase;font-weight: 700;margin-bottom: 0px;margin-top: 15px;">Executing Pipeline ...</p>
+            </div>
+            <div>
+              <p>Please, wait for this process to finish.</p>
+            </div>
+            <div class="text-center">
+                <button class="btn  btn-danger btn-fill" @click="cancelExecution()">Cancel</button>
+              </div>
+            </div>
+        </div>
+        <div  v-show="loading_create" class="loading-overlay is-active">
           <span class="fas fa-spinner fa-3x fa-spin"></span>
         </div>
         <div class="col-12 col-sm-12 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
@@ -93,7 +107,7 @@
                     <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                         <thead>
                             <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Criteria</th>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repository and Service</th>
+                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">External Repository and Service</th>
                             <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">When</th>
                         </thead>
                         <tbody v-for="(criteria, index) in $store.state.config_yaml.sqa_criteria" :key="index">
@@ -111,7 +125,7 @@
                                           <div class="row">
                                             <div class="col-md-6">
                                               <p class="text-left" style="font-size:14px;margin-bottom:0px;">
-                                                <strong style="font-weight:bold;">Name:</strong> {{repo_criteria.repo_url}}
+                                                <strong style="font-weight:bold;">Name:</strong> {{(repo_criteria.repo_url != 'default')?repo_criteria.repo_url:''}}
                                               </p>
                                               <p class="text-left" style="font-size:14px;margin-bottom:0px;">
                                                 <strong style="font-weight:bold;">Service:</strong> {{repo_criteria.container}}
@@ -203,7 +217,7 @@
                           <div class="tab-content px-1" >
                             <div v-for="(yaml,index) in yamlConfig" style="border-left: 1px solid #cccc;"
                               :key="index" class="tab-pane tab-config" :class="{'active':index==0}" :id="'tabs-config-'+index" role="tabpanel" aria-labelledby="baseVerticalLeft1-tab1">
-                              <span style="padding-left:15px;"><b> File name:</b> {{yaml.file_name}}</span>
+                              <span style="padding-left:15px;padding-top:20px;"><b> File name:</b> {{yaml.file_name}}</span>
                               <div class="col-12" style="padding-top:10px;padding-left: 15px;">
                                 <button class="btn  btn-primary btn-simple" @click="downloadConfig(yaml)" :key="'button'+index+uuid" >Download <i class="fa fa-download" aria-hidden="true"></i></button>
                               </div>
@@ -254,12 +268,78 @@
               </card>
             </div>
           </div>
+          <div v-show="showRunPipeline" class="row">
+            <div class="col-12">
+              <card  class="strpied-tabled-with-hover"
+                        body-classes=""
+                  >
+              <template slot="header" >
+                <h4 class="card-title text-center" style="padding-bottom:1rem;font-weight:700;">Pipeline Execution</h4>
+              </template>
+
+              <template >
+                <div style="padding-bottom:20px;padding-bottom: 3rem;padding-left:20px;padding-right:20px;">
+
+
+                    <!-- <div v-show="showStatusBar">
+                      <div class="requestProgress">
+                        <div class="bar">
+                        </div>
+                      </div>
+                      <div class="text-center">
+                        <button type="button" class="btn btn-simple" disabled>
+                              <span style="padding-right:5px;" class="btn-label"><i style="color:#00a77e;" class="fa fa-refresh fa-spin fa-1x fa-fw"></i></span>Loading the pipeline status</button>
+                      </div>
+                    </div> -->
+
+
+                    <div v-show="showFieldsPipeline">
+                      <base-input type="text" class="no-margin"
+                        label="URL"
+                        :disabled="false"
+                        placeholder="https://github.com/EOSC-synergy/sqaaas-web.git"
+                        v-model="repo_url_mimic">
+                      </base-input>
+                      <base-input type="text" class="no-margin"
+                          label="Branch (Optional)"
+                          :disabled="false"
+                          placeholder="master"
+                          v-model="repo_branch_mimic">
+                      </base-input>
+                    </div>
+
+                    <div class="text-center" style="padding-top:15px;" v-show="showBuildUrl == false">
+                      <span>Build URL:  </span><a style="text-decoration: underline;" :href="build_url" target="_blank">Click here!</a>
+                    </div>
+                    <div style="padding-bottom:15px;" class="text-center" v-show="showStatus==false">
+                      <span style="font-weight:700;">{{build_status}}</span>
+                      <i v-if="build_status == 'SUCCESS'" style="color:green;" class="fa fa-check" aria-hidden="true"></i>
+                      <i v-else-if ="build_status == 'FAILURE'" style="color:red;" class="fa fa-times" aria-hidden="true"></i>
+                      <i v-else style="color:red;" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    </div>
+                    <div v-show="showBadge == true" class="" id="badge" style="padding-top:20px;padding-left:15px;">
+                    </div>
+                    <!-- <div class="text-center">
+                      <button class="btn  btn-primary btn-fill" @click="runPipeline()">Run pipeline</button>
+                    </div> -->
+                    <!-- <div v-show="loading_run" class="text-center" >
+                      <button type="button" class="btn btn-simple" disabled>
+                          <span style="padding-right:5px;" class="btn-label"><i style="color:black;" class="fa fa-cog fa-spin fa-1x fa-fw"></i></span>Executing Pipeline...</button>
+                    </div> -->
+                </div>
+
+              </template>
+            </card>
+
+
+            </div>
+          </div>
           <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
               <div class="col-12 col-md-12 text-center">
                   <button @click="back()" type="button" class="btn btn-next-back btn-back" >
                       BACK
                   </button>
-                  <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
+                  <button @click="runPipeline()" type="button" class="btn btn-next btn-next-back">
                       Run/Try Pipeline
                   </button>
               </div>
@@ -308,6 +388,7 @@
         pipeline_id:'',
         disabled_button: false,
         loading: false,
+        loading_create: false,
         repo_pull_request:'',
         showErrorPullRequest:true,
         pull_request_url: '',
@@ -321,7 +402,13 @@
         show_accordion: false,
         config_data: {},
         uuid: this.guidGenerator(),
-         showURL:false,
+        showURL:false,
+        showFieldsPipeline: false,
+        showRunPipeline : false,
+        showBadge: false,
+        repo_url_mimic: '',
+        repo_branch_mimic:'',
+        t:'',
 		}
     },
     watch:{
@@ -331,9 +418,23 @@
         }else{
           this.showErrorPullRequest = true;
         }
+      },
+      "autoRefresh"(val) {
+        if (val) {
+            this.t = setInterval(() => {
+                this.checkStatus()
+            }, 10 * 1000)
+        } else {
+            clearInterval(this.t)
+        }
       }
     },
     methods:{
+      cancelExecution(){
+        console.log('here')
+        this.autoRefresh = false;
+        this.loading = false;
+      },
       guidGenerator() {
         var S4 = function () {
             return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -358,7 +459,7 @@
       },
       changeContentA (val) {
     	console.log(val)
-    },
+      },
       deletePipeline(){
         this.loading = true;
           this.deletePipelineCall(this.pipeline_id,this.deletePipelineCallBack)
@@ -429,7 +530,7 @@
                           }
                       }
 
-        this.loading = true;
+        this.loading_create = true;
 
         console.log(this.$store.state)
 
@@ -482,12 +583,38 @@
             this.notifyVue("Error", response.status +":" + response.data.detail,'nc-icon nc-simple-remove','danger')
           }
         }
-        this.loading = false;
+        this.loading_create = false;
 
       },
       runPipeline(){
-        this.loading = true;
-        this.runPipelineCall(this.pipeline_id,this.runPipelineCallBack)
+        this.showRunPipeline = true;
+        console.log(this.$store.state.config_yaml)
+        for (var criteria in this.$store.state.config_yaml.sqa_criteria){
+          for (let i = 0; i < this.$store.state.config_yaml.sqa_criteria[criteria].repos.length; i++) {
+            if(this.$store.state.config_yaml.sqa_criteria[criteria].repos[i].repo_url == ''){
+              this.showFieldsPipeline = true
+            }
+
+          }
+
+        }
+
+        var data = {
+          id:this.pipeline_id,
+          url:this.repo_url_mimic,
+          branch:this.repo_branch_mimic
+        }
+        if(this.showFieldsPipeline == false){
+          this.loading = true;
+
+          this.runPipelineCall(data,this.runPipelineCallBack)
+        }else if(this.showFieldsPipeline == true && this.repo_url_mimic == ''){
+          this.notifyVue("Error", "Please add the URL of the repository",'nc-icon nc-simple-remove','danger')
+        }else{
+          this.loading = true;
+          this.runPipelineCall(data,this.runPipelineCallBack)
+        }
+        // console.log()
       },
       runPipelineCallBack(response){
         if(response.status == 200){
@@ -497,26 +624,29 @@
             this.build_url = response.data.build_url;
             this.$store.state.build_url = this.build_url;
             this.showBuildUrl = true;
-            this.notifyVue("Success","Pipeline executed successfully.",'nc-icon nc-check-2','info');
+            this.autoRefresh = true;
+            // this.notifyVue("Success","Pipeline executed successfully.",'nc-icon nc-check-2','info');
           }
         }else if(response.status == 204){
           this.disable_status = false;
-          this.notifyVue("Info","Waiting for scan organization.",'nc-icon nc-simple-remove','warning')
+          this.autoRefresh = true;
+          // this.notifyVue("Info","Waiting for scan organization.",'nc-icon nc-simple-remove','warning')
 
         }else if(response.status == 403){
           this.$router.replace(this.$route.query.redirect || "/logout");
+          this.loading = false;
         }else{
           this.showBuildUrl = false;
           this.showBuildUrl = false;
           this.notifyVue("Error ", response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
+          this.loading = false;
         }
-        this.loading = false;
       },
       checkStatus(){
-        this.loading = true;
+        // this.showStatusBar = true;
         this.checkStatusCall(this.pipeline_id,this.checkStatusCallBack)
       },
-      checkStatusCallBack(response){
+       checkStatusCallBack(response){
         if(response.status == 200){
           if (response.data.build_status){
             this.build_status = response.data.build_status;
@@ -529,15 +659,35 @@
             this.$store.state.build_url = this.build_url;
             this.showBuildUrl = true;
           }
+          if(this.build_status != null && this.build_status == 'FAILURE'){
+            this.showStatusBar = false;
+            if(response.data.openbadge_id != null){
+              this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
+            }
+              this.loading = false;
+              this.autoRefresh = false;
+          }
 
         }else if(response.status == 403){
+          this.autoRefresh = false;
           this.showStatus = false;
+          this.loading = false;
           this.$router.replace(this.$route.query.redirect || "/logout");
+        }else if (response.status == 422){
+          this.autoRefresh = false;
+          this.showStatus = false;
+          this.showBuildUrl = false;
+          this.$store.state.status = '';
+          this.$store.state.build_url = '';
+          this.loading = false;
+          this.notifyVue("Error ", response.status +": Pipeline has not been execute",'nc-icon nc-simple-remove','danger')
+
         }else{
+          this.autoRefresh = false;
           this.showStatus = false;
           this.notifyVue("Error ", response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
+          this.loading = false;
         }
-        this.loading = false;
       },
       generateFiles(){
         this.downloadFileCall(this.pipeline_id,this.downloadFileCallBack);
@@ -674,6 +824,15 @@
       },
       downloadJenkinsfile(){
           this.download("Jenkinsfile",this.yamlJenkinsfile)
+      },
+      getBadgeCallBackGET(response){
+        if(response.status == 200){
+          this.showBadge = true;
+
+          if($("#badge").has("blockquote").length == 0){
+            $( "#badge" ).append(response.data);
+          }
+        }
       },
 
   },

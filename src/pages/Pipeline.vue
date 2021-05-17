@@ -62,7 +62,7 @@
                       <p style="padding-top:20px;">Some text</p>
                       <p>Some other text</p>
                     </div>
-                     <div v-show="showBadge == true" class="" id="badge" style="padding-bottom:20px;padding-left:15px;">
+                    <div v-show="showBadge == true" class="" id="badge" style="padding-bottom:20px;padding-left:15px;">
                     </div>
 
                     <!-- <div v-show="showStatusBar">
