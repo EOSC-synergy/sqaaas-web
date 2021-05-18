@@ -11,7 +11,7 @@
               <p>Please, wait for this process to finish.</p>
             </div>
             <div class="text-center">
-                <button class="btn  btn-danger btn-fill" @click="cancelExecution()">Cancel</button>
+                <button class="btn  btn-danger btn-fill" :disabled="disable_cancel" @click="cancelExecution()">Cancel</button>
               </div>
             </div>
         </div>
@@ -308,10 +308,10 @@
                       </base-input>
                     </div>
 
-                    <div class="text-center" style="padding-top:15px;" v-show="showBuildUrl == false">
+                    <div class="text-center" style="padding-top:15px;" v-show="showBuildUrl">
                       <span>Build URL:  </span><a style="text-decoration: underline;" :href="build_url" target="_blank">Click here!</a>
                     </div>
-                    <div style="padding-bottom:15px;" class="text-center" v-show="showStatus==false">
+                    <div style="padding-bottom:15px;" class="text-center" v-show="showStatus">
                       <span style="font-weight:700;">{{build_status}}</span>
                       <i v-if="build_status == 'SUCCESS'" style="color:green;" class="fa fa-check" aria-hidden="true"></i>
                       <i v-else-if ="build_status == 'FAILURE'" style="color:red;" class="fa fa-times" aria-hidden="true"></i>
@@ -409,6 +409,8 @@
         repo_url_mimic: '',
         repo_branch_mimic:'',
         t:'',
+        disable_cancel : true,
+        autoRefresh:false,
 		}
     },
     watch:{
@@ -420,6 +422,7 @@
         }
       },
       "autoRefresh"(val) {
+        console.log(val)
         if (val) {
             this.t = setInterval(() => {
                 this.checkStatus()
@@ -558,7 +561,7 @@
             this.notifyVue("Error", response.status +":" + response.data.detail,'nc-icon nc-simple-remove','danger')
           }
         }
-        this.loading = false;
+        this.loading_create = false;
 
       },
       createPipelineCallBack(response){
@@ -606,7 +609,6 @@
         }
         if(this.showFieldsPipeline == false){
           this.loading = true;
-
           this.runPipelineCall(data,this.runPipelineCallBack)
         }else if(this.showFieldsPipeline == true && this.repo_url_mimic == ''){
           this.notifyVue("Error", "Please add the URL of the repository",'nc-icon nc-simple-remove','danger')
@@ -625,6 +627,8 @@
             this.$store.state.build_url = this.build_url;
             this.showBuildUrl = true;
             this.autoRefresh = true;
+            this.showFieldsPipeline = false;
+
             // this.notifyVue("Success","Pipeline executed successfully.",'nc-icon nc-check-2','info');
           }
         }else if(response.status == 204){
@@ -648,6 +652,7 @@
       },
        checkStatusCallBack(response){
         if(response.status == 200){
+          this.disable_cancel = false;
           if (response.data.build_status){
             this.build_status = response.data.build_status;
             this.$store.state.status = this.build_status;
@@ -861,18 +866,18 @@
           this.disabled_button =true;
           this.showCard = true;
         }
-        if(this.build_url == ''){
-          this.showBuildUrl = false;
-        }else{
-          this.showBuildUrl = true;
-        }
-        if(this.build_status == ''){
-          this.showStatus = false;
-          this.disabled_status = true;
-        }else{
-          this.showStatus = true;
-          this.disable_status = false;
-        }
+        // if(this.build_url == ''){
+        //   this.showBuildUrl = false;
+        // }else{
+        //   this.showBuildUrl = true;
+        // }
+        // if(this.build_status == ''){
+        //   this.showStatus = false;
+        //   this.disabled_status = true;
+        // }else{
+        //   this.showStatus = true;
+        //   this.disable_status = false;
+        // }
     }
   },
   mounted(){
