@@ -687,7 +687,7 @@
           }
           var repo = {}
           repo={
-                  repo_url: this.repository,
+                  repo_url: (this.repository!='default')?this.repository:'',
                   container: this.service,
             }
           if (this.commands.length > 0){
