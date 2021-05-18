@@ -5,7 +5,7 @@
           <div>
             <div style="vertical-align: middle;display: flex;">
               <span class="fas fa-cog fa-3x fa-spin"></span>
-              <p style="padding-left: 10px;text-transform: uppercase;font-weight: 700;margin-bottom: 0px;margin-top: 15px;">Executing Pipeline ...</p>
+              <p style="padding-left: 10px;text-transform: uppercase;font-weight: 700;margin-bottom: 0px;margin-top: 15px;">{{modal_message}}</p>
             </div>
             <div>
               <p>Please, wait for this process to finish.</p>
@@ -411,6 +411,7 @@
         t:'',
         disable_cancel : true,
         autoRefresh:false,
+        modal_message : ''
 		}
     },
     watch:{
@@ -609,11 +610,13 @@
         }
         if(this.showFieldsPipeline == false){
           this.loading = true;
+          this.modal_message = 'Submitting Pipeline ...';
           this.runPipelineCall(data,this.runPipelineCallBack)
         }else if(this.showFieldsPipeline == true && this.repo_url_mimic == ''){
           this.notifyVue("Error", "Please add the URL of the repository",'nc-icon nc-simple-remove','danger')
         }else{
           this.loading = true;
+          this.modal_message = 'Submitting Pipeline ...';
           this.runPipelineCall(data,this.runPipelineCallBack)
         }
         // console.log()
@@ -648,6 +651,7 @@
       },
       checkStatus(){
         // this.showStatusBar = true;
+        this.modal_message = 'Executing Pipeline ...'
         this.checkStatusCall(this.pipeline_id,this.checkStatusCallBack)
       },
        checkStatusCallBack(response){
@@ -866,18 +870,20 @@
           this.disabled_button =true;
           this.showCard = true;
         }
-        // if(this.build_url == ''){
-        //   this.showBuildUrl = false;
-        // }else{
-        //   this.showBuildUrl = true;
-        // }
-        // if(this.build_status == ''){
-        //   this.showStatus = false;
-        //   this.disabled_status = true;
-        // }else{
-        //   this.showStatus = true;
-        //   this.disable_status = false;
-        // }
+        if(this.build_url == ''){
+          this.showBuildUrl = false;
+        }else{
+          this.showRunPipeline = true;
+          this.showBuildUrl = true;
+        }
+        if(this.build_status == ''){
+          this.showStatus = false;
+          // this.disabled_status = true;
+        }else{
+          this.showRunPipeline = true;
+          this.showStatus = true;
+          this.disable_status = false;
+        }
     }
   },
   mounted(){
