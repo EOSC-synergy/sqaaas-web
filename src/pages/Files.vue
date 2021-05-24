@@ -427,7 +427,7 @@
         if (val) {
             this.t = setInterval(() => {
                 this.checkStatus()
-            }, 10 * 1000)
+            }, 3 * 1000)
         } else {
             clearInterval(this.t)
         }

@@ -13,33 +13,162 @@
             </template>
 
             <template>
-              <!-- <div class="row"> -->
-                <base-input style="padding-left:20px;margin-bottom:0px;" type="text"
-                          label="Docker Image"
-                          :disabled="false"
-                          placeholder="Name of the image used by the container. Example: worsica/worsica-backend"
-                          v-model="service.image">
+              <div class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
+                <div class="col-12 col-md-6">
+                  <base-input style="margin-bottom:0px;" type="text"
+                      label="Service Name"
+                      :disabled="false"
+                      placeholder="Container name. Example: processing"
+                      v-model="service.container_name">
+                  </base-input>
+                  <div class="text-right">
+                      <span v-show="showErrorContName" style="color:red;font-size:12px;">This field is required</span>
+                  </div>
+                </div>
+               <div class="col-12 col-md-6">
+                 <label>Push Build</label>
+                  <select class="custom-select" id="sqacriteria" v-model='pull_build'>
+                    <option value="default">Select ...</option>
+                    <option value="pull">Pull Image</option>
+                    <option value="build">Build Image</option>
+                  </select>
+                  <div class="text-right">
+                      <span v-show="showErrorSelectOption" style="color:red;font-size:12px;">This field is required</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row" v-show="pull_build !='default'" style="padding-left:35px;">
+                <p><i style="color:#E09E37;" class="fa fa-bell" aria-hidden="true"></i> You can use the environment variables of the Step 1 and the <a href="https://plugins.jenkins.io/git/#environment-variables" target="blank">Jenkins Git Plugin.</a></p>
+
+              </div>
+
+              <div style="padding-left:20px;" v-show="showPull">
+                <base-input style="margin-bottom:0px;" type="text"
+                  label="Image Name"
+                  :disabled="false"
+                  placeholder="Name of the image used by the container. Example: worsica/worsica-backend"
+                  v-model="service.image">
                 </base-input>
-                <div class="col-12 text-right">
+                <div class="text-right">
                     <span v-show="showErrorImageName" style="color:red;font-size:12px;">This field is required</span>
                 </div>
-                <div class="row" style="justify-content: flex-end;padding-right:20px;">
-                  <span class="custom-label">One shot image</span><base-checkbox name="workpace" v-model="oneshot"></base-checkbox>
+
+              </div>
+
+              <div style="padding-left:20px;" class="row" v-show="showBuild">
+                <div class="col-12 col-md-12 text-left">
+
+                    <base-input style="padding-top:1rem;" type="text" class="no-margin"
+                          label="Path to Dockerfile"
+                          :disabled="false"
+                          placeholder="./"
+                          v-model="path_dockerfile">
+                    </base-input>
+                      <div class="col-12 text-right">
+                        <span v-show="showErrorPathDockerfile" style="color:red;font-size:12px;">This field is required</span>
+                    </div>
+                      <base-input style="padding-top:1rem;" type="text" class="no-margin"
+                          label="Enter the url of the registry (Optional)"
+                          :disabled="false"
+                          placeholder="https://hub.docker.com/"
+                          v-model="url_service">
+                    </base-input>
+                    <base-input style="padding-top:1rem;" type="text" class="no-margin"
+                          label="context (optional)"
+                          :disabled="false"
+                          placeholder="./"
+                          v-model="context">
+                    </base-input>
+
+                    <label for="" style="padding-top:20px;">ARG (OPTIONAL)</label>
+                    <div class="row" >
+                      <base-input class="col-12 col-md-5" type="text"
+                            label="Key"
+                            :disabled="false"
+                            placeholder="Debug"
+                            v-model="arg.key">
+                      </base-input>
+                      <base-input class="col-12 col-md-5" type="text"
+                            label="value"
+                            :disabled="false"
+                            placeholder="1"
+                            v-model="arg.value">
+                      </base-input>
+
+
+                      <div style="margin-bottom:10px;width:95%;padding-top:30px;" class="text-right col-12 col-md-2">
+                        <button type="button" class="btn-simple btn btn-xs btn-info" @click="addArg()"><i class="fa fa-plus"></i>ADD</button>
+                      </div>
+                    </div>
+                    <div v-show="showArg" style="padding-top:20px;padding-bottom:20px;">
+                      <!-- <span class="custom-label">Env Vars</span> -->
+                      <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between"
+                          v-for="(env,key) in arg_push"
+                          :key="key"
+                        >
+                        {{key}} : {{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeArg(key)"><i class="fa fa-minus"></i></button></span>
+
+                        </li>
+
+                      </ul>
+                    </div>
+
+                    <div class="row" style="padding-bottom:20px;">
+                      <span class="custom-label">Push Image</span><base-checkbox name="env" v-model="showBuildImage"></base-checkbox>
+                    </div>
+
+                    <div v-show='showBuildImage'>
+                      <div style="margin-bottom:10px;">
+                        <base-input  type="text" class="no-margin"
+                            label="Image Name"
+                            :disabled="false"
+                            placeholder="Name of the image used by the container. Example: worsica/worsica-backend"
+                            v-model="service.image">
+                        </base-input>
+                        <div class="col-12 text-right">
+                            <span v-show="showErrorImageName" style="color:red;font-size:12px;">This field is required</span>
+                        </div>
+
+                      </div>
+                      <div style="margin-bottom:10px;">
+                        <base-input type="text"  class="no-margin"
+                            label="Enter the ID of the Jenkins credentials"
+                            :disabled="false"
+                            placeholder="userpass"
+                            v-model="id_cred_service">
+                        </base-input>
+                        <div class="col-12 text-right">
+                            <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                  </div>
+
+
+              </div>
+
+              <!-- <div  class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
+                <span class="custom-label">Push Image to Registry?</span>
+                <div class="custom-div-append">
+                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Push the docker-compose service image to the Docker Registry <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html?highlight=push#environment' title='test add link'>More info</a>">
+                          <i class="fa fa-question-circle"></i>
+                        </button>
+                      </div>
+                <span class="custom-label">Yes</span><base-checkbox name="env" v-model="push_image.yes"></base-checkbox>
+                <span class="custom-label">No</span><base-checkbox name="env" v-model="push_image.no"></base-checkbox>
+              </div>
+
+              <div class="row" v-show='push_image.yes == true' style="padding-left:10px;margin-bottom: 2rem;">
+                <div class="col-12" style="padding-left:30px;padding-right:30px;">
+                  <p style="color:#C79804;text-align:justify" ><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Before proceeding you will need to provide the ID of the credentials created in Jenkins or <a target="blank" href="https://jenkins.eosc-synergy.eu/"> go now</a> and create them. You also need to provide the path to a Dockerfile. </p>
 
                 </div>
-
-
-
-              <!-- </div> -->
-              <base-input style="padding-left:20px;margin-bottom:0px;" type="text"
-                        label="Container Name"
-                        :disabled="false"
-                        placeholder="Container name. Example: processing"
-                        v-model="service.container_name">
-              </base-input>
-              <div class="col-12 text-right">
-                  <span v-show="showErrorContName" style="color:red;font-size:12px;">This field is required</span>
-              </div>
+              </div> -->
 
 
               <div class="col-12" id="accordion_general" role="tablist" aria-multiselectable="true" style="padding-left:20px;margin-top:2rem;padding-right:0px;">
@@ -196,96 +325,6 @@
                           </ul>
                         </div>
                     </div>
-                    <div  class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
-                      <span class="custom-label">Push Image to Registry?</span>
-                      <div class="custom-div-append">
-                              <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Push the docker-compose service image to the Docker Registry <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html?highlight=push#environment' title='test add link'>More info</a>">
-                                <i class="fa fa-question-circle"></i>
-                              </button>
-                            </div>
-                      <span class="custom-label">Yes</span><base-checkbox name="env" v-model="push_image.yes"></base-checkbox>
-                      <span class="custom-label">No</span><base-checkbox name="env" v-model="push_image.no"></base-checkbox>
-                    </div>
-
-
-                    <div class="row" v-show='push_image.yes == true' style="padding-left:10px;margin-bottom: 2rem;">
-                      <div class="col-12" style="padding-left:30px;padding-right:30px;">
-                        <p style="color:#C79804;text-align:justify" ><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Before proceeding you will need to provide the ID of the credentials created in Jenkins or <a target="blank" href="https://jenkins.eosc-synergy.eu/"> go now</a> and create them. You also need to provide the path to a Dockerfile. </p>
-                        <div style="margin-top:2rem;padding-left:0px;padding-right:0px;" class="col-12 col-md-12 text-left">
-                          <base-input type="text" class="no-margin"
-                                label="Enter the ID of the Jenkins credentials."
-                                :disabled="false"
-                                placeholder="userpass"
-                                v-model="id_cred_service">
-                          </base-input>
-                          <div class="col-12 text-right">
-                              <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
-                          </div>
-                          <base-input style="padding-top:1rem;" type="text" class="no-margin"
-                                label="Path to Dockerfile"
-                                :disabled="false"
-                                placeholder="./"
-                                v-model="path_dockerfile">
-                          </base-input>
-                           <div class="col-12 text-right">
-                              <span v-show="showErrorPathDockerfile" style="color:red;font-size:12px;">This field is required</span>
-                          </div>
-                           <base-input style="padding-top:1rem;" type="text" class="no-margin"
-                                label="Enter the url of the registry (Optional)"
-                                :disabled="false"
-                                placeholder="https://hub.docker.com/"
-                                v-model="url_service">
-                          </base-input>
-                          <base-input style="padding-top:1rem;" type="text" class="no-margin"
-                                label="context (optional)"
-                                :disabled="false"
-                                placeholder="./"
-                                v-model="context">
-                          </base-input>
-                          <!-- <base-input style="padding-top:1rem;" type="text" class="no-margin"
-                                label="cache_from (optional)"
-                                :disabled="false"
-                                placeholder="cache_from"
-                                v-model="cache">
-                          </base-input> -->
-                           <label for="" style="padding-top:20px;">ARG (OPTIONAL)</label>
-                          <div class="row" >
-
-
-                            <base-input class="col-12 col-md-5" type="text"
-                                  label="Key"
-                                  :disabled="false"
-                                  placeholder="Debug"
-                                  v-model="arg.key">
-                            </base-input>
-                            <base-input class="col-12 col-md-5" type="text"
-                                  label="value"
-                                  :disabled="false"
-                                  placeholder="1"
-                                  v-model="arg.value">
-                            </base-input>
-
-
-                            <div style="margin-bottom:10px;width:95%;padding-top:30px;" class="text-right col-12 col-md-2">
-                              <button type="button" class="btn-simple btn btn-xs btn-info" @click="addArg()"><i class="fa fa-plus"></i>ADD</button>
-                            </div>
-                          </div>
-                          <div v-show="showArg" style="padding-top:20px;padding-bottom:20px;">
-                            <!-- <span class="custom-label">Env Vars</span> -->
-                            <ul class="list-group">
-                              <li class="list-group-item d-flex justify-content-between"
-                                v-for="(env,key) in arg_push"
-                                :key="key"
-                              >
-                              {{key}} : {{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeArg(key)"><i class="fa fa-minus"></i></button></span>
-
-                              </li>
-
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -429,13 +468,38 @@ import services from '../services/services'
         path_dockerfile:'',
         arg_push:{},
         idToRemove:'',
-        criteriaToRemove:''
+        criteriaToRemove:'',
+        pull_build:'default',
+        showPull:false,
+        showBuild:false,
+        showBuildImage:false,
+        showErrorSelectOption:false
 
 
 
       }
     },
     watch:{
+      'showBuildImage'(val){
+      },
+      'pull_build'(val){
+        if(val != 'default'){
+          this.showErrorSelectOption =false;
+          if(val == 'pull'){
+            this.showPull = true;
+          }else{
+            this.showPull = false;
+          }
+          if(val == 'build'){
+            this.showBuild = true;
+          }else{
+            this.showBuild = false;
+          }
+        }else{
+          this.showBuild=false;
+          this.showPull=false;
+        }
+      },
       'service.image'(val){
         if(val != ''){
           this.showErrorImageName = false;
@@ -594,94 +658,80 @@ import services from '../services/services'
         this.arg.value = '';
       },
       addService(){
-        if(this.service.image == '' || this.service.container_name == ''){
+        if( (this.pull_build=='push' && this.service.image=='') || (this.pull_build=='build' && this.path_dockerfile=='') || (this.pull_build=='build' && this.showBuildImage==true && (this.service.image=='' || this.id_cred_service =='')) || this.service.container_name == '' || this.pull_build == 'default'){
           if(this.service.container_name == ''){
             this.showErrorContName =  true;
           }
-          if(this.service.image == ''){
+          if(this.pull_build == 'default'){
+            this.showErrorSelectOption = true;
+
+          }
+          if(this.pull_build=='push' && this.service.image==''){
             this.showErrorImageName =  true;
           }
 
-         }else{
-          if(this.oneshot== true){
-            this.services[this.service.container_name]={
-              image: {
-                name: this.service.image,
-                registry:{
-                  url: '',
-                  push: false,
-                  credential_id:''
+          if(this.pull_build=='build' && this.path_dockerfile==''){
+            this.showErrorPathDockerfile = true;
 
-                }
-              },
-              build:{
-                  dockerfile:'',
-                  context: '',
-                  args: {}
-              },
-              hostname: this.service.hostname,
-              volumes: this.service.volumes,
-              command: 'sleep infinity',
-              environment: this.service.envs
-            }
-          }else{
-            this.showErrorImageName = false;
-            this.showErrorContName = false;
-            this.services[this.service.container_name]={
-               image: {
-                name: this.service.image,
-                registry:{
-                  url: '',
-                  push: false,
-                  credential_id:''
-
-                }
-              },
-              build:{
-                  dockerfile:'',
-                  context: '',
-                  args: {}
-              },
-              hostname: this.service.hostname,
-              volumes: this.service.volumes,
-              environment: this.service.envs
-            }
           }
-          if(this.push_image.yes == true){
-             if(this.id_cred_service == ""){
+          if((this.pull_build=='build' && this.showBuildImage==true && (this.service.image=='' || this.id_cred_service =='') )){
+            if(this.service.image == ''){
+              this.showErrorImageName = true
+            }
+            if(this.id_cred_service == ''){
               this.showErrorCredID = true;
-            }else if(this.path_dockerfile == ""){
-              this.showErrorPathDockerfile = true;
-            }else{
-              this.showErrorCredID = false;
-              this.showErrorPathDockerfile = false;
-              this.services[this.service.container_name].image.registry.push = true;
-              this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
-              this.services[this.service.container_name].image.registry.url = this.url_service;
-              this.services[this.service.container_name].build.dockerfile = this.path_dockerfile;
-              this.services[this.service.container_name].build.context = this.context;
-              this.services[this.service.container_name].build.args = this.arg_push;
-              this.showServices = true;
-              // $("#select_service").append('<option value="'+this.service.container_name+'">'+this.service.container_name+'</option>');
-              // $("#select_service").selectpicker("refresh");
-              this.disable_done = false;
-              this.$store.state.docker_compose.services = this.services;
-              if($('#accordionBodyGeneral').hasClass('show')){
-                $('#link_accordion').click();
-              }
-              this.cleanService();
             }
-          }else{
-              this.showServices = true;
-              // $("#select_service").append('<option value="'+this.service.container_name+'">'+this.service.container_name+'</option>');
-              // $("#select_service").selectpicker("refresh");
-              this.disable_done = false;
-              this.$store.state.docker_compose.services = this.services;
-              if($('#accordionBodyGeneral').hasClass('show')){
-                $('#link_accordion').click();
-              }
-              this.cleanService();
           }
+
+         }else{
+
+          this.showErrorImageName = false;
+          this.showErrorContName = false;
+          this.showErrorSelectOption = false;
+
+          this.services[this.service.container_name]={
+              image: {
+              name: '',
+              registry:{
+                url: '',
+                push: false,
+                credential_id:''
+
+              }
+            },
+            build:{
+                dockerfile:'',
+                context: '',
+                args: {}
+            },
+            hostname: this.service.hostname,
+            volumes: this.service.volumes,
+            environment: this.service.envs
+          }
+
+          if(this.pull_build == 'push'){
+            this.services[this.service.container_name].image.name=this.service.image
+          }
+          if(this.pull_build == 'build'){
+            this.services[this.service.container_name].image.registry.push = true;
+            this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
+            this.services[this.service.container_name].image.registry.url = this.url_service;
+            this.services[this.service.container_name].build.dockerfile = this.path_dockerfile;
+            this.services[this.service.container_name].build.context = this.context;
+            this.services[this.service.container_name].build.args = this.arg_push;
+
+            if(this.showBuildImage == true){
+              this.services[this.service.container_name].image.name=this.service.image
+            }
+
+          }
+          this.showServices = true;
+          this.disable_done = false;
+          this.$store.state.docker_compose.services = this.services;
+          if($('#accordionBodyGeneral').hasClass('show')){
+            $('#link_accordion').click();
+          }
+          this.cleanService();
         }
       },
       removeService(item){
@@ -761,6 +811,7 @@ import services from '../services/services'
         this.url_service = '';
         this.id_cred_service = '';
         this.showErrorCredID = false;
+        this.pull_build = 'default';
       },
       isEmpty(obj) {
         for(var key in obj) {
