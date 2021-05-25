@@ -181,7 +181,7 @@
                           class="collapsed ">
                           <i class="fa fa-angle-down" aria-hidden="true"></i>
                           <p>ADVANCED OPTIONS</p>
-                           <p>(Volumes, Env Vars, Registry)</p>
+                           <p>(Volumes, Env Vars)</p>
                         </a>
                       </div>
                     </div>
@@ -590,8 +590,8 @@ import services from '../services/services'
         var envVars= {};
         var key= this.envCompose.key.replace(" ", "")
 				var value = this.envCompose.value.replace(" ", "")
-        envVars[key]=value
-        this.service.envs[key]= value
+        envVars[key]=value;
+        this.service.envs[key]= value;
         this.showEnvCompose = true;
         this.cleanEnvCompose()
 
@@ -616,7 +616,6 @@ import services from '../services/services'
           target:this.volume.target.trim()
         }
         this.service.volumes.push(this.volumes)
-        console.log(this.service.volumes)
         this.cleanVolume();
 
       },
@@ -640,9 +639,7 @@ import services from '../services/services'
       addArg(){
         var key= this.arg.key.replace(" ", "")
 				var value = this.arg.value.replace(" ", "")
-        console.log(key,value)
         this.arg_push[key]= value
-        console.log(this.arg_push)
         this.showArg = true;
         this.cleanArg()
 
@@ -709,19 +706,20 @@ import services from '../services/services'
             environment: this.service.envs
           }
 
-          if(this.pull_build == 'push'){
-            this.services[this.service.container_name].image.name=this.service.image
+          if(this.pull_build == 'pull'){
+            this.services[this.service.container_name].image.name=this.service.image;
           }
           if(this.pull_build == 'build'){
             this.services[this.service.container_name].image.registry.push = true;
-            this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
+            // this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
             this.services[this.service.container_name].image.registry.url = this.url_service;
             this.services[this.service.container_name].build.dockerfile = this.path_dockerfile;
             this.services[this.service.container_name].build.context = this.context;
             this.services[this.service.container_name].build.args = this.arg_push;
 
             if(this.showBuildImage == true){
-              this.services[this.service.container_name].image.name=this.service.image
+              this.services[this.service.container_name].image.name=this.service.image;
+              this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
             }
 
           }
@@ -748,7 +746,6 @@ import services from '../services/services'
           }
 
         }
-        console.log(check_repo)
         if(check_repo == true){
           this.openModal();
         }else{
@@ -756,7 +753,6 @@ import services from '../services/services'
         }
       },
       removeConfirmServ(){
-        console.log(this.idToRemove)
         this.$delete(this.services,this.idToRemove);
         this.$store.state.docker_compose.services = this.services;
         if(this.criteriaToRemove != ''){
@@ -786,7 +782,7 @@ import services from '../services/services'
         this.service.image='';
         this.service.container_name='';
         this.service.hostname='';
-        this.service.envs=[];
+        this.service.envs={};
         this.volumes={};
         this.service.volumes=[];
         this.oneshot = false;

@@ -39,14 +39,7 @@
             </div>
             <div class="row" style="margin:0px 0px 2rem 0px;">
 
-              <div v-show="showSelect && objectSize($store.state.config_yaml.config.project_repos) > 0" class="col-12 col-md-6" style="display:grid;">
-                <label>Select an External Repository</label>
-                <select class="custom-select" id="respository" v-model='repository'  >
-                  <option value="default">Choose a repository...</option>
-                  <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="repo.repo">{{repo.repo}}</option>
-                </select>
-                <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
-              </div>
+
 
               <div v-show="showSelect" class="col-12 col-md-6" style="display:grid;">
                 <label>Select a service</label>
@@ -55,6 +48,15 @@
                   <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
                 </select>
                 <span v-show="showErrorService" style="color:red; font-size:12px;">You must select a service</span>
+              </div>
+
+              <div v-show="showSelect && objectSize($store.state.config_yaml.config.project_repos) > 0" class="col-12 col-md-6" style="display:grid;">
+                <label>Select an External Repository</label>
+                <select class="custom-select" id="respository" v-model='repository'  >
+                  <option value="default">Choose a repository...</option>
+                  <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="repo.repo">{{repo.repo}}</option>
+                </select>
+                <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
               </div>
             </div>
 
@@ -580,7 +582,6 @@
       },
        next(){
          for(const index in this.criterias_store ){
-           console.log(index)
            if(Object.hasOwnProperty.call(this.$store.state.config_yaml.sqa_criteria, index)){
              if(this.criterias_store[index].pattern != ''){
                this.$store.state.config_yaml.sqa_criteria[index]['when'] = Object.assign({},this.$store.state.config_yaml.sqa_criteria[index]['when'], {
@@ -622,21 +623,19 @@
       addCriteria(){
         console.log(this.commands)
         console.log(this.testenv)
-        // if(objectSize(this.$store.state.config_yaml.config.project_repos) < 1){
 
-        // }
-        if(this.criteria == 'default' || this.service == "default" || (this.commands.length == 0 && this.testenv.length == 0) || (this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0)){
-          // this.error_message = "Error: you must select a valid criteria";
+        // || (this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0)
+        if(this.criteria == 'default' || this.service == "default" || (this.commands.length == 0 && this.testenv.length == 0) ){
           if(this.criteria == 'default'){
             this.showErrorCriteria = true;
           }
           if(this.service == "default"){
             this.showErrorService = true;
           }
-          if(this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0 ){
-            console.log('here here here')
-            this.showErrorRepo = true;
-          }
+          // if(this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0 ){
+          //   console.log('here here here')
+          //   this.showErrorRepo = true;
+          // }
           if(this.commands.length == 0 && this.testenv.length == 0){
             if(this.builder_tool != 'default'){
               if(this.builder_tool == 'command'){
