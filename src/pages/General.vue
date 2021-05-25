@@ -44,10 +44,16 @@
                         <span v-show="showErrorRepoUrl" style="color:red; font-size:12px;">This field is required.</span>
 
                       </div>
+                       <base-input class="col-md-6" type="text" style="padding-left: 0px;"
+                          label="Branch"
+                          :disabled="false"
+                          placeholder="master"
+                          v-model="repo.branch">
+                      </base-input>
 
                   </div>
 
-                  <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
+                  <!-- <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
                     <div style="display:contents" class="col-12 col-md-6">
                       <span class="custom-label">Pipeline react to all changes:</span>
                       <div class="custom-div-append">
@@ -55,12 +61,6 @@
                           <i class="fa fa-question-circle"></i>
                         </button>
                       </div>
-                      <!-- <span class="custom-label">Do you want the pipeline to react to all changes?</span> -->
-                      <!-- <div class="custom-div-append">
-                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
-                          <i class="fa fa-question-circle"></i>
-                        </button>
-                      </div> -->
                     </div>
                     <div style="display:contents" class="col-12 col-md-6">
                       <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="config.workspace.yes"></base-checkbox>
@@ -75,20 +75,7 @@
                           v-model="repo.branch">
                       </base-input>
                       <span v-show="showBranchError" style="color:red;font-size:12px;padding-left:20px;">This field is required</span>
-                      <!-- <base-input class="col-md-4" type="text"
-                          label="Image"
-                          :disabled="false"
-                          placeholder="worsica/worsica-processing"
-                          v-model="repo.image">
-                      </base-input>
-                      <base-input class="col-md-4" type="text"
-                          label="Tag"
-                          :disabled="false"
-                          placeholder="latest"
-                          v-model="repo.tag">
-                      </base-input> -->
-
-                  </div>
+                  </div> -->
 
                   <div class="text-right" style="padding-right: 20px;">
                     <button type="button" class="btn-outline btn btn-info" @click="addRepo();track()"><i class="fa fa-plus"></i>ADD REPOSITORY</button>
