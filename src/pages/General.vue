@@ -31,7 +31,7 @@
 
                 <div v-show="add_external_repo.yes">
 
-                  <div class="col-12"  style="padding-left:20px;padding-top:20px;">
+                  <div class="col-12"  style="padding-left:20px;">
 
                       <base-input style="margin-bottom:0px;"  type="text"
                                 label="Repository URL"
@@ -725,6 +725,9 @@
         this.$router.push({name:"PipelineName"})
       }else{
         var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos)
+        if(sizeRepos > 0){
+          this.add_external_repo.yes = true;
+        }
         for (let i = 0; i < sizeRepos; i++) {
           this.config.all_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]=this.$store.state.config_yaml.config.project_repos[Object.keys(this.$store.state.config_yaml.config.project_repos)[i]]
         }
