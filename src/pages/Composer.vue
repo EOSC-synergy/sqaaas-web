@@ -105,7 +105,7 @@
                     </div>
 
                     <div class="row" style="padding-bottom:20px;">
-                      <span class="custom-label">Push Image</span><base-checkbox name="env" v-model="showBuildImage"></base-checkbox>
+                      <span class="custom-label">Would you like to push the Docker image to a registry (e.g. Docker Hub)?</span><base-checkbox name="env" v-model="showBuildImage"></base-checkbox>
                     </div>
 
                     <div v-show='showBuildImage'>
