@@ -293,14 +293,14 @@
                     </div> -->
 
 
-                    <div v-show="showFieldsPipeline">
-                      <base-input type="text" class="no-margin"
+                    <div class="row" v-show="showFieldsPipeline">
+                      <base-input class="col-12 col-md-6 no-margin" type="text"
                         label="URL"
                         :disabled="false"
                         placeholder="https://github.com/EOSC-synergy/sqaaas-web.git"
                         v-model="repo_url_mimic">
                       </base-input>
-                      <base-input type="text" class="no-margin"
+                      <base-input class="col-12 col-md-6 no-margin"
                           label="Branch (Optional)"
                           :disabled="false"
                           placeholder="master"
@@ -657,24 +657,32 @@
        checkStatusCallBack(response){
         if(response.status == 200){
           this.disable_cancel = false;
-          if (response.data.build_status){
+          if (response.data.build_status != 'NOT_EXECUTED'){
             this.build_status = response.data.build_status;
             this.$store.state.status = this.build_status;
             this.showStatus = true;
           }
-          if (response.data.build_url){
+
+          if (response.data.build_url != ''){
             this.showCard = true;
             this.build_url = response.data.build_url;
             this.$store.state.build_url = this.build_url;
             this.showBuildUrl = true;
           }
-          if(this.build_status != null && this.build_status == 'FAILURE'){
+
+          console.log(response.data.build_status)
+          if(response.data.build_status == 'SUCCESS'){
             this.showStatusBar = false;
             if(response.data.openbadge_id != null){
               this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
             }
-              this.loading = false;
-              this.autoRefresh = false;
+            this.loading = false;
+            this.autoRefresh = false;
+          }
+
+          if(this.build_status == "FAILURE"){
+            this.loading = false;
+            this.autoRefresh = false;
           }
 
         }else if(response.status == 403){

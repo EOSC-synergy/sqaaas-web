@@ -38,10 +38,6 @@
                 </div>
               </div>
 
-              <div class="row" v-show="pull_build !='default'" style="padding-left:35px;">
-                <p><i style="color:#E09E37;" class="fa fa-bell" aria-hidden="true"></i> You can use the environment variables of the Step 1 and the <a href="https://plugins.jenkins.io/git/#environment-variables" target="blank">Jenkins Git Plugin.</a></p>
-
-              </div>
 
               <div style="padding-left:20px;" v-show="showPull">
                 <base-input style="margin-bottom:0px;" type="text"
@@ -120,6 +116,9 @@
                     </div>
 
                     <div v-show='showBuildImage'>
+                      <div class="row" style="padding-left:35px;">
+                        <p><i style="color:#E09E37;" class="fa fa-bell" aria-hidden="true"></i> You can use the environment variables of the Step 1 and the <a href="https://plugins.jenkins.io/git/#environment-variables" target="blank">Jenkins Git Plugin.</a></p>
+                      </div>
                       <div style="margin-bottom:10px;">
                         <base-input  type="text" class="no-margin"
                             label="Image Name"
@@ -655,7 +654,7 @@ import services from '../services/services'
         this.arg.value = '';
       },
       addService(){
-        if( (this.pull_build=='push' && this.service.image=='') || (this.pull_build=='build' && this.path_dockerfile=='') || (this.pull_build=='build' && this.showBuildImage==true && (this.service.image=='' || this.id_cred_service =='')) || this.service.container_name == '' || this.pull_build == 'default'){
+        if( (this.pull_build=='push' && this.service.image=='') || (this.pull_build=='build' && this.path_dockerfile=='') || (this.pull_build=='build' && this.showBuildImage==true && this.service.image=='' ) || this.service.container_name == '' || this.pull_build == 'default'){
           if(this.service.container_name == ''){
             this.showErrorContName =  true;
           }
@@ -671,7 +670,7 @@ import services from '../services/services'
             this.showErrorPathDockerfile = true;
 
           }
-          if((this.pull_build=='build' && this.showBuildImage==true && (this.service.image=='' || this.id_cred_service =='') )){
+          if((this.pull_build=='build' && this.showBuildImage==true && this.service.image=='')){
             if(this.service.image == ''){
               this.showErrorImageName = true
             }
@@ -710,7 +709,6 @@ import services from '../services/services'
             this.services[this.service.container_name].image.name=this.service.image;
           }
           if(this.pull_build == 'build'){
-            this.services[this.service.container_name].image.registry.push = true;
             // this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
             this.services[this.service.container_name].image.registry.url = this.url_service;
             this.services[this.service.container_name].build.dockerfile = this.path_dockerfile;
@@ -718,6 +716,7 @@ import services from '../services/services'
             this.services[this.service.container_name].build.args = this.arg_push;
 
             if(this.showBuildImage == true){
+              this.services[this.service.container_name].image.registry.push = true;
               this.services[this.service.container_name].image.name=this.service.image;
               this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
             }
