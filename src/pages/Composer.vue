@@ -70,13 +70,6 @@
                           placeholder="https://hub.docker.com/"
                           v-model="url_service">
                     </base-input>
-                    <base-input style="padding-top:1rem;" type="text" class="no-margin"
-                          label="context (optional)"
-                          :disabled="false"
-                          placeholder="./"
-                          v-model="context">
-                    </base-input>
-
                     <label for="" style="padding-top:20px;">ARG (OPTIONAL)</label>
                     <div class="row" >
                       <base-input class="col-12 col-md-5" type="text"
@@ -119,6 +112,20 @@
                       <div class="row" style="padding-left:35px;">
                         <p><i style="color:#E09E37;" class="fa fa-bell" aria-hidden="true"></i> You can use the environment variables of the Step 1 and the <a href="https://plugins.jenkins.io/git/#environment-variables" target="blank">Jenkins Git Plugin.</a></p>
                       </div>
+                      <div class="row" style="padding-bottom:20px;">
+                        <span class="custom-label">Use generic credentials</span><base-checkbox name="env" v-model="showCredID"></base-checkbox>
+                      </div>
+                      <div v-show="showCredID == false" style="margin-bottom:10px;">
+                        <base-input type="text"  class="no-margin"
+                            label="Enter the ID of the Jenkins credentials"
+                            :disabled="false"
+                            placeholder="userpass"
+                            v-model="id_cred_service">
+                        </base-input>
+                        <div class="col-12 text-right">
+                            <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
+                        </div>
+                      </div>
                       <div style="margin-bottom:10px;">
                         <base-input  type="text" class="no-margin"
                             label="Image Name"
@@ -131,17 +138,7 @@
                         </div>
 
                       </div>
-                      <div style="margin-bottom:10px;">
-                        <base-input type="text"  class="no-margin"
-                            label="Enter the ID of the Jenkins credentials"
-                            :disabled="false"
-                            placeholder="userpass"
-                            v-model="id_cred_service">
-                        </base-input>
-                        <div class="col-12 text-right">
-                            <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
-                        </div>
-                      </div>
+
                     </div>
 
 
@@ -463,7 +460,6 @@ import services from '../services/services'
         volumes:{},
         count:0,
         cache:'',
-        context:'',
         path_dockerfile:'',
         arg_push:{},
         idToRemove:'',
@@ -472,7 +468,8 @@ import services from '../services/services'
         showPull:false,
         showBuild:false,
         showBuildImage:false,
-        showErrorSelectOption:false
+        showErrorSelectOption:false,
+        showCredID:false
 
 
 
@@ -654,7 +651,7 @@ import services from '../services/services'
         this.arg.value = '';
       },
       addService(){
-        if( (this.pull_build=='push' && this.service.image=='') || (this.pull_build=='build' && this.path_dockerfile=='') || (this.pull_build=='build' && this.showBuildImage==true && this.service.image=='' ) || this.service.container_name == '' || this.pull_build == 'default'){
+        if( (this.pull_build=='push' && this.service.image=='') || (this.pull_build=='build' && this.path_dockerfile=='') || (this.pull_build=='build' && this.showBuildImage==true && this.showCredID==false && this.id_cred_service == '' ) || (this.pull_build=='build' && this.showBuildImage==true && this.service.image=='' ) || this.service.container_name == '' || this.pull_build == 'default'){
           if(this.service.container_name == ''){
             this.showErrorContName =  true;
           }
@@ -678,6 +675,9 @@ import services from '../services/services'
               this.showErrorCredID = true;
             }
           }
+          if(this.pull_build=='build' && this.showBuildImage==true && this.showCredID==false && this.id_cred_service == '' ){
+              this.showErrorCredID = true
+          }
 
          }else{
 
@@ -697,7 +697,6 @@ import services from '../services/services'
             },
             build:{
                 dockerfile:'',
-                context: '',
                 args: {}
             },
             hostname: this.service.hostname,
@@ -712,7 +711,6 @@ import services from '../services/services'
             // this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
             this.services[this.service.container_name].image.registry.url = this.url_service;
             this.services[this.service.container_name].build.dockerfile = this.path_dockerfile;
-            this.services[this.service.container_name].build.context = this.context;
             this.services[this.service.container_name].build.args = this.arg_push;
 
             if(this.showBuildImage == true){
@@ -799,7 +797,6 @@ import services from '../services/services'
         }
 
         this.path_dockerfile = '';
-        this.context = '';
         this.cleanArg();
         this.arg_push = {};
         this.showArg = false;
@@ -807,6 +804,7 @@ import services from '../services/services'
         this.id_cred_service = '';
         this.showErrorCredID = false;
         this.pull_build = 'default';
+        this.showCredID = false;
       },
       isEmpty(obj) {
         for(var key in obj) {
