@@ -26,7 +26,7 @@
                   </div>
                 </div>
                <div class="col-12 col-md-6">
-                 <label>Push Build</label>
+                 <label>Pull OR Build</label>
                   <select class="custom-select" id="sqacriteria" v-model='pull_build'>
                     <option value="default">Select ...</option>
                     <option value="pull">Pull Image</option>
@@ -87,7 +87,7 @@
 
 
                       <div style="margin-bottom:10px;width:95%;padding-top:30px;" class="text-right col-12 col-md-2">
-                        <button type="button" class="btn-simple btn btn-xs btn-info" @click="addArg()"><i class="fa fa-plus"></i>ADD</button>
+                        <button type="button" class="btn-simple btn btn-xs btn-info" @click="addArg()"><i class="fa fa-plus"></i>ADD Build Arg</button>
                       </div>
                     </div>
                     <div v-show="showArg" style="padding-top:20px;padding-bottom:20px;">
@@ -112,20 +112,6 @@
                       <div class="row" style="padding-left:35px;">
                         <p><i style="color:#E09E37;" class="fa fa-bell" aria-hidden="true"></i> You can use the environment variables of the Step 1 and the <a href="https://plugins.jenkins.io/git/#environment-variables" target="blank">Jenkins Git Plugin.</a></p>
                       </div>
-                      <div class="row" style="padding-bottom:20px;">
-                        <span class="custom-label">Use the EOSC-Synergy catch-all credentials</span><base-checkbox name="env" v-model="showCredID"></base-checkbox>
-                      </div>
-                      <div v-show="showCredID == false" style="margin-bottom:10px;">
-                        <base-input type="text"  class="no-margin"
-                            label="Enter the ID of the Jenkins credentials"
-                            :disabled="false"
-                            placeholder="userpass"
-                            v-model="id_cred_service">
-                        </base-input>
-                        <div class="col-12 text-right">
-                            <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
-                        </div>
-                      </div>
                       <div style="margin-bottom:10px;">
                         <base-input  type="text" class="no-margin"
                             label="Image Name"
@@ -135,6 +121,25 @@
                         </base-input>
                         <div class="col-12 text-right">
                             <span v-show="showErrorImageName" style="color:red;font-size:12px;">This field is required</span>
+                        </div>
+                        <div class="row" style="padding-left:20px;padding-top:20px">
+                            <base-checkbox name="env" v-model="showCredID"></base-checkbox><span class="custom-label" style="padding-left:0px">Use the EOSC-Synergy catch-all credentials</span>
+                            <div class="custom-div-append">
+                              <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                                <i class="fa fa-question-circle"></i>
+                              </button>
+                            </div>
+                        </div>
+                        <div v-show="showCredID == false" style="margin-bottom:10px;padding-left:20px;padding-top:10px">
+                            <base-input type="text"  class="no-margin"
+                                label="Jenkins credential ID"
+                                :disabled="false"
+                                placeholder="userpass"
+                                v-model="id_cred_service">
+                            </base-input>
+                            <div class="col-12 text-right">
+                                <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
+                            </div>
                         </div>
 
                       </div>
@@ -233,7 +238,7 @@
 
                       </div>
                       <div class="text-right">
-                        <button type="button" class="btn-simple btn btn-xs btn-info" @click="addVolume()"><i class="fa fa-plus"></i>ADD VOLUME</button>
+                        <button type="button" class="btn-simple btn btn-xs btn-info" @click="addVolume()"><i class="fa fa-plus"></i>ADD Volume</button>
                       </div>
                       <div v-show="showVolumes" style="padding-top:20px;">
                         <div class="table-responsive">
@@ -282,7 +287,7 @@
                         </div>
                       </div>
                       <div class="row" style="padding-left:5px;margin-bottom:1rem;margin-top:2rem;">
-                        <span class="custom-label">Environment variables:</span>
+                        <span class="custom-label">Does the current service need specific environment variables?</span>
                         <span class="custom-label">Yes</span><base-checkbox name="env" v-model="envComposeYesNo.yes"></base-checkbox>
                         <span class="custom-label">No</span><base-checkbox name="env" v-model="envComposeYesNo.no"></base-checkbox>
                       </div>
@@ -304,7 +309,7 @@
 
 
                           <div style="margin-bottom:30px;width:95%;" class="text-right">
-                            <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnvCompose()"><i class="fa fa-plus"></i>ADD Env Vars</button>
+                            <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnvCompose()"><i class="fa fa-plus"></i>ADD Env Var</button>
                           </div>
                         </div>
                         <div v-show="showEnvCompose" style="padding-top:20px;padding-bottom:20px;">
