@@ -113,7 +113,7 @@
                         <p><i style="color:#E09E37;" class="fa fa-bell" aria-hidden="true"></i> You can use the environment variables of the Step 1 and the <a href="https://plugins.jenkins.io/git/#environment-variables" target="blank">Jenkins Git Plugin.</a></p>
                       </div>
                       <div class="row" style="padding-bottom:20px;">
-                        <span class="custom-label">Use generic credentials</span><base-checkbox name="env" v-model="showCredID"></base-checkbox>
+                        <span class="custom-label">Use the EOSC-Synergy catch-all credentials</span><base-checkbox name="env" v-model="showCredID"></base-checkbox>
                       </div>
                       <div v-show="showCredID == false" style="margin-bottom:10px;">
                         <base-input type="text"  class="no-margin"
