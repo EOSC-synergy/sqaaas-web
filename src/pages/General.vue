@@ -16,7 +16,7 @@
               <template>
                   <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
                     <div style="display:contents" class="col-12 col-md-6">
-                      <span class="custom-label">Does your pipeline need code from adicional repository?</span>
+                      <span class="custom-label">Does your pipeline need code from external repositories?</span>
                       <div class="custom-div-append">
                         <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
                           <i class="fa fa-question-circle"></i>
@@ -146,20 +146,20 @@
                             <i class="fa fa-question-circle"></i>
                           </button>
                       </div> -->
-                        <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem;">
-                          <span class="custom-label">Add Credentials:</span>
+                        <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
+                          <span class="custom-label">Add Credentials?</span>
                           <div class="custom-div-append">
                             <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
                               <i class="fa fa-question-circle"></i>
                             </button>
                         </div>
-                          <span class="custom-label">Yes</span><base-checkbox name="credentials" v-model="config.credentials.yes"></base-checkbox>
+                          <span class="custom-label" style="padding-left:75px;">Yes</span><base-checkbox name="credentials" v-model="config.credentials.yes"></base-checkbox>
                           <span class="custom-label">No</span><base-checkbox name="credentials" v-model="config.credentials.no"></base-checkbox>
                         </div>
                         <div v-show='config.credentials.yes' style="padding-left:30px;">
 
                           <base-input type="text" class="no-margin"
-                                label="ID"
+                                label="Jenkins credential ID"
                                 :disabled="false"
                                 placeholder="userpass"
                                 v-model="credentials.id">
@@ -187,7 +187,7 @@
                             </div>
                           </div> -->
                           <div style="padding-top:20px;">
-
+                            <label>Jenkins Credential Type</label>
                             <select  class="custom-select" id="cred" v-model='credentials.type' >
                               <!-- <option value="default">Choose a type...</option> -->
                               <option value="username_password">Username Password</option>
@@ -244,11 +244,16 @@
                           </div>
                         </div>
                       <div class="row" style="padding-left:20px;margin-top:2rem;margin-bottom:2rem;">
-                        <span class="custom-label">Environment variables:</span>
+                        <span class="custom-label">Customize Environment?</span>
+                        <div class="custom-div-append" style="padding-left:5px">
+                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                              <i class="fa fa-question-circle"></i>
+                            </button>
+                        </div>
                         <span class="custom-label">Yes</span><base-checkbox name="env" v-model="config.env.yes"></base-checkbox>
                         <span class="custom-label">No</span><base-checkbox name="env" v-model="config.env.no"></base-checkbox>
                       </div>
-                      <div class="row" v-show='config.env.yes' style="padding-left:30px;">
+                      <div class="row" v-show='config.env.yes' style="padding-left:30px">
 
                         <base-input class="col-md-6" type="text"
                               label="Key"
@@ -263,7 +268,7 @@
                               v-model="env.value">
                         </base-input>
                         <div style="margin-bottom:10px;width:95%;" class="text-right">
-                          <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnv()"><i class="fa fa-plus"></i>ADD ENV VAR</button>
+                          <button type="button" class="btn-simple btn btn-xs btn-info" @click="addEnv()"><i class="fa fa-plus"></i>ADD Env Var</button>
                         </div>
                       </div>
                       <div v-show="showEnv" style="padding-top:5px;margin-bottom:1rem;">
