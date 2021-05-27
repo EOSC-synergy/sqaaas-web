@@ -15,7 +15,7 @@
               <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;">
                 <div class="col-6">
                   <label> Choose a criteria</label>
-                  <select class="custom-select" id="sqacriteria" v-model='criteria' style="font-family: consola;font-weight: 700;" >
+                  <select class="custom-select" id="sqacriteria" v-model='criteria'>
                     <option value="default">Select ...</option>
                     <option value="QC.Sty">QC.Sty</option>
                     <option value="QC.Uni">QC.Uni</option>
@@ -42,7 +42,7 @@
 
 
               <div v-show="showSelect" class="col-12 col-md-6" style="display:grid;">
-                <label>Select a service</label>
+                <label>Select the service</label>
                 <select class="custom-select" id="service" v-model='service' >
                   <option value="default">Choose a service...</option>
                   <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
@@ -131,7 +131,7 @@
                             v-model="tox.env">
                     </base-input>
                     <div class="col-2"  style="padding-top:30px;padding-left:0px;">
-                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="addTestEnv()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD</button>
+                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="addTestEnv()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD Tox Env</button>
                     </div>
                   </div>
                   <span v-show="showErrorEnv" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
@@ -166,7 +166,7 @@
 
                 </div>
                 <div class="col-2" style="padding-top:30px;">
-                  <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCommand()"><i class="fa fa-plus"></i>ADD</button>
+                  <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCommand()"><i class="fa fa-plus"></i>ADD Command</button>
                 </div>
               </div>
             </div>
