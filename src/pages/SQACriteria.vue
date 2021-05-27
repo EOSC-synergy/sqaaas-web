@@ -197,7 +197,7 @@
             </div> -->
           <template>
             <div v-show="showCriteria" style="padding-top:20px;margin-bottom:2rem;">
-                <span class="custom-label">Configured Criterias</span>
+                <span class="custom-label">Configured Criteria</span>
                 <div class="table-responsive">
                   <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                       <thead>
