@@ -271,8 +271,8 @@
                         <div class="table-responsive">
                           <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                               <thead>
-                                  <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">KEY</th>
-                                  <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">VALUE</th>
+                                  <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">key</th>
+                                  <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">value</th>
                                   <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">REMOVE</th>
                               </thead>
                               <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->

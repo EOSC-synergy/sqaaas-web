@@ -56,7 +56,7 @@
                 <div class="col-12 col-md-12 text-left">
 
                     <base-input style="padding-top:1rem;" type="text" class="no-margin"
-                          label="Path to Dockerfile"
+                          label="Dockerfile location"
                           :disabled="false"
                           placeholder="./"
                           v-model="path_dockerfile">
@@ -65,12 +65,12 @@
                         <span v-show="showErrorPathDockerfile" style="color:red;font-size:12px;">This field is required</span>
                     </div>
                       <base-input style="padding-top:1rem;" type="text" class="no-margin"
-                          label="Enter the url of the registry (Optional)"
+                          label="Docker registry URL (Optional)"
                           :disabled="false"
                           placeholder="https://hub.docker.com/"
                           v-model="url_service">
                     </base-input>
-                    <label for="" style="padding-top:20px;">ARG (OPTIONAL)</label>
+                    <label for="" style="padding-top:20px;">Build arguments (OPTIONAL)</label>
                     <div class="row" >
                       <base-input class="col-12 col-md-5" type="text"
                             label="Key"
@@ -105,7 +105,7 @@
                     </div>
 
                     <div class="row" style="padding-bottom:20px;">
-                      <span class="custom-label">Push Image</span><base-checkbox name="env" v-model="showBuildImage"></base-checkbox>
+                      <span class="custom-label">Would you like to push the Docker image to a registry (e.g. Docker Hub)?</span><base-checkbox name="env" v-model="showBuildImage"></base-checkbox>
                     </div>
 
                     <div v-show='showBuildImage'>
