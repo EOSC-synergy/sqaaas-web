@@ -27,7 +27,7 @@
                                         <li @click="menuChange('3')" data-target="#step3" class="step3 general-step">
                                           <sidebar-link to="/auth/sqa-criteria">
                                             <!-- <i class="nc-icon nc-tap-01"></i> -->
-                                            <span class="step">3</span> <span class="title">criterias</span>
+                                            <span class="step">3</span> <span class="title">criteria</span>
                                           </sidebar-link>
                                             <!-- <a href="#tab3" data-toggle="tab"> <span class="step">3</span> <span class="title">Domain Setup</span> </a> -->
                                         </li>

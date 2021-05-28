@@ -36,7 +36,7 @@
                                 </div>
                             </li>
                             <li role="presentation" class="step3 general-step">
-                                <a href="#step3" @click="menuChange('3')" data-toggle="tab" aria-controls="step3" role="tab"><span class="round-tab">3</span> <i style="font-size:16px;">CRITERIAS</i></a>
+                                <a href="#step3" @click="menuChange('3')" data-toggle="tab" aria-controls="step3" role="tab"><span class="round-tab">3</span> <i style="font-size:16px;">CRITERIA</i></a>
                                  <div v-show="this.current_step==3" style="margin-top:40px;" >
                                   <p>Arrange the pipeline steps according to the supported quality criteria. Each criterion will prompt you for the relevant details to get it done (e.g. build parameters).</p>
                                 </div>

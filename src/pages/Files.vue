@@ -98,7 +98,7 @@
 
                   <div class="col-12 col-md-8">
                     <p class="text-left" style="font-size:14px;">
-                      <strong style="font-weight:bold;">SQA Criterias:</strong> {{''}}
+                      <strong style="font-weight:bold;">SQA Criteria:</strong> {{''}}
                     </p>
                   </div>
 

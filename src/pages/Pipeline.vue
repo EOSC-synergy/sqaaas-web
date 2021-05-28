@@ -326,7 +326,7 @@
           this.$store.state.status = '';
           this.$store.state.build_url = '';
           this.loading = false;
-          this.notifyVue("Error ", response.status +": Pipeline has not been execute",'nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error ", response.status +": Pipeline has not been executed",'nc-icon nc-simple-remove','danger')
 
         }else{
           this.autoRefresh = false;
