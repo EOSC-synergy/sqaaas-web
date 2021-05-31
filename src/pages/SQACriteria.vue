@@ -13,7 +13,7 @@
           <template class="card-body">
             <div style="margin:0px 0px 2rem 0px;">
               <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;">
-                <div class="col-6">
+                <div class="col-6 mx-auto">
                   <label> Choose a criteria</label>
                   <select class="custom-select" id="sqacriteria" v-model='criteria'>
                     <option value="default">Select ...</option>
@@ -33,7 +33,7 @@
                   <p style="margin-bottom:0px"><i><u>Improves:</u></i> {{(info[criteria]) ? info[criteria].p2 : ''}}</p>
                 </div>
               </div>
-              <div >
+              <div class="text-center">
                 <span v-show="showErrorCriteria" style="color:red; font-size:12px;padding-left:20px;">You must select a valid criteria</span>
               </div>
             </div>
@@ -96,9 +96,9 @@
                 </table>
               </div>
             </div>
-            <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
-              <h4 style="font-weight:700;padding-left:15px;">Builder settings</h4>
-              <p style="padding-left:15px;">According to the programming language in use, you can choose between builders. As a catch-all builder you might prefer to use the list of commands that you commonly use for carrying out the work aligned with the given criterion.</p>
+            <div v-show="criteria != 'default'" class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
+              <h5 style="font-weight:700;padding-left:15px;">Builder settings</h5>
+              <p style="padding-left:15px;font-size:14px;">According to the programming language in use, you can choose between builders. As a catch-all builder you might prefer to use the list of commands that you commonly use for carrying out the work aligned with the given criterion.</p>
               <div class="col-12 col-md-6">
                 <label> Choose a builder tool</label>
                 <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
