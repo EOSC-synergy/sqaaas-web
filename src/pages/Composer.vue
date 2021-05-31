@@ -113,7 +113,7 @@
                         <p><i style="color:#E09E37;" class="fa fa-bell" aria-hidden="true"></i> You can use the environment variables of the Step 1 and the <a href="https://plugins.jenkins.io/git/#environment-variables" target="blank">Jenkins Git Plugin.</a></p>
                       </div>
                       <div style="margin-bottom:10px;">
-                        <base-input  type="text" class="no-margin"
+                        <base-input  type="text" class="no-margin" style="padding-left:20px;"
                             label="Image Name"
                             :disabled="false"
                             placeholder="Name of the image used by the container. Example: worsica/worsica-backend"
@@ -334,8 +334,8 @@
                 <button type="button" class="btn-outline btn btn-info" @click="addService()"><i class="fa fa-plus"></i>ADD SERVICE</button>
               </div>
 
-              <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;padding-left:20px;">
-                <span class="custom-label">Configured Services</span>
+              <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;">
+                <span class="custom-table-title">Configured Services</span>
                 <div class="table-responsive">
                   <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                       <thead>
@@ -998,6 +998,16 @@ input[type=number]::-webkit-inner-spin-button {
 
 .accordion-head > .collapsed > i:before{
     content: "\f105";
+}
+
+.custom-table-title{
+  padding-top:5px;
+  /* padding-left:20px; */
+  text-transform: uppercase;
+  font-size:16px;
+  color:black;
+  font-weight:700,
+
 }
 
 
