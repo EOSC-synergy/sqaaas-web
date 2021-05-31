@@ -12,7 +12,7 @@
           </template>
           <template class="card-body">
             <div style="margin:0px 0px 2rem 0px;">
-              <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;">
+              <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right: 15px;">
                 <div class="col-6">
                   <label> Choose a criteria</label>
                   <select class="custom-select" id="sqacriteria" v-model='criteria'>
@@ -24,7 +24,7 @@
                     <option value="QC.Doc">QC.Doc</option>
                   </select>
                 </div>
-                <div v-show="criteria != 'default'" class="col-12" style="padding-top:20px;">
+                <div v-show="criteria != 'default'" class="col-12" style="margin-top:20px;;background-color:#E1DFDE;border-radius:5px;">
                   <p style="margin-bottom:0px;">
                     <span style="font-weight:700; font-family: consola;"> {{criteria}}: </span>
                     <span style="font-style:italic;">{{(info[criteria]) ? info[criteria].p1 : ''}}</span>
@@ -186,18 +186,9 @@
             <div class="text-right" style="padding-top:4rem;padding-bottom:10px;">
               <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
             </div>
-          </template>
-        </card>
-        <card>
-          <template slot="header">
-            <!-- <h4 class="card-title text-center">ADD Criteria</h4> -->
-          </template>
-            <!-- <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
-              <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
-            </div> -->
-          <template>
-            <div v-show="showCriteria" style="padding-top:20px;margin-bottom:2rem;">
-                <span class="custom-label">Configured Criteria</span>
+
+            <div v-show="showCriteria" style="padding-top:40px;margin-bottom:2rem;">
+                <span class="custom-table-title" style="te">Configured Criteria</span>
                 <div class="table-responsive">
                   <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                       <thead>
@@ -300,18 +291,18 @@
                       </tbody>
                   </table>
                 </div>
-              </div>
-          </template>
-          <div class="row" style="margin-top:2rem; margin-bottom:2rem;">
-            <div class="col-12 col-md-12 text-center">
-                <button @click="back()" type="button" class="btn btn-next-back btn-back" >
-                    BACK
-                </button>
-                <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
-                    NEXT
-                </button>
             </div>
-          </div>
+            <div class="row" style="margin-top:2rem; margin-bottom:2rem;">
+              <div class="col-12 col-md-12 text-center">
+                  <button @click="back()" type="button" class="btn btn-next-back btn-back" >
+                      BACK
+                  </button>
+                  <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
+                      NEXT
+                  </button>
+              </div>
+            </div>
+          </template>
         </card>
       <!-- </div> -->
       </div>
@@ -439,7 +430,7 @@
         }else{
           this.show_link = false;
           this.showSelect = false;
-          this.showErrorCriteria = true;
+          // this.showErrorCriteria = true;
         }
       },
       'repository'(val){
@@ -828,6 +819,15 @@
   }
 </script>
 <style scoped>
+.custom-table-title{
+  padding-top:5px;
+  /* padding-left:20px; */
+  text-transform: uppercase;
+  font-size:16px;
+  color:black;
+  font-weight:700,
+
+}
 .custom-label{
   padding-top:5px;
   padding-left:20px;

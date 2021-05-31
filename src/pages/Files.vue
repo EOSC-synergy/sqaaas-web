@@ -258,6 +258,10 @@
                             <button class="btn btn-outline-secondary" :disabled='showErrorPullRequest' style="border-width:1px; border-color:#3472F7;color:#3472F7;" type="button" @click="pullrequest()">Pull  <i class="fa fa-upload" aria-hidden="true"></i></button>
                           </div>
                         </div>
+                        <label >Branch (Optional)</label>
+                        <div class="">
+                          <input type="text"  class="form-control" placeholder="master" aria-label="master" aria-describedby="basic-addon2" v-model="repo_pull_request_branch">
+                        </div>
                       </div>
                       <!-- <span v-show="showErrorPullRequest==false" style="padding-left:30px;color:red; font-size:12px;">This field is required.</span> -->
                       <div v-show="showURL" class="text-center" style="text-decoration: underline;">
@@ -390,6 +394,7 @@
         loading: false,
         loading_create: false,
         repo_pull_request:'',
+        repo_pull_request_branch:'',
         showErrorPullRequest:true,
         pull_request_url: '',
         disable_status: true,
@@ -727,7 +732,8 @@
           this.showErrorPullRequest = false;
           this.loading = true;
           var data = {
-            "repo": this.repo_pull_request
+            "repo": this.repo_pull_request,
+            "branch": this.repo_pull_request_branch
           }
           this.pullRequestCall(this.pipeline_id,data,this.pullRequestCallBack);
 

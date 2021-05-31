@@ -81,8 +81,8 @@
                     <button type="button" class="btn-outline btn btn-info" @click="addRepo();track()"><i class="fa fa-plus"></i>ADD REPOSITORY</button>
                   </div>
 
-                  <div v-show="showRepo" style="padding-top:20px;padding-left:20px;">
-                    <span class="custom-label">Configured Repositories</span>
+                  <div v-show="showRepo" style="padding-top:20px;">
+                    <span class="custom-table-title">Configured Repositories</span>
                     <div class="table-responsive">
                       <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                           <thead>
@@ -883,5 +883,15 @@ input[type=number]::-webkit-inner-spin-button {
         max-width: 70%;
     }
   }
+
+  .custom-table-title{
+  padding-top:5px;
+  /* padding-left:20px; */
+  text-transform: uppercase;
+  font-size:16px;
+  color:black;
+  font-weight:700,
+
+}
 
 </style>
