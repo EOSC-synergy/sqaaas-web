@@ -316,7 +316,7 @@
                       <span>Build URL:  </span><a style="text-decoration: underline;" :href="build_url" target="_blank">Click here!</a>
                     </div>
                     <div style="padding-bottom:15px;" class="text-center" v-show="showStatus">
-                      <span style="font-weight:700;">{{build_status}}</span>
+                      <span style="font-weight:700;">{{possible_status[build_status]}}</span>
                       <i v-if="build_status == 'SUCCESS'" style="color:green;" class="fa fa-check" aria-hidden="true"></i>
                       <i v-else-if ="build_status == 'FAILURE'" style="color:red;" class="fa fa-times" aria-hidden="true"></i>
                       <i v-else style="color:red;" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
@@ -416,7 +416,16 @@
         t:'',
         disable_cancel : true,
         autoRefresh:false,
-        modal_message : ''
+        modal_message : '',
+        possible_status:{
+          'WAITING_FOR_SCAN':'SCANING ORGANIZATION',
+          'NOT_EXECUTED':'NOT EXECUTED',
+          'NOT_EXECUTED':'NOT EXECUTED',
+          'QUEUED':'QUEUED',
+          'RUNNING':'RUNNING',
+          'SUCCESS':'SUCCESS',
+          'FAILURE':'FAILURE',
+        }
 		}
     },
     watch:{
@@ -631,9 +640,9 @@
           if (response.data.build_url){
             this.disable_status = false;
             this.showCard = true;
-            this.build_url = response.data.build_url;
-            this.$store.state.build_url = this.build_url;
-            this.showBuildUrl = true;
+            // this.build_url = response.data.build_url;
+            // this.$store.state.build_url = this.build_url;
+            // this.showBuildUrl = true;
             this.autoRefresh = true;
             this.showFieldsPipeline = false;
 
