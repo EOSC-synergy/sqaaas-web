@@ -123,7 +123,14 @@
                   <span v-show="showErrorFile" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
                 </div>
                 <div class="col-12 col-md-6" style="display:grid;">
-                  <div style="display:flex;">
+                  <label >Test ENV</label>
+                  <div class="input-group">
+                    <input type="text" style="height: 42px;border-right: 1px solid #AAAAAA;" class="form-control" placeholder="https://github.com/EOSC-synergy/sqaaas-web.git" aria-label="https://github.com/EOSC-synergy/sqaaas-web.git" aria-describedby="basic-addon2" v-model="tox.env">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary" style="border-width:1px; border-color:#3472F7;color:#3472F7;" type="button"  @click="addTestEnv()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD</button>
+                    </div>
+                  </div>
+                  <!-- <div style="display:flex;">
                     <base-input type="text" class="col-10 no-margin"
                             label="Test env"
                             :disabled="false"
@@ -133,17 +140,17 @@
                     <div class="col-2"  style="padding-top:30px;padding-left:0px;">
                       <button type="button" class="btn-simple btn btn-xs btn-info" @click="addTestEnv()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD Tox Env</button>
                     </div>
-                  </div>
+                  </div> -->
                   <span v-show="showErrorEnv" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
 
                 </div>
 
             </div>
-            <div v-show="show_tool_tox" style="padding-top:20px;padding-right:15px;margin-bottom:2rem;">
+            <div v-show="show_tool_tox" style="padding-top:20px;padding-left:15px;;margin-bottom:2rem;">
               <span class="custom-label">Test Env</span>
 
               <ul class="list-group">
-                <li style="padding-left:40px;" class="list-group-item d-flex justify-content-between"
+                <li style="padding-bottom:0px;padding-top:0px;" class="list-group-item d-flex justify-content-between"
                   v-for="(env,key) in testenv"
                   :key="key"
                 >
@@ -154,8 +161,18 @@
               </ul>
             </div>
             <div class="row" style="padding-top:20px;" v-show="showCommandBuilder">
-              <div class="col-12 row">
-                <div class="col-10">
+              <div class="col-12" style="padding-left:30px;">
+
+                <label>Command</label>
+                <div class="input-group">
+                  <input type="text" style="height: 42px;border-right: 1px solid #AAAAAA;" class="form-control" placeholder="npm install" aria-describedby="basic-addon2" v-model="command">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" style="border-width:1px; border-color:#3472F7;color:#3472F7;" type="button"  @click="addCommand()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD</button>
+                  </div>
+                </div>
+                <span v-show="showErrorCommand" style="padding-left:20px;color:red; font-size:12px;">This field is required</span>
+
+                <!-- <div class="col-10">
                   <base-input style="padding-left:15px;" type="text" class="no-margin"
                           label="Command"
                           :disabled="false"
@@ -164,16 +181,16 @@
                   </base-input>
                   <span v-show="showErrorCommand" style="padding-left:20px;color:red; font-size:12px;">This field is required</span>
 
-                </div>
-                <div class="col-2" style="padding-top:30px;">
+                </div> -->
+                <!-- <div class="col-2" style="padding-top:30px;">
                   <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCommand()"><i class="fa fa-plus"></i>ADD Command</button>
-                </div>
+                </div> -->
               </div>
             </div>
-            <div v-show="showCommands" style="padding-top:20px;padding-right:15px;margin-bottom:2rem;">
+            <div v-show="showCommands" style="padding-top:20px;padding-left:15px;margin-bottom:2rem;">
               <span class="custom-label">Commands</span>
               <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between"
+                <li style="padding-bottom:0px;padding-top:0px;" class="list-group-item d-flex justify-content-between"
                   v-for="(command,key) in commands"
                   :key="key"
                 >
@@ -454,8 +471,6 @@
       'tox.file'(val){
         if(val != ''){
           this.showErrorFile = false;
-        }else{
-          this.showErrorFile = true;
         }
       }
     },
@@ -612,9 +627,6 @@
           })
       },
       addCriteria(){
-        console.log(this.commands)
-        console.log(this.testenv)
-
         // || (this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0)
         if(this.criteria == 'default' || this.service == "default" || (this.commands.length == 0 && this.testenv.length == 0) ){
           if(this.criteria == 'default'){
@@ -684,7 +696,7 @@
             repo=Object.assign(repo, commands)
           }
            if (this.testenv.length > 0){
-            repo=Object.assign(repo, tox)
+            repo['tox']=Object.assign({},repo['tox'], tox)
           }
           this.repos["repos"].push(repo)
           this.selected_criteria[this.criteria]=Object.assign({}, this.selected_criteria[this.criteria], this.repos)
