@@ -646,12 +646,9 @@
                   this.showErrorCommand = true;
                 }
               }else if(this.builder_tool == 'tox'){
-                if(this.tox.env == '' || this.tox.file == ''){
+                if(this.tox.env == ''){
                   if(this.tox.env == '' ){
                     this.showErrorEnv = true
-                  }
-                  if(this.tox.file == '' ){
-                    this.showErrorFile = true
                   }
                 }
               }
@@ -743,12 +740,9 @@
         this.testenv = [];
       },
       addTestEnv(){
-        if(this.tox.env == '' || this.tox.file == ''){
+        if(this.tox.env == ''){
           if(this.tox.env == '' ){
             this.showErrorEnv = true
-          }
-          if(this.tox.file == '' ){
-            this.showErrorFile = true
           }
         }else{
           this.showErrorEnv = false
@@ -761,7 +755,7 @@
       },
       removetestEnv(key){
         this.$delete(this.testenv,key)
-        if (this.isEmpty(this.testenv) || this.tox.file == '') {
+        if (this.isEmpty(this.testenv)) {
           this.show_tool_tox = false;
         }
 

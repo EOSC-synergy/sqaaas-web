@@ -730,7 +730,7 @@
           this.showErrorPullRequest = true;
         }else{
           this.showErrorPullRequest = false;
-          this.loading = true;
+          this.loading_create = true;
           var data = {
             "repo": this.repo_pull_request,
             "branch": this.repo_pull_request_branch
@@ -753,7 +753,7 @@
         }else{
           this.notifyVue("Error ", response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
         }
-        this.loading = false;
+        this.loading_create = false;
 
       },
 
