@@ -12,10 +12,10 @@
           </template>
           <template class="card-body">
             <div style="margin:0px 0px 2rem 0px;">
-              <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;">
+              <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right: 15px;">
                 <div class="col-6">
                   <label> Choose a criteria</label>
-                  <select class="custom-select" id="sqacriteria" v-model='criteria' style="font-family: consola;font-weight: 700;" >
+                  <select class="custom-select" id="sqacriteria" v-model='criteria'>
                     <option value="default">Select ...</option>
                     <option value="QC.Sty">QC.Sty</option>
                     <option value="QC.Uni">QC.Uni</option>
@@ -24,7 +24,7 @@
                     <option value="QC.Doc">QC.Doc</option>
                   </select>
                 </div>
-                <div v-show="criteria != 'default'" class="col-12" style="padding-top:20px;">
+                <div v-show="criteria != 'default'" class="col-12" style="margin-top:20px;;background-color:#E1DFDE;border-radius:5px;">
                   <p style="margin-bottom:0px;">
                     <span style="font-weight:700; font-family: consola;"> {{criteria}}: </span>
                     <span style="font-style:italic;">{{(info[criteria]) ? info[criteria].p1 : ''}}</span>
@@ -33,7 +33,7 @@
                   <p style="margin-bottom:0px"><i><u>Improves:</u></i> {{(info[criteria]) ? info[criteria].p2 : ''}}</p>
                 </div>
               </div>
-              <div >
+              <div class="text-center">
                 <span v-show="showErrorCriteria" style="color:red; font-size:12px;padding-left:20px;">You must select a valid criteria</span>
               </div>
             </div>
@@ -42,7 +42,7 @@
 
 
               <div v-show="showSelect" class="col-12 col-md-6" style="display:grid;">
-                <label>Select a service</label>
+                <label>Select the service</label>
                 <select class="custom-select" id="service" v-model='service' >
                   <option value="default">Choose a service...</option>
                   <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
@@ -96,9 +96,9 @@
                 </table>
               </div>
             </div>
-            <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
-              <h4 style="font-weight:700;padding-left:15px;">Builder settings</h4>
-              <p style="padding-left:15px;">According to the programming language in use, you can choose between builders. As a catch-all builder you might prefer to use the list of commands that you commonly use for carrying out the work aligned with the given criterion.</p>
+            <div v-show="criteria != 'default'" class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
+              <h5 style="font-weight:700;padding-left:15px;">Builder settings</h5>
+              <p style="padding-left:15px;font-size:14px;">According to the programming language in use, you can choose between builders. As a catch-all builder you might prefer to use the list of commands that you commonly use for carrying out the work aligned with the given criterion.</p>
               <div class="col-12 col-md-6">
                 <label> Choose a builder tool</label>
                 <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
@@ -123,7 +123,14 @@
                   <span v-show="showErrorFile" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
                 </div>
                 <div class="col-12 col-md-6" style="display:grid;">
-                  <div style="display:flex;">
+                  <label >Test ENV</label>
+                  <div class="input-group">
+                    <input type="text" style="height: 42px;border-right: 1px solid #AAAAAA;" class="form-control" placeholder="https://github.com/EOSC-synergy/sqaaas-web.git" aria-label="https://github.com/EOSC-synergy/sqaaas-web.git" aria-describedby="basic-addon2" v-model="tox.env">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary" style="border-width:1px; border-color:#3472F7;color:#3472F7;" type="button"  @click="addTestEnv()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD</button>
+                    </div>
+                  </div>
+                  <!-- <div style="display:flex;">
                     <base-input type="text" class="col-10 no-margin"
                             label="Test env"
                             :disabled="false"
@@ -131,19 +138,19 @@
                             v-model="tox.env">
                     </base-input>
                     <div class="col-2"  style="padding-top:30px;padding-left:0px;">
-                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="addTestEnv()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD</button>
+                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="addTestEnv()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD Tox Env</button>
                     </div>
-                  </div>
+                  </div> -->
                   <span v-show="showErrorEnv" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
 
                 </div>
 
             </div>
-            <div v-show="show_tool_tox" style="padding-top:20px;padding-right:15px;margin-bottom:2rem;">
+            <div v-show="show_tool_tox" style="padding-top:20px;padding-left:15px;;margin-bottom:2rem;">
               <span class="custom-label">Test Env</span>
 
               <ul class="list-group">
-                <li style="padding-left:40px;" class="list-group-item d-flex justify-content-between"
+                <li style="padding-bottom:0px;padding-top:0px;" class="list-group-item d-flex justify-content-between"
                   v-for="(env,key) in testenv"
                   :key="key"
                 >
@@ -154,8 +161,18 @@
               </ul>
             </div>
             <div class="row" style="padding-top:20px;" v-show="showCommandBuilder">
-              <div class="col-12 row">
-                <div class="col-10">
+              <div class="col-12" style="padding-left:30px;">
+
+                <label>Command</label>
+                <div class="input-group">
+                  <input type="text" style="height: 42px;border-right: 1px solid #AAAAAA;" class="form-control" placeholder="npm install" aria-describedby="basic-addon2" v-model="command">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" style="border-width:1px; border-color:#3472F7;color:#3472F7;" type="button"  @click="addCommand()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD</button>
+                  </div>
+                </div>
+                <span v-show="showErrorCommand" style="padding-left:20px;color:red; font-size:12px;">This field is required</span>
+
+                <!-- <div class="col-10">
                   <base-input style="padding-left:15px;" type="text" class="no-margin"
                           label="Command"
                           :disabled="false"
@@ -164,16 +181,16 @@
                   </base-input>
                   <span v-show="showErrorCommand" style="padding-left:20px;color:red; font-size:12px;">This field is required</span>
 
-                </div>
-                <div class="col-2" style="padding-top:30px;">
-                  <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCommand()"><i class="fa fa-plus"></i>ADD</button>
-                </div>
+                </div> -->
+                <!-- <div class="col-2" style="padding-top:30px;">
+                  <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCommand()"><i class="fa fa-plus"></i>ADD Command</button>
+                </div> -->
               </div>
             </div>
-            <div v-show="showCommands" style="padding-top:20px;padding-right:15px;margin-bottom:2rem;">
+            <div v-show="showCommands" style="padding-top:20px;padding-left:15px;margin-bottom:2rem;">
               <span class="custom-label">Commands</span>
               <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between"
+                <li style="padding-bottom:0px;padding-top:0px;" class="list-group-item d-flex justify-content-between"
                   v-for="(command,key) in commands"
                   :key="key"
                 >
@@ -186,18 +203,9 @@
             <div class="text-right" style="padding-top:4rem;padding-bottom:10px;">
               <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
             </div>
-          </template>
-        </card>
-        <card>
-          <template slot="header">
-            <!-- <h4 class="card-title text-center">ADD Criteria</h4> -->
-          </template>
-            <!-- <div class="text-right" style="padding-top:1rem;padding-bottom:10px;">
-              <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
-            </div> -->
-          <template>
-            <div v-show="showCriteria" style="padding-top:20px;margin-bottom:2rem;">
-                <span class="custom-label">Configured Criterias</span>
+
+            <div v-show="showCriteria" style="padding-top:40px;margin-bottom:2rem;">
+                <span class="custom-table-title" style="te">Configured Criteria</span>
                 <div class="table-responsive">
                   <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                       <thead>
@@ -300,18 +308,18 @@
                       </tbody>
                   </table>
                 </div>
-              </div>
-          </template>
-          <div class="row" style="margin-top:2rem; margin-bottom:2rem;">
-            <div class="col-12 col-md-12 text-center">
-                <button @click="back()" type="button" class="btn btn-next-back btn-back" >
-                    BACK
-                </button>
-                <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
-                    NEXT
-                </button>
             </div>
-          </div>
+            <div class="row" style="margin-top:2rem; margin-bottom:2rem;">
+              <div class="col-12 col-md-12 text-center">
+                  <button @click="back()" type="button" class="btn btn-next-back btn-back" >
+                      BACK
+                  </button>
+                  <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
+                      NEXT
+                  </button>
+              </div>
+            </div>
+          </template>
         </card>
       <!-- </div> -->
       </div>
@@ -439,7 +447,7 @@
         }else{
           this.show_link = false;
           this.showSelect = false;
-          this.showErrorCriteria = true;
+          // this.showErrorCriteria = true;
         }
       },
       'repository'(val){
@@ -463,8 +471,6 @@
       'tox.file'(val){
         if(val != ''){
           this.showErrorFile = false;
-        }else{
-          this.showErrorFile = true;
         }
       }
     },
@@ -621,9 +627,6 @@
           })
       },
       addCriteria(){
-        console.log(this.commands)
-        console.log(this.testenv)
-
         // || (this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0)
         if(this.criteria == 'default' || this.service == "default" || (this.commands.length == 0 && this.testenv.length == 0) ){
           if(this.criteria == 'default'){
@@ -643,12 +646,9 @@
                   this.showErrorCommand = true;
                 }
               }else if(this.builder_tool == 'tox'){
-                if(this.tox.env == '' || this.tox.file == ''){
+                if(this.tox.env == ''){
                   if(this.tox.env == '' ){
                     this.showErrorEnv = true
-                  }
-                  if(this.tox.file == '' ){
-                    this.showErrorFile = true
                   }
                 }
               }
@@ -693,7 +693,7 @@
             repo=Object.assign(repo, commands)
           }
            if (this.testenv.length > 0){
-            repo=Object.assign(repo, tox)
+            repo['tox']=Object.assign({},repo['tox'], tox)
           }
           this.repos["repos"].push(repo)
           this.selected_criteria[this.criteria]=Object.assign({}, this.selected_criteria[this.criteria], this.repos)
@@ -740,12 +740,9 @@
         this.testenv = [];
       },
       addTestEnv(){
-        if(this.tox.env == '' || this.tox.file == ''){
+        if(this.tox.env == ''){
           if(this.tox.env == '' ){
             this.showErrorEnv = true
-          }
-          if(this.tox.file == '' ){
-            this.showErrorFile = true
           }
         }else{
           this.showErrorEnv = false
@@ -758,7 +755,7 @@
       },
       removetestEnv(key){
         this.$delete(this.testenv,key)
-        if (this.isEmpty(this.testenv) || this.tox.file == '') {
+        if (this.isEmpty(this.testenv)) {
           this.show_tool_tox = false;
         }
 
@@ -828,6 +825,15 @@
   }
 </script>
 <style scoped>
+.custom-table-title{
+  padding-top:5px;
+  /* padding-left:20px; */
+  text-transform: uppercase;
+  font-size:16px;
+  color:black;
+  font-weight:700,
+
+}
 .custom-label{
   padding-top:5px;
   padding-left:20px;
