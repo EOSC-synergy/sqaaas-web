@@ -4,12 +4,22 @@
 			<!-- <span>User: {{username}}</span> -->
       <div class="col-12 col-lg-8 mx-auto" >
         <div class="" style="margin:auto;">
-            <h4 style="margin-top:0px;font-weight:700;" class="card-title text-center">Code repositories are the substrate for the CI/CD pipeline work</h4>
+            <!--<h4 style="margin-top:0px;font-weight:700;" class="card-title text-center">Code repositories are the substrate for the CI/CD pipeline work</h4>-->
             <card style="height:75vh;overflow-y: auto;">
-              <template slot="header" >
-                <div class="text-center" style="padding-left:20px;padding-top:20px;">
-                  <!-- <p style="font-weight:700;">Code repositories are the substrate for the CI/CD pipeline work.</p> -->
-                  <p><i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i> CI/CD pipelines are commonly located next to the code, so they can react instantly to code changes. Nonetheless, alternative approaches maintain the pipelines in individual code repositories. Here you will be able to customize your CI/CD pipeline to adequate to one or both approaches (git code repositories only).</p>
+              <template slot="header">
+                <div style="display:flex;flex-direction:row">
+                  <div style="background-color:#ccc;padding-left:80px;padding-top:20px;padding-bottom:20px;width:60%">
+                    <!-- <p style="font-weight:700;">Code repositories are the substrate for the CI/CD pipeline work.</p> -->
+                    <h3 style="margin-top:0px;font-weight:700;" class="card-title">Code repositories are the substrate for the CI/CD pipeline work</h3>
+                    <p style="padding-top:20px">
+                        <!--<i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i>-->
+                        The ultimate benefit of CI/CD pipelines is that they react instantly to code changes. Having the CI/CD pipelines next to the code they act upon
+                        is the recommended approach.
+                    </p>
+                  </div>
+                  <div style="background-color:#ccc;padding-left:80px;padding-top:20px;width:40%">
+                    <img src="../../static/git.png" alt="" style="opacity: 0.5;">
+                  </div>
                 </div>
               </template>
 
@@ -81,10 +91,14 @@
                     <button type="button" class="btn-outline btn btn-info" @click="addRepo();track()"><i class="fa fa-plus"></i>ADD REPOSITORY</button>
                   </div>
 
-                  <div v-show="showRepo" style="padding-top:20px;">
-                    <span class="custom-table-title">Configured Repositories</span>
+                  <div v-show="showRepo" style="padding-top:40px;">
+                    <!--<span class="custom-table-title">Configured Repositories</span>-->
                     <div class="table-responsive">
-                      <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <table class="table" width="80%" cellpadding="0" cellspacing="0" border="0">
+                          <thead>
+                              <th style="text-align:center;justify-content: center;background-color:#C0C0C0;font-size:14px;width:100%;">Configured Repositories</th>
+                              <th style="text-align:center;justify-content: center;background-color:#C0C0C0;font-size:14px;width:100%;"/>
+                          </thead>
                           <thead>
                               <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repo</th>
                               <th style="text-align:center;justify-content: center;,padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
