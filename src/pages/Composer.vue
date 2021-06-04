@@ -3,15 +3,23 @@
     <div class="container-fluid">
       <div class="col-12 col-sm-12 col-lg-8 mx-auto" >
         <div class="" style="margin:auto;padding:0px;">
-          <h4 style="margin-top:0px;font-weight:700;" class="card-title text-center">Services are deployed as Docker containers that will make up the building and testing environment.</h4>
-          <card style="height:90vh;overflow-y: auto;">
+          <card style="height:31vh;overflow-y: auto;">
             <template slot="header">
-              <div class="text-center" style="padding-left:20px;padding-top:20px;">
-                <!-- <p style="font-weight:700;">Services are deployed as Docker containers that will make up the building and testing environment.</p> -->
-                <p><i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i> Here you will be able to compose your testing environment by either obtaining Docker images from explicit registries (defaults to Docker Hub) or building your own images through Dockerfiles. The latter will allow you to push the resultant image to the remote Docker registry.</p>
-              </div>
+                <div style="display:flex;flex-direction:row">
+                  <div style="background-color:#e6ede8;padding-left:100px;padding-top:20px;padding-bottom:10px;width:80%">
+                    <h3 style="margin-top:0px;font-weight:700;" class="card-title">Services make up the testing and building environment</h3>
+                    <p style="padding-top:20px">
+                        <!--<i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i>-->
+                        Compose your environment by means of Docker containers, either pulling existing images from registries (e.g. from Docker Hub) or building your own (e.g. Dockerfiles)
+                    </p>
+                  </div>
+                  <div style="background-color:#e6ede8;padding-left:80px;padding-top:60px;padding-bottom:20px;width:30%">
+                    <img src="../../static/service.png" alt="" style="opacity: 0.5">
+                  </div>
+                </div>
             </template>
-
+          </card>
+          <card>
             <template>
               <div class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
                 <div class="col-12 col-md-6">
