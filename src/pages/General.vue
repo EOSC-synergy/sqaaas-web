@@ -5,24 +5,25 @@
       <div class="col-12 col-lg-8 mx-auto" >
         <div class="" style="margin:auto;">
             <!--<h4 style="margin-top:0px;font-weight:700;" class="card-title text-center">Code repositories are the substrate for the CI/CD pipeline work</h4>-->
-            <card style="height:75vh;overflow-y: auto;">
+            <card style="height:30vh;overflow-y: auto;">
               <template slot="header">
                 <div style="display:flex;flex-direction:row">
-                  <div style="background-color:#ccc;padding-left:80px;padding-top:20px;padding-bottom:20px;width:60%">
-                    <!-- <p style="font-weight:700;">Code repositories are the substrate for the CI/CD pipeline work.</p> -->
-                    <h3 style="margin-top:0px;font-weight:700;" class="card-title">Code repositories are the substrate for the CI/CD pipeline work</h3>
+                  <div style="background-color:#e6ede8;padding-left:100px;padding-top:20px;padding-bottom:10px;width:80%">
+                    <h3 style="margin-top:0px;font-weight:700;" class="card-title">Code repositories are the substrate for the CI/CD pipelines</h3>
                     <p style="padding-top:20px">
                         <!--<i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i>-->
                         The ultimate benefit of CI/CD pipelines is that they react instantly to code changes. Having the CI/CD pipelines next to the code they act upon
                         is the recommended approach.
                     </p>
                   </div>
-                  <div style="background-color:#ccc;padding-left:80px;padding-top:20px;width:40%">
+                  <div style="background-color:#e6ede8;padding-left:80px;padding-top:55px;padding-bottom:10px;width:30%">
                     <img src="../../static/git.png" alt="" style="opacity: 0.5;">
                   </div>
                 </div>
               </template>
+            </card>
 
+            <card>
               <template>
                   <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
                     <div style="display:contents" class="col-12 col-md-6">
