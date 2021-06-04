@@ -19,12 +19,53 @@
           <span class="fas fa-spinner fa-3x fa-spin"></span>
         </div>
         <div class="col-12 col-sm-12 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
-          <!-- <h4 style="margin-top:0px;" class="card-title text-center">Information Summary</h4> -->
-          <card
-                  body-classes=""
-            >
+          <card body-classes="">
               <template slot="header">
-                <h4 class="card-title text-center" style="font-weight:700;">Information Summary</h4>
+                <div style="display:flex;flex-direction:row;padding-bottom:20px">
+                  <div style="background-color:#c2edd6;padding-left:80px;padding-top:80px;padding-bottom:60px;width:60%">
+                    <h2 style="margin-top:0px;font-weight:700;" class="card-title">Your pipeline has been successfully created!</h2>
+                    <div style="padding-top:20px">
+                      <button class="btn btn-primary btn-fill" @click="generateFiles()">Download</button>
+                    </div>
+                  </div>
+                  <div style="background-color:#c2edd6;padding-left:80px;padding-top:20px;width:40%">
+                    <img src="../../static/pipeline.png" alt="" style="opacity: 0.5;">
+                  </div>
+                </div>
+              </template>
+          </card>
+
+          <card body-classes="">
+              <template>
+                <div style="padding: 40px 40px 40px 40px;">
+                  <h3 class="text-center">Discover the additional features we provide</h3>
+                </div>
+                <div style="display:flex;flex-direction:row;justify-content:center">
+                  <div>
+                    <a href="#" style="color:inherit">
+                      <img src="../../static/summary.png" alt="" style="opacity:0.5;height:120px;width:100px">
+                      <p class="text-center" style="font-size:22px;font-weight:bold;opacity:0.5;width:100px">Summary of the setup</p>
+                    </a>
+                  </div>
+                  <div style="padding-left:100px">
+                    <a href="#" style="color:inherit">
+                      <img src="../../static/jepl_files.png" alt="" style="opacity:0.5;height:120px;width:100px">
+                      <p class="text-center" style="font-size:22px;font-weight:bold;opacity:0.5;width:100px">JePL config files</p>
+                    </a>
+                  </div>
+                  <div style="padding-left:100px">
+                    <a href="#" style="color:inherit">
+                      <img src="../../static/pull-request.png" alt="" style="opacity:0.5;height:120px;width:100px">
+                      <p class="text-center" style="font-size:22px;font-weight:bold;opacity:0.5;width:100px">Pull request</p>
+                    </a>
+                  </div>
+                  <div style="padding-left:100px">
+                    <a href="#" style="color:inherit">
+                      <img src="../../static/execution.jpg" alt="" style="opacity:0.5;height:120px;width:100px">
+                      <p class="text-center" style="font-size:22px;font-weight:bold;opacity:0.5;width:100px">Pipeline execution</p>
+                    </a>
+                  </div>
+                </div>
               </template>
 
               <template >
