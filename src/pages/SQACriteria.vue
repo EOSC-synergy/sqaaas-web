@@ -2,41 +2,57 @@
   <div class="content" style="background-color:#f8f9fa;">
     <div class="container-fluid">
       <div class="col-12 col-sm-12 col-lg-8 mx-auto" style="margin:auto;padding:0px;">
-        <h4 style="margin-top:0px;font-weight:700;" class="card-title text-center">The quality criteria allows you to define the work expected of the CI/CD pipeline. It is then the underpinning part where the pipeline’s purpose takes shape.</h4>
-        <card >
+        <card style="height:30vh;">
           <template slot="header">
-            <div class="text-center" style="padding-left:20px;padding-top:20px;">
-              <!-- <p style="font-weight:700;">The quality criteria allows you to define the work expected of the CI/CD pipeline. It is then the underpinning part where the pipeline’s purpose takes shape.</p> -->
-              <p><i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i> Use the dropdown list to select the specific criterion you would like to fulfill. Then fill in the requested data.</p>
+            <div style="display:flex;flex-direction:row">
+              <div style="background-color:#e6ede8;padding-left:100px;padding-top:20px;padding-bottom:10px;width:80%">
+                <h3 style="margin-top:0px;font-weight:700;" class="card-title">Quality criteria define the CI/CD pipeline work</h3>
+                <p style="padding-top:20px">
+                    <!--<i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i>-->
+                    It is then the underpinning part where the pipeline’s purpose takes shape. The associated properties for each criterion will be displayed once selected in the dropdown list below
+                </p>
+              </div>
+              <div style="background-color:#e6ede8;padding-left:80px;padding-top:35px;padding-bottom:10px;width:30%">
+                <img src="../../static/criteria.png" alt="" style="opacity: 0.4">
+              </div>
             </div>
           </template>
+        </card>
+
+        <card >
           <template class="card-body">
-            <div style="margin:0px 0px 2rem 0px;">
-              <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right: 15px;">
-                <div class="col-6">
-                  <label> Choose a criteria</label>
-                  <select class="custom-select" id="sqacriteria" v-model='criteria'>
-                    <option value="default">Select ...</option>
-                    <option value="QC.Sty">QC.Sty</option>
-                    <option value="QC.Uni">QC.Uni</option>
-                    <option value="QC.Fun">QC.Fun</option>
-                    <option value="QC.Sec">QC.Sec</option>
-                    <option value="QC.Doc">QC.Doc</option>
-                  </select>
+              <div style="margin:0px 0px 2rem 0px;">
+                <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right: 15px;">
+                    <div class="col-6" style="margin:auto;padding-bottom:10px">
+                      <label> Choose a criteria</label>
+                      <select class="custom-select" id="sqacriteria" v-model='criteria'>
+                        <option value="default">Select ...</option>
+                        <option value="QC.Sty">QC.Sty</option>
+                        <option value="QC.Uni">QC.Uni</option>
+                        <option value="QC.Fun">QC.Fun</option>
+                        <option value="QC.Sec">QC.Sec</option>
+                        <option value="QC.Doc">QC.Doc</option>
+                      </select>
+                    </div>
+                    <div v-show="criteria != 'default'" class="col-8" style="margin:auto;border-radius:5px;">
+                      <div class="quote-custom">
+                      <!--<p style="margin-bottom:0px;padding-left:100px;padding-top:20px">
+                        <span style="padding-left:150px;font-weight:700;font-size:40px;font-family: consola;"> {{criteria}}: </span>-->
+                        <p style="padding-left:120px;font-weight:700;font-size:20px;font-style:italic;">{{(info[criteria]) ? info[criteria].p1 : ''}}
+                        (<a style="text-decoration: underline" :href="(info[criteria]) ? info[criteria]['link'] : ''" target="_blank">See More</a>)</p>
+                      <!--</p>-->
+                      </div>
+<!--
+                      <p style="margin-bottom:0px"><i><u>Improves:</u></i> {{(info[criteria]) ? info[criteria].p2 : ''}}</p>
+-->
+                    </div>
                 </div>
-                <div v-show="criteria != 'default'" class="col-12" style="margin-top:20px;;background-color:#E1DFDE;border-radius:5px;">
-                  <p style="margin-bottom:0px;">
-                    <span style="font-weight:700; font-family: consola;"> {{criteria}}: </span>
-                    <span style="font-style:italic;">{{(info[criteria]) ? info[criteria].p1 : ''}}</span>
-                    (<a style="text-decoration: underline" :href="(info[criteria]) ? info[criteria]['link'] : ''" target="_blank">See More</a>)
-                  </p>
-                  <p style="margin-bottom:0px"><i><u>Improves:</u></i> {{(info[criteria]) ? info[criteria].p2 : ''}}</p>
+                <div class="text-center">
+                  <span v-show="showErrorCriteria" style="color:red; font-size:12px;padding-left:20px;">You must select a valid criteria</span>
                 </div>
               </div>
-              <div class="text-center">
-                <span v-show="showErrorCriteria" style="color:red; font-size:12px;padding-left:20px;">You must select a valid criteria</span>
-              </div>
-            </div>
+
+
             <div class="row" style="margin:0px 0px 2rem 0px;">
 
 
@@ -895,4 +911,10 @@ input[type=number]::-webkit-inner-spin-button {
     }
   }
 
+.quote-custom {
+    height:90px;
+    background-image: url("../../static/quote.png");
+    background-repeat: no-repeat;
+    opacity:0.5;
+}
 </style>
