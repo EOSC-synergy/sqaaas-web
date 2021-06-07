@@ -109,9 +109,6 @@
                     </div>
 
                     <div v-show='showBuildImage'>
-                      <div class="row" style="padding-left:35px;">
-                        <p><i style="color:#E09E37;" class="fa fa-bell" aria-hidden="true"></i> You can use the environment variables of the Step 1 and the <a href="https://plugins.jenkins.io/git/#environment-variables" target="blank">Jenkins Git Plugin.</a></p>
-                      </div>
                       <div style="margin-bottom:10px;">
                         <base-input  type="text" class="no-margin" style="padding-left:20px;"
                             label="Image Name"
@@ -119,6 +116,9 @@
                             placeholder="Name of the image used by the container. Example: worsica/worsica-backend"
                             v-model="service.image">
                         </base-input>
+                        <div class="row" style="padding-left:55px;">
+                          <p style="font-style:italic;color: #A7A1A0;margin-bottom:0px;"><i style="color:#A7A1A0;" class="fa fa-bell" aria-hidden="true"></i> You can use the environment variables of the Step 1 and the <a href="https://plugins.jenkins.io/git/#environment-variables" target="blank">Jenkins Git Plugin.</a></p>
+                        </div>
                         <div class="col-12 text-right">
                             <span v-show="showErrorImageName" style="color:red;font-size:12px;">This field is required</span>
                         </div>
@@ -137,7 +137,9 @@
                                 placeholder="userpass"
                                 v-model="id_cred_service">
                             </base-input>
-                            <p style="color:#C79804;text-align:justify" ><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Before proceeding you will need to provide the ID of the credentials created in Jenkins or <a target="blank" href="https://jenkins.eosc-synergy.eu/"> go now</a> and create them.</p>
+                            <div class="row" style="padding-left:55px;">
+                              <p style="color:#A7A1A0;text-align:justify;margin-bottom:0px;" ><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Provide the ID of the credentials created in Jenkins or <a target="blank" href="https://jenkins.eosc-synergy.eu/"> go now</a> and create them.</p>
+                            </div>
                             <div class="col-12 text-right">
                                 <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
                             </div>
@@ -342,18 +344,25 @@
                 <div class="table-responsive">
                   <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                       <thead>
-                          <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Services</th>
+                          <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Service</th>
+                          <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Image</th>
                           <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Remove</th>
                           <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Push</th>
                       </thead>
                       <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
-                      <tbody v-for="(repo, index) in services" :key="index">
+                      <tbody v-for="(serv, index) in services" :key="index">
                               <tr
                                   style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
                                   <td
                                       style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                       <div style="text-align:left;">
                                           {{index}}
+                                      </div>
+                                  </td>
+                                  <td
+                                      style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <div style="text-align:left;">
+                                          {{serv.image.name}}
                                       </div>
                                   </td>
 
@@ -679,9 +688,6 @@ import services from '../services/services'
             if(this.service.image == ''){
               this.showErrorImageName = true
             }
-            if(this.id_cred_service == ''){
-              this.showErrorCredID = true;
-            }
           }
           if(this.pull_build=='build' && this.showBuildImage==true && this.showCredID==false && this.id_cred_service == '' ){
               this.showErrorCredID = true
@@ -723,7 +729,17 @@ import services from '../services/services'
 
             if(this.showBuildImage == true){
               this.services[this.service.container_name].image.registry.push = true;
-              this.services[this.service.container_name].image.name=this.service.image;
+              if(this.showCredID==true){
+                var add_org_name = this.service.image.split("/");
+                console.log(add_org_name)
+                if(add_org_name.length > 1){
+                  this.services[this.service.container_name].image.name='eoscsynergyapps/'+add_org_name[1];
+                }else{
+                  this.services[this.service.container_name].image.name='eoscsynergyapps/'+this.service.image;
+                }
+              }else{
+                this.services[this.service.container_name].image.name=this.service.image;
+              }
               this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
             }
 

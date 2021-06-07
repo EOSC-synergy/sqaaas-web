@@ -10,7 +10,7 @@
             <div>
               <p>Please, wait for this process to finish.</p>
             </div>
-            <div class="text-center">
+            <div v-show="build_status!=''" class="text-center">
               <p style="font-size:18px;font-weight:700;">Current State: {{build_status}}</p>
             </div>
             <div class="text-center">
@@ -401,7 +401,8 @@
         showErrorPullRequest:true,
         pull_request_url: '',
         disable_status: true,
-        yamlConfig:'',
+        yamlConfig:[],
+        // yamlScript:'',
         yamlComposer:'',
         yamlJenkinsfile:'',
         editor: '',
@@ -567,6 +568,7 @@
             this.disabled_button = true;
             this.showFiles = true;
             this.getConfigCall(this.pipeline_id,this.getConfigCallBack);
+            this.getBuilderScriptCall(this.pipeline_id,this.getBuilderScriptCallBack);
             this.getComposerCall(this.pipeline_id,this.getComposerCallBack);
             this.getJenkCall(this.pipeline_id,this.getJenkCallBack);
             this.notifyVue("Success","Pipeline updated successfully.",'nc-icon nc-check-2','info');
@@ -591,6 +593,7 @@
             this.disabled_button = true;
             this.showFiles = true;
             this.getConfigCall(this.pipeline_id,this.getConfigCallBack);
+            this.getBuilderScriptCall(this.pipeline_id,this.getBuilderScriptCallBack);
             this.getComposerCall(this.pipeline_id,this.getComposerCallBack);
             this.getJenkCall(this.pipeline_id,this.getJenkCallBack);
             this.disable_done = false;
@@ -813,17 +816,31 @@
       getConfigCallBack(response){
         console.log(response)
         if(response.status == 200){
-          //  this.yamlConfig= YAML.stringify(response.data, undefined, 2)
-           this.yamlConfig= response.data;
-           for (var i in this.yamlConfig){
-             var parts = this.yamlConfig[i].file_name.split("/");
-             this.yamlConfig[i].file_name = parts[parts.length - 1];
-             this.yamlConfig[i].content = YAML.stringify(this.yamlConfig[i].content, undefined, 2)
+          this.yamlConfig=[];
+          //  this.yamlConfig= response.data;
+           for (var i in response.data){
+             var parts = response.data[i].file_name.split("/");
+             var file = {
+               file_name:parts[parts.length - 1],
+               content: YAML.stringify(response.data[i].content, undefined, 2)
+             }
+             this.yamlConfig.push(file)
            }
            console.log(this.yamlConfig)
-          //  this.config_data[this.yamlConfig[0].file_name] = this.yamlConfig[0].content
-           this.config_data[this.yamlConfig[0].file_name] = YAML.stringify(this.yamlConfig[0].content, undefined, 2)
-          //  this.yamlConfig=  JSON.stringify(response.data, undefined, 2);
+          // this.getBuilderScriptCall(this.pipeline_id,this.getBuilderScriptCallBack);
+        }
+      },
+      getBuilderScriptCallBack(response){
+        console.log(response)
+        if(response.status == 200){
+          for (var i in response.data){
+             var parts = response.data[i].file_name.split("/");
+             var file = {
+               file_name:parts[parts.length - 1],
+               content: YAML.stringify(response.data[i].content, undefined, 2)
+             }
+             this.yamlConfig.push(file)
+           }
         }
       },
       getComposerCallBack(response){

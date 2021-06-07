@@ -126,6 +126,18 @@ export default {
         });
 
     },
+    getBuilderScriptCall(id,callBackHandler){
+         axios({
+          method: 'get',
+          url: this.env.api +'/'+id+'/config/scripts',
+        }).then(response => {
+            return callBackHandler(response);
+        })
+        .catch(error => {
+            return callBackHandler(error.response);
+        });
+
+    },
     getComposerCall(id,callBackHandler){
          axios({
           method: 'get',

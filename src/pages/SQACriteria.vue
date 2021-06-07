@@ -259,7 +259,7 @@
                               <tr>
 
                                 <td colspan="5">
-                                  <div :id="'criteria_'+index" class="row col-12" style="padding-top:20px;display:none;">
+                                  <div :id="'criteria_'+index" class="row col-12" style="display:none;justify-content: flex-end;">
                                     <div class="col-12 col-md-4" style="padding-top:28px;">
                                       <select class="custom-select" :id="'select_when_'+index" @change="selectWhen(index)">
                                         <!-- <option value="default"></option> -->
@@ -697,10 +697,10 @@
                   repo_url: (this.repository!='default')?this.repository:'',
                   container: this.service,
             }
-          if (this.commands.length > 0){
+          if (this.builder_tool == 'command'){
             repo=Object.assign(repo, commands)
           }
-           if (this.testenv.length > 0){
+           if (this.builder_tool == 'tox'){
             repo['tox']=Object.assign({},repo['tox'], tox)
           }
           this.repos["repos"].push(repo)
