@@ -37,35 +37,42 @@
 
           <card body-classes="">
               <template>
+              <div style="background-color:#dcf3f7">
                 <div style="padding: 40px 40px 40px 40px;">
                   <h3 class="text-center">Discover the additional features we provide</h3>
                 </div>
                 <div style="display:flex;flex-direction:row;justify-content:center">
                   <div>
                     <a href="#" style="color:inherit">
-                      <img src="../../static/summary.png" alt="" style="opacity:0.5;padding-left:45px;padding-bottom:10px">
-                      <p class="text-center" style="font-size:19px;font-weight:bold;opacity:0.5">Config summary</p>
+                      <p class="text-center"><img src="../../static/summary.png" alt="" style="padding-bottom:10px"></p>
+                      <p class="text-center" style="font-size:20px;font-weight:bold">Config summary</p>
+                      <p class="text-center" style="font-size:15px;opacity:0.8;width:220px">Provides a table-like view with the selections made when the pipeline was composed</p>
                     </a>
                   </div>
-                  <div style="padding-left:150px">
+                  <div style="padding-left:140px">
                     <a href="#" style="color:inherit">
-                      <img src="../../static/jepl_files.png" alt="" style="opacity:0.5;padding-left:5px;padding-bottom:10px">
-                      <p class="text-center" style="font-size:19px;font-weight:bold;opacity:0.5">JePL files</p>
+                      <p class="text-center"><img src="../../static/jepl_files.png" alt="" style="padding-left:5px;padding-bottom:10px"></p>
+                      <p class="text-center" style="font-size:20px;font-weight:bold">JePL files</p>
+                      <p class="text-center" style="font-size:15px;opacity:0.8;width:220px">Check out the files that drive the execution of the pipeline</p>
                     </a>
                   </div>
-                  <div style="padding-left:150px">
+                  <div style="padding-left:140px">
                     <a href="#" style="color:inherit">
-                      <img src="../../static/pull-request.png" alt="" style="opacity:0.5;padding-left:20px;padding-bottom:10px">
-                      <p class="text-center" style="font-size:19px;font-weight:bold;opacity:0.5">Pull request</p>
+                      <p class="text-center"><img src="../../static/pull-request.png" alt="" style="padding-left:20px;padding-bottom:10px"></p>
+                      <p class="text-center" style="font-size:20px;font-weight:bold">Pull request</p>
+                      <p class="text-center" style="font-size:15px;opacity:0.8;width:220px">Create a pull request to add the pipeline to your preferred repository</p>
+                      <p class="text-center"><label style="border:solid;border-width:1px;border-color:blue;color:blue;padding:2px 2px 2px 2px">Github only</label></p>
                     </a>
                   </div>
-                  <div style="padding-left:150px">
+                  <div style="padding-left:140px">
                     <a href="#" style="color:inherit">
-                      <img src="../../static/play.png" alt="" style="opacity:0.5;padding-bottom:10px">
-                      <p class="text-center" style="font-size:22px;font-weight:bold;opacity:0.5">Try out</p>
+                      <p class="text-center"><img src="../../static/play.png" alt="" style="padding-bottom:10px"></p>
+                      <p class="text-center" style="font-size:20px;font-weight:bold;">Try out</p>
+                      <p class="text-center" style="font-size:15px;opacity:0.8;width:220px">Execute the composed pipeline and check the results</p>
                     </a>
                   </div>
                 </div>
+              </div>
               </template>
 
               <template >
