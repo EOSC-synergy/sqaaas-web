@@ -161,7 +161,7 @@
                         <div v-show='config.credentials.yes' style="padding-left:30px;">
 
                           <base-input type="text" class="no-margin"
-                                label="Jenkins credential ID"
+                                label="JENKINS CREDENTIALS ID"
                                 :disabled="false"
                                 placeholder="userpass"
                                 v-model="credentials.id">
@@ -189,7 +189,7 @@
                             </div>
                           </div> -->
                           <div style="padding-top:20px;">
-                            <label>Jenkins Credential Type</label>
+                            <label>JENKINS CREDENTIAL TYPE</label>
                             <select  class="custom-select" id="cred" v-model='credentials.type' >
                               <!-- <option value="default">Choose a type...</option> -->
                               <option value="username_password">Username Password</option>
@@ -258,7 +258,7 @@
                       <div class="row" v-show='config.env.yes' style="padding-left:30px">
 
                         <base-input class="col-md-6" type="text"
-                              label="Key"
+                              label="key"
                               :disabled="false"
                               placeholder="GIT_USER"
                               v-model="env.key">

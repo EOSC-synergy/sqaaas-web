@@ -16,7 +16,7 @@
               <div class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
                 <div class="col-12 col-md-6">
                   <base-input style="margin-bottom:0px;" type="text"
-                      label="Service Name"
+                      label="SERVICE NAME"
                       :disabled="false"
                       placeholder="Container name. Example: processing"
                       v-model="service.container_name">
@@ -26,7 +26,7 @@
                   </div>
                 </div>
                <div class="col-12 col-md-6">
-                 <label>Pull OR Build</label>
+                 <label>PULL OR BUILD</label>
                   <select class="custom-select" id="sqacriteria" v-model='pull_build'>
                     <option value="default">Select ...</option>
                     <option value="pull">Pull Image</option>
@@ -41,7 +41,7 @@
 
               <div style="padding-left:20px;" v-show="showPull">
                 <base-input style="margin-bottom:0px;" type="text"
-                  label="Image Name"
+                  label="IMAGE NAME"
                   :disabled="false"
                   placeholder="Name of the image used by the container. Example: worsica/worsica-backend"
                   v-model="service.image">
@@ -56,7 +56,7 @@
                 <div class="col-12 col-md-12 text-left">
 
                     <base-input style="padding-top:1rem;" type="text" class="no-margin"
-                          label="Dockerfile location"
+                          label="DOCKERFILE LOCATION"
                           :disabled="false"
                           placeholder="./"
                           v-model="path_dockerfile">
@@ -65,15 +65,15 @@
                         <span v-show="showErrorPathDockerfile" style="color:red;font-size:12px;">This field is required</span>
                     </div>
                       <base-input style="padding-top:1rem;" type="text" class="no-margin"
-                          label="Docker registry URL (Optional)"
+                          label="DOCKER REGISTRY URL (OPTIONAL)"
                           :disabled="false"
                           placeholder="https://hub.docker.com/"
                           v-model="url_service">
                     </base-input>
-                    <label for="" style="padding-top:20px;">Build arguments (OPTIONAL)</label>
+                    <label for="" style="padding-top:20px;">BUILD ARGUMENTS (OPTIONAL)</label>
                     <div class="row" >
                       <base-input class="col-12 col-md-5" type="text"
-                            label="Key"
+                            label="key"
                             :disabled="false"
                             placeholder="Debug"
                             v-model="arg.key">
@@ -111,7 +111,7 @@
                     <div v-show='showBuildImage'>
                       <div style="margin-bottom:10px;">
                         <base-input  type="text" class="no-margin" style="padding-left:20px;"
-                            label="Image Name"
+                            label="IMAGE NAME"
                             :disabled="false"
                             placeholder="Name of the image used by the container. Example: worsica/worsica-backend"
                             v-model="service.image">
@@ -132,7 +132,7 @@
                         </div>
                         <div v-show="showCredID == false" style="margin-bottom:10px;padding-left:20px;padding-top:10px">
                             <base-input type="text"  class="no-margin"
-                                label="Jenkins credential ID"
+                                label="JENKINS CREDENTIAL ID"
                                 :disabled="false"
                                 placeholder="userpass"
                                 v-model="id_cred_service">
@@ -195,7 +195,7 @@
                     <div class="card-block col-12">
                       <!-- <p>Accordion Item 1 - Body</p> -->
                       <base-input style="padding-left:5px;" type="text"
-                        label="Hostname"
+                        label="HOSTNAME"
                         :disabled="false"
                         placeholder="Container hostname. Example: processing"
                          :help="true"
@@ -221,7 +221,7 @@
                             </select>
                         </div>
                         <base-input class="col-12 col-md-4" type="text"
-                                label="Volume Source"
+                                label="VOLUME SOURCE"
                                 :disabled="false"
                                 placeholder="worsica_web_products"
                                 :help="true"
@@ -230,7 +230,7 @@
                                 v-model="volume.source">
                         </base-input>
                         <base-input class="col-12 col-md-4" type="text"
-                                label="Volume target"
+                                label="VOLUME TARGET"
                                 :disabled="false"
                                 placeholder="/usr/local/worsica_web_products"
                                 :help="true"
@@ -298,7 +298,7 @@
                       <div class="row" v-show='envComposeYesNo.yes' style="padding-left:10x;">
 
                           <base-input class="col-md-6" type="text"
-                                label="Key"
+                                label="key"
                                 :disabled="false"
                                 placeholder="Debug"
                                 v-model="envCompose.key">

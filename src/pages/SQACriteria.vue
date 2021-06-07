@@ -14,7 +14,7 @@
             <div style="margin:0px 0px 2rem 0px;">
               <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right: 15px;">
                 <div class="col-6 mx-auto">
-                  <label> Choose a criteria</label>
+                  <label> CHOOSE A CRITERIA</label>
                   <select class="custom-select" id="sqacriteria" v-model='criteria'>
                     <option value="default">Select ...</option>
                     <option value="QC.Sty">QC.Sty</option>
@@ -42,7 +42,7 @@
 
 
               <div v-show="showSelect" class="col-12 col-md-6" style="display:grid;">
-                <label>Select the service</label>
+                <label>SELECT THE SERVICE</label>
                 <select class="custom-select" id="service" v-model='service' >
                   <option value="default">Choose a service...</option>
                   <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
@@ -56,7 +56,7 @@
                 </div>
                 <div>
                   <select :disabled="!disable_menu" class="custom-select" id="respository" v-model='repository'  >
-                    <option value="default">Choose a repository...</option>
+                    <option value="default">CHOOSE A REPOSITORY...</option>
                     <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="repo.repo">{{repo.repo}}</option>
                   </select>
                   <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
@@ -104,7 +104,7 @@
               <h5 style="font-weight:700;padding-left:15px;">Builder settings</h5>
               <p style="padding-left:15px;font-size:14px;">According to the programming language in use, you can choose between builders. As a catch-all builder you might prefer to use the list of commands that you commonly use for carrying out the work aligned with the given criterion.</p>
               <div class="col-12 col-md-6">
-                <label> Choose a builder tool</label>
+                <label> CHOOSE A BUILDER TOOL</label>
                 <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
                   <option value="default">Select ...</option>
                   <option value="tox">TOX</option>

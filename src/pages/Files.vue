@@ -308,11 +308,14 @@
                         v-model="repo_url_mimic">
                       </base-input>
                       <base-input class="col-12 col-md-6 no-margin"
-                          label="Branch of the pipeline's target repository(Optional)"
+                          label="Branch of the pipeline's target repository (Optional)"
                           :disabled="false"
                           placeholder="master"
                           v-model="repo_branch_mimic">
                       </base-input>
+                    </div>
+                    <div class="text-center" v-show="showFieldsPipeline">
+                      <p style="font-style:italic;color: #A7A1A0;margin-bottom:0px;"><i style="color:#A7A1A0;" class="fa fa-bell" aria-hidden="true"></i> Repositories MUST be public for the checkout to work.</a></p>
                     </div>
 
                     <div class="text-center" style="padding-top:25px;" v-show="showBuildUrl">
