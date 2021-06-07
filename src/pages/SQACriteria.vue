@@ -2,7 +2,7 @@
   <div class="content" style="background-color:#f8f9fa;">
     <div class="container-fluid">
       <div class="col-12 col-sm-12 col-lg-8 mx-auto" style="margin:auto;padding:0px;">
-        <card style="height:30vh;">
+        <card style="height:22vh;">
           <template slot="header">
             <div style="display:flex;flex-direction:row">
               <div style="background-color:#e6ede8;padding-left:100px;padding-top:20px;padding-bottom:10px;width:80%">

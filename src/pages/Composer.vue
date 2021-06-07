@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="col-12 col-sm-12 col-lg-8 mx-auto" >
         <div class="" style="margin:auto;padding:0px;">
-          <card style="height:31vh;overflow-y: auto;">
+          <card style="height:23vh;overflow-y: auto;">
             <template slot="header">
                 <div style="display:flex;flex-direction:row">
                   <div style="background-color:#e6ede8;padding-left:100px;padding-top:20px;padding-bottom:10px;width:80%">

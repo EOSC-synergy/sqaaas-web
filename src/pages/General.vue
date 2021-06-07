@@ -4,8 +4,7 @@
 			<!-- <span>User: {{username}}</span> -->
       <div class="col-12 col-lg-8 mx-auto" >
         <div class="" style="margin:auto;">
-            <!--<h4 style="margin-top:0px;font-weight:700;" class="card-title text-center">Code repositories are the substrate for the CI/CD pipeline work</h4>-->
-            <card style="height:30vh;overflow-y: auto;">
+            <card style="height:23vh;overflow-y: auto;">
               <template slot="header">
                 <div style="display:flex;flex-direction:row">
                   <div style="background-color:#e6ede8;padding-left:100px;padding-top:20px;padding-bottom:10px;width:80%">
