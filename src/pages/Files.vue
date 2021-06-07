@@ -43,26 +43,26 @@
                 <div style="display:flex;flex-direction:row;justify-content:center">
                   <div>
                     <a href="#" style="color:inherit">
-                      <img src="../../static/summary.png" alt="" style="opacity:0.5;height:120px;width:100px">
-                      <p class="text-center" style="font-size:22px;font-weight:bold;opacity:0.5;width:100px">Summary of the setup</p>
+                      <img src="../../static/summary.png" alt="" style="opacity:0.5;padding-left:45px;padding-bottom:10px">
+                      <p class="text-center" style="font-size:19px;font-weight:bold;opacity:0.5">Config summary</p>
                     </a>
                   </div>
-                  <div style="padding-left:100px">
+                  <div style="padding-left:150px">
                     <a href="#" style="color:inherit">
-                      <img src="../../static/jepl_files.png" alt="" style="opacity:0.5;height:120px;width:100px">
-                      <p class="text-center" style="font-size:22px;font-weight:bold;opacity:0.5;width:100px">JePL config files</p>
+                      <img src="../../static/jepl_files.png" alt="" style="opacity:0.5;padding-left:5px;padding-bottom:10px">
+                      <p class="text-center" style="font-size:19px;font-weight:bold;opacity:0.5">JePL files</p>
                     </a>
                   </div>
-                  <div style="padding-left:100px">
+                  <div style="padding-left:150px">
                     <a href="#" style="color:inherit">
-                      <img src="../../static/pull-request.png" alt="" style="opacity:0.5;height:120px;width:100px">
-                      <p class="text-center" style="font-size:22px;font-weight:bold;opacity:0.5;width:100px">Pull request</p>
+                      <img src="../../static/pull-request.png" alt="" style="opacity:0.5;padding-left:20px;padding-bottom:10px">
+                      <p class="text-center" style="font-size:19px;font-weight:bold;opacity:0.5">Pull request</p>
                     </a>
                   </div>
-                  <div style="padding-left:100px">
+                  <div style="padding-left:150px">
                     <a href="#" style="color:inherit">
-                      <img src="../../static/execution.jpg" alt="" style="opacity:0.5;height:120px;width:100px">
-                      <p class="text-center" style="font-size:22px;font-weight:bold;opacity:0.5;width:100px">Pipeline execution</p>
+                      <img src="../../static/play.png" alt="" style="opacity:0.5;padding-bottom:10px">
+                      <p class="text-center" style="font-size:22px;font-weight:bold;opacity:0.5">Try out</p>
                     </a>
                   </div>
                 </div>
