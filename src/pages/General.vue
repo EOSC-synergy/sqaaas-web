@@ -82,7 +82,9 @@
                   </div>
 
                   <div v-show="showRepo" style="padding-top:20px;">
-                    <span class="custom-table-title">Configured Repositories</span>
+                    <div class="text-center" style="padding-bottom:10px;">
+                      <span class="custom-table-title">Configured Repositories</span>
+                    </div>
                     <div class="table-responsive">
                       <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                           <thead>
@@ -890,7 +892,7 @@ input[type=number]::-webkit-inner-spin-button {
   text-transform: uppercase;
   font-size:16px;
   color:black;
-  font-weight:700,
+  font-weight:700;
 
 }
 

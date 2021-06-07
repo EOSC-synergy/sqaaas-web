@@ -137,6 +137,7 @@
                                 placeholder="userpass"
                                 v-model="id_cred_service">
                             </base-input>
+                            <p style="color:#C79804;text-align:justify" ><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Before proceeding you will need to provide the ID of the credentials created in Jenkins or <a target="blank" href="https://jenkins.eosc-synergy.eu/"> go now</a> and create them.</p>
                             <div class="col-12 text-right">
                                 <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
                             </div>
@@ -335,7 +336,9 @@
               </div>
 
               <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;">
-                <span class="custom-table-title">Configured Services</span>
+                <div class="text-center" style="padding-bottom:10px;">
+                  <span class="custom-table-title">Configured Services</span>
+                </div>
                 <div class="table-responsive">
                   <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                       <thead>
@@ -1006,7 +1009,7 @@ input[type=number]::-webkit-inner-spin-button {
   text-transform: uppercase;
   font-size:16px;
   color:black;
-  font-weight:700,
+  font-weight:700;
 
 }
 

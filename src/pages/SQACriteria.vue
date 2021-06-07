@@ -13,7 +13,7 @@
           <template class="card-body">
             <div style="margin:0px 0px 2rem 0px;">
               <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right: 15px;">
-                <div class="col-6">
+                <div class="col-6 mx-auto">
                   <label> Choose a criteria</label>
                   <select class="custom-select" id="sqacriteria" v-model='criteria'>
                     <option value="default">Select ...</option>
@@ -51,12 +51,16 @@
               </div>
 
               <div v-show="showSelect && objectSize($store.state.config_yaml.config.project_repos) > 0" class="col-12 col-md-6" style="display:grid;">
-                <label>Select an External Repository</label>
-                <select class="custom-select" id="respository" v-model='repository'  >
-                  <option value="default">Choose a repository...</option>
-                  <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="repo.repo">{{repo.repo}}</option>
-                </select>
-                <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
+                <div class="row">
+                  <span class="custom-label" style="text-transform:uppercase;font-size: 12px;">Does the criterion apply to an outside repo?</span><base-checkbox style="font-size:12px;" name="env" v-model="disable_menu"></base-checkbox>
+                </div>
+                <div>
+                  <select :disabled="!disable_menu" class="custom-select" id="respository" v-model='repository'  >
+                    <option value="default">Choose a repository...</option>
+                    <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="repo.repo">{{repo.repo}}</option>
+                  </select>
+                  <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
+                </div>
               </div>
             </div>
 
@@ -201,11 +205,13 @@
               </ul>
             </div>
             <div class="text-right" style="padding-top:4rem;padding-bottom:10px;">
-              <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
+              <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERION</button>
             </div>
 
             <div v-show="showCriteria" style="padding-top:40px;margin-bottom:2rem;">
-                <span class="custom-table-title" style="te">Configured Criteria</span>
+                <div class="text-center" style="padding-bottom:10px;">
+                  <span class="custom-table-title" style="te">Configured Criteria</span>
+                </div>
                 <div class="table-responsive">
                   <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                       <thead>
@@ -283,7 +289,7 @@
                                                   v-model="branches[index]"
                                                   >
                                           </base-input>
-                                          <span v-show="showErrorCommand" style="color:red; font-size:12px;">This field is required</span>
+                                          <!-- <span v-show="showErrorCommand" style="color:red; font-size:12px;">This field is required</span> -->
 
                                         </div>
                                         <!-- <div style="padding-top:30px;">
@@ -377,6 +383,7 @@
         showToxBuilder:false,
         showCommandBuilder:false,
         showErrorBuilderTool:false,
+        disable_menu: false,
         info:{
           'QC.Sty':{
             'p1':'Use code style standards to guide your code writing so you let others  understand it.',
@@ -628,7 +635,7 @@
       },
       addCriteria(){
         // || (this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0)
-        if(this.criteria == 'default' || this.service == "default" || (this.commands.length == 0 && this.testenv.length == 0) ){
+        if(this.criteria == 'default' || this.service == "default" || (this.builder_tool == 'command' && this.commands.length == 0)) {
           if(this.criteria == 'default'){
             this.showErrorCriteria = true;
           }
@@ -639,19 +646,20 @@
           //   console.log('here here here')
           //   this.showErrorRepo = true;
           // }
-          if(this.commands.length == 0 && this.testenv.length == 0){
+          if(this.commands.length == 0 ){
             if(this.builder_tool != 'default'){
               if(this.builder_tool == 'command'){
                 if(this.command == ''){
                   this.showErrorCommand = true;
                 }
-              }else if(this.builder_tool == 'tox'){
-                if(this.tox.env == ''){
-                  if(this.tox.env == '' ){
-                    this.showErrorEnv = true
-                  }
-                }
               }
+              // else if(this.builder_tool == 'tox'){
+              //   if(this.tox.env == ''){
+              //     if(this.tox.env == '' ){
+              //       this.showErrorEnv = true
+              //     }
+              //   }
+              // }
             }else{
               this.showErrorBuilderTool = true;
             }
@@ -825,13 +833,16 @@
   }
 </script>
 <style scoped>
+.form-check-label{
+  padding-bottom:5px!important;
+}
 .custom-table-title{
   padding-top:5px;
   /* padding-left:20px; */
   text-transform: uppercase;
   font-size:16px;
   color:black;
-  font-weight:700,
+  font-weight: 700;
 
 }
 .custom-label{

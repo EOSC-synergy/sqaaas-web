@@ -1,14 +1,17 @@
 <template>
   	<div class="content">
       <div class="container-fluid">
-        <div  v-show="loading" class="loading-overlay is-active">
-          <div>
+        <div id="test"  v-show="loading" class="loading-overlay is-active" >
+          <div style="padding: 20px;background-color: #ccc;border-radius: 5px;">
             <div style="vertical-align: middle;display: flex;">
               <span class="fas fa-cog fa-3x fa-spin"></span>
               <p style="padding-left: 10px;text-transform: uppercase;font-weight: 700;margin-bottom: 0px;margin-top: 15px;">{{modal_message}}</p>
             </div>
             <div>
               <p>Please, wait for this process to finish.</p>
+            </div>
+            <div class="text-center">
+              <p style="font-size:18px;font-weight:700;">Current State: {{build_status}}</p>
             </div>
             <div class="text-center">
                 <button class="btn  btn-danger btn-fill" :disabled="disable_cancel" @click="cancelExecution()">Cancel</button>
@@ -217,10 +220,10 @@
                           <div class="tab-content px-1" >
                             <div v-for="(yaml,index) in yamlConfig" style="border-left: 1px solid #cccc;"
                               :key="index" class="tab-pane tab-config" :class="{'active':index==0}" :id="'tabs-config-'+index" role="tabpanel" aria-labelledby="baseVerticalLeft1-tab1">
-                              <span style="padding-left:15px;padding-top:20px;"><b> File name:</b> {{yaml.file_name}}</span>
-                              <div class="col-12" style="padding-top:10px;padding-left: 15px;">
+                              <span style="padding-left:15px;padding-top:40px;"><b> File name:</b> {{yaml.file_name}}</span>
+                              <!-- <div class="col-12" style="padding-top:10px;padding-left: 15px;">
                                 <button class="btn  btn-primary btn-simple" @click="downloadConfig(yaml)" :key="'button'+index+uuid" >Download <i class="fa fa-download" aria-hidden="true"></i></button>
-                              </div>
+                              </div> -->
                               <div class="col-12" style="height:40vh;overflow-y: auto;">
                                 <editor :editor-id="'editor'+index" lang="yaml" :content="yaml.content" v-on:change-content="changeContentA"  :key="'editor'+index+uuid" ></editor>
                               </div>
@@ -230,18 +233,18 @@
                         </div>
                       </div>
                       <div class="tab-pane" id="tabs-2" role="tabpanel">
-                        <div class="col-12" style="padding-top:2rem;padding-left:0px;">
+                        <!-- <div class="col-12" style="padding-top:2rem;padding-left:0px;">
                           <button class="btn  btn-primary btn-simple" @click="downloadComposer()">Download <i class="fa fa-download" aria-hidden="true"></i> </button>
-                        </div>
-                        <div class="col-12" style="height:40vh;overflow-y: auto;">
+                        </div> -->
+                        <div class="col-12" style="padding-top:2rem;height:40vh;overflow-y: auto;">
                             <editor editor-id="editorB" lang="yaml" :content="yamlComposer" ></editor>
                         </div>
                       </div>
                       <div class="tab-pane" id="tabs-3" role="tabpanel">
-                        <div class="col-12" style="padding-top:2rem;padding-left:0px;">
+                        <!-- <div class="col-12" style="padding-top:2rem;padding-left:0px;">
                           <button class="btn  btn-primary btn-simple" @click="downloadJenkinsfile()">Download <i class="fa fa-download" aria-hidden="true"></i></button>
-                        </div>
-                        <div class="col-12" style="height:40vh;overflow-y: auto;">
+                        </div> -->
+                        <div class="col-12" style="padding-top:2rem;height:40vh;overflow-y: auto;">
                             <editor editor-id="editorC" lang='json' :content="yamlJenkinsfile" ></editor>
                         </div>
                       </div>
@@ -265,7 +268,7 @@
                       </div>
                       <!-- <span v-show="showErrorPullRequest==false" style="padding-left:30px;color:red; font-size:12px;">This field is required.</span> -->
                       <div v-show="showURL" class="text-center" style="text-decoration: underline;">
-                        <a :href="pull_request_url" target="_blank">URL</a>
+                        <a class="btn btn-primary btn-fill" :href="pull_request_url" target="_blank">Go to PR!</a>
                       </div>
                     </div>
                   </template>
@@ -299,21 +302,21 @@
 
                     <div class="row" v-show="showFieldsPipeline">
                       <base-input class="col-12 col-md-6 no-margin" type="text"
-                        label="URL"
+                        label="URL of the pipeline's target repository"
                         :disabled="false"
                         placeholder="https://github.com/EOSC-synergy/sqaaas-web.git"
                         v-model="repo_url_mimic">
                       </base-input>
                       <base-input class="col-12 col-md-6 no-margin"
-                          label="Branch (Optional)"
+                          label="Branch of the pipeline's target repository(Optional)"
                           :disabled="false"
                           placeholder="master"
                           v-model="repo_branch_mimic">
                       </base-input>
                     </div>
 
-                    <div class="text-center" style="padding-top:15px;" v-show="showBuildUrl">
-                      <span>Build URL:  </span><a style="text-decoration: underline;" :href="build_url" target="_blank">Click here!</a>
+                    <div class="text-center" style="padding-top:25px;" v-show="showBuildUrl">
+                      <a class="btn btn-primary btn-fill" :href="build_url" target="_blank">Go to Build URL!</a>
                     </div>
                     <div style="padding-bottom:15px;" class="text-center" v-show="showStatus">
                       <span style="font-weight:700;">{{possible_status[build_status]}}</span>
@@ -627,7 +630,7 @@
           this.modal_message = 'Submitting Pipeline ...';
           this.runPipelineCall(data,this.runPipelineCallBack)
         }else if(this.showFieldsPipeline == true && this.repo_url_mimic == ''){
-          this.notifyVue("Error", "Please add the URL of the repository",'nc-icon nc-simple-remove','danger')
+          this.notifyVue("Warning", "Please add the info of the target repository",'nc-icon nc-simple-remove','warning')
         }else{
           this.loading = true;
           this.modal_message = 'Submitting Pipeline ...';
@@ -636,6 +639,7 @@
         // console.log()
       },
       runPipelineCallBack(response){
+        console.log(response)
         if(response.status == 200){
           if (response.data.build_url){
             this.disable_status = false;
@@ -917,6 +921,17 @@
 }
 </script>
 <style scoped>
+
+/* .custom-link {
+  text-decoration: none;
+  background-color: #EEEEEE;
+  color: #333333;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+} */
 
 @media (min-width: 992px){
     .col-lg-10 {
