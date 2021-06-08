@@ -4,9 +4,13 @@
 			<!-- <span>User: {{username}}</span> -->
       <div class="col-12 col-lg-8 mx-auto" >
         <div class="" style="margin:auto;">
-            <card style="height:23vh;overflow-y: auto;">
+            <!-- <card>
+
+            </card> -->
+
+            <card>
               <template slot="header">
-                <div style="display:flex;flex-direction:row">
+                <div style="display:flex;flex-direction:row;padding-bottom:15px;">
                   <div style="background-color:#e6ede8;padding-left:100px;padding-top:20px;padding-bottom:10px;width:80%">
                     <h3 style="margin-top:0px;font-weight:700;" class="card-title">Code repositories are the substrate for the CI/CD pipelines</h3>
                     <p style="padding-top:20px">
@@ -20,9 +24,6 @@
                   </div>
                 </div>
               </template>
-            </card>
-
-            <card>
               <template>
                   <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
                     <div style="display:contents" class="col-12 col-md-6">

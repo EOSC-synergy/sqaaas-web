@@ -26,9 +26,10 @@
               <template slot="header">
                 <div style="display:flex;flex-direction:row;padding-bottom:20px">
                   <div style="background-color:#c2edd6;padding-left:80px;padding-top:80px;padding-bottom:60px;width:60%">
-                    <h2 style="margin-top:0px;font-weight:700;" class="card-title">Your pipeline has been successfully created!</h2>
+                    <h2 style="margin-top:0px;font-weight:700;" class="card-title">{{pipeline_create_message}}</h2>
                     <div style="padding-top:20px">
-                      <button class="btn btn-primary btn-fill" @click="generateFiles()">Download</button>
+                      <button v-if="createSuccess" class="btn btn-primary btn-fill" @click="generateFiles()"><i style="margin-right:5px;" class="fa fa-download "></i>Download</button>
+                      <button v-else class="btn btn-primary btn-fill" @click="back()"><i class="fa fa-arrow-left" aria-hidden="true"></i>Back</button>
                     </div>
                   </div>
                   <div style="background-color:#c2edd6;padding-left:80px;padding-top:20px;width:40%">
@@ -40,266 +41,274 @@
 
           <card body-classes="">
               <template>
-              <div style="background-color:#dcf3f7">
+              <div style="background-color:#dcf3f7;margin-bottom:20px;">
                 <div style="padding: 40px 40px 40px 40px;">
                   <h3 class="text-center">Discover the additional features we provide</h3>
                 </div>
-                <div style="display:flex;flex-direction:row;justify-content:center">
-                  <div>
-                    <a href="#" style="color:inherit">
+                <div id='panels' class="row" style="justify-content:center;padding-left: 15px;padding-right: 15px;">
+                  <div  class="col-12 col-md-3 text-center">
+                    <div id='summary' class="active-panel select-div" @click="showPanel('summary')" role="button" style="color:inherit;padding:10px;min-height: 289px;">
                       <p class="text-center"><img src="../../static/summary.png" alt="" style="padding-bottom:10px"></p>
                       <p class="text-center" style="font-size:20px;font-weight:bold">Config summary</p>
-                      <p class="text-center" style="font-size:15px;opacity:0.8;width:220px">Provides a table-like view with the selections made when the pipeline was composed</p>
-                    </a>
+                      <span class="text-center" style="font-size:15px;opacity:0.8;width:220px">Provides a table-like view with the selections made when the pipeline was composed</span>
+                    </div>
                   </div>
-                  <div style="padding-left:140px">
-                    <a href="#" style="color:inherit">
+                  <div class="col-12 col-md-3 text-center" >
+                    <div id='files' class="select-div" @click="showPanel('files')" role="button" style="color:inherit;padding:10px;min-height: 289px;">
                       <p class="text-center"><img src="../../static/jepl_files.png" alt="" style="padding-left:5px;padding-bottom:10px"></p>
                       <p class="text-center" style="font-size:20px;font-weight:bold">JePL files</p>
-                      <p class="text-center" style="font-size:15px;opacity:0.8;width:220px">Check out the files that drive the execution of the pipeline</p>
-                    </a>
+                      <span class="text-center" style="font-size:15px;opacity:0.8;width:220px">Check out the files that drive the execution of the pipeline</span>
+                    </div>
                   </div>
-                  <div style="padding-left:140px">
-                    <a href="#" style="color:inherit">
+                  <div  class="col-12 col-md-3 text-center">
+                    <div id='pull_request' class="select-div" @click="showPanel('pull_request')" role="button" style="color:inherit;padding:10px;min-height: 289px;">
                       <p class="text-center"><img src="../../static/pull-request.png" alt="" style="padding-left:20px;padding-bottom:10px"></p>
                       <p class="text-center" style="font-size:20px;font-weight:bold">Pull request</p>
-                      <p class="text-center" style="font-size:15px;opacity:0.8;width:220px">Create a pull request to add the pipeline to your preferred repository</p>
+                      <span class="text-center" style="font-size:15px;opacity:0.8;width:220px">Create a pull request to add the pipeline to your preferred repository</span>
                       <p class="text-center"><label style="border:solid;border-width:1px;border-color:blue;color:blue;padding:2px 2px 2px 2px">Github only</label></p>
-                    </a>
+                    </div>
                   </div>
-                  <div style="padding-left:140px">
-                    <a href="#" style="color:inherit">
-                      <p class="text-center"><img src="../../static/play.png" alt="" style="padding-bottom:10px"></p>
+                  <div class="col-12 col-md-3 text-center" >
+                    <div id='run' class="select-div" @click="showPanel('run_pipeline')" role="button" style="color:inherit;padding:10px;min-height: 289px;">
+                      <p class="text-center"><img src="../../static/play.png" alt="" style="max-width:90px;"></p>
                       <p class="text-center" style="font-size:20px;font-weight:bold;">Try out</p>
-                      <p class="text-center" style="font-size:15px;opacity:0.8;width:220px">Execute the composed pipeline and check the results</p>
-                    </a>
+                      <span class="text-center" style="font-size:15px;opacity:0.8;width:220px">Execute the composed pipeline and check the results</span>
+                    </div>
                   </div>
                 </div>
               </div>
               </template>
 
-              <template >
-                <div class="row text-center" style="padding: 0px 40px 0px 40px;">
-                  <div class="col-12 col-md-8">
-                    <p class="text-left" style="font-size:14px;margin-bottom:1rem;">
-                      <strong style="font-weight:bold;">Pipeline name:</strong> {{($store.state.name) ? $store.state.name : ''}}
-                    </p>
-                    <p class="text-left" style="font-size:14px;">
-                      <strong style="font-weight:bold;">Repositories:</strong> {{ ''}}
-                    </p>
-                  </div>
-                  <div v-if="Object.keys($store.state.config_yaml.config.project_repos).length > 0" class="col-12 col-md-12">
-                    <div class="table-responsive">
-                    <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
-                        <thead>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">URL</th>
-                        </thead>
-                        <tbody v-for="(repo, index) in $store.state.config_yaml.config.project_repos" :key="index">
-                                <tr
-                                    style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
-                                    <td
-                                        style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        {{repo.repo}}
-                                    </td>
+              <template>
+                <div v-show="showFeature=='summary'" class="row text-center">
+                  <div class="col-12">
+                    <card  class="strpied-tabled-with-hover"
+                              body-classes=""
+                        >
+                      <template slot="header" >
+                        <h4 class="text-center" style="padding-bottom:1rem;font-weight:700;">Pipeline files (JePL format)</h4>
+                      </template>
+                      <template >
+                        <div class="col-12 col-md-8">
+                          <p class="text-left" style="font-size:14px;margin-bottom:1rem;">
+                            <strong style="font-weight:bold;">Pipeline name:</strong> {{($store.state.name) ? $store.state.name : ''}}
+                          </p>
+                          <p v-if="Object.keys($store.state.config_yaml.config.project_repos).length > 0" class="text-left" style="font-size:14px;">
+                            <strong style="font-weight:bold;">External Repositories:</strong> {{ ''}}
+                          </p>
+                        </div>
+                        <div v-if="Object.keys($store.state.config_yaml.config.project_repos).length > 0" class="col-12 col-md-12">
+                          <div class="table-responsive">
+                          <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <thead>
+                                  <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">URL</th>
+                              </thead>
+                              <tbody v-for="(repo, index) in $store.state.config_yaml.config.project_repos" :key="index">
+                                      <tr
+                                          style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                          <td
+                                              style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              {{repo.repo}}
+                                          </td>
 
-                                </tr>
+                                      </tr>
 
-                        </tbody>
-                    </table>
-                    </div>
-                  </div>
-                  <div class="col-12 col-md-8">
-                    <p class="text-left" style="font-size:14px;">
-                      <strong style="font-weight:bold;">Services:</strong> {{''}}
-                    </p>
-                  </div>
-
-                  <div v-if="Object.keys($store.state.docker_compose.services).length > 0" class="col-12 col-md-12">
-                    <div class="table-responsive">
-                    <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
-                        <thead>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Name</th>
-                            <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Image</th>
-                            <th style="text-align:center;justify-content:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Push Images</th>
-                        </thead>
-                        <tbody v-for="(service, index) in $store.state.docker_compose.services" :key="index">
-                                <tr
-                                    style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
-                                    <td
-                                        style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        <div style="text-align:left;">
-                                            {{index}}
-                                        </div>
-                                    </td>
-                                    <td
-                                        style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        {{service.image.name}}
-                                    </td>
-                                    <td
-                                        style="text-align:center;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        <i style="color:#1BC10B;" v-show="service.image.registry.push == true" class="fa fa-check-circle" aria-hidden="true"></i>
-                                    </td>
-
-                                </tr>
-
-                        </tbody>
-                    </table>
-                    </div>
-                  </div>
-
-                  <div class="col-12 col-md-8">
-                    <p class="text-left" style="font-size:14px;">
-                      <strong style="font-weight:bold;">SQA Criteria:</strong> {{''}}
-                    </p>
-                  </div>
-
-                  <div v-if="Object.keys($store.state.config_yaml.sqa_criteria).length > 0" class="col-12 col-md-12">
-                    <div class="table-responsive">
-                    <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
-                        <thead>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Criteria</th>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">External Repository and Service</th>
-                            <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">When</th>
-                        </thead>
-                        <tbody v-for="(criteria, index) in $store.state.config_yaml.sqa_criteria" :key="index">
-                                <tr
-                                    style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px;">
-                                    <td
-                                        style="padding-right: 10px; padding-left: 10px; padding-top: 5px;vertical-align: top;">
-                                        <div style="text-align:left;">
-                                            {{index}}
-                                        </div>
-                                    </td>
-                                    <td
-                                        style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                        <div v-for="(repo_criteria, index) in criteria.repos" :key="index" >
-                                          <div class="row">
-                                            <div class="col-md-6">
-                                              <p class="text-left" style="font-size:14px;margin-bottom:0px;">
-                                                <strong style="font-weight:bold;">Name:</strong> {{(repo_criteria.repo_url != 'default')?repo_criteria.repo_url:''}}
-                                              </p>
-                                              <p class="text-left" style="font-size:14px;margin-bottom:0px;">
-                                                <strong style="font-weight:bold;">Service:</strong> {{repo_criteria.container}}
-                                              </p>
-                                            </div>
-                                            <div class="col-md-6">
-                                              <p class="text-left" style="font-size:14px;margin-bottom:0;">
-                                                <strong style="font-weight:bold;">Commands: </strong>
-                                              </p>
-                                              <p style="margin-bottom:0;">
-                                                <span style="font-size:14px;" v-for="(command, index) in repo_criteria.commands" :key="index">
-                                                  {{(index==repo_criteria.commands.length-1) ? command : command+','}}
-                                                </span>
-                                              </p>
-
-                                            </div>
-                                          </div>
-                                        </div>
-
-                                    </td>
-                                    <td style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                      <div v-if="criteria.when && criteria.when.building_tag && criteria.when.building_tag == true">
-                                        <p>On Tag Creation</p>
-                                      </div>
-                                      <div v-else-if="criteria.when && criteria.when.branch">
-                                        <p>Branch: {{(criteria.when) ? ((criteria.when.branch) ? criteria.when.branch.pattern : '') : ''}}</p>
-                                      </div>
-
-                                    </td>
-                                </tr>
-
-                        </tbody>
-                    </table>
-                    </div>
-                  </div>
-                </div>
-              </template>
-          </card>
-          <div v-show="showFiles" class="row">
-            <div class="col-12">
-              <card class="strpied-tabled-with-hover"
-                      body-classes=""
-                >
-                  <template slot="header">
-                    <div class="row" style="justify-content: center;">
-                        <h4 class="card-title text-center" style="padding-top:5px;font-weight:700;">Pipeline files (JePL format)</h4>
-                      <!--  -->
-                      <!-- <button class="btn  btn-primary btn-simple " style="margin-bottom:5px;" @click="downloadAll()">(Download All)</button> -->
-
-
-                    </div>
-                  </template>
-
-                  <template >
-
-                    <div class="row">
-                      <div class="col-12 text-center">
-
-                        <button type="button" class="btn btn-simple btn-primary" @click="generateFiles()">
-                            <i class="fa fa-file-text" aria-hidden="true"></i>Get as ZIP
-                              <i class="fa fa-download "></i>
-                            </button>
-                      </div>
-                    </div>
-
-
-                    <ul class="nav nav-tabs nav-fill" role="tablist">
-                      <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Main Configuration</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Composer</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Jenkinsfile</a>
-                      </li>
-                    </ul>
-                    <div class="tab-content">
-                      <div class="tab-pane active" id="tabs-1" role="tabpanel">
-
-                        <div class="nav-vertical" style="padding-top:20px;">
-                          <ul class="nav nav-tabs nav-left nav-border-left" role="tablist">
-                            <li  v-for="(yaml,index) in yamlConfig"
-                              :key="index" class="nav-item">
-                              <a class="nav-link file-config" :class="{'active':index==0}" :id="'file-config-'+index" data-toggle="tab" aria-controls="tabVerticalLeft11" :href="'#tabs-config-'+index" role="tab" aria-selected="true" @click="get_data_config(index)">{{(yaml.file_name.length > 10) ? yaml.file_name.substring(0, 10)+'...' : yaml.file_name}}</a>
-                            </li>
-
-                          </ul>
-                          <div class="tab-content px-1" >
-                            <div v-for="(yaml,index) in yamlConfig" style="border-left: 1px solid #cccc;"
-                              :key="index" class="tab-pane tab-config" :class="{'active':index==0}" :id="'tabs-config-'+index" role="tabpanel" aria-labelledby="baseVerticalLeft1-tab1">
-                              <span style="padding-left:15px;padding-top:40px;"><b> File name:</b> {{yaml.file_name}}</span>
-                              <!-- <div class="col-12" style="padding-top:10px;padding-left: 15px;">
-                                <button class="btn  btn-primary btn-simple" @click="downloadConfig(yaml)" :key="'button'+index+uuid" >Download <i class="fa fa-download" aria-hidden="true"></i></button>
-                              </div> -->
-                              <div class="col-12" style="height:40vh;overflow-y: auto;">
-                                <editor :editor-id="'editor'+index" lang="yaml" :content="yaml.content" v-on:change-content="changeContentA"  :key="'editor'+index+uuid" ></editor>
-                              </div>
-                            </div>
-
+                              </tbody>
+                          </table>
                           </div>
                         </div>
-                      </div>
-                      <div class="tab-pane" id="tabs-2" role="tabpanel">
-                        <!-- <div class="col-12" style="padding-top:2rem;padding-left:0px;">
-                          <button class="btn  btn-primary btn-simple" @click="downloadComposer()">Download <i class="fa fa-download" aria-hidden="true"></i> </button>
-                        </div> -->
-                        <div class="col-12" style="padding-top:2rem;height:40vh;overflow-y: auto;">
-                            <editor editor-id="editorB" lang="yaml" :content="yamlComposer" ></editor>
+                        <div class="col-12 col-md-8">
+                          <p class="text-left" style="font-size:14px;">
+                            <strong style="font-weight:bold;">Services:</strong> {{''}}
+                          </p>
                         </div>
-                      </div>
-                      <div class="tab-pane" id="tabs-3" role="tabpanel">
-                        <!-- <div class="col-12" style="padding-top:2rem;padding-left:0px;">
-                          <button class="btn  btn-primary btn-simple" @click="downloadJenkinsfile()">Download <i class="fa fa-download" aria-hidden="true"></i></button>
-                        </div> -->
-                        <div class="col-12" style="padding-top:2rem;height:40vh;overflow-y: auto;">
-                            <editor editor-id="editorC" lang='json' :content="yamlJenkinsfile" ></editor>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div style="padding-bottom:20px;margin-top:2rem;">
-                      <p class="text-center" style="font-weight:700;">Pull Request</p>
+                        <div v-if="Object.keys($store.state.docker_compose.services).length > 0" class="col-12 col-md-12">
+                          <div class="table-responsive">
+                          <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <thead>
+                                  <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Name</th>
+                                  <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Image</th>
+                                  <th style="text-align:center;justify-content:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Push Images</th>
+                              </thead>
+                              <tbody v-for="(service, index) in $store.state.docker_compose.services" :key="index">
+                                      <tr
+                                          style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                          <td
+                                              style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              <div style="text-align:left;">
+                                                  {{index}}
+                                              </div>
+                                          </td>
+                                          <td
+                                              style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              {{service.image.name}}
+                                          </td>
+                                          <td
+                                              style="text-align:center;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              <i style="color:#1BC10B;" v-show="service.image.registry.push == true" class="fa fa-check-circle" aria-hidden="true"></i>
+                                          </td>
+
+                                      </tr>
+
+                              </tbody>
+                          </table>
+                          </div>
+                        </div>
+
+                        <div class="col-12 col-md-8">
+                          <p class="text-left" style="font-size:14px;">
+                            <strong style="font-weight:bold;">SQA Criteria:</strong> {{''}}
+                          </p>
+                        </div>
+
+                        <div v-if="Object.keys($store.state.config_yaml.sqa_criteria).length > 0" class="col-12 col-md-12">
+                          <div class="table-responsive">
+                          <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <thead>
+                                  <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Criteria</th>
+                                  <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">External Repository and Service</th>
+                                  <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">When</th>
+                              </thead>
+                              <tbody v-for="(criteria, index) in $store.state.config_yaml.sqa_criteria" :key="index">
+                                      <tr
+                                          style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px;">
+                                          <td
+                                              style="padding-right: 10px; padding-left: 10px; padding-top: 5px;vertical-align: top;">
+                                              <div style="text-align:left;">
+                                                  {{index}}
+                                              </div>
+                                          </td>
+                                          <td
+                                              style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              <div v-for="(repo_criteria, index) in criteria.repos" :key="index" >
+                                                <div class="row">
+                                                  <div class="col-md-6">
+                                                    <p class="text-left" style="font-size:14px;margin-bottom:0px;">
+                                                      <strong style="font-weight:bold;">Name:</strong> {{(repo_criteria.repo_url != 'default')?repo_criteria.repo_url:''}}
+                                                    </p>
+                                                    <p class="text-left" style="font-size:14px;margin-bottom:0px;">
+                                                      <strong style="font-weight:bold;">Service:</strong> {{repo_criteria.container}}
+                                                    </p>
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                    <p class="text-left" style="font-size:14px;margin-bottom:0;">
+                                                      <strong style="font-weight:bold;">Commands: </strong>
+                                                    </p>
+                                                    <p style="margin-bottom:0;">
+                                                      <span style="font-size:14px;" v-for="(command, index) in repo_criteria.commands" :key="index">
+                                                        {{(index==repo_criteria.commands.length-1) ? command : command+','}}
+                                                      </span>
+                                                    </p>
+
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                          </td>
+                                          <td style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                            <div v-if="criteria.when && criteria.when.building_tag && criteria.when.building_tag == true">
+                                              <p>On Tag Creation</p>
+                                            </div>
+                                            <div v-else-if="criteria.when && criteria.when.branch">
+                                              <p>Branch: {{(criteria.when) ? ((criteria.when.branch) ? criteria.when.branch.pattern : '') : ''}}</p>
+                                            </div>
+
+                                          </td>
+                                      </tr>
+
+                              </tbody>
+                          </table>
+                          </div>
+                        </div>
+                      </template>
+                    </card>
+                  </div>
+                </div>
+                <div v-show="showFiles" class="row">
+                  <div class="col-12">
+                    <card  class="strpied-tabled-with-hover"
+                            body-classes=""
+                      >
+                      <template slot="header" >
+                        <h4 class="text-center" style="padding-bottom:1rem;font-weight:700;">Pipeline files (JePL format)</h4>
+                      </template>
+                       <template >
+                            <!-- <div class="row">
+                              <div class="col-12 text-center">
+
+                                <button type="button" class="btn btn-simple btn-primary" @click="generateFiles()">
+                                    <i class="fa fa-file-text" aria-hidden="true"></i>Get as ZIP
+                                      <i class="fa fa-download "></i>
+                                    </button>
+                              </div>
+                            </div> -->
+                        <ul class="nav nav-tabs nav-fill" role="tablist">
+                          <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Main Configuration</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Composer</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Jenkinsfile</a>
+                          </li>
+                        </ul>
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="tabs-1" role="tabpanel">
+
+                            <div class="nav-vertical" style="padding-top:20px;">
+                              <ul class="nav nav-tabs nav-left nav-border-left" role="tablist">
+                                <li  v-for="(yaml,index) in yamlConfig"
+                                  :key="index" class="nav-item">
+                                  <a class="nav-link file-config" :class="{'active':index==0}" :id="'file-config-'+index" data-toggle="tab" aria-controls="tabVerticalLeft11" :href="'#tabs-config-'+index" role="tab" aria-selected="true" @click="get_data_config(index)">{{(yaml.file_name.length > 10) ? yaml.file_name.substring(0, 10)+'...' : yaml.file_name}}</a>
+                                </li>
+
+                              </ul>
+                              <div class="tab-content px-1" >
+                                <div v-for="(yaml,index) in yamlConfig" style="border-left: 1px solid #cccc;"
+                                  :key="index" class="tab-pane tab-config" :class="{'active':index==0}" :id="'tabs-config-'+index" role="tabpanel" aria-labelledby="baseVerticalLeft1-tab1">
+                                  <span style="padding-left:15px;padding-top:40px;"><b> File name:</b> {{yaml.file_name}}</span>
+                                  <!-- <div class="col-12" style="padding-top:10px;padding-left: 15px;">
+                                    <button class="btn  btn-primary btn-simple" @click="downloadConfig(yaml)" :key="'button'+index+uuid" >Download <i class="fa fa-download" aria-hidden="true"></i></button>
+                                  </div> -->
+                                  <div class="col-12" style="height:40vh;overflow-y: auto;">
+                                    <editor :editor-id="'editor'+index" lang="yaml" :content="yaml.content" v-on:change-content="changeContentA"  :key="'editor'+index+uuid" ></editor>
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="tab-pane" id="tabs-2" role="tabpanel">
+                            <!-- <div class="col-12" style="padding-top:2rem;padding-left:0px;">
+                              <button class="btn  btn-primary btn-simple" @click="downloadComposer()">Download <i class="fa fa-download" aria-hidden="true"></i> </button>
+                            </div> -->
+                            <div class="col-12" style="padding-top:2rem;height:40vh;overflow-y: auto;">
+                                <editor editor-id="editorB" lang="yaml" :content="yamlComposer" ></editor>
+                            </div>
+                          </div>
+                          <div class="tab-pane" id="tabs-3" role="tabpanel">
+                            <!-- <div class="col-12" style="padding-top:2rem;padding-left:0px;">
+                              <button class="btn  btn-primary btn-simple" @click="downloadJenkinsfile()">Download <i class="fa fa-download" aria-hidden="true"></i></button>
+                            </div> -->
+                            <div class="col-12" style="padding-top:2rem;height:40vh;overflow-y: auto;">
+                                <editor editor-id="editorC" lang='json' :content="yamlJenkinsfile" ></editor>
+                            </div>
+                          </div>
+                        </div>
+                       </template>
+                    </card>
+                  </div>
+                </div>
+                <div v-show="showFeature=='pull_request'" style="margin-top:2rem;">
+                  <card  class="strpied-tabled-with-hover"
+                              body-classes=""
+                        >
+                    <template slot="header" >
+                      <h4 class="text-center" style="font-weight:700;padding-bottom:1rem;">Pull Request</h4>
+                    </template>
+                    <template >
                       <div class="col-12 col-md-6 mx-auto mb-3">
 
                         <label >Repository</label>
@@ -316,83 +325,81 @@
                       </div>
                       <!-- <span v-show="showErrorPullRequest==false" style="padding-left:30px;color:red; font-size:12px;">This field is required.</span> -->
                       <div v-show="showURL" class="text-center" style="text-decoration: underline;">
-                        <a class="btn btn-primary btn-fill" :href="pull_request_url" target="_blank">Go to PR!</a>
+                        <a class="btn btn-primary btn-fill btn-sm" :href="pull_request_url" target="_blank">Go to PR!</a>
                       </div>
-                    </div>
-                  </template>
-              </card>
-            </div>
-          </div>
-          <div v-show="showRunPipeline" class="row">
-            <div class="col-12">
-              <card  class="strpied-tabled-with-hover"
-                        body-classes=""
-                  >
-              <template slot="header" >
-                <h4 class="card-title text-center" style="padding-bottom:1rem;font-weight:700;">Pipeline Execution</h4>
-              </template>
-
-              <template >
-                <div style="padding-bottom:20px;padding-bottom: 3rem;padding-left:20px;padding-right:20px;">
-
-
-                    <!-- <div v-show="showStatusBar">
-                      <div class="requestProgress">
-                        <div class="bar">
-                        </div>
-                      </div>
-                      <div class="text-center">
-                        <button type="button" class="btn btn-simple" disabled>
-                              <span style="padding-right:5px;" class="btn-label"><i style="color:#00a77e;" class="fa fa-refresh fa-spin fa-1x fa-fw"></i></span>Loading the pipeline status</button>
-                      </div>
-                    </div> -->
-
-
-                    <div class="row" v-show="showFieldsPipeline">
-                      <base-input class="col-12 col-md-6 no-margin" type="text"
-                        label="URL of the pipeline's target repository"
-                        :disabled="false"
-                        placeholder="https://github.com/EOSC-synergy/sqaaas-web.git"
-                        v-model="repo_url_mimic">
-                      </base-input>
-                      <base-input class="col-12 col-md-6 no-margin"
-                          label="Branch of the pipeline's target repository (Optional)"
-                          :disabled="false"
-                          placeholder="master"
-                          v-model="repo_branch_mimic">
-                      </base-input>
-                    </div>
-                    <div class="text-center" v-show="showFieldsPipeline">
-                      <p style="font-style:italic;color: #A7A1A0;margin-bottom:0px;"><i style="color:#A7A1A0;" class="fa fa-bell" aria-hidden="true"></i> Repositories MUST be public for the checkout to work.</a></p>
-                    </div>
-
-                    <div class="text-center" style="padding-top:25px;" v-show="showBuildUrl">
-                      <a class="btn btn-primary btn-fill" :href="build_url" target="_blank">Go to Build URL!</a>
-                    </div>
-                    <div style="padding-bottom:15px;" class="text-center" v-show="showStatus">
-                      <span style="font-weight:700;">{{possible_status[build_status]}}</span>
-                      <i v-if="build_status == 'SUCCESS'" style="color:green;" class="fa fa-check" aria-hidden="true"></i>
-                      <i v-else-if ="build_status == 'FAILURE'" style="color:red;" class="fa fa-times" aria-hidden="true"></i>
-                      <i v-else style="color:red;" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                    </div>
-                    <div v-show="showBadge == true" class="" id="badge" style="padding-top:20px;padding-left:15px;">
-                    </div>
-                    <!-- <div class="text-center">
-                      <button class="btn  btn-primary btn-fill" @click="runPipeline()">Run pipeline</button>
-                    </div> -->
-                    <!-- <div v-show="loading_run" class="text-center" >
-                      <button type="button" class="btn btn-simple" disabled>
-                          <span style="padding-right:5px;" class="btn-label"><i style="color:black;" class="fa fa-cog fa-spin fa-1x fa-fw"></i></span>Executing Pipeline...</button>
-                    </div> -->
+                    </template>
+                  </card>
                 </div>
+                <div v-show="showRunPipeline" class="row">
+                  <div class="col-12">
+                    <card  class="strpied-tabled-with-hover"
+                              body-classes=""
+                        >
+                    <template slot="header" >
+                      <h4 class="card-title text-center" style="padding-bottom:1rem;font-weight:700;">Pipeline Execution</h4>
+                    </template>
 
+                    <template >
+                      <div style="padding-bottom:20px;padding-bottom: 3rem;padding-left:20px;padding-right:20px;">
+
+
+                          <!-- <div v-show="showStatusBar">
+                            <div class="requestProgress">
+                              <div class="bar">
+                              </div>
+                            </div>
+                            <div class="text-center">
+                              <button type="button" class="btn btn-simple" disabled>
+                                    <span style="padding-right:5px;" class="btn-label"><i style="color:#00a77e;" class="fa fa-refresh fa-spin fa-1x fa-fw"></i></span>Loading the pipeline status</button>
+                            </div>
+                          </div> -->
+
+
+                          <div class="row" v-show="showFieldsPipeline">
+                            <base-input class="col-12 col-md-6 no-margin" type="text"
+                              label="URL of the pipeline's target repository"
+                              :disabled="false"
+                              placeholder="https://github.com/EOSC-synergy/sqaaas-web.git"
+                              v-model="repo_url_mimic">
+                            </base-input>
+                            <base-input class="col-12 col-md-6 no-margin"
+                                label="Branch of the pipeline's target repository (Optional)"
+                                :disabled="false"
+                                placeholder="master"
+                                v-model="repo_branch_mimic">
+                            </base-input>
+                          </div>
+                          <div class="text-center" v-show="showFieldsPipeline">
+                            <p style="font-style:italic;color: #A7A1A0;margin-bottom:0px;"><i style="color:#A7A1A0;" class="fa fa-bell" aria-hidden="true"></i> Repositories MUST be public for the checkout to work.</p>
+                          </div>
+
+                          <div class="text-center" style="padding-top:20px;">
+                            <button @click="runPipeline()" type="button" class="btn btn-sm btn-primary btn-fill">
+                                Run/Try Pipeline
+                            </button>
+                          </div>
+                          <div style="padding-bottom:15px;padding-top:20px;" class="text-center col-12" v-show="showStatus">
+                              <span v-if="build_status == 'SUCCESS'" class="badge badge-success"  style="font-size:18px;font-weight:700;">Pipeline successfully executed! <i style="color:white;" class="fa fa-check" aria-hidden="true"></i></span>
+                              <span  v-else-if="build_status == 'FAILURE'" class="badge badge-danger"  style="font-size:18px;font-weight:700;">Ups, something was wrong! <i style="color:white;" class="fa fa-times" aria-hidden="true"></i></span>
+                          </div>
+                          <div class="row">
+                            <div class="text-center col-12 col-md-6" style="padding-top:25px;" v-show="showBuildUrl">
+                              <p><img src="../../static/jenkins.png" alt="" style="padding-bottom:10px;max-width:150px;"></p>
+                              <p style="font-size:18px;font-weight:bold">See the build in Jenkins</p>
+                              <a style="color:white;" class="btn btn-primary btn-fill btn-sm" :href="build_url" target="_blank">Go now!</a>
+                            </div>
+                            <div v-show="showBadge == true" class="col-12 col-md-6" id="badge" style="padding-top:20px;padding-left:15px;">
+                            </div>
+                          </div>
+                      </div>
+
+                    </template>
+                  </card>
+                  </div>
+                </div>
               </template>
-            </card>
-
-
-            </div>
-          </div>
-          <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
+          </card>
+          <!-- <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
               <div class="col-12 col-md-12 text-center">
                   <button @click="back()" type="button" class="btn btn-next-back btn-back" >
                       BACK
@@ -401,7 +408,7 @@
                       Run/Try Pipeline
                   </button>
               </div>
-          </div>
+          </div> -->
         </div>
       </div>
   	</div>
@@ -475,12 +482,15 @@
         possible_status:{
           'WAITING_FOR_SCAN':'SCANING ORGANIZATION',
           'NOT_EXECUTED':'NOT EXECUTED',
-          'NOT_EXECUTED':'NOT EXECUTED',
+          'EXECUTING':'EXECUTING',
           'QUEUED':'QUEUED',
           'RUNNING':'RUNNING',
           'SUCCESS':'SUCCESS',
           'FAILURE':'FAILURE',
-        }
+        },
+        showFeature:'summary',
+        pipeline_create_message:'',
+        createSuccess:false
 		}
     },
     watch:{
@@ -503,6 +513,38 @@
       }
     },
     methods:{
+      showPanel(item){
+        $('#panels').find('div').each(function(){
+          $(this).removeClass('active-panel')
+        })
+        console.log(item)
+        if(item == 'summary'){
+          this.showFeature = 'summary'
+          this.showFiles = false
+          this.showRunPipeline = false
+          $('#summary').addClass('active-panel')
+        }
+        if(item == 'pull_request'){
+          this.showFeature = 'pull_request'
+          this.showFiles = false
+          this.showRunPipeline = false
+          $('#pull_request').addClass('active-panel')
+        }
+        if(item == 'files'){
+          this.showFiles = true
+          this.showRunPipeline = false
+          this.showFeature=''
+          $('#files').addClass('active-panel')
+        }
+        if(item == 'run_pipeline'){
+          this.showFeature=''
+          this.showRunPipeline = true
+          this.showFiles = false
+          this.runPipeline()
+          $('#run').addClass('active-panel')
+        }
+
+      },
       cancelExecution(){
         console.log('here')
         this.autoRefresh = false;
@@ -557,7 +599,7 @@
             this.disabled_button = false;
             this.$router.replace(this.$route.query.redirect || "/logout");
           }else{
-            this.notifyVue("Error ", response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
+            this.notifyVue("Error "+ response.status +":", (response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
           }
         }
         this.loading = false;
@@ -615,20 +657,24 @@
       },
       updatePipelineCallBack(response){
         if(response.status == 204){
-            this.showCard = true;
-            this.disabled_button = true;
-            this.showFiles = true;
-            this.getConfigCall(this.pipeline_id,this.getConfigCallBack);
-            this.getBuilderScriptCall(this.pipeline_id,this.getBuilderScriptCallBack);
-            this.getComposerCall(this.pipeline_id,this.getComposerCallBack);
-            this.getJenkCall(this.pipeline_id,this.getJenkCallBack);
-            this.notifyVue("Success","Pipeline updated successfully.",'nc-icon nc-check-2','info');
-            this.disable_done = false;
+          this.pipeline_create_message = 'Your pipeline has been successfully created!';
+          this.createSuccess = true
+          this.showCard = true;
+          this.disabled_button = true;
+          // this.showFiles = true;
+          this.getConfigCall(this.pipeline_id,this.getConfigCallBack);
+          this.getBuilderScriptCall(this.pipeline_id,this.getBuilderScriptCallBack);
+          this.getComposerCall(this.pipeline_id,this.getComposerCallBack);
+          this.getJenkCall(this.pipeline_id,this.getJenkCallBack);
+          this.notifyVue("Success","Pipeline updated successfully.",'nc-icon nc-check-2','info');
+          this.disable_done = false;
         }else{
            if(response.status == 403){
             this.disabled_button = false;
             this.$router.replace(this.$route.query.redirect || "/logout");
           }else{
+            this.createSuccess = false;
+            this.pipeline_create_message = 'Ups something is wrong!!';
             this.notifyVue("Error", response.status +":" + response.data.detail,'nc-icon nc-simple-remove','danger')
           }
         }
@@ -638,11 +684,13 @@
       createPipelineCallBack(response){
         if(response.status == 201){
           if (response.data.id && response.data.id != 0){
+            this.pipeline_create_message = 'Your pipeline has been successfully created!';
+            this.createSuccess = true
             this.pipeline_id = response.data.id;
             this.$store.state.pipeline_id = this.pipeline_id;
             this.showCard = true;
             this.disabled_button = true;
-            this.showFiles = true;
+            // this.showFiles = true;
             this.getConfigCall(this.pipeline_id,this.getConfigCallBack);
             this.getBuilderScriptCall(this.pipeline_id,this.getBuilderScriptCallBack);
             this.getComposerCall(this.pipeline_id,this.getComposerCallBack);
@@ -655,6 +703,8 @@
             this.disabled_button = false;
             this.$router.replace(this.$route.query.redirect || "/logout");
           }else{
+            this.createSuccess = false
+            this.pipeline_create_message = 'Ups something is wrong!!';
             this.notifyVue("Error", response.status +":" + response.data.detail,'nc-icon nc-simple-remove','danger')
           }
         }
@@ -694,30 +744,24 @@
       },
       runPipelineCallBack(response){
         console.log(response)
-        if(response.status == 200){
-          if (response.data.build_url){
-            this.disable_status = false;
-            this.showCard = true;
-            // this.build_url = response.data.build_url;
-            // this.$store.state.build_url = this.build_url;
-            // this.showBuildUrl = true;
-            this.autoRefresh = true;
-            this.showFieldsPipeline = false;
-
-            // this.notifyVue("Success","Pipeline executed successfully.",'nc-icon nc-check-2','info');
-          }
-        }else if(response.status == 204){
+        if(response.status == 204){
           this.disable_status = false;
+          this.showCard = true;
+          // this.build_url = response.data.build_url;
+          // this.$store.state.build_url = this.build_url;
+          // this.showBuildUrl = true;
           this.autoRefresh = true;
-          // this.notifyVue("Info","Waiting for scan organization.",'nc-icon nc-simple-remove','warning')
+          this.showFieldsPipeline = false;
 
+          // this.notifyVue("Success","Pipeline executed successfully.",'nc-icon nc-check-2','info');
         }else if(response.status == 403){
           this.$router.replace(this.$route.query.redirect || "/logout");
           this.loading = false;
         }else{
           this.showBuildUrl = false;
           this.showBuildUrl = false;
-          this.notifyVue("Error ", response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
+          console.log(response.status)
+          this.notifyVue("Error "+response.status +":",(response.data) ? response.data: '','nc-icon nc-simple-remove','danger')
           this.loading = false;
         }
       },
@@ -769,12 +813,12 @@
           this.$store.state.status = '';
           this.$store.state.build_url = '';
           this.loading = false;
-          this.notifyVue("Error ", response.status +": Pipeline has not been execute",'nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error "+response.status +":", "Pipeline has not been execute",'nc-icon nc-simple-remove','danger')
 
         }else{
           this.autoRefresh = false;
           this.showStatus = false;
-          this.notifyVue("Error ", response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error "+response.status +":", (response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
           this.loading = false;
         }
       },
@@ -789,7 +833,7 @@
           this.showStatus = false;
         }else{
           this.showStatus = false;
-          this.notifyVue("Error ", response.status +":" +  response.data.reason,'nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error "+ response.status +":", (response.data)?response.data:'','nc-icon nc-simple-remove','danger')
         }
       },
       pullrequest(){
@@ -818,7 +862,7 @@
         }else if(response.status == 403){
           this.$router.replace(this.$route.query.redirect || "/logout");
         }else{
-          this.notifyVue("Error ", response.status +":" + (response.data.upstream_reason) ? response.data.upstream_reason : response.data.reason,'nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error "+response.status +":",(response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
         }
         this.loading_create = false;
 
@@ -879,6 +923,8 @@
            }
            console.log(this.yamlConfig)
           // this.getBuilderScriptCall(this.pipeline_id,this.getBuilderScriptCallBack);
+        }else{
+          this.notifyVue("Error "+response.status +":",(response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
         }
       },
       getBuilderScriptCallBack(response){
@@ -892,6 +938,8 @@
              }
              this.yamlConfig.push(file)
            }
+        }else{
+          this.notifyVue("Error "+response.status +":",(response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
         }
       },
       getComposerCallBack(response){
@@ -899,12 +947,17 @@
         if(response.status == 200){
            this.yamlComposer= YAML.stringify(response.data.content)
           //  this.yamlComposer= response.data
+        }else{
+          this.notifyVue("Error "+response.status +":",(response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
         }
+
       },
       getJenkCallBack(response){
         if(response.status == 200){
           this.yamlJenkinsfile= response.data.content;
-          }
+        }else{
+          this.notifyVue("Error "+response.status +":",(response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
+        }
       },
       download(filename, text) {
         console.log(filename)
@@ -936,6 +989,8 @@
           if($("#badge").has("blockquote").length == 0){
             $( "#badge" ).append(response.data);
           }
+        }else{
+          this.notifyVue("Error "+response.status +":",(response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
         }
       },
 
@@ -990,6 +1045,13 @@
 </script>
 <style scoped>
 
+.select-div:hover{
+  background-color: #D6EAF8;
+}
+
+.active-panel{
+  background-color: #D6EAF8;
+}
 /* .custom-link {
   text-decoration: none;
   background-color: #EEEEEE;
@@ -1122,5 +1184,9 @@
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     color: #555;
+}
+
+.badgr-badge p{
+  text-align: center!important;
 }
 </style>

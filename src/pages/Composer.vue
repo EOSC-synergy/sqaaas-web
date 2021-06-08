@@ -3,9 +3,12 @@
     <div class="container-fluid">
       <div class="col-12 col-sm-12 col-lg-8 mx-auto" >
         <div class="" style="margin:auto;padding:0px;">
-          <card style="height:23vh;overflow-y: auto;">
+          <!-- <card >
+
+          </card> -->
+          <card>
             <template slot="header">
-                <div style="display:flex;flex-direction:row">
+                <div style="display:flex;flex-direction:row;padding-bottom:15px;">
                   <div style="background-color:#e6ede8;padding-left:100px;padding-top:20px;padding-bottom:10px;width:80%">
                     <h3 style="margin-top:0px;font-weight:700;" class="card-title">Services make up the testing and building environment</h3>
                     <p style="padding-top:20px">
@@ -18,8 +21,6 @@
                   </div>
                 </div>
             </template>
-          </card>
-          <card>
             <template>
               <div class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
                 <div class="col-12 col-md-6">
