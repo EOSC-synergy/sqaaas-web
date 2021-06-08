@@ -22,12 +22,60 @@
           <span class="fas fa-spinner fa-3x fa-spin"></span>
         </div>
         <div class="col-12 col-sm-12 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
-          <!-- <h4 style="margin-top:0px;" class="card-title text-center">Information Summary</h4> -->
-          <card
-                  body-classes=""
-            >
+          <card body-classes="">
               <template slot="header">
-                <h4 class="card-title text-center" style="font-weight:700;">Information Summary</h4>
+                <div style="display:flex;flex-direction:row;padding-bottom:20px">
+                  <div style="background-color:#c2edd6;padding-left:80px;padding-top:80px;padding-bottom:60px;width:60%">
+                    <h2 style="margin-top:0px;font-weight:700;" class="card-title">Your pipeline has been successfully created!</h2>
+                    <div style="padding-top:20px">
+                      <button class="btn btn-primary btn-fill" @click="generateFiles()">Download</button>
+                    </div>
+                  </div>
+                  <div style="background-color:#c2edd6;padding-left:80px;padding-top:20px;width:40%">
+                    <img src="../../static/pipeline.png" alt="" style="opacity: 0.5;">
+                  </div>
+                </div>
+              </template>
+          </card>
+
+          <card body-classes="">
+              <template>
+              <div style="background-color:#dcf3f7">
+                <div style="padding: 40px 40px 40px 40px;">
+                  <h3 class="text-center">Discover the additional features we provide</h3>
+                </div>
+                <div style="display:flex;flex-direction:row;justify-content:center">
+                  <div>
+                    <a href="#" style="color:inherit">
+                      <p class="text-center"><img src="../../static/summary.png" alt="" style="padding-bottom:10px"></p>
+                      <p class="text-center" style="font-size:20px;font-weight:bold">Config summary</p>
+                      <p class="text-center" style="font-size:15px;opacity:0.8;width:220px">Provides a table-like view with the selections made when the pipeline was composed</p>
+                    </a>
+                  </div>
+                  <div style="padding-left:140px">
+                    <a href="#" style="color:inherit">
+                      <p class="text-center"><img src="../../static/jepl_files.png" alt="" style="padding-left:5px;padding-bottom:10px"></p>
+                      <p class="text-center" style="font-size:20px;font-weight:bold">JePL files</p>
+                      <p class="text-center" style="font-size:15px;opacity:0.8;width:220px">Check out the files that drive the execution of the pipeline</p>
+                    </a>
+                  </div>
+                  <div style="padding-left:140px">
+                    <a href="#" style="color:inherit">
+                      <p class="text-center"><img src="../../static/pull-request.png" alt="" style="padding-left:20px;padding-bottom:10px"></p>
+                      <p class="text-center" style="font-size:20px;font-weight:bold">Pull request</p>
+                      <p class="text-center" style="font-size:15px;opacity:0.8;width:220px">Create a pull request to add the pipeline to your preferred repository</p>
+                      <p class="text-center"><label style="border:solid;border-width:1px;border-color:blue;color:blue;padding:2px 2px 2px 2px">Github only</label></p>
+                    </a>
+                  </div>
+                  <div style="padding-left:140px">
+                    <a href="#" style="color:inherit">
+                      <p class="text-center"><img src="../../static/play.png" alt="" style="padding-bottom:10px"></p>
+                      <p class="text-center" style="font-size:20px;font-weight:bold;">Try out</p>
+                      <p class="text-center" style="font-size:15px;opacity:0.8;width:220px">Execute the composed pipeline and check the results</p>
+                    </a>
+                  </div>
+                </div>
+              </div>
               </template>
 
               <template >
