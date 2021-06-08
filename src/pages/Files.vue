@@ -380,8 +380,8 @@
                             </button>
                           </div>
                           <div style="padding-bottom:15px;padding-top:20px;" class="text-center col-12" v-show="showStatus">
-                              <span v-if="build_status == 'SUCCESS'" class="badge badge-success"  style="font-size:18px;font-weight:700;">Pipeline successfully executed! <i style="color:white;" class="fa fa-check" aria-hidden="true"></i></span>
-                              <span  v-else-if="build_status == 'FAILURE'" class="badge badge-danger"  style="font-size:18px;font-weight:700;">Ups, something was wrong! <i style="color:white;" class="fa fa-times" aria-hidden="true"></i></span>
+                              <span v-if="build_status == 'SUCCESS'" class="badge badge-success"  style="font-size:18px;font-weight:700;">Pipeline was executed successfully! <i style="color:white;" class="fa fa-check" aria-hidden="true"></i></span>
+                              <span  v-else-if="build_status == 'FAILURE'" class="badge badge-danger"  style="font-size:18px;font-weight:700;">Oops, something went wrong while executing the pipeline! <i style="color:white;" class="fa fa-times" aria-hidden="true"></i></span>
                           </div>
                           <div class="row">
                             <div class="text-center col-12 col-md-6" style="padding-top:25px;" v-show="showBuildUrl">
