@@ -3,20 +3,29 @@
     <div class="container-fluid">
       <div class="col-12 col-sm-12 col-lg-8 mx-auto" >
         <div class="" style="margin:auto;padding:0px;">
-          <h4 style="margin-top:0px;font-weight:700;" class="card-title text-center">Services are deployed as Docker containers that will make up the building and testing environment.</h4>
-          <card style="height:90vh;overflow-y: auto;">
-            <template slot="header">
-              <div class="text-center" style="padding-left:20px;padding-top:20px;">
-                <!-- <p style="font-weight:700;">Services are deployed as Docker containers that will make up the building and testing environment.</p> -->
-                <p><i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i> Here you will be able to compose your testing environment by either obtaining Docker images from explicit registries (defaults to Docker Hub) or building your own images through Dockerfiles. The latter will allow you to push the resultant image to the remote Docker registry.</p>
-              </div>
-            </template>
+          <!-- <card >
 
+          </card> -->
+          <card>
+            <template slot="header">
+                <div style="display:flex;flex-direction:row;padding-bottom:15px;">
+                  <div style="background-color:#e6ede8;padding-left:100px;padding-top:20px;padding-bottom:10px;width:80%">
+                    <h3 style="margin-top:0px;font-weight:700;" class="card-title">Services make up the testing and building environment</h3>
+                    <p style="padding-top:20px">
+                        <!--<i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i>-->
+                        Compose your environment by means of Docker containers, either pulling existing images from registries (e.g. from Docker Hub) or building your own (e.g. Dockerfiles)
+                    </p>
+                  </div>
+                  <div style="background-color:#e6ede8;padding-left:80px;padding-top:60px;padding-bottom:20px;width:30%">
+                    <img src="../../static/service.png" alt="" style="opacity: 0.5">
+                  </div>
+                </div>
+            </template>
             <template>
               <div class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
                 <div class="col-12 col-md-6">
                   <base-input style="margin-bottom:0px;" type="text"
-                      label="Service Name"
+                      label="SERVICE NAME"
                       :disabled="false"
                       placeholder="Container name. Example: processing"
                       v-model="service.container_name">
@@ -26,7 +35,7 @@
                   </div>
                 </div>
                <div class="col-12 col-md-6">
-                 <label>Pull OR Build</label>
+                 <label>PULL OR BUILD</label>
                   <select class="custom-select" id="sqacriteria" v-model='pull_build'>
                     <option value="default">Select ...</option>
                     <option value="pull">Pull Image</option>
@@ -41,7 +50,7 @@
 
               <div style="padding-left:20px;" v-show="showPull">
                 <base-input style="margin-bottom:0px;" type="text"
-                  label="Image Name"
+                  label="IMAGE NAME"
                   :disabled="false"
                   placeholder="Name of the image used by the container. Example: worsica/worsica-backend"
                   v-model="service.image">
@@ -56,7 +65,7 @@
                 <div class="col-12 col-md-12 text-left">
 
                     <base-input style="padding-top:1rem;" type="text" class="no-margin"
-                          label="Dockerfile location"
+                          label="DOCKERFILE LOCATION"
                           :disabled="false"
                           placeholder="./"
                           v-model="path_dockerfile">
@@ -65,15 +74,15 @@
                         <span v-show="showErrorPathDockerfile" style="color:red;font-size:12px;">This field is required</span>
                     </div>
                       <base-input style="padding-top:1rem;" type="text" class="no-margin"
-                          label="Docker registry URL (Optional)"
+                          label="DOCKER REGISTRY URL (OPTIONAL)"
                           :disabled="false"
                           placeholder="https://hub.docker.com/"
                           v-model="url_service">
                     </base-input>
-                    <label for="" style="padding-top:20px;">Build arguments (OPTIONAL)</label>
+                    <label for="" style="padding-top:20px;">BUILD ARGUMENTS (OPTIONAL)</label>
                     <div class="row" >
                       <base-input class="col-12 col-md-5" type="text"
-                            label="Key"
+                            label="key"
                             :disabled="false"
                             placeholder="Debug"
                             v-model="arg.key">
@@ -109,16 +118,16 @@
                     </div>
 
                     <div v-show='showBuildImage'>
-                      <div class="row" style="padding-left:35px;">
-                        <p><i style="color:#E09E37;" class="fa fa-bell" aria-hidden="true"></i> You can use the environment variables of the Step 1 and the <a href="https://plugins.jenkins.io/git/#environment-variables" target="blank">Jenkins Git Plugin.</a></p>
-                      </div>
                       <div style="margin-bottom:10px;">
                         <base-input  type="text" class="no-margin" style="padding-left:20px;"
-                            label="Image Name"
+                            label="IMAGE NAME"
                             :disabled="false"
                             placeholder="Name of the image used by the container. Example: worsica/worsica-backend"
                             v-model="service.image">
                         </base-input>
+                        <div class="row" style="padding-left:55px;">
+                          <p style="font-style:italic;color: #A7A1A0;margin-bottom:0px;"><i style="color:#A7A1A0;" class="fa fa-bell" aria-hidden="true"></i> You can use the environment variables of the Step 1 and the <a href="https://plugins.jenkins.io/git/#environment-variables" target="blank">Jenkins Git Plugin.</a></p>
+                        </div>
                         <div class="col-12 text-right">
                             <span v-show="showErrorImageName" style="color:red;font-size:12px;">This field is required</span>
                         </div>
@@ -132,11 +141,14 @@
                         </div>
                         <div v-show="showCredID == false" style="margin-bottom:10px;padding-left:20px;padding-top:10px">
                             <base-input type="text"  class="no-margin"
-                                label="Jenkins credential ID"
+                                label="JENKINS CREDENTIAL ID"
                                 :disabled="false"
                                 placeholder="userpass"
                                 v-model="id_cred_service">
                             </base-input>
+                            <div class="row" style="padding-left:55px;">
+                              <p style="color:#A7A1A0;text-align:justify;margin-bottom:0px;" ><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Provide the ID of the credentials created in Jenkins or <a target="blank" href="https://jenkins.eosc-synergy.eu/"> go now</a> and create them.</p>
+                            </div>
                             <div class="col-12 text-right">
                                 <span v-show="showErrorCredID" style="color:red;font-size:12px;">This field is required</span>
                             </div>
@@ -192,7 +204,7 @@
                     <div class="card-block col-12">
                       <!-- <p>Accordion Item 1 - Body</p> -->
                       <base-input style="padding-left:5px;" type="text"
-                        label="Hostname"
+                        label="HOSTNAME"
                         :disabled="false"
                         placeholder="Container hostname. Example: processing"
                          :help="true"
@@ -218,7 +230,7 @@
                             </select>
                         </div>
                         <base-input class="col-12 col-md-4" type="text"
-                                label="Volume Source"
+                                label="VOLUME SOURCE"
                                 :disabled="false"
                                 placeholder="worsica_web_products"
                                 :help="true"
@@ -227,7 +239,7 @@
                                 v-model="volume.source">
                         </base-input>
                         <base-input class="col-12 col-md-4" type="text"
-                                label="Volume target"
+                                label="VOLUME TARGET"
                                 :disabled="false"
                                 placeholder="/usr/local/worsica_web_products"
                                 :help="true"
@@ -295,7 +307,7 @@
                       <div class="row" v-show='envComposeYesNo.yes' style="padding-left:10x;">
 
                           <base-input class="col-md-6" type="text"
-                                label="Key"
+                                label="key"
                                 :disabled="false"
                                 placeholder="Debug"
                                 v-model="envCompose.key">
@@ -335,22 +347,31 @@
               </div>
 
               <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;">
-                <span class="custom-table-title">Configured Services</span>
+                <div class="text-center" style="padding-bottom:10px;">
+                  <span class="custom-table-title">Configured Services</span>
+                </div>
                 <div class="table-responsive">
                   <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                       <thead>
-                          <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Services</th>
+                          <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Service</th>
+                          <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Image</th>
                           <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Remove</th>
                           <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Push</th>
                       </thead>
                       <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
-                      <tbody v-for="(repo, index) in services" :key="index">
+                      <tbody v-for="(serv, index) in services" :key="index">
                               <tr
                                   style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
                                   <td
                                       style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                       <div style="text-align:left;">
                                           {{index}}
+                                      </div>
+                                  </td>
+                                  <td
+                                      style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <div style="text-align:left;">
+                                          {{serv.image.name}}
                                       </div>
                                   </td>
 
@@ -676,9 +697,6 @@ import services from '../services/services'
             if(this.service.image == ''){
               this.showErrorImageName = true
             }
-            if(this.id_cred_service == ''){
-              this.showErrorCredID = true;
-            }
           }
           if(this.pull_build=='build' && this.showBuildImage==true && this.showCredID==false && this.id_cred_service == '' ){
               this.showErrorCredID = true
@@ -720,7 +738,17 @@ import services from '../services/services'
 
             if(this.showBuildImage == true){
               this.services[this.service.container_name].image.registry.push = true;
-              this.services[this.service.container_name].image.name=this.service.image;
+              if(this.showCredID==true){
+                var add_org_name = this.service.image.split("/");
+                console.log(add_org_name)
+                if(add_org_name.length > 1){
+                  this.services[this.service.container_name].image.name='eoscsynergyapps/'+add_org_name[1];
+                }else{
+                  this.services[this.service.container_name].image.name='eoscsynergyapps/'+this.service.image;
+                }
+              }else{
+                this.services[this.service.container_name].image.name=this.service.image;
+              }
               this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
             }
 
@@ -1006,7 +1034,7 @@ input[type=number]::-webkit-inner-spin-button {
   text-transform: uppercase;
   font-size:16px;
   color:black;
-  font-weight:700,
+  font-weight:700;
 
 }
 

@@ -2,47 +2,65 @@
   <div class="content" style="background-color:#f8f9fa;">
     <div class="container-fluid">
       <div class="col-12 col-sm-12 col-lg-8 mx-auto" style="margin:auto;padding:0px;">
-        <h4 style="margin-top:0px;font-weight:700;" class="card-title text-center">The quality criteria allows you to define the work expected of the CI/CD pipeline. It is then the underpinning part where the pipeline’s purpose takes shape.</h4>
+        <!-- <card>
+
+        </card> -->
+
         <card >
           <template slot="header">
-            <div class="text-center" style="padding-left:20px;padding-top:20px;">
-              <!-- <p style="font-weight:700;">The quality criteria allows you to define the work expected of the CI/CD pipeline. It is then the underpinning part where the pipeline’s purpose takes shape.</p> -->
-              <p><i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i> Use the dropdown list to select the specific criterion you would like to fulfill. Then fill in the requested data.</p>
+            <div style="display:flex;flex-direction:row;padding-bottom:15px;">
+              <div style="background-color:#e6ede8;padding-left:100px;padding-top:20px;padding-bottom:10px;width:80%">
+                <h3 style="margin-top:0px;font-weight:700;" class="card-title">Quality criteria define the CI/CD pipeline work</h3>
+                <p style="padding-top:20px">
+                    <!--<i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i>-->
+                    It is then the underpinning part where the pipeline’s purpose takes shape. The associated properties for each criterion will be displayed once selected in the dropdown list below
+                </p>
+                <div>
+                  <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-right: 15px;">
+                      <div class="" style="margin:auto;padding-bottom:10px">
+                        <label style="color:black;"> CHOOSE A CRITERIA</label>
+                        <select class="custom-select" id="sqacriteria" v-model='criteria'>
+                          <option value="default">Select ...</option>
+                          <option value="QC.Sty">QC.Sty</option>
+                          <option value="QC.Uni">QC.Uni</option>
+                          <option value="QC.Fun">QC.Fun</option>
+                          <option value="QC.Sec">QC.Sec</option>
+                          <option value="QC.Doc">QC.Doc</option>
+                        </select>
+                      </div>
+                      <div v-show="criteria != 'default'" class="col-8" style="margin:auto;border-radius:5px;">
+                        <div class="quote-custom">
+                        <!--<p style="margin-bottom:0px;padding-left:100px;padding-top:20px">
+                          <span style="padding-left:150px;font-weight:700;font-size:40px;font-family: consola;"> {{criteria}}: </span>-->
+                          <p style="font-weight:700;font-size:14px;font-style:italic;">{{(info[criteria]) ? info[criteria].p1 : ''}}
+                          (<a style="text-decoration: underline" :href="(info[criteria]) ? info[criteria]['link'] : ''" target="_blank">See More</a>)</p>
+                        <!--</p>-->
+                        </div>
+    <!--
+                        <p style="margin-bottom:0px"><i><u>Improves:</u></i> {{(info[criteria]) ? info[criteria].p2 : ''}}</p>
+    -->
+                      </div>
+                  </div>
+                  <div class="text-center">
+                    <span v-show="showErrorCriteria" style="color:red; font-size:12px;padding-left:20px;">You must select a valid criteria</span>
+                  </div>
+                </div>
+              </div>
+              <div style="background-color:#e6ede8;padding-left:80px;padding-top:35px;padding-bottom:10px;width:30%">
+                <img src="../../static/criteria.png" alt="" style="opacity: 0.4">
+              </div>
             </div>
           </template>
           <template class="card-body">
-            <div style="margin:0px 0px 2rem 0px;">
-              <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right: 15px;">
-                <div class="col-6">
-                  <label> Choose a criteria</label>
-                  <select class="custom-select" id="sqacriteria" v-model='criteria'>
-                    <option value="default">Select ...</option>
-                    <option value="QC.Sty">QC.Sty</option>
-                    <option value="QC.Uni">QC.Uni</option>
-                    <option value="QC.Fun">QC.Fun</option>
-                    <option value="QC.Sec">QC.Sec</option>
-                    <option value="QC.Doc">QC.Doc</option>
-                  </select>
-                </div>
-                <div v-show="criteria != 'default'" class="col-12" style="margin-top:20px;;background-color:#E1DFDE;border-radius:5px;">
-                  <p style="margin-bottom:0px;">
-                    <span style="font-weight:700; font-family: consola;"> {{criteria}}: </span>
-                    <span style="font-style:italic;">{{(info[criteria]) ? info[criteria].p1 : ''}}</span>
-                    (<a style="text-decoration: underline" :href="(info[criteria]) ? info[criteria]['link'] : ''" target="_blank">See More</a>)
-                  </p>
-                  <p style="margin-bottom:0px"><i><u>Improves:</u></i> {{(info[criteria]) ? info[criteria].p2 : ''}}</p>
-                </div>
-              </div>
-              <div class="text-center">
-                <span v-show="showErrorCriteria" style="color:red; font-size:12px;padding-left:20px;">You must select a valid criteria</span>
-              </div>
-            </div>
+
+
+
             <div class="row" style="margin:0px 0px 2rem 0px;">
 
 
 
               <div v-show="showSelect" class="col-12 col-md-6" style="display:grid;">
-                <label>Select the service</label>
+                <label>SELECT THE SERVICE</label>
                 <select class="custom-select" id="service" v-model='service' >
                   <option value="default">Choose a service...</option>
                   <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
@@ -51,12 +69,16 @@
               </div>
 
               <div v-show="showSelect && objectSize($store.state.config_yaml.config.project_repos) > 0" class="col-12 col-md-6" style="display:grid;">
-                <label>Select an External Repository</label>
-                <select class="custom-select" id="respository" v-model='repository'  >
-                  <option value="default">Choose a repository...</option>
-                  <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="repo.repo">{{repo.repo}}</option>
-                </select>
-                <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
+                <div class="row">
+                  <span class="custom-label" style="text-transform:uppercase;font-size: 12px;">Does the criterion apply to an outside repo?</span><base-checkbox style="font-size:12px;" name="env" v-model="disable_menu"></base-checkbox>
+                </div>
+                <div>
+                  <select :disabled="!disable_menu" class="custom-select" id="respository" v-model='repository'  >
+                    <option value="default">CHOOSE A REPOSITORY...</option>
+                    <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="repo.repo">{{repo.repo}}</option>
+                  </select>
+                  <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
+                </div>
               </div>
             </div>
 
@@ -100,7 +122,7 @@
               <h5 style="font-weight:700;padding-left:15px;">Builder settings</h5>
               <p style="padding-left:15px;font-size:14px;">According to the programming language in use, you can choose between builders. As a catch-all builder you might prefer to use the list of commands that you commonly use for carrying out the work aligned with the given criterion.</p>
               <div class="col-12 col-md-6">
-                <label> Choose a builder tool</label>
+                <label> CHOOSE A BUILDER TOOL</label>
                 <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
                   <option value="default">Select ...</option>
                   <option value="tox">TOX</option>
@@ -201,11 +223,13 @@
               </ul>
             </div>
             <div class="text-right" style="padding-top:4rem;padding-bottom:10px;">
-              <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERIA</button>
+              <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERION</button>
             </div>
 
             <div v-show="showCriteria" style="padding-top:40px;margin-bottom:2rem;">
-                <span class="custom-table-title" style="te">Configured Criteria</span>
+                <div class="text-center" style="padding-bottom:10px;">
+                  <span class="custom-table-title" style="te">Configured Criteria</span>
+                </div>
                 <div class="table-responsive">
                   <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                       <thead>
@@ -253,7 +277,7 @@
                               <tr>
 
                                 <td colspan="5">
-                                  <div :id="'criteria_'+index" class="row col-12" style="padding-top:20px;display:none;">
+                                  <div :id="'criteria_'+index" class="row col-12" style="display:none;justify-content: flex-end;">
                                     <div class="col-12 col-md-4" style="padding-top:28px;">
                                       <select class="custom-select" :id="'select_when_'+index" @change="selectWhen(index)">
                                         <!-- <option value="default"></option> -->
@@ -283,7 +307,7 @@
                                                   v-model="branches[index]"
                                                   >
                                           </base-input>
-                                          <span v-show="showErrorCommand" style="color:red; font-size:12px;">This field is required</span>
+                                          <!-- <span v-show="showErrorCommand" style="color:red; font-size:12px;">This field is required</span> -->
 
                                         </div>
                                         <!-- <div style="padding-top:30px;">
@@ -377,6 +401,7 @@
         showToxBuilder:false,
         showCommandBuilder:false,
         showErrorBuilderTool:false,
+        disable_menu: false,
         info:{
           'QC.Sty':{
             'p1':'Use code style standards to guide your code writing so you let others  understand it.',
@@ -628,7 +653,7 @@
       },
       addCriteria(){
         // || (this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0)
-        if(this.criteria == 'default' || this.service == "default" || (this.commands.length == 0 && this.testenv.length == 0) ){
+        if(this.criteria == 'default' || this.service == "default" || (this.builder_tool == 'command' && this.commands.length == 0)) {
           if(this.criteria == 'default'){
             this.showErrorCriteria = true;
           }
@@ -639,19 +664,20 @@
           //   console.log('here here here')
           //   this.showErrorRepo = true;
           // }
-          if(this.commands.length == 0 && this.testenv.length == 0){
+          if(this.commands.length == 0 ){
             if(this.builder_tool != 'default'){
               if(this.builder_tool == 'command'){
                 if(this.command == ''){
                   this.showErrorCommand = true;
                 }
-              }else if(this.builder_tool == 'tox'){
-                if(this.tox.env == ''){
-                  if(this.tox.env == '' ){
-                    this.showErrorEnv = true
-                  }
-                }
               }
+              // else if(this.builder_tool == 'tox'){
+              //   if(this.tox.env == ''){
+              //     if(this.tox.env == '' ){
+              //       this.showErrorEnv = true
+              //     }
+              //   }
+              // }
             }else{
               this.showErrorBuilderTool = true;
             }
@@ -689,10 +715,10 @@
                   repo_url: (this.repository!='default')?this.repository:'',
                   container: this.service,
             }
-          if (this.commands.length > 0){
+          if (this.builder_tool == 'command'){
             repo=Object.assign(repo, commands)
           }
-           if (this.testenv.length > 0){
+           if (this.builder_tool == 'tox'){
             repo['tox']=Object.assign({},repo['tox'], tox)
           }
           this.repos["repos"].push(repo)
@@ -825,13 +851,16 @@
   }
 </script>
 <style scoped>
+.form-check-label{
+  padding-bottom:5px!important;
+}
 .custom-table-title{
   padding-top:5px;
   /* padding-left:20px; */
   text-transform: uppercase;
   font-size:16px;
   color:black;
-  font-weight:700,
+  font-weight: 700;
 
 }
 .custom-label{
@@ -895,4 +924,10 @@ input[type=number]::-webkit-inner-spin-button {
     }
   }
 
+.quote-custom {
+    height:90px;
+    /* background-image: url("../../static/quote.png"); */
+    background-repeat: no-repeat;
+    opacity:0.5;
+}
 </style>

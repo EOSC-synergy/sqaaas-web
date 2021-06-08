@@ -4,15 +4,26 @@
 			<!-- <span>User: {{username}}</span> -->
       <div class="col-12 col-lg-8 mx-auto" >
         <div class="" style="margin:auto;">
-            <h4 style="margin-top:0px;font-weight:700;" class="card-title text-center">Code repositories are the substrate for the CI/CD pipeline work</h4>
-            <card style="height:75vh;overflow-y: auto;">
-              <template slot="header" >
-                <div class="text-center" style="padding-left:20px;padding-top:20px;">
-                  <!-- <p style="font-weight:700;">Code repositories are the substrate for the CI/CD pipeline work.</p> -->
-                  <p><i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i> CI/CD pipelines are commonly located next to the code, so they can react instantly to code changes. Nonetheless, alternative approaches maintain the pipelines in individual code repositories. Here you will be able to customize your CI/CD pipeline to adequate to one or both approaches (git code repositories only).</p>
+            <!-- <card>
+
+            </card> -->
+
+            <card>
+              <template slot="header">
+                <div style="display:flex;flex-direction:row;padding-bottom:15px;">
+                  <div style="background-color:#e6ede8;padding-left:100px;padding-top:20px;padding-bottom:10px;width:80%">
+                    <h3 style="margin-top:0px;font-weight:700;" class="card-title">Code repositories are the substrate for the CI/CD pipelines</h3>
+                    <p style="padding-top:20px">
+                        <!--<i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i>-->
+                        The ultimate benefit of CI/CD pipelines is that they react instantly to code changes. Having the CI/CD pipelines next to the code they act upon
+                        is the recommended approach.
+                    </p>
+                  </div>
+                  <div style="background-color:#e6ede8;padding-left:80px;padding-top:55px;padding-bottom:10px;width:30%">
+                    <img src="../../static/git.png" alt="" style="opacity: 0.5;">
+                  </div>
                 </div>
               </template>
-
               <template>
                   <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
                     <div style="display:contents" class="col-12 col-md-6">
@@ -82,9 +93,15 @@
                   </div>
 
                   <div v-show="showRepo" style="padding-top:20px;">
-                    <span class="custom-table-title">Configured Repositories</span>
+                    <div class="text-center" style="padding-bottom:10px;">
+                      <span class="custom-table-title">Configured Repositories</span>
+                    </div>
                     <div class="table-responsive">
-                      <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <table class="table" width="80%" cellpadding="0" cellspacing="0" border="0">
+                          <thead>
+                              <th style="text-align:center;justify-content: center;background-color:#C0C0C0;font-size:14px;width:100%;">Configured Repositories</th>
+                              <th style="text-align:center;justify-content: center;background-color:#C0C0C0;font-size:14px;width:100%;"/>
+                          </thead>
                           <thead>
                               <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repo</th>
                               <th style="text-align:center;justify-content: center;,padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
@@ -159,7 +176,7 @@
                         <div v-show='config.credentials.yes' style="padding-left:30px;">
 
                           <base-input type="text" class="no-margin"
-                                label="Jenkins credential ID"
+                                label="JENKINS CREDENTIALS ID"
                                 :disabled="false"
                                 placeholder="userpass"
                                 v-model="credentials.id">
@@ -187,7 +204,7 @@
                             </div>
                           </div> -->
                           <div style="padding-top:20px;">
-                            <label>Jenkins Credential Type</label>
+                            <label>JENKINS CREDENTIAL TYPE</label>
                             <select  class="custom-select" id="cred" v-model='credentials.type' >
                               <!-- <option value="default">Choose a type...</option> -->
                               <option value="username_password">Username Password</option>
@@ -256,7 +273,7 @@
                       <div class="row" v-show='config.env.yes' style="padding-left:30px">
 
                         <base-input class="col-md-6" type="text"
-                              label="Key"
+                              label="key"
                               :disabled="false"
                               placeholder="GIT_USER"
                               v-model="env.key">
@@ -890,7 +907,7 @@ input[type=number]::-webkit-inner-spin-button {
   text-transform: uppercase;
   font-size:16px;
   color:black;
-  font-weight:700,
+  font-weight:700;
 
 }
 
