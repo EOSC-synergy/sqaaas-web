@@ -16,8 +16,8 @@
                     It is then the underpinning part where the pipeline’s purpose takes shape. The associated properties for each criterion will be displayed once selected in the dropdown list below
                 </p>
                 <div>
-                  <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-right: 15px;">
-                      <div class="" style="margin:auto;padding-bottom:10px">
+                  <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left: 15px;">
+                      <div class="" style="padding-bottom:10px">
                         <label style="color:black;"> CHOOSE A CRITERIA</label>
                         <select class="custom-select" id="sqacriteria" v-model='criteria'>
                           <option value="default">Select ...</option>
@@ -28,7 +28,7 @@
                           <option value="QC.Doc">QC.Doc</option>
                         </select>
                       </div>
-                      <div v-show="criteria != 'default'" class="col-8" style="margin:auto;border-radius:5px;">
+                      <div v-show="criteria != 'default'" style="margin:auto;border-radius:5px;">
                         <div class="quote-custom">
                         <!--<p style="margin-bottom:0px;padding-left:100px;padding-top:20px">
                           <span style="padding-left:150px;font-weight:700;font-size:40px;font-family: consola;"> {{criteria}}: </span>-->

@@ -14,7 +14,8 @@
               <p style="font-size:18px;font-weight:700;">Current State: {{build_status}}</p>
             </div>
             <div class="text-center">
-                <button class="btn  btn-danger btn-fill" :disabled="disable_cancel" @click="cancelExecution()">Cancel</button>
+                <a v-show="showBuildUrl" style="color:white;margin-right:10px;" class="btn btn-primary btn-fill btn-sm" :href="build_url" target="_blank">Go Build</a>
+                <button style="margin-left:10px;" class="btn btn-sm btn-danger btn-fill" :disabled="disable_cancel" @click="cancelExecution()">Cancel</button>
               </div>
             </div>
         </div>
@@ -388,7 +389,7 @@
                               <p style="font-size:18px;font-weight:bold">See the build in Jenkins</p>
                               <a style="color:white;" class="btn btn-primary btn-fill btn-sm" :href="build_url" target="_blank">Go now!</a>
                             </div>
-                            <div v-show="showBadge == true" class="col-12 col-md-6" id="badge" style="padding-top:20px;padding-left:15px;">
+                            <div v-show="showBadge == true" class="col-12 col-md-6 text-center" id="badge" style="padding-top:20px;padding-left:15px;">
                             </div>
                           </div>
                       </div>
@@ -985,10 +986,11 @@
       getBadgeCallBackGET(response){
         if(response.status == 200){
           this.showBadge = true;
-
           if($("#badge").has("blockquote").length == 0){
             $( "#badge" ).append(response.data);
           }
+          $('blockquote p').css('text-align','center');
+          $('blockquote p a').css('display','unset');
         }else{
           this.notifyVue("Error "+response.status +":",(response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
         }
@@ -1186,7 +1188,7 @@
     color: #555;
 }
 
-.badgr-badge p{
+blockquote p{
   text-align: center!important;
 }
 </style>
