@@ -779,8 +779,7 @@
             this.$store.state.status = this.build_status;
             this.showStatus = true;
           }
-
-          if (response.data.build_url != ''){
+          if (response.data.build_url != '' && response.data.build_url != null){
             this.showCard = true;
             this.build_url = response.data.build_url;
             this.$store.state.build_url = this.build_url;
