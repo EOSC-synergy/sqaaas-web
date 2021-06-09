@@ -892,7 +892,7 @@ import services from '../services/services'
       }
     }
 
-    this.checkauthCall(this.checkauthCallBack);
+    // this.checkauthCall(this.checkauthCallBack);
 
 
       },

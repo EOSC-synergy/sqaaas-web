@@ -997,7 +997,7 @@
 
   },
   created(){
-    this.checkauthCall(this.checkauthCallBack);
+    // this.checkauthCall(this.checkauthCallBack);
     this.$store.state.status = '';
     this.$store.state.build_url = '';
     var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);

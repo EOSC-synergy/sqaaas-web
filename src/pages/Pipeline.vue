@@ -460,7 +460,7 @@
   },
   created(){
 
-    this.checkauthCall(this.checkauthCallBack);
+    // this.checkauthCall(this.checkauthCallBack);
     console.log(this.$store.state)
     var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
     if(this.$store.state.pipeline_id == ''){

@@ -741,7 +741,7 @@
 
     },
     created(){
-       this.checkauthCall(this.checkauthCallBack);
+      //  this.checkauthCall(this.checkauthCallBack);
       if(this.$store.state.name == ''){
         this.notifyVue("Please define the name of the pipeline",'nc-icon nc-simple-remove','danger')
         this.$router.push({name:"PipelineName"})

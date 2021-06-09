@@ -815,7 +815,7 @@
     },
     created(){
       console.log(this.info)
-      this.checkauthCall(this.checkauthCallBack);
+      // this.checkauthCall(this.checkauthCallBack);
       if(this.$store.state.config_yaml.config.credentials.length > 0){
         this.showCredInfo = true;
       }
