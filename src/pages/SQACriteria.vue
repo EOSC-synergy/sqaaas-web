@@ -47,7 +47,7 @@
                 </div>
               </div>
               <div style="background-color:#e6ede8;padding-left:80px;padding-top:35px;padding-bottom:10px;width:30%">
-                <img src="../../static/criteria.png" alt="" style="opacity: 0.4">
+                <img src="../../static/criteria.png" alt="" style="opacity: 0.4;padding-top:40px">
               </div>
             </div>
           </template>
