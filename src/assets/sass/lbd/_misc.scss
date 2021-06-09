@@ -5,7 +5,7 @@ body,
     position: relative;
 }
 a{
-  color: $info-color;
+  color: #6495ED;
 
   &:hover, &:focus{
      color: $info-states-color;
@@ -57,7 +57,7 @@ input:focus {
 .wrapper{
     position: relative;
     top: 0;
-    height: 100vh;
+    // height: 100vh;
 }
 
 // documentation

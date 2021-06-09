@@ -4,8 +4,8 @@
        :data-color="backgroundColor"
        :data-image="backgroundImage">
     <div class="sidebar-wrapper">
-		<div class="logo" style="background:#c9d22a;border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
-			<a href="#" class="simple-text logo__container">
+		<div class="logo" style="background:#73bbdc;border-bottom: 1px solid rgba(0, 0, 0, 0.1);height:73px;">
+			<a style="color:white;" href="#" class="simple-text logo__container">
 				<div class="logo-img">
 					<img src="../../../static/eosc-synergy.png" alt="">
 				</div>
@@ -13,8 +13,8 @@
 			</a>
 		</div>
 
-      <slot name="content"></slot>
-      <ul class="nav nav-main__links">
+      <slot name="content" style="background:#c9d22a"></slot>
+      <ul class="nav nav-main__links" >
         <!--By default vue-router adds an active class to each route link. This way the links are colored when clicked-->
         <slot>
           <sidebar-link v-for="(link,index) in sidebarLinks"
@@ -47,9 +47,10 @@
       },
       backgroundColor: {
         type: String,
-        default: 'azure',
+        default: 'custom1',
         validator: (value) => {
-          let acceptedValues = ['', 'blue', 'azure', 'green', 'orange', 'red', 'purple', 'black']
+          let acceptedValues = ['', 'blue', 'azure', 'green', 'orange', 'red', 'purple', 'black', 'custom1']
+          console.log(acceptedValues.indexOf(value))
           return acceptedValues.indexOf(value) !== -1
         }
       },
@@ -100,4 +101,5 @@
  .sidebar .sidebar-wrapper .logo .logo__container {
    padding-left: 10px;
  }
+
 </style>
