@@ -48,33 +48,33 @@
                 </div>
                 <div id='panels' class="row" style="justify-content:center;padding-left: 15px;padding-right: 15px;">
                   <div  class="col-12 col-md-3 text-center">
-                    <div id='summary' class="active-panel select-div" @click="showPanel('summary')" role="button" style="color:inherit;padding:10px;min-height: 289px;">
+                    <button :disabled="createSuccess==false" id='summary' :class="{ 'disable-button' : createSuccess == false}"  class="active-panel select-div" @click="showPanel('summary')" role="button" style="color:inherit;padding:10px;min-height: 289px;border:none;background-color: transparent;">
                       <p class="text-center"><img src="../../static/summary.png" alt="" style="padding-bottom:10px"></p>
                       <p class="text-center" style="font-size:20px;font-weight:bold">Config summary</p>
                       <span class="text-center" style="font-size:15px;opacity:0.8;width:220px">Provides a table-like view with the selections made when the pipeline was composed</span>
-                    </div>
+                    </button>
                   </div>
                   <div class="col-12 col-md-3 text-center" >
-                    <div id='files' class="select-div" @click="showPanel('files')" role="button" style="color:inherit;padding:10px;min-height: 289px;">
+                    <button :disabled="createSuccess==false" id='files' :class="{ 'disable-button' : createSuccess == false}" class="select-div" @click="showPanel('files')" role="button" style="color:inherit;padding:10px;min-height: 289px;border:none;background-color: transparent;">
                       <p class="text-center"><img src="../../static/jepl_files.png" alt="" style="padding-left:5px;padding-bottom:10px"></p>
                       <p class="text-center" style="font-size:20px;font-weight:bold">JePL files</p>
                       <span class="text-center" style="font-size:15px;opacity:0.8;width:220px">Check out the files that drive the execution of the pipeline</span>
-                    </div>
+                    </button>
                   </div>
                   <div  class="col-12 col-md-3 text-center">
-                    <div id='pull_request' class="select-div" @click="showPanel('pull_request')" role="button" style="color:inherit;padding:10px;min-height: 289px;">
+                    <button :disabled="createSuccess==false" id='pull_request' :class="{ 'disable-button' : createSuccess == false}" class="select-div" @click="showPanel('pull_request')" role="button" style="color:inherit;padding:10px;min-height: 289px;border:none;background-color: transparent;">
                       <p class="text-center"><img src="../../static/pull-request.png" alt="" style="padding-left:20px;padding-bottom:10px"></p>
                       <p class="text-center" style="font-size:20px;font-weight:bold">Pull request</p>
                       <span class="text-center" style="font-size:15px;opacity:0.8;width:220px">Create a pull request to add the pipeline to your preferred repository</span>
                       <p class="text-center"><label style="border:solid;border-width:1px;border-color:blue;color:blue;padding:2px 2px 2px 2px">Github only</label></p>
-                    </div>
+                    </button>
                   </div>
                   <div class="col-12 col-md-3 text-center" >
-                    <div id='run' class="select-div" @click="showPanel('run_pipeline')" role="button" style="color:inherit;padding:10px;min-height: 289px;">
+                    <button :disabled="createSuccess==false" id='run' :class="{ 'disable-button' : createSuccess == false}" class="select-div" @click="showPanel('run_pipeline')" role="button" style="color:inherit;padding:10px;min-height: 289px;border:none;background-color: transparent;">
                       <p class="text-center"><img src="../../static/play.png" alt="" style="max-width:90px;"></p>
                       <p class="text-center" style="font-size:20px;font-weight:bold;">Try out</p>
                       <span class="text-center" style="font-size:15px;opacity:0.8;width:220px">Execute the composed pipeline and check the results</span>
-                    </div>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -491,7 +491,7 @@
         },
         showFeature:'summary',
         pipeline_create_message:'',
-        createSuccess:false
+        createSuccess:true
 		}
     },
     watch:{
@@ -515,7 +515,7 @@
     },
     methods:{
       showPanel(item){
-        $('#panels').find('div').each(function(){
+        $('#panels').find('button').each(function(){
           $(this).removeClass('active-panel')
         })
         console.log(item)
@@ -1047,12 +1047,17 @@
 </script>
 <style scoped>
 
-.select-div:hover{
-  background-color: #D6EAF8;
+.disable-button{
+      background-color: #ccc!important;
+      cursor: auto;
 }
 
-.active-panel{
-  background-color: #D6EAF8;
+.select-div:hover:enabled{
+  background-color: #D6EAF8!important;
+}
+
+.active-panel:enabled{
+  background-color: #D6EAF8!important;
 }
 /* .custom-link {
   text-decoration: none;
