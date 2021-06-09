@@ -19,8 +19,6 @@ export default {
             'Authorization': 'Bearer ' + token
         },
           success: function (result) {
-            // CallBack(result);
-            console.log("here")
             callBackHandler(result)
           },
           error: function (error) {
@@ -33,6 +31,19 @@ export default {
               method: 'post',
               url: this.env.api,
               data: data
+          }).then(response => {
+              return callBackHandler(response);
+          })
+          .catch(error => {
+              return callBackHandler(error.response);
+          });
+      },
+      updatePipelineCall(id, data,callBackHandler) {
+          axios({
+              method: 'put',
+              url: this.env.api+'/'+id,
+              data:data
+
           }).then(response => {
               return callBackHandler(response);
           })
@@ -54,7 +65,7 @@ export default {
       runPipelineCall(data, callBackHandler){
         axios({
           method: 'post',
-          url: this.env.api +'/'+data+'/run',
+          url: this.env.api +'/'+data.id+'/run?issue_badge=true&repo_url='+data.url+'&repo_branch='+data.branch,
         }).then(response => {
             return callBackHandler(response);
         })
@@ -106,7 +117,19 @@ export default {
     getConfigCall(id,callBackHandler){
          axios({
           method: 'get',
-          url: this.env.api +'/'+id+'/config',
+          url: this.env.api +'/'+id+'/config/jepl',
+        }).then(response => {
+            return callBackHandler(response);
+        })
+        .catch(error => {
+            return callBackHandler(error.response);
+        });
+
+    },
+    getBuilderScriptCall(id,callBackHandler){
+         axios({
+          method: 'get',
+          url: this.env.api +'/'+id+'/config/scripts',
         }).then(response => {
             return callBackHandler(response);
         })
@@ -118,7 +141,7 @@ export default {
     getComposerCall(id,callBackHandler){
          axios({
           method: 'get',
-          url: this.env.api +'/'+id+'/composer',
+          url: this.env.api +'/'+id+'/composer/jepl',
         }).then(response => {
             return callBackHandler(response);
         })
@@ -130,7 +153,31 @@ export default {
     getJenkCall(id,callBackHandler){
          axios({
           method: 'get',
-          url: this.env.api +'/'+id+'/jenkinsfile',
+          url: this.env.api +'/'+id+'/jenkinsfile/jepl',
+        }).then(response => {
+            return callBackHandler(response);
+        })
+        .catch(error => {
+            return callBackHandler(error.response);
+        });
+
+    },
+    getBadgeCallPOST(id,callBackHandler){
+         axios({
+          method: 'post',
+          url: this.env.api +'/'+ id+ '/badge',
+        }).then(response => {
+            return callBackHandler(response);
+        })
+        .catch(error => {
+            return callBackHandler(error.response);
+        });
+
+    },
+    getBadgeCallGET(id,callBackHandler){
+         axios({
+          method: 'get',
+          url: this.env.api +'/'+ id+ '/badge?share=html',
         }).then(response => {
             return callBackHandler(response);
         })
