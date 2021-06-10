@@ -27,9 +27,9 @@
               <template>
                   <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
                     <div style="display:contents" class="col-12 col-md-6">
-                      <span class="custom-label">Does your pipeline need code from external repositories?</span>
+                      <span class="custom-label" style="font-weight:bold;font-size:17px">Does your pipeline need code from external repositories?</span>
                       <div class="custom-div-append">
-                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="External repositories are those different from the one that will contain the current pipeline">
                           <i class="fa fa-question-circle"></i>
                         </button>
                       </div>
@@ -68,7 +68,7 @@
                     <div style="display:contents" class="col-12 col-md-6">
                       <span class="custom-label">Pipeline react to all changes:</span>
                       <div class="custom-div-append">
-                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Define here the environment variables that will be furtherly used by the pipeline">
                           <i class="fa fa-question-circle"></i>
                         </button>
                       </div>
@@ -166,7 +166,7 @@
                         <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
                           <span class="custom-label">Add Credentials?</span>
                           <div class="custom-div-append">
-                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance">
                               <i class="fa fa-question-circle"></i>
                             </button>
                         </div>
@@ -263,7 +263,7 @@
                       <div class="row" style="padding-left:20px;margin-top:2rem;margin-bottom:2rem;">
                         <span class="custom-label">Customize Environment?</span>
                         <div class="custom-div-append" style="padding-left:5px">
-                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Define here the environment variables that will be furtherly used by the pipeline">
                               <i class="fa fa-question-circle"></i>
                             </button>
                         </div>
