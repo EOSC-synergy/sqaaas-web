@@ -100,8 +100,8 @@
                       <table class="table" width="80%" cellpadding="0" cellspacing="0" border="0">
                           <thead>
                               <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repo</th>
-                              <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Branch</th>
-                              <th style="text-align:center;justify-content: center;,padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
+                              <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Branch</th>
+                              <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
                           </thead>
                           <tbody v-for="(repo, index) in $store.state.config_yaml.config.project_repos" :key="index">
                                   <tr
