@@ -113,7 +113,7 @@
                                           </div>
                                       </td>
                                       <td
-                                          style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                          style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                           <div style="text-align:center;">
                                               {{repo.branch}}
                                           </div>
