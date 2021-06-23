@@ -99,11 +99,8 @@
                     <div class="table-responsive">
                       <table class="table" width="80%" cellpadding="0" cellspacing="0" border="0">
                           <thead>
-                              <th style="text-align:center;justify-content: center;background-color:#C0C0C0;font-size:14px;width:100%;">Configured Repositories</th>
-                              <th style="text-align:center;justify-content: center;background-color:#C0C0C0;font-size:14px;width:100%;"/>
-                          </thead>
-                          <thead>
                               <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repo</th>
+                              <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Branch</th>
                               <th style="text-align:center;justify-content: center;,padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
                           </thead>
                           <tbody v-for="(repo, index) in $store.state.config_yaml.config.project_repos" :key="index">
@@ -113,6 +110,12 @@
                                           style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                           <div style="text-align:left;">
                                               {{repo.repo}}
+                                          </div>
+                                      </td>
+                                      <td
+                                          style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                          <div style="text-align:center;">
+                                              {{repo.branch}}
                                           </div>
                                       </td>
 
@@ -560,10 +563,7 @@
         if(this.repo.path == ''){
           this.repo.path = '.sqa/docker-compose.yml'
         }
-        // if(this.repo.branch == ''){
-        //   this.repo.branch = 'master'
-        // }
-          console.log(this.config.workspace.yes)
+
         if(this.repo.url == ''){
           if(this.repo.url == ''){
             this.showErrorRepoUrl = true;
@@ -574,15 +574,10 @@
         }else{
           // this.showErrorRepoName = false;
           this.showErrorRepoUrl = false;
-          if(this.config.workspace.yes == true){
-            this.repo.branch = ''
-          }
           var push_repos = {
 
             'repo':this.repo.url.trim(),
             'branch':this.repo.branch.trim(),
-            // 'deploy_template':this.repo.path.trim()
-
           }
           this.config.all_repos.push(push_repos)
           this.showRepo = true;
