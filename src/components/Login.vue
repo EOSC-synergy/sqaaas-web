@@ -97,7 +97,7 @@
       <div class="container" style="">
         <h2 style="font-weight: 700;color:#ffff;padding-bottom:2rem;margin-top: 0px;text-align: center;">Tailor quality checks to your software needs</h2>
         <h4 style="font-weight: 700;padding-bottom:0.2rem;">No expertise required on CI/CD, just graphically compose the pipeline, add it to your code repository, and start validating your software for every change</h4>
-        <p>Researchers and computational scientists use SQAaaS to harness the benefits of applying good software engineering practices to their own software projects. The Pipeline as Code building block allows you to compose and test customized CI/CD pipelines in accordance with [reference criteria](link) used throughout the software development life cycle of research EU projects. And all of this without the burden of being at the forefront of the latest trendy CI languages or configuration formats.</p>
+        <p>Researchers and computational scientists use SQAaaS to harness the benefits of applying good software engineering practices to their own software projects. The Pipeline as a Service building block allows you to compose and test customized CI/CD pipelines in accordance with [reference criteria](link) used throughout the software development life cycle of research EU projects. And all of this without the burden of being at the forefront of the latest trendy CI languages or configuration formats.</p>
         <div class="text-center" style="padding-top:20px;padding-bottom:20px;">
           <button type="button" class=" btn btn-outline btn-login" >Try it out!</button>
 
