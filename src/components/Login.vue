@@ -72,7 +72,7 @@
 
       </div>
       <div style="padding-top:4rem;">
-        <button style type="button" class="btn-outline btn" ><i style="color:black; margin-right:10px;" class="fa fa-play-circle" aria-hidden="true"></i>See SQAaaS in Action</button>
+        <a style type="button" class="btn-outline btn" href="https://www.youtube.com/watch?v=krHm0eP9yiI" target="blank"><i style="color:black; margin-right:10px;" class="fa fa-play-circle" aria-hidden="true"></i>See SQAaaS in Action</a>
       </div>
     </div>
 
@@ -159,7 +159,7 @@
           </div>
           <div class="col-12 col-md-4 text-center">
             <span class="fa-stack fa-3x">
-                <a class='section_docs' href="https://www.youtube.com/watch?v=krHm0eP9yiI" target="blank">
+                <a class='section_docs' href="#">
                     <i class="fa fa-circle fa-stack-2x text-primary"></i>
                     <i class="fa fa-youtube-play fa-stack-1x fa-inverse"></i>
                 </a>
