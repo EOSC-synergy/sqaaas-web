@@ -159,7 +159,7 @@
           </div>
           <div class="col-12 col-md-4 text-center">
             <span class="fa-stack fa-3x">
-                <a class='section_docs' href="#">
+                <a class='section_docs' href="https://www.youtube.com/watch?v=krHm0eP9yiI" target="blank">
                     <i class="fa fa-circle fa-stack-2x text-primary"></i>
                     <i class="fa fa-youtube-play fa-stack-1x fa-inverse"></i>
                 </a>
