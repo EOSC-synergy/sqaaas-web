@@ -85,7 +85,7 @@
           <h2 style="font-weight: 700;color:#73bbdc;margin-top: 0px;">What are SQAaaS <em>digital badges</em> all about?</h2>
           <p>Badges are commonly used by earners for proving the attainment of certain achievements. Digital badges complement traditional badging by providing virtual certification with built-in features for online sharing, verification, portability and trustworthiness. The SQAaaS platform harnesses the potential of the Open Badges specification to issue digital badges for particular versions of the software. Each badge issued by SQAaaS has associated metadata that includes the software quality criteria being fulfilled and the applicable evidence in the form of build logs, reports and/or binary artefacts.</p>
           <h4 style="font-weight: 700;color:#73bbdc;margin-top: 0px;">How can software in research benefit from badges?</h4>
-          <p>The resultant badge can then be shared and verified by external bodies, thus significantly impacting the visibility and adoption of the software. In research ecosystems, such a quality badge definitely contributes to usability, reputation-building and crediting, as well as improving the reusability and reproducibility of the awarded software version</p>
+          <p>The resultant badge can then be shared and verified by external bodies, thus significantly impacting the visibility and adoption of the software. In research ecosystems, such a quality badge definitely contributes to usability, reputation-building and crediting, as well as improving the reusability and reproducibility of the awarded software version.</p>
         </div>
     </section>
 
@@ -94,8 +94,8 @@
           <h2 style="font-weight: 700;color:#ffff;margin-top: 0px;">Benefit from the good practices when developing software and services</h2>
           <h4 style="font-weight: 700;padding-bottom:0.2rem;">Meet the quality criteria we use to foster the implementation of reproducible and sustainable research software.</h4>
           <p>The workflow of the CI/CD pipelines created by the SQAaaS platform is criteria-driven, which means that each stage executed by the pipeline fulfills a criterion from the two sets of Software and Service Quality Assurance documents. The criteria compiled are the result of an open and continuous collaborative effort and can be reached at:</p>
-              <p>- A set of Common Software Quality Assurance Baseline Criteria for Research Projects (link https://github.com/indigo-dc/sqa-baseline)</p>
-              <p>- A set of Common Service Quality Assurance Baseline Criteria for Research Projects (link to https://github.com/EOSC-synergy/service-qa-baseline)</p>
+              <p>- A set of Common Software Quality Assurance Baseline Criteria for <a style="color:white;text-decoration: underline;" href="https://github.com/indigo-dc/sqa-baseline" target="blank">Research Projects</a>.</p>
+              <p>- A set of Common Service Quality Assurance Baseline Criteria for <a style="color:white;text-decoration: underline;" href="https://github.com/EOSC-synergy/service-qa-baseline" target="blank">Research Projects</a>.</p>
         </div>
     </section>
 
@@ -103,9 +103,9 @@
       <div class="container" style="">
         <h2 style="font-weight: 700;color:#73bbdc;padding-bottom:2rem;margin-top: 0px;text-align: center;">Tailor quality checks to your software needs</h2>
         <h4 style="font-weight: 700;padding-bottom:0.2rem;">No expertise required on CI/CD, just graphically compose the pipeline, add it to your code repository, and start validating your software for every change</h4>
-        <p>Researchers and computational scientists use SQAaaS to harness the benefits of applying good software engineering practices to their own software projects. The <strong> <i> Pipeline as a Service </i></strong> building block allows you to compose and test customized CI/CD pipelines in accordance with [reference criteria](link) used throughout the software development life cycle of research EU projects. And all of this without the burden of being at the forefront of the latest trendy CI languages or configuration formats.</p>
+        <p>Researchers and computational scientists use SQAaaS to harness the benefits of applying good software engineering practices to their own software projects. The <strong> <i> Pipeline as a Service </i></strong> building block allows you to compose and test customized CI/CD pipelines in accordance with reference criteria used throughout the software development life cycle of research EU projects. And all of this without the burden of being at the forefront of the latest trendy CI languages or configuration formats.</p>
         <div class="text-center" style="padding-top:20px;padding-bottom:20px;">
-          <button type="button" class=" btn btn-outline btn-white" >Try it out!</button>
+          <button type="button" class=" btn btn-outline btn-white" @click="login_egi()" >Try it out!</button>
 
         </div>
 
@@ -118,7 +118,7 @@
         <h4 style="font-weight: 700;padding-bottom:0.2rem;">Estimate how well your software is doing in terms of QA and get recognition for it!</h4>
         <p>The <strong><i> Quality Assessment & Awarding</i> </strong> building block analyses, building upon your input, the level of completeness with the [reference criteria](link) for any given release of your software. Once the assessment is completed, you will get a digital badge that acknowledges the criteria fulfilled and the associated assets such as the code versioning and building related data.</p>
         <div class="text-center" style="padding-top:20px;padding-bottom:20px;">
-          <button type="button" class=" btn btn-outline btn-login" >Try it out!</button>
+          <button type="button" class=" btn btn-outline btn-login" @click="login_egi()" >Try it out!</button>
 
         </div>
 
