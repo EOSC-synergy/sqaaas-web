@@ -82,10 +82,6 @@
           <p>CI/CD stands for Continuous Integration and Continuous Delivery, respectively. They are common practices in software engineering that aim at improving the overall quality of the software during the development life cycle. CI/CD encompass both the verification and validation (V&V) processes, and thus they not only act at the code level, but also assess the operational part of the software. Consequently, CI/CD helps developers to meet both the functional (behavior-driven) and non-functional (usability-oriented) requirements that the software is intended to provide to their users.</p>
           <h4 style="font-weight: 700;color:#73bbdc;margin-top: 0px;">What about the <em>Pipelines</em>?</h4>
           <p>The CI/CD work is commonly arranged into pipelines, which define the sequential steps that the software V&V needs to go through, commonly as often as new source code changes are added to the codebase. As a result, automation is key to enable the CI/CD scenarios and a key feature of the pipelines.</p>
-        </div>
-    </section>
-    <section class="section-style">
-        <div class="container" style="padding-top:0px;" id="badges" ref="badges">
           <h2 style="font-weight: 700;color:#73bbdc;margin-top: 0px;">What are SQAaaS <em>digital badges</em> all about?</h2>
           <p>Badges are commonly used by earners for proving the attainment of certain achievements. Digital badges complement traditional badging by providing virtual certification with built-in features for online sharing, verification, portability and trustworthiness. The SQAaaS platform harnesses the potential of the Open Badges specification to issue digital badges for particular versions of the software. Each badge issued by SQAaaS has associated metadata that includes the software quality criteria being fulfilled and the applicable evidence in the form of build logs, reports and/or binary artefacts.</p>
           <h4 style="font-weight: 700;color:#73bbdc;margin-top: 0px;">How can software in research benefit from badges?</h4>
@@ -94,23 +90,20 @@
     </section>
 
     <section class="bg-blue section-style">
-      <div class="container" style="">
-        <h2 style="font-weight: 700;color:#ffff;padding-bottom:2rem;margin-top: 0px;text-align: center;">Tailor quality checks to your software needs</h2>
-        <h4 style="font-weight: 700;padding-bottom:0.2rem;">No expertise required on CI/CD, just graphically compose the pipeline, add it to your code repository, and start validating your software for every change</h4>
-        <p>Researchers and computational scientists use SQAaaS to harness the benefits of applying good software engineering practices to their own software projects. The Pipeline as Code building block allows you to compose and test customized CI/CD pipelines in accordance with [reference criteria](link) used throughout the software development life cycle of research EU projects. And all of this without the burden of being at the forefront of the latest trendy CI languages or configuration formats.</p>
-        <div class="text-center" style="padding-top:20px;padding-bottom:20px;">
-          <button type="button" class=" btn btn-outline btn-login" >Try it out!</button>
-
+        <div class="container" style="padding-top:0px;" id="badges" ref="badges">
+          <h2 style="font-weight: 700;color:#ffff;margin-top: 0px;">Benefit from the good practices when developing software and services</h2>
+          <h4 style="font-weight: 700;padding-bottom:0.2rem;">Meet the quality criteria we use to foster the implementation of reproducible and sustainable research software.</h4>
+          <p>The workflow of the CI/CD pipelines created by the SQAaaS platform is criteria-driven, which means that each stage executed by the pipeline fulfills a criterion from the two sets of Software and Service Quality Assurance documents. The criteria compiled are the result of an open and continuous collaborative effort and can be reached at:</p>
+              <p>- A set of Common Software Quality Assurance Baseline Criteria for Research Projects (link https://github.com/indigo-dc/sqa-baseline)</p>
+              <p>- A set of Common Service Quality Assurance Baseline Criteria for Research Projects (link to https://github.com/EOSC-synergy/service-qa-baseline)</p>
         </div>
-
-      </div>
     </section>
 
     <section class="section-style">
-      <div class="container">
-        <h2 style="font-weight: 700;color:#73bbdc;padding-bottom:2rem;margin-top: 0px;text-align: center;">Obtain the quality achievements of your software</h2>
-        <h4 style="font-weight: 700;padding-bottom:0.2rem;">Estimate how well your software is doing in terms of QA and get recognition for it!</h4>
-        <p>The Quality Assessment & Awarding building block analyses, building upon your input, the level of completeness with the [reference criteria](link) for any given release of your software. Once the assessment is completed, you will get a digital badge that acknowledges the criteria fulfilled and the associated assets such as the code versioning and building related data.</p>
+      <div class="container" style="">
+        <h2 style="font-weight: 700;color:#73bbdc;padding-bottom:2rem;margin-top: 0px;text-align: center;">Tailor quality checks to your software needs</h2>
+        <h4 style="font-weight: 700;padding-bottom:0.2rem;">No expertise required on CI/CD, just graphically compose the pipeline, add it to your code repository, and start validating your software for every change</h4>
+        <p>Researchers and computational scientists use SQAaaS to harness the benefits of applying good software engineering practices to their own software projects. The <strong> <i> Pipeline as a Service </i></strong> building block allows you to compose and test customized CI/CD pipelines in accordance with [reference criteria](link) used throughout the software development life cycle of research EU projects. And all of this without the burden of being at the forefront of the latest trendy CI languages or configuration formats.</p>
         <div class="text-center" style="padding-top:20px;padding-bottom:20px;">
           <button type="button" class=" btn btn-outline btn-white" >Try it out!</button>
 
@@ -121,9 +114,33 @@
 
     <section class="bg-blue section-style">
       <div class="container">
-        <h2 style="font-weight: 700;color:#ffff;padding-bottom:2rem;margin-top: 0px;text-align: center;">Deploy your own SQAaaS platform</h2>
+        <h2 style="font-weight: 700;color:#ffff;padding-bottom:2rem;margin-top: 0px;text-align: center;">Obtain the quality achievements of your software</h2>
+        <h4 style="font-weight: 700;padding-bottom:0.2rem;">Estimate how well your software is doing in terms of QA and get recognition for it!</h4>
+        <p>The <strong><i> Quality Assessment & Awarding</i> </strong> building block analyses, building upon your input, the level of completeness with the [reference criteria](link) for any given release of your software. Once the assessment is completed, you will get a digital badge that acknowledges the criteria fulfilled and the associated assets such as the code versioning and building related data.</p>
+        <div class="text-center" style="padding-top:20px;padding-bottom:20px;">
+          <button type="button" class=" btn btn-outline btn-login" >Try it out!</button>
+
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section-style">
+      <div class="container">
+        <h2 style="font-weight: 700;color:#73bbdc;padding-bottom:2rem;margin-top: 0px;text-align: center;">Deploy your own SQAaaS platform</h2>
         <h4 style="font-weight: 700;padding-bottom:0.2rem;">Get the SQAaaS on your premises at the drop of a hat!</h4>
         <p>The SQAaaS platform relies on a set of services to provide its functionality. We deliver an Infrastructure as Code solution that makes the on-premise deployment straightforward for any individual researcher or scientific community. This approach is useful for use cases with privative source code where unrestricted access to the repositories is not granted.</p>
+        <div class="text-center" style="padding-top:20px;padding-bottom:20px;">
+          <button type="button" class=" btn btn-outline btn-white" >Try it out!</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-blue section-style">
+      <div class="container">
+        <h2 style="font-weight: 700;color:#ffff;padding-bottom:2rem;margin-top: 0px;text-align: center;">Use code rather than a graphical interface</h2>
+        <h4 style="font-weight: 700;padding-bottom:0.2rem;">Harness the full potential of the underlying CI/CD technology by means of the JePL library</h4>
+        <p>Tech-savvy users tend to favor code over a graphical interface for the task of managing their CI/CD pipelines. Especially suitable for complex setups, you can use the same library the SQAaaS platform relies on, the <strong><i>JePL library</i></strong>, and benefit from the full set of features it provides.</p>
         <div class="text-center" style="padding-top:20px;padding-bottom:20px;">
           <button type="button" class=" btn btn-outline btn-login" >Try it out!</button>
         </div>
@@ -258,9 +275,9 @@ export default {
    /* margin-bottom:4rem;
    padding-top:2rem; */
    /* padding-bottom:2rem; */
-   height: 400px;
+   min-height: 400px;
    padding-top: 3rem;
-   padding-bottom: 3rem;
+   padding-bottom: 1rem;
 }
 
 .text-primary {
