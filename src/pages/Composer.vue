@@ -52,7 +52,7 @@
                 <base-input style="margin-bottom:0px;" type="text"
                   label="IMAGE NAME"
                   :disabled="false"
-                  placeholder="Name of the image used by the container. Example: worsica/worsica-backend"
+                  placeholder="Name of the image used by the container. Example: alpine:latest"
                   v-model="service.image">
                 </base-input>
                 <div class="text-right">
@@ -84,7 +84,7 @@
                       <base-input class="col-12 col-md-5" type="text"
                             label="key"
                             :disabled="false"
-                            placeholder="Debug"
+                            placeholder="DEBUG"
                             v-model="arg.key">
                       </base-input>
                       <base-input class="col-12 col-md-5" type="text"
@@ -113,8 +113,8 @@
                       </ul>
                     </div>
 
-                    <div class="row" style="padding-bottom:20px;">
-                      <span class="custom-label">Would you like to push the Docker image to a registry (e.g. Docker Hub)?</span><base-checkbox name="env" v-model="showBuildImage"></base-checkbox>
+                    <div class="row" style="padding-bottom:20px;padding-top:20px">
+                      <span class="custom-label" style="font-weight:bold;font-size:17px">Would you like to push the Docker image to a registry (e.g. Docker Hub)?</span><base-checkbox name="env" v-model="showBuildImage"></base-checkbox>
                     </div>
 
                     <div v-show='showBuildImage'>
@@ -131,15 +131,19 @@
                         <div class="col-12 text-right">
                             <span v-show="showErrorImageName" style="color:red;font-size:12px;">This field is required</span>
                         </div>
-                        <div class="row" style="padding-left:20px;padding-top:20px">
-                            <base-checkbox name="env" v-model="showCredID"></base-checkbox><span class="custom-label" style="padding-left:0px">Use the EOSC-Synergy catch-all credentials</span>
+                        <div class="custom-label" style="padding-top:25px;font-size:13px">CREDENTIALS</div>
+                        <div class="row" style="padding-left:50px">
+                            <base-checkbox name="env" v-model="showCredID"></base-checkbox><span class="custom-label" style="padding-left:0px;font-size:17px">Use the EOSC-Synergy catch-all credentials</span>
                             <div class="custom-div-append">
-                              <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+
+                                <!--<button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="The Docker       >  \image will be pushed by the <eoscsynergybot> user to <a target='blank' href='https://hub.docker.com/orgs/eoscsynergyapps/repositories' title='test add link'>Docker  >  \Hub eoscsynergyapps</a> organization">-->
+
+                              <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="The resultant Docker image will be pushed to <a target='blank' href='https://hub.docker.com/orgs/eoscsynergyapps/repositories' title='test add link'>eoscsynergyapps</a> Docker Hub organization">
                                 <i class="fa fa-question-circle"></i>
                               </button>
                             </div>
                         </div>
-                        <div v-show="showCredID == false" style="margin-bottom:10px;padding-left:20px;padding-top:10px">
+                        <div v-show="showCredID == false" style="margin-bottom:10px;padding-left:50px;padding-top:0px">
                             <base-input type="text"  class="no-margin"
                                 label="JENKINS CREDENTIAL ID"
                                 :disabled="false"
@@ -208,7 +212,7 @@
                         :disabled="false"
                         placeholder="Container hostname. Example: processing"
                          :help="true"
-                          link = 'https://docs.docker.com/compose/'
+                          link = 'https://docs.docker.com/compose/compose-file/compose-file-v3/#domainname-hostname-ipc-mac_address-privileged-read_only-shm_size-stdin_open-tty-user-working_dir'
                           message = 'Docker compose oficial documentation'
                         v-model="service.hostname">
                       </base-input>
@@ -217,7 +221,7 @@
                           <div class="row">
                             <span class="custom-label" style="font-size: 12px;text-transform: uppercase;padding-top:10px;">Volume Type</span>
                             <div class="custom-div-append">
-                              <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                              <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Docker compose oficial documentation <a target='blank' href='https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes' title='test add link'>More info</a>">
                                 <i class="fa fa-question-circle"></i>
                               </button>
                             </div>
@@ -232,18 +236,18 @@
                         <base-input class="col-12 col-md-4" type="text"
                                 label="VOLUME SOURCE"
                                 :disabled="false"
-                                placeholder="worsica_web_products"
+                                placeholder="./"
                                 :help="true"
-                                link = 'https://docs.docker.com/compose/'
+                                link = 'https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes'
                                 message = 'Docker compose oficial documentation'
                                 v-model="volume.source">
                         </base-input>
                         <base-input class="col-12 col-md-4" type="text"
                                 label="VOLUME TARGET"
                                 :disabled="false"
-                                placeholder="/usr/local/worsica_web_products"
+                                placeholder="/sqaaas-build"
                                 :help="true"
-                                link = 'https://docs.docker.com/compose/'
+                                link = 'https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes'
                                 message = 'Docker compose oficial documentation'
                                 v-model="volume.target">
                         </base-input>
@@ -299,7 +303,7 @@
                         </div>
                       </div>
                       <div class="row" style="padding-left:5px;margin-bottom:1rem;margin-top:2rem;">
-                        <span class="custom-label">Does the current service need specific environment variables?</span>
+                        <span class="custom-label" style="font-size:17px;font-weight:bold">Does the current service need specific environment variables?</span>
                         <span class="custom-label">Yes</span><base-checkbox name="env" v-model="envComposeYesNo.yes"></base-checkbox>
                         <span class="custom-label">No</span><base-checkbox name="env" v-model="envComposeYesNo.no"></base-checkbox>
                       </div>

@@ -32,7 +32,7 @@
                         <div class="quote-custom">
                         <!--<p style="margin-bottom:0px;padding-left:100px;padding-top:20px">
                           <span style="padding-left:150px;font-weight:700;font-size:40px;font-family: consola;"> {{criteria}}: </span>-->
-                          <p style="font-weight:700;font-size:14px;font-style:italic;">{{(info[criteria]) ? info[criteria].p1 : ''}}
+                          <p style="font-weight:700;font-size:18px;font-style:italic;width:90%;padding-left:40px">{{(info[criteria]) ? info[criteria].p1 : ''}}
                           (<a style="text-decoration: underline" :href="(info[criteria]) ? info[criteria]['link'] : ''" target="_blank">See More</a>)</p>
                         <!--</p>-->
                         </div>
@@ -404,27 +404,27 @@
         disable_menu: false,
         info:{
           'QC.Sty':{
-            'p1':'Use code style standards to guide your code writing so you let others  understand it.',
+            'p1':'"Use code style standards to guide your code writing so you let others  understand it."',
             'p2':'readability, reusability',
             'link':'https://indigo-dc.github.io/sqa-baseline/#code-style-qc.sty'
           },
           'QC.Uni':{
-            'p1':'Test the behaviour of segments or units within your code (e.g. conditionals, loops, functions).',
+            'p1':'"Test the behaviour of segments or units within your code (e.g. conditionals, loops, functions)."',
             'p2':'design, bug detection',
             'link':'https://indigo-dc.github.io/sqa-baseline/#unit-testing-qc.uni'
           },
           'QC.Fun':{
-            'p1':'Ensure compliance with the functional requirements to meet your users’ expectations.',
+            'p1':'"Ensure compliance with the functional requirements to meet your users’ expectations."',
             'p2':'end-user satisfaction',
             'link':'https://indigo-dc.github.io/sqa-baseline/#functional-testing-qc.fun'
           },
           'QC.Sec':{
-            'p1':'Secure your software by finding (statically) common issues associated to the programming language in use and look for disclosed security vulnerabilities.',
+            'p1':'"Secure your software by finding (statically) common issues associated to the programming language in use and look for disclosed security vulnerabilities."',
             'p2':'security issues detection',
             'link':'https://indigo-dc.github.io/sqa-baseline/#security-qc.sec'
           },
           'QC.Doc':{
-            'p1':'Treat documentation as code by using markup languages to automatically build and place it in online repositories.',
+            'p1':'"Treat documentation as code by using markup languages to automatically build and place it in online repositories."',
             'p2':'outreach capacity, documentation maintenance',
             'link':'https://indigo-dc.github.io/sqa-baseline/#documentation-qc.doc'
           }
