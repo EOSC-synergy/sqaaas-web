@@ -27,9 +27,9 @@
               <template>
                   <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
                     <div style="display:contents" class="col-12 col-md-6">
-                      <span class="custom-label">Does your pipeline need code from external repositories?</span>
+                      <span class="custom-label" style="font-weight:bold;font-size:17px">Does your pipeline need code from external repositories?</span>
                       <div class="custom-div-append">
-                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="External repositories are those different from the one that will contain the current pipeline">
                           <i class="fa fa-question-circle"></i>
                         </button>
                       </div>
@@ -68,7 +68,7 @@
                     <div style="display:contents" class="col-12 col-md-6">
                       <span class="custom-label">Pipeline react to all changes:</span>
                       <div class="custom-div-append">
-                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Define here the environment variables that will be furtherly used by the pipeline">
                           <i class="fa fa-question-circle"></i>
                         </button>
                       </div>
@@ -99,12 +99,9 @@
                     <div class="table-responsive">
                       <table class="table" width="80%" cellpadding="0" cellspacing="0" border="0">
                           <thead>
-                              <th style="text-align:center;justify-content: center;background-color:#C0C0C0;font-size:14px;width:100%;">Configured Repositories</th>
-                              <th style="text-align:center;justify-content: center;background-color:#C0C0C0;font-size:14px;width:100%;"/>
-                          </thead>
-                          <thead>
                               <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Repo</th>
-                              <th style="text-align:center;justify-content: center;,padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
+                              <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Branch</th>
+                              <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
                           </thead>
                           <tbody v-for="(repo, index) in $store.state.config_yaml.config.project_repos" :key="index">
                                   <tr
@@ -113,6 +110,12 @@
                                           style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                           <div style="text-align:left;">
                                               {{repo.repo}}
+                                          </div>
+                                      </td>
+                                      <td
+                                          style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                          <div style="text-align:center;">
+                                              {{repo.branch}}
                                           </div>
                                       </td>
 
@@ -166,7 +169,7 @@
                         <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
                           <span class="custom-label">Add Credentials?</span>
                           <div class="custom-div-append">
-                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance">
                               <i class="fa fa-question-circle"></i>
                             </button>
                         </div>
@@ -263,7 +266,7 @@
                       <div class="row" style="padding-left:20px;margin-top:2rem;margin-bottom:2rem;">
                         <span class="custom-label">Customize Environment?</span>
                         <div class="custom-div-append" style="padding-left:5px">
-                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Define here the environment variables that will be furtherly used by the pipeline">
                               <i class="fa fa-question-circle"></i>
                             </button>
                         </div>
@@ -560,10 +563,7 @@
         if(this.repo.path == ''){
           this.repo.path = '.sqa/docker-compose.yml'
         }
-        // if(this.repo.branch == ''){
-        //   this.repo.branch = 'master'
-        // }
-          console.log(this.config.workspace.yes)
+
         if(this.repo.url == ''){
           if(this.repo.url == ''){
             this.showErrorRepoUrl = true;
@@ -574,15 +574,10 @@
         }else{
           // this.showErrorRepoName = false;
           this.showErrorRepoUrl = false;
-          if(this.config.workspace.yes == true){
-            this.repo.branch = ''
-          }
           var push_repos = {
 
             'repo':this.repo.url.trim(),
             'branch':this.repo.branch.trim(),
-            // 'deploy_template':this.repo.path.trim()
-
           }
           this.config.all_repos.push(push_repos)
           this.showRepo = true;
