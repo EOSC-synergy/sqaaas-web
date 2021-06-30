@@ -19,9 +19,9 @@
                   <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left: 15px;">
                       <div class="" style="padding-bottom:10px">
                         <label style="color:black;"> CHOOSE A CRITERIA</label>
-                        <select class="custom-select" id="sqacriteria" v-model='criteria'>
+                        <select style="font-family: console;font-weight: 700;" class="custom-select" id="sqacriteria" v-model='criteria'>
                           <option value="default">Select ...</option>
-                          <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
+                          <option v-for="(crit,key) in array_criterias" :key="key" :value="crit['id']">{{crit['id']}}</option>
 
 
                         </select>
@@ -45,7 +45,7 @@
                 </div>
               </div>
               <div style="background-color:#e6ede8;padding-left:80px;padding-top:35px;padding-bottom:10px;width:30%">
-                <img src="../../static/criteria.png" alt="" style="opacity: 0.4;padding-top:40px">
+                <img src="../../static/criteria.png" alt="" style="opacity: 0.4;padding-top:40px;">
               </div>
             </div>
           </template>
@@ -123,8 +123,9 @@
                 <label> CHOOSE A BUILDER TOOL</label>
                 <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
                   <option value="default">Select ...</option>
-                  <option value="tox">TOX</option>
-                  <option value="command">COMMANDS</option>
+                  <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
+                  <!-- <option value="tox">TOX</option>
+                  <option value="command">COMMANDS</option> -->
                 </select>
               </div>
             </div>
@@ -400,7 +401,8 @@
         showCommandBuilder:false,
         showErrorBuilderTool:false,
         disable_menu: false,
-        array_criterias:{},
+        array_criterias:[],
+        array_tools:[],
         info:{
           'QC.Sty':{
             'p1':'"Use code style standards to guide your code writing so you let others  understand it."',
@@ -456,6 +458,11 @@
         if(val != "default"){
           this.show_link = true;
           this.showSelect = true;
+          for (var i in this.array_criterias){
+            if (this.array_criterias[i].id == val){
+              this.array_tools = this.array_criterias[i]['tools']
+            }
+          }
           this.showErrorCriteria = false;
           if(val == "qc_style"){
             this.criteria_link = ""
@@ -809,7 +816,10 @@
       getCriteriaCallBack(response){
         console.log(response)
         console.log('here')
-        this.array_criterias = reponse
+        if(response.status == 200){
+          this.array_criterias = response.data
+
+        }
       }
 
 
