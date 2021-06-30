@@ -21,11 +21,9 @@
                         <label style="color:black;"> CHOOSE A CRITERIA</label>
                         <select class="custom-select" id="sqacriteria" v-model='criteria'>
                           <option value="default">Select ...</option>
-                          <option value="QC.Sty">QC.Sty</option>
-                          <option value="QC.Uni">QC.Uni</option>
-                          <option value="QC.Fun">QC.Fun</option>
-                          <option value="QC.Sec">QC.Sec</option>
-                          <option value="QC.Doc">QC.Doc</option>
+                          <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
+
+
                         </select>
                       </div>
                       <div v-show="criteria != 'default'" style="margin:auto;border-radius:5px;">
@@ -402,6 +400,7 @@
         showCommandBuilder:false,
         showErrorBuilderTool:false,
         disable_menu: false,
+        array_criterias:{},
         info:{
           'QC.Sty':{
             'p1':'"Use code style standards to guide your code writing so you let others  understand it."',
@@ -806,6 +805,11 @@
         }else{
           this.username = response;
         }
+      },
+      getCriteriaCallBack(response){
+        console.log(response)
+        console.log('here')
+        this.array_criterias = reponse
       }
 
 
@@ -814,6 +818,7 @@
        this.$eventHub.$emit('steps', 3);
     },
     created(){
+      this.getCriteriaCall(this.getCriteriaCallBack)
       console.log(this.info)
       this.checkauthCall(this.checkauthCallBack);
       if(this.$store.state.config_yaml.config.credentials.length > 0){

@@ -186,5 +186,17 @@ export default {
         });
 
     },
+    getCriteriaCall(callBackHandler){
+      axios({
+       method: 'get',
+       url: this.env.api +'/'+id+'/criteria',
+     }).then(response => {
+         return callBackHandler(response);
+     })
+     .catch(error => {
+         return callBackHandler(error.response);
+     });
+
+ },
   }
 }
