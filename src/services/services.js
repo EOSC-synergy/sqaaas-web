@@ -29,7 +29,7 @@ export default {
       createPipelineCall(data, callBackHandler) {
           axios({
               method: 'post',
-              url: this.env.api,
+              url: this.env.api+'/pipeline',
               data: data
           }).then(response => {
               return callBackHandler(response);
@@ -41,7 +41,7 @@ export default {
       updatePipelineCall(id, data,callBackHandler) {
           axios({
               method: 'put',
-              url: this.env.api+'/'+id,
+              url: this.env.api+'/pipeline/'+id,
               data:data
 
           }).then(response => {
@@ -54,7 +54,7 @@ export default {
       deletePipelineCall(data, callBackHandler) {
           axios({
               method: 'delete',
-              url: this.env.api +'/'+data,
+              url: this.env.api+'/pipeline/'+data,
           }).then(response => {
               return callBackHandler(response);
           })
@@ -65,7 +65,7 @@ export default {
       runPipelineCall(data, callBackHandler){
         axios({
           method: 'post',
-          url: this.env.api +'/'+data.id+'/run?issue_badge=true&repo_url='+data.url+'&repo_branch='+data.branch,
+          url: this.env.api +'/pipeline/'+data.id+'/run?issue_badge=true&repo_url='+data.url+'&repo_branch='+data.branch,
         }).then(response => {
             return callBackHandler(response);
         })
@@ -77,7 +77,7 @@ export default {
       checkStatusCall(data, callBackHandler){
         axios({
           method: 'get',
-          url: this.env.api +'/'+data+'/status',
+          url: this.env.api +'/pipeline/'+data+'/status',
         }).then(response => {
             return callBackHandler(response);
         })
@@ -89,7 +89,7 @@ export default {
     downloadFileCall(id, callBackHandler){
       axios({
           method: 'get',
-          url: this.env.api +'/'+id+'/compressed_files',
+          url: this.env.api +'/pipeline/'+id+'/compressed_files',
           contentType:'application/zip',
           responseType: 'blob'
         }).then(response => {
@@ -103,7 +103,7 @@ export default {
     pullRequestCall(id,data, callBackHandler){
       axios({
           method: 'post',
-          url: this.env.api +'/'+id+'/pull_request',
+          url: this.env.api +'/pipeline/'+id+'/pull_request',
           data: data
         }).then(response => {
             return callBackHandler(response);
@@ -117,7 +117,7 @@ export default {
     getConfigCall(id,callBackHandler){
          axios({
           method: 'get',
-          url: this.env.api +'/'+id+'/config/jepl',
+          url: this.env.api +'/pipeline/'+id+'/config/jepl',
         }).then(response => {
             return callBackHandler(response);
         })
@@ -129,7 +129,7 @@ export default {
     getBuilderScriptCall(id,callBackHandler){
          axios({
           method: 'get',
-          url: this.env.api +'/'+id+'/config/scripts',
+          url: this.env.api +'/pipeline/'+id+'/config/scripts',
         }).then(response => {
             return callBackHandler(response);
         })
@@ -141,7 +141,7 @@ export default {
     getComposerCall(id,callBackHandler){
          axios({
           method: 'get',
-          url: this.env.api +'/'+id+'/composer/jepl',
+          url: this.env.api +'/pipeline/'+id+'/composer/jepl',
         }).then(response => {
             return callBackHandler(response);
         })
@@ -153,7 +153,7 @@ export default {
     getJenkCall(id,callBackHandler){
          axios({
           method: 'get',
-          url: this.env.api +'/'+id+'/jenkinsfile/jepl',
+          url: this.env.api +'/pipeline/'+id+'/jenkinsfile/jepl',
         }).then(response => {
             return callBackHandler(response);
         })
@@ -165,7 +165,7 @@ export default {
     getBadgeCallPOST(id,callBackHandler){
          axios({
           method: 'post',
-          url: this.env.api +'/'+ id+ '/badge',
+          url: this.env.api +'/pipeline/'+ id+ '/badge',
         }).then(response => {
             return callBackHandler(response);
         })
@@ -177,7 +177,7 @@ export default {
     getBadgeCallGET(id,callBackHandler){
          axios({
           method: 'get',
-          url: this.env.api +'/'+ id+ '/badge?share=html',
+          url: this.env.api +'/pipeline/'+ id+ '/badge?share=html',
         }).then(response => {
             return callBackHandler(response);
         })
@@ -186,5 +186,17 @@ export default {
         });
 
     },
+    getCriteriaCall(callBackHandler){
+      axios({
+       method: 'get',
+       url: this.env.api +'/criteria',
+     }).then(response => {
+         return callBackHandler(response);
+     })
+     .catch(error => {
+         return callBackHandler(error.response);
+     });
+
+ },
   }
 }

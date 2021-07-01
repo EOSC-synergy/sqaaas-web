@@ -1,6 +1,9 @@
 <template>
   <div class="content" style="background-color:#f8f9fa;">
     <div class="container-fluid">
+      <div  v-show="loading" class="loading-overlay is-active">
+         <span class="fas fa-spinner fa-3x fa-spin"></span>
+      </div>
       <div class="col-12 col-sm-12 col-lg-8 mx-auto" style="margin:auto;padding:0px;">
         <!-- <card>
 
@@ -19,13 +22,11 @@
                   <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left: 15px;">
                       <div class="" style="padding-bottom:10px">
                         <label style="color:black;"> CHOOSE A CRITERIA</label>
-                        <select class="custom-select" id="sqacriteria" v-model='criteria'>
+                        <select style="font-family: console;font-weight: 700;" class="custom-select" id="sqacriteria" v-model='criteria'>
                           <option value="default">Select ...</option>
-                          <option value="QC.Sty">QC.Sty</option>
-                          <option value="QC.Uni">QC.Uni</option>
-                          <option value="QC.Fun">QC.Fun</option>
-                          <option value="QC.Sec">QC.Sec</option>
-                          <option value="QC.Doc">QC.Doc</option>
+                          <option v-for="(crit,key) in array_criterias" :key="key" :value="crit['id']">{{crit['id']}}</option>
+
+
                         </select>
                       </div>
                       <div v-show="criteria != 'default'" style="margin:auto;border-radius:5px;">
@@ -47,7 +48,7 @@
                 </div>
               </div>
               <div style="background-color:#e6ede8;padding-left:80px;padding-top:35px;padding-bottom:10px;width:30%">
-                <img src="../../static/criteria.png" alt="" style="opacity: 0.4;padding-top:40px">
+                <img src="../../static/criteria.png" alt="" style="opacity: 0.4;padding-top:40px;">
               </div>
             </div>
           </template>
@@ -92,8 +93,8 @@
                         <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">PASS</th>
                     </thead>
                     <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
-                    <tbody v-for="(cred, index) in $store.state.config_yaml.config.credentials" :key="index">
-                            <tr
+                    <tbody >
+                            <tr v-for="(cred, index) in $store.state.config_yaml.config.credentials" :key="index"
                                 style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
                                 <td
                                     style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
@@ -125,15 +126,16 @@
                 <label> CHOOSE A BUILDER TOOL</label>
                 <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
                   <option value="default">Select ...</option>
-                  <option value="tox">TOX</option>
-                  <option value="command">COMMANDS</option>
+                  <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
+                  <!-- <option value="tox">TOX</option>
+                  <option value="command">COMMANDS</option> -->
                 </select>
               </div>
             </div>
             <div>
                 <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a builder tool.</span>
               </div>
-            <div class="row" style="padding-top:20px;" v-show="showToxBuilder">
+            <!-- <div class="row" style="padding-top:20px;" v-show="showToxBuilder">
                 <div class="col-12 col-md-6">
 
                   <base-input type="text" class="col-12 no-margin"
@@ -152,17 +154,6 @@
                       <button class="btn btn-outline-secondary" style="border-width:1px; border-color:#3472F7;color:#3472F7;" type="button"  @click="addTestEnv()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD</button>
                     </div>
                   </div>
-                  <!-- <div style="display:flex;">
-                    <base-input type="text" class="col-10 no-margin"
-                            label="Test env"
-                            :disabled="false"
-                            placeholder="stylecheck"
-                            v-model="tox.env">
-                    </base-input>
-                    <div class="col-2"  style="padding-top:30px;padding-left:0px;">
-                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="addTestEnv()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD Tox Env</button>
-                    </div>
-                  </div> -->
                   <span v-show="showErrorEnv" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
 
                 </div>
@@ -193,20 +184,6 @@
                   </div>
                 </div>
                 <span v-show="showErrorCommand" style="padding-left:20px;color:red; font-size:12px;">This field is required</span>
-
-                <!-- <div class="col-10">
-                  <base-input style="padding-left:15px;" type="text" class="no-margin"
-                          label="Command"
-                          :disabled="false"
-                          placeholder="npm install"
-                          v-model="command">
-                  </base-input>
-                  <span v-show="showErrorCommand" style="padding-left:20px;color:red; font-size:12px;">This field is required</span>
-
-                </div> -->
-                <!-- <div class="col-2" style="padding-top:30px;">
-                  <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCommand()"><i class="fa fa-plus"></i>ADD Command</button>
-                </div> -->
               </div>
             </div>
             <div v-show="showCommands" style="padding-top:20px;padding-left:15px;margin-bottom:2rem;">
@@ -221,7 +198,7 @@
                 </li>
 
               </ul>
-            </div>
+            </div> -->
             <div class="text-right" style="padding-top:4rem;padding-bottom:10px;">
               <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERION</button>
             </div>
@@ -363,6 +340,7 @@
     mixins: [Services],
     data () {
       return {
+        loading:false,
         pipelineName:'',
         criteria:'default',
         repository:'default',
@@ -402,6 +380,8 @@
         showCommandBuilder:false,
         showErrorBuilderTool:false,
         disable_menu: false,
+        array_criterias:[],
+        array_tools:[],
         info:{
           'QC.Sty':{
             'p1':'"Use code style standards to guide your code writing so you let others  understand it."',
@@ -433,30 +413,35 @@
       }
     },
     watch:{
-      'builder_tool'(val){
-        console.log(val)
-        if(val=='tox'){
-          this.showToxBuilder = true;
-        }else{
-          this.showToxBuilder = false;
-        }
-        if(val=='command'){
-          this.showCommandBuilder = true;
-        }else{
-          this.showCommandBuilder = false;
-        }
-        if(val=='default'){
-          this.showToxBuilder = false;
-          this.showCommandBuilder = false;
-          this.showErrorBuilderTool = true;
-        }else{
-          this.showErrorBuilderTool = false;
-        }
-      },
+      // 'builder_tool'(val){
+      //   console.log(val)
+      //   if(val=='tox'){
+      //     this.showToxBuilder = true;
+      //   }else{
+      //     this.showToxBuilder = false;
+      //   }
+      //   if(val=='command'){
+      //     this.showCommandBuilder = true;
+      //   }else{
+      //     this.showCommandBuilder = false;
+      //   }
+      //   if(val=='default'){
+      //     this.showToxBuilder = false;
+      //     this.showCommandBuilder = false;
+      //     this.showErrorBuilderTool = true;
+      //   }else{
+      //     this.showErrorBuilderTool = false;
+      //   }
+      // },
       'criteria'(val){
         if(val != "default"){
           this.show_link = true;
           this.showSelect = true;
+          for (var i in this.array_criterias){
+            if (this.array_criterias[i].id == val){
+              this.array_tools = this.array_criterias[i]['tools']
+            }
+          }
           this.showErrorCriteria = false;
           if(val == "qc_style"){
             this.criteria_link = ""
@@ -653,7 +638,9 @@
       },
       addCriteria(){
         // || (this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0)
-        if(this.criteria == 'default' || this.service == "default" || (this.builder_tool == 'command' && this.commands.length == 0)) {
+        // if(this.criteria == 'default' || this.service == "default" || (this.builder_tool == 'command' && this.commands.length == 0)) {
+        if(this.criteria == 'default' || this.service == "default") {
+          console.log('hereeeeeeeeeeeeeeeeeeeeeeeeee')
           if(this.criteria == 'default'){
             this.showErrorCriteria = true;
           }
@@ -684,23 +671,23 @@
           }
 
         }else{
-          var commands = {
-            commands : this.commands
-          }
-          var tox = {}
-          // commands=this.commands
-          tox={
-            tox_file:this.tox.file,
-            testenv: this.testenv
-          }
+          // var commands = {
+          //   commands : this.commands
+          // }
+          // var tox = {}
+          // // commands=this.commands
+          // tox={
+          //   tox_file:this.tox.file,
+          //   testenv: this.testenv
+          // }
           this.showCriteria = true;
           this.disable_done = false;
-          this.clearCommand();
-          this.showCommands = false;
+          // // this.clearCommand();
+          // this.showCommands = false;
           this.showErrorRepo = false;
           this.showErrorService = false;
           this.showErrorCriteria = false;
-          this.show_tool_tox = false;
+          // this.show_tool_tox = false;
 
           this.repos["repos"]=[];
           var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria)
@@ -714,22 +701,36 @@
           repo={
                   repo_url: (this.repository!='default')?this.repository:'',
                   container: this.service,
+                  tools:[]
             }
-          if (this.builder_tool == 'command'){
-            repo=Object.assign(repo, commands)
+          console.log(this.array_tools)
+          var selected_tool = {}
+          for (var i in this.array_tools){
+            if(this.array_tools[i].name == this.builder_tool){
+              selected_tool = this.array_tools[i]
+
+            }
           }
-           if (this.builder_tool == 'tox'){
-            repo['tox']=Object.assign({},repo['tox'], tox)
-          }
+          repo['tools']=Object.assign(repo['tools'], selected_tool)
+          // if (this.builder_tool == 'command'){
+          //   repo=Object.assign(repo, commands)
+          // }
+          //  if (this.builder_tool == 'tox'){
+          //   repo['tox']=Object.assign({},repo['tox'], tox)
+          // }
+
           this.repos["repos"].push(repo)
           this.selected_criteria[this.criteria]=Object.assign({}, this.selected_criteria[this.criteria], this.repos)
           this.$store.state.config_yaml.sqa_criteria[this.criteria] = Object.assign({}, this.$store.state.config_yaml.sqa_criteria[this.criteria], this.repos)
-          this.clearTox();
-          this.commands=[];
-          this.tox.file='';
-          this.testenv=[];
+          // this.clearTox();
+          // this.commands=[];
+          // this.tox.file='';
+          // this.testenv=[];
           this.showErrorFile = false;
-          console.log( this.$store.state.config_yaml.sqa_criteria)
+          console.log( this.$store.state.config_yaml.sqa_criteria);
+          console.log(this.selected_criteria)
+          this.service = 'default'
+          this.builder_tool = 'default'
         }
       },
       removeCriteria(key){
@@ -806,6 +807,15 @@
         }else{
           this.username = response;
         }
+      },
+      getCriteriaCallBack(response){
+        this.loading = false;
+        console.log(response)
+        console.log('here')
+        if(response.status == 200){
+          this.array_criterias = response.data
+
+        }
       }
 
 
@@ -814,6 +824,8 @@
        this.$eventHub.$emit('steps', 3);
     },
     created(){
+      this.loading = true;
+      this.getCriteriaCall(this.getCriteriaCallBack)
       console.log(this.info)
       this.checkauthCall(this.checkauthCallBack);
       if(this.$store.state.config_yaml.config.credentials.length > 0){
