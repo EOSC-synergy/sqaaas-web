@@ -12,8 +12,8 @@
     "dev": "vue-cli-service serve --open",
     "lint-fix": "vue-cli-service lint --fix",
     "deploy": "npm install && npm run build && echo 'sqaaas.eosc-synergy.eu' > dist/CNAME  && gh-pages -d dist/",
-    "stage": "sed -i '/api/c\\ \\ \\ \\ \"api\" : \"https://api-staging.sqaaas.eosc-synergy.eu/v1/pipeline\",' src/env.js && sed -i '/redirect_uri/c\\ \\ \\ \\ \"redirect_uri\" : \"http://localhost:8080/callback.html\",' src/env.js && npm install && npm run dev",
-    "prod": "sed -i '/api/c\\ \\ \\ \\ \"api\" : \"https://api.sqaaas.eosc-synergy.eu/v1/pipeline\",' src/env.js && sed -i '/redirect_uri/c\\ \\ \\ \\ \"redirect_uri\" : \"https://eosc-synergy.github.io/sqaaas-web/callback\",' src/env.js && npm install && npm run dev"
+    "stage": "sed -i '/api/c\\ \\ \\ \\ \"api\" : \"https://api-staging.sqaaas.eosc-synergy.eu/v1\",' src/env.js && sed -i '/redirect_uri/c\\ \\ \\ \\ \"redirect_uri\" : \"http://localhost:8080/callback.html\",' src/env.js && npm install && npm run dev",
+    "prod": "sed -i '/api/c\\ \\ \\ \\ \"api\" : \"https://api.sqaaas.eosc-synergy.eu/v1\",' src/env.js && sed -i '/redirect_uri/c\\ \\ \\ \\ \"redirect_uri\" : \"https://eosc-synergy.github.io/sqaaas-web/callback\",' src/env.js && npm install && npm run dev"
   },
   "dependencies": {
     "axios": "^0.21.0",
