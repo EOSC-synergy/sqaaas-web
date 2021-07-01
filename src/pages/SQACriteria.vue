@@ -93,8 +93,8 @@
                         <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">PASS</th>
                     </thead>
                     <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
-                    <tbody v-for="(cred, index) in $store.state.config_yaml.config.credentials" :key="index">
-                            <tr
+                    <tbody >
+                            <tr v-for="(cred, index) in $store.state.config_yaml.config.credentials" :key="index"
                                 style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
                                 <td
                                     style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
@@ -413,26 +413,26 @@
       }
     },
     watch:{
-      'builder_tool'(val){
-        console.log(val)
-        if(val=='tox'){
-          this.showToxBuilder = true;
-        }else{
-          this.showToxBuilder = false;
-        }
-        if(val=='command'){
-          this.showCommandBuilder = true;
-        }else{
-          this.showCommandBuilder = false;
-        }
-        if(val=='default'){
-          this.showToxBuilder = false;
-          this.showCommandBuilder = false;
-          this.showErrorBuilderTool = true;
-        }else{
-          this.showErrorBuilderTool = false;
-        }
-      },
+      // 'builder_tool'(val){
+      //   console.log(val)
+      //   if(val=='tox'){
+      //     this.showToxBuilder = true;
+      //   }else{
+      //     this.showToxBuilder = false;
+      //   }
+      //   if(val=='command'){
+      //     this.showCommandBuilder = true;
+      //   }else{
+      //     this.showCommandBuilder = false;
+      //   }
+      //   if(val=='default'){
+      //     this.showToxBuilder = false;
+      //     this.showCommandBuilder = false;
+      //     this.showErrorBuilderTool = true;
+      //   }else{
+      //     this.showErrorBuilderTool = false;
+      //   }
+      // },
       'criteria'(val){
         if(val != "default"){
           this.show_link = true;
@@ -638,7 +638,9 @@
       },
       addCriteria(){
         // || (this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0)
-        if(this.criteria == 'default' || this.service == "default" || (this.builder_tool == 'command' && this.commands.length == 0)) {
+        // if(this.criteria == 'default' || this.service == "default" || (this.builder_tool == 'command' && this.commands.length == 0)) {
+        if(this.criteria == 'default' || this.service == "default") {
+          console.log('hereeeeeeeeeeeeeeeeeeeeeeeeee')
           if(this.criteria == 'default'){
             this.showErrorCriteria = true;
           }
@@ -669,23 +671,23 @@
           }
 
         }else{
-          var commands = {
-            commands : this.commands
-          }
-          var tox = {}
-          // commands=this.commands
-          tox={
-            tox_file:this.tox.file,
-            testenv: this.testenv
-          }
+          // var commands = {
+          //   commands : this.commands
+          // }
+          // var tox = {}
+          // // commands=this.commands
+          // tox={
+          //   tox_file:this.tox.file,
+          //   testenv: this.testenv
+          // }
           this.showCriteria = true;
           this.disable_done = false;
-          this.clearCommand();
-          this.showCommands = false;
+          // // this.clearCommand();
+          // this.showCommands = false;
           this.showErrorRepo = false;
           this.showErrorService = false;
           this.showErrorCriteria = false;
-          this.show_tool_tox = false;
+          // this.show_tool_tox = false;
 
           this.repos["repos"]=[];
           var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria)
@@ -702,7 +704,14 @@
                   tools:[]
             }
           console.log(this.array_tools)
-          repo['tools']=Object.assign(repo['tools'], this.array_tools)
+          var selected_tool = {}
+          for (var i in this.array_tools){
+            if(this.array_tools[i].name == this.builder_tool){
+              selected_tool = this.array_tools[i]
+
+            }
+          }
+          repo['tools']=Object.assign(repo['tools'], selected_tool)
           // if (this.builder_tool == 'command'){
           //   repo=Object.assign(repo, commands)
           // }
@@ -713,12 +722,15 @@
           this.repos["repos"].push(repo)
           this.selected_criteria[this.criteria]=Object.assign({}, this.selected_criteria[this.criteria], this.repos)
           this.$store.state.config_yaml.sqa_criteria[this.criteria] = Object.assign({}, this.$store.state.config_yaml.sqa_criteria[this.criteria], this.repos)
-          this.clearTox();
-          this.commands=[];
-          this.tox.file='';
-          this.testenv=[];
+          // this.clearTox();
+          // this.commands=[];
+          // this.tox.file='';
+          // this.testenv=[];
           this.showErrorFile = false;
-          console.log( this.$store.state.config_yaml.sqa_criteria)
+          console.log( this.$store.state.config_yaml.sqa_criteria);
+          console.log(this.selected_criteria)
+          this.service = 'default'
+          this.builder_tool = 'default'
         }
       },
       removeCriteria(key){
