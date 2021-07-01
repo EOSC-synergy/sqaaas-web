@@ -1,6 +1,9 @@
 <template>
   <div class="content" style="background-color:#f8f9fa;">
     <div class="container-fluid">
+      <div  v-show="loading" class="loading-overlay is-active">
+         <span class="fas fa-spinner fa-3x fa-spin"></span>
+      </div>
       <div class="col-12 col-sm-12 col-lg-8 mx-auto" style="margin:auto;padding:0px;">
         <!-- <card>
 
@@ -132,7 +135,7 @@
             <div>
                 <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a builder tool.</span>
               </div>
-            <div class="row" style="padding-top:20px;" v-show="showToxBuilder">
+            <!-- <div class="row" style="padding-top:20px;" v-show="showToxBuilder">
                 <div class="col-12 col-md-6">
 
                   <base-input type="text" class="col-12 no-margin"
@@ -151,17 +154,6 @@
                       <button class="btn btn-outline-secondary" style="border-width:1px; border-color:#3472F7;color:#3472F7;" type="button"  @click="addTestEnv()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD</button>
                     </div>
                   </div>
-                  <!-- <div style="display:flex;">
-                    <base-input type="text" class="col-10 no-margin"
-                            label="Test env"
-                            :disabled="false"
-                            placeholder="stylecheck"
-                            v-model="tox.env">
-                    </base-input>
-                    <div class="col-2"  style="padding-top:30px;padding-left:0px;">
-                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="addTestEnv()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD Tox Env</button>
-                    </div>
-                  </div> -->
                   <span v-show="showErrorEnv" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
 
                 </div>
@@ -192,20 +184,6 @@
                   </div>
                 </div>
                 <span v-show="showErrorCommand" style="padding-left:20px;color:red; font-size:12px;">This field is required</span>
-
-                <!-- <div class="col-10">
-                  <base-input style="padding-left:15px;" type="text" class="no-margin"
-                          label="Command"
-                          :disabled="false"
-                          placeholder="npm install"
-                          v-model="command">
-                  </base-input>
-                  <span v-show="showErrorCommand" style="padding-left:20px;color:red; font-size:12px;">This field is required</span>
-
-                </div> -->
-                <!-- <div class="col-2" style="padding-top:30px;">
-                  <button type="button" class="btn-simple btn btn-xs btn-info" @click="addCommand()"><i class="fa fa-plus"></i>ADD Command</button>
-                </div> -->
               </div>
             </div>
             <div v-show="showCommands" style="padding-top:20px;padding-left:15px;margin-bottom:2rem;">
@@ -220,7 +198,7 @@
                 </li>
 
               </ul>
-            </div>
+            </div> -->
             <div class="text-right" style="padding-top:4rem;padding-bottom:10px;">
               <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERION</button>
             </div>
@@ -362,6 +340,7 @@
     mixins: [Services],
     data () {
       return {
+        loading:false,
         pipelineName:'',
         criteria:'default',
         repository:'default',
@@ -720,13 +699,17 @@
           repo={
                   repo_url: (this.repository!='default')?this.repository:'',
                   container: this.service,
+                  tools:[]
             }
-          if (this.builder_tool == 'command'){
-            repo=Object.assign(repo, commands)
-          }
-           if (this.builder_tool == 'tox'){
-            repo['tox']=Object.assign({},repo['tox'], tox)
-          }
+          console.log(this.array_tools)
+          repo['tools']=Object.assign(repo['tools'], this.array_tools)
+          // if (this.builder_tool == 'command'){
+          //   repo=Object.assign(repo, commands)
+          // }
+          //  if (this.builder_tool == 'tox'){
+          //   repo['tox']=Object.assign({},repo['tox'], tox)
+          // }
+
           this.repos["repos"].push(repo)
           this.selected_criteria[this.criteria]=Object.assign({}, this.selected_criteria[this.criteria], this.repos)
           this.$store.state.config_yaml.sqa_criteria[this.criteria] = Object.assign({}, this.$store.state.config_yaml.sqa_criteria[this.criteria], this.repos)
@@ -814,6 +797,7 @@
         }
       },
       getCriteriaCallBack(response){
+        this.loading = false;
         console.log(response)
         console.log('here')
         if(response.status == 200){
@@ -828,6 +812,7 @@
        this.$eventHub.$emit('steps', 3);
     },
     created(){
+      this.loading = true;
       this.getCriteriaCall(this.getCriteriaCallBack)
       console.log(this.info)
       this.checkauthCall(this.checkauthCallBack);
