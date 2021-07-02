@@ -14,7 +14,7 @@
               <p style="font-size:18px;font-weight:700;">Current State: {{build_status}}</p>
             </div>
             <div class="text-center">
-                <a v-show="showBuildUrl" style="color:white;margin-right:10px;" class="btn btn-primary btn-fill btn-sm" :href="build_url" target="_blank">Go Build</a>
+                <a v-show="showBuildUrl" style="color:white;margin-right:10px;" class="btn btn-primary btn-fill btn-sm" :href="build_url" target="_blank">Check logs</a>
                 <button style="margin-left:10px;" class="btn btn-sm btn-danger btn-fill" :disabled="disable_cancel" @click="cancelExecution()">Cancel</button>
               </div>
             </div>
