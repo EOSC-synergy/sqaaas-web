@@ -11,7 +11,17 @@
                   <i class="fa fa-arrow-left" aria-hidden="true"></i>
                   BACK
               </button>
-              <div class="text-center" style="margin-bottom: 40px;margin-top:40px;">
+              <div class="text-center" style="margin-bottom: 40px;">
+                <p class="text-center" style="font-size:40px;padding-bottom:20px;">Start composing your CI/CD pipeline</p>
+                <div style="padding-bottom:40px;margin-top:2rem;">
+                  <div class="col-12 col-md-6 mx-auto mb-3">
+                    <div>
+                      <input type="text" class="form-control" placeholder="Name of the pipeline. Exmaple: worsica." aria-label="Name of the pipeline. Exmaple: worsica." aria-describedby="basic-addon2" v-model="pipelineName">
+                      <button class="btn btn-next btn-next-back" :disabled='disabled_next' style="border-width:1px; border-color:#000;color:#3472F7;margin-top:10px;" type="button" @click="next()">Create pipeline</button>
+                    </div>
+                    <label  v-show="showErrorPipeline" style="color:red; font-size:12px;" >Error: Invalid character.</label>
+                  </div>
+                </div>
                 <span style="font-weight: bold;font-size: 20px;">The Pipeline as Code block will guide you through 3 steps to compose your CI/CD pipeline based on the software quality criteria you select</span>
                 <p>Once composed, you can then try out the pipeline in our premises or get it to be readily used in your code repositories</p>
               </div>
@@ -19,30 +29,31 @@
 
 						<template>
               <div style="margin-top:4rem;height:250px;">
+
                 <div class="wizard">
                     <div class="wizard-inner">
                         <div class="connecting-line"></div>
                         <ul class="nav nav-tabs" role="tablist">
                             <li role="presentation" class="active step1 general-step">
-                                <a href="#step1" @click="menuChange('1')" data-toggle="tab" aria-controls="step1" role="tab" aria-expanded="true"><span class="round-tab">1 </span> <i style="font-size:16px;">REPOS</i></a>
+                                <a href="#step1" @click="menuChange(1)" data-toggle="tab" aria-controls="step1" role="tab" aria-expanded="true"><span class="round-tab">1 </span> <i style="font-size:16px;">REPOS</i></a>
                                 <div v-show="this.current_step==1" style="margin-top:40px;" >
                                   <p>Provide pointers to the repositories where the target code is available, and customize them as needed (add branches, tags, etc.).</p>
                                 </div>
                             </li>
                             <li role="presentation"  class="step2 general-step">
-                                <a href="#step2" @click="menuChange('2')" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false"><span class="round-tab">2</span> <i style="font-size:16px;">SERVICES</i></a>
+                                <a href="#step2" @click="menuChange(2)" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false"><span class="round-tab">2</span> <i style="font-size:16px;">SERVICES</i></a>
                                 <div v-show="this.current_step==2" style="margin-top:40px;" >
                                   <p>Define the set of services (via Docker containers) that are required for your testing environment.</p>
                                 </div>
                             </li>
                             <li role="presentation" class="step3 general-step">
-                                <a href="#step3" @click="menuChange('3')" data-toggle="tab" aria-controls="step3" role="tab"><span class="round-tab">3</span> <i style="font-size:16px;">CRITERIA</i></a>
+                                <a href="#step3" @click="menuChange(3)" data-toggle="tab" aria-controls="step3" role="tab"><span class="round-tab">3</span> <i style="font-size:16px;">CRITERIA</i></a>
                                  <div v-show="this.current_step==3" style="margin-top:40px;" >
                                   <p>Arrange the pipeline steps according to the supported quality criteria. Each criterion will prompt you for the relevant details to get it done (e.g. build parameters).</p>
                                 </div>
                             </li>
                             <li role="presentation" class="step4 general-step">
-                                <a href="#step4" @click="menuChange('4')" data-toggle="tab" aria-controls="step4" role="tab"><span class="round-tab">4</span> <i style="font-size:16px;">SUMMARY</i></a>
+                                <a href="#step4" @click="menuChange(4)" data-toggle="tab" aria-controls="step4" role="tab"><span class="round-tab">4</span> <i style="font-size:16px;">SUMMARY</i></a>
                                  <div v-show="this.current_step==4" style="margin-top:40px;" >
                                   <p>The CI/CD pipeline is now ready to use. The SQAaaS provides further support for executing and/or downloaine. You could even push it directly to your own git repository.</p>
                                 </div>
@@ -57,18 +68,7 @@
                     </div>
                   </div>
               </div>
-              <p class="text-center" style="font-size:40px;padding-top:20px;padding-bottom:40px;">Start composing your CI/CD pipeline</p>
-              <div style="padding-bottom:40px;margin-top:2rem;">
-                <div class="col-12 col-md-6 mx-auto mb-3">
-                  <div class="input-group">
-                    <input type="text" style="height: 42px;border-right: 1px solid #000;" class="form-control" placeholder="Name of the pipeline. Exmaple: worsica." aria-label="Name of the pipeline. Exmaple: worsica." aria-describedby="basic-addon2" v-model="pipelineName">
-                    <div class="input-group-append">
-                      <button class="btn btn-next btn-next-back" :disabled='disabled_next' style="border-width:1px; border-color:#000;color:#3472F7;" type="button" @click="next()">Create CI/CD pipeline</button>
-                    </div>
-                  </div>
-                   <label  v-show="showErrorPipeline" style="color:red; font-size:12px;" >Error: Invalid character.</label>
-                </div>
-              </div>
+
 						</template>
 					</card>
 				</div>
@@ -98,7 +98,6 @@
     watch:{
       'pipelineName'(val){
         var regex = new RegExp("(^$)|^[a-zA-Z0-9_.-]+$");
-        console.log(val)
         if(regex.test(this.pipelineName) ==  false){
             this.showErrorPipeline= true;
           }else{
@@ -111,12 +110,14 @@
         }
       },
       "autoMove"(val) {
-        console.log('here')
         if (val) {
             this.m = setInterval(() => {
               this.current_step = this.current_step + 1;
+              if (this.current_step == 5){
+                this.current_step = 1
+              };
               this.menuChange(this.current_step)
-            }, 10 * 1000)
+            }, 3 * 1000)
         } else {
             clearInterval(this.m)
         }
@@ -126,39 +127,35 @@
       next(){
         this.autoMove = false;
         this.$store.state.name = this.pipelineName;
+        clearInterval(this.m)
         this.$router.push({name: 'general'});
       },
       back(){
         this.autoMove = false;
+        clearInterval(this.m)
         this.$router.push({name: 'SelectOption'});
       },
       menuChange(step){
-        console.log(step)
         this.current_step = step;
         $('.general-step').removeClass('active')
         $('.step'+step).addClass('active')
 
       },
-      created(){
-        console.log(this.pipelineName)
 
+  },
+  created(){
+        this.autoMove = true
         this.pipelineName = this.$store.state.name;
-
-
       },
-      mounted(){
-        var _this=this
+  mounted(){
+    var _this=this
+    this.$nextTick(function () {
+      setTimeout(function(){
+        _this.autoMove = true
+      },30)
 
-        this.$nextTick(function () {
-           _this.autoMove = true;
-            // window.setInterval(() => {
-            //    console.log('here')
-            //   _this.current_step = _this.current_step + 1;
-            // },100);
+    })
 
-        })
-
-      }
   }
 }
 </script>
