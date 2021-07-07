@@ -66,7 +66,7 @@
                   <option value="default">Choose a service...</option>
                   <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
                 </select>
-                <span v-show="showErrorService" style="color:red; font-size:12px;">You must select a service</span>
+                <span v-show="showErrorService" style="color:red; font-size:12px;">For the selected tool you must select a service.</span>
               </div>
 
               <div v-show="showSelect && objectSize($store.state.config_yaml.config.project_repos) > 0" class="col-12 col-md-6" style="display:grid;">
@@ -639,36 +639,36 @@
       addCriteria(){
         // || (this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0)
         // if(this.criteria == 'default' || this.service == "default" || (this.builder_tool == 'command' && this.commands.length == 0)) {
-        if(this.criteria == 'default' || this.service == "default") {
+        if(this.criteria == 'default' || (this.builder_tool == 'commands' && this.service == 'default')) {
           console.log('hereeeeeeeeeeeeeeeeeeeeeeeeee')
           if(this.criteria == 'default'){
             this.showErrorCriteria = true;
           }
-          if(this.service == "default"){
+          if(this.builder_tool == 'commands' && this.service == 'default'){
             this.showErrorService = true;
           }
           // if(this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0 ){
           //   console.log('here here here')
           //   this.showErrorRepo = true;
           // }
-          if(this.commands.length == 0 ){
-            if(this.builder_tool != 'default'){
-              if(this.builder_tool == 'command'){
-                if(this.command == ''){
-                  this.showErrorCommand = true;
-                }
-              }
-              // else if(this.builder_tool == 'tox'){
-              //   if(this.tox.env == ''){
-              //     if(this.tox.env == '' ){
-              //       this.showErrorEnv = true
-              //     }
-              //   }
-              // }
-            }else{
-              this.showErrorBuilderTool = true;
-            }
-          }
+          // if(this.commands.length == 0 ){
+          //   if(this.builder_tool != 'default'){
+          //     if(this.builder_tool == 'command'){
+          //       if(this.command == ''){
+          //         this.showErrorCommand = true;
+          //       }
+          //     }
+          //     // else if(this.builder_tool == 'tox'){
+          //     //   if(this.tox.env == ''){
+          //     //     if(this.tox.env == '' ){
+          //     //       this.showErrorEnv = true
+          //     //     }
+          //     //   }
+          //     // }
+          //   }else{
+          //     this.showErrorBuilderTool = true;
+          //   }
+          // }
 
         }else{
           // var commands = {
@@ -697,10 +697,16 @@
                this.repos["repos"] = this.$store.state.config_yaml.sqa_criteria[this.criteria]["repos"]
              }
           }
+          var serv = ''
           var repo = {}
+          if(this.service =='default'){
+            serv = ''
+          }else{
+            serv = this.service
+          }
           repo={
                   repo_url: (this.repository!='default')?this.repository:'',
-                  container: this.service,
+                  container: serv,
                   tools:[]
             }
           console.log(this.array_tools)
@@ -836,15 +842,11 @@
       var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
       console.log(this.$store.state.docker_compose.services)
       // if(sizeRepos == 0 || sizeServices == 0){
-      if(sizeServices == 0){
-        this.notifyVue("Error you must add at least one service")
-        this.$router.push({name:"composer"})
-
-      // }else if(this.$store.state.docker_compose.id_cred_service == ""){
-      //   this.notifyVue("Error you must enter the ID of the credential in Jenkins.")
+      // if(sizeServices == 0){
+      //   this.notifyVue("Error you must add at least one service")
       //   this.$router.push({name:"composer"})
-
-      }else{
+      // }else
+      // {
         var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
         var getCriteria = this.$store.state.config_yaml.sqa_criteria
         for (var i in getCriteria){
@@ -857,7 +859,7 @@
           this.showCriteria = false;
           this.disable_done = true;
         }
-      }
+      // }
 
     }
   }

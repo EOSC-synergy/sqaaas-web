@@ -400,7 +400,7 @@
                   <button @click="back()" type="button" class="btn btn-next-back btn-back" >
                       BACK
                   </button>
-                  <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
+                  <button @click="next()" type="button"  class="btn btn-next btn-next-back">
                       NEXT
                   </button>
               </div>
@@ -450,7 +450,7 @@ import services from '../services/services'
         showArg:false,
         showServices:false,
         showErrorCredID:false,
-        disable_done:true,
+        disable_done:false,
         id_credential: '',
         checked: true,
         id_cred_service:'',
@@ -758,7 +758,6 @@ import services from '../services/services'
 
           }
           this.showServices = true;
-          this.disable_done = false;
           this.$store.state.docker_compose.services = this.services;
           if($('#accordionBodyGeneral').hasClass('show')){
             $('#link_accordion').click();
@@ -794,7 +793,6 @@ import services from '../services/services'
         }
         if (this.isEmpty(this.services)) {
           this.showServices = false;
-          this.disable_done = true;
           this.push_image.yes = false;
         }
       },
@@ -889,9 +887,7 @@ import services from '../services/services'
 
       if(this.isEmpty(this.services)){
         this.showServices = false;
-        this.disable_done = true;
       }else {
-        this.disable_done = false;
         this.showServices = true
       }
     }
