@@ -717,7 +717,7 @@
 
             }
           }
-          repo['tools']=Object.assign(repo['tools'], selected_tool)
+          repo['tools'].push(selected_tool)
           // if (this.builder_tool == 'command'){
           //   repo=Object.assign(repo, commands)
           // }
