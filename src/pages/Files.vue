@@ -647,9 +647,6 @@
                       }
 
         this.loading_create = true;
-
-        console.log(this.$store.state)
-
         if(this.pipeline_id != ''){
           this.updatePipelineCall(this.pipeline_id,data,this.updatePipelineCallBack)
         }else{
