@@ -55,34 +55,6 @@
           <template class="card-body">
 
 
-
-            <div class="row" style="margin:0px 0px 2rem 0px;">
-
-
-
-              <div v-show="showSelect" class="col-12 col-md-6" style="display:grid;">
-                <label>SELECT THE SERVICE</label>
-                <select class="custom-select" id="service" v-model='service' >
-                  <option value="default">Choose a service...</option>
-                  <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
-                </select>
-                <span v-show="showErrorService" style="color:red; font-size:12px;">For the selected tool you must select a service.</span>
-              </div>
-
-              <div v-show="showSelect && objectSize($store.state.config_yaml.config.project_repos) > 0" class="col-12 col-md-6" style="display:grid;">
-                <div class="row">
-                  <span class="custom-label" style="text-transform:uppercase;font-size: 12px;">Does the criterion apply to an outside repo?</span><base-checkbox style="font-size:12px;" name="env" v-model="disable_menu"></base-checkbox>
-                </div>
-                <div>
-                  <select :disabled="!disable_menu" class="custom-select" id="respository" v-model='repository'  >
-                    <option value="default">CHOOSE A REPOSITORY...</option>
-                    <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="repo.repo">{{repo.repo}}</option>
-                  </select>
-                  <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
-                </div>
-              </div>
-            </div>
-
             <div v-show="showCredInfo" style="padding-top:20px;margin-bottom:2rem;">
               <span class="custom-label">Credentials</span>
               <div class="table-responsive">
@@ -199,6 +171,29 @@
 
               </ul>
             </div> -->
+            <div class="row" style="margin:2rem 0px 2rem 0px;">
+              <div v-show="showSelect && objectSize( $store.state.docker_compose.services) > 0 && builder_tool == 'commands'" class="col-12 col-md-6" style="display:grid;">
+                <label>SELECT THE SERVICE</label>
+                <select class="custom-select" id="service" v-model='service' >
+                  <option value="default">Choose a service...</option>
+                  <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
+                </select>
+                <span v-show="showErrorService" style="color:red; font-size:12px;">For the selected tool you must select a service.</span>
+              </div>
+
+              <div v-show="showSelect && objectSize($store.state.config_yaml.config.project_repos) > 0" class="col-12 col-md-6" style="display:grid;">
+                <div class="row">
+                  <span class="custom-label" style="text-transform:uppercase;font-size: 12px;">Does the criterion apply to an outside repo?</span><base-checkbox style="font-size:12px;" name="env" v-model="disable_menu"></base-checkbox>
+                </div>
+                <div>
+                  <select :disabled="!disable_menu" class="custom-select" id="respository" v-model='repository'  >
+                    <option value="default">CHOOSE A REPOSITORY...</option>
+                    <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="repo.repo">{{repo.repo}}</option>
+                  </select>
+                  <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
+                </div>
+              </div>
+            </div>
             <div class="text-right" style="padding-top:4rem;padding-bottom:10px;">
               <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERION</button>
             </div>
