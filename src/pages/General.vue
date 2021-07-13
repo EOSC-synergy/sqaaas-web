@@ -18,6 +18,13 @@
                         The ultimate benefit of CI/CD pipelines is that they react instantly to code changes. Having the CI/CD pipelines next to the code they act upon
                         is the recommended approach.
                     </p>
+                    <p>
+                        <span style="text-decoration: underline;font-weight: bold;">This is an optional step:</span>
+                        if the resultant pipeline will be added to the code repository, you are not required to define it here.
+                        <div style="padding-top:15px;width:190px; margin:0 auto;">
+                            <a href="#" onclick="next();" style="border-style:solid;border-width:thin;padding:5px 5px;font-weight: bold;">Skip this step for now ></a>
+                        </div>
+                    </p>
                   </div>
                   <div style="background-color:#e6ede8;padding-left:80px;padding-top:55px;padding-bottom:10px;width:30%">
                     <img src="../../static/git.png" alt="" style="opacity: 0.5;">
