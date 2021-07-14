@@ -15,6 +15,16 @@
                         <!--<i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i>-->
                         Compose your environment by means of Docker containers, either pulling existing images from registries (e.g. from Docker Hub) or building your own (e.g. Dockerfiles)
                     </p>
+                    <div>
+                        <p>
+
+                          <span style="text-decoration: underline;font-weight: bold;">This is an optional step:</span>
+                          spa those tools natively supported by the Pipeline as a Service module (check them out at the <span style="font-style:italic">'Criteria'</span> step) do not require a service definition.
+                        </p>
+                        <div style="padding-top:15px;width:190px; margin:0 auto;">
+                            <button class="btn btn-outline btn-info" style="border-style:solid;border-width:thin;padding:5px 5px;font-weight: bold;" @click="next()" >Skip this step for now ></button>
+                        </div>
+                    </div>
                   </div>
                   <div style="background-color:#e6ede8;padding-left:80px;padding-top:60px;padding-bottom:20px;width:30%">
                     <img src="../../static/service.png" alt="" style="opacity: 0.5">
