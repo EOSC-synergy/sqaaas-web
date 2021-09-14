@@ -4,7 +4,7 @@
       <div  v-show="loading" class="loading-overlay is-active">
          <span class="fas fa-spinner fa-3x fa-spin"></span>
       </div>
-      <div class="col-12 col-sm-12 col-lg-8 mx-auto" style="margin:auto;padding:0px;">
+      <div class="col-12 col-sm-12 col-xl-8 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
         <!-- <card>
 
         </card> -->
@@ -91,87 +91,7 @@
                 </table>
               </div>
             </div>
-            <div v-show="criteria != 'default'" class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
-              <h5 style="font-weight:700;padding-left:15px;">Builder settings</h5>
-              <p style="padding-left:15px;font-size:14px;">According to the programming language in use, you can choose between builders. As a catch-all builder you might prefer to use the list of commands that you commonly use for carrying out the work aligned with the given criterion.</p>
-              <div class="col-12 col-md-6">
-                <label> CHOOSE A BUILDER TOOL</label>
-                <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
-                  <option value="default">Select ...</option>
-                  <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
-                  <!-- <option value="tox">TOX</option>
-                  <option value="command">COMMANDS</option> -->
-                </select>
-              </div>
-            </div>
-            <div>
-                <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a builder tool.</span>
-              </div>
-            <!-- <div class="row" style="padding-top:20px;" v-show="showToxBuilder">
-                <div class="col-12 col-md-6">
-
-                  <base-input type="text" class="col-12 no-margin"
-                          label="Tox file"
-                          :disabled="false"
-                          placeholder="/myrepo-testing/tox.ini"
-                          v-model="tox.file">
-                  </base-input>
-                  <span v-show="showErrorFile" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
-                </div>
-                <div class="col-12 col-md-6" style="display:grid;">
-                  <label >Test ENV</label>
-                  <div class="input-group">
-                    <input type="text" style="height: 42px;border-right: 1px solid #AAAAAA;" class="form-control" placeholder="https://github.com/EOSC-synergy/sqaaas-web.git" aria-label="https://github.com/EOSC-synergy/sqaaas-web.git" aria-describedby="basic-addon2" v-model="tox.env">
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-secondary" style="border-width:1px; border-color:#3472F7;color:#3472F7;" type="button"  @click="addTestEnv()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD</button>
-                    </div>
-                  </div>
-                  <span v-show="showErrorEnv" style="padding-left:40px;color:red; font-size:12px;">This field is required</span>
-
-                </div>
-
-            </div>
-            <div v-show="show_tool_tox" style="padding-top:20px;padding-left:15px;;margin-bottom:2rem;">
-              <span class="custom-label">Test Env</span>
-
-              <ul class="list-group">
-                <li style="padding-bottom:0px;padding-top:0px;" class="list-group-item d-flex justify-content-between"
-                  v-for="(env,key) in testenv"
-                  :key="key"
-                >
-                {{env}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removetestEnv(key)"><i class="fa fa-minus"></i></button></span>
-
-                </li>
-
-              </ul>
-            </div>
-            <div class="row" style="padding-top:20px;" v-show="showCommandBuilder">
-              <div class="col-12" style="padding-left:30px;">
-
-                <label>Command</label>
-                <div class="input-group">
-                  <input type="text" style="height: 42px;border-right: 1px solid #AAAAAA;" class="form-control" placeholder="npm install" aria-describedby="basic-addon2" v-model="command">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" style="border-width:1px; border-color:#3472F7;color:#3472F7;" type="button"  @click="addCommand()"><i style="padding-top:3px;" class="fa fa-plus"></i>ADD</button>
-                  </div>
-                </div>
-                <span v-show="showErrorCommand" style="padding-left:20px;color:red; font-size:12px;">This field is required</span>
-              </div>
-            </div>
-            <div v-show="showCommands" style="padding-top:20px;padding-left:15px;margin-bottom:2rem;">
-              <span class="custom-label">Commands</span>
-              <ul class="list-group">
-                <li style="padding-bottom:0px;padding-top:0px;" class="list-group-item d-flex justify-content-between"
-                  v-for="(command,key) in commands"
-                  :key="key"
-                >
-                {{command}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeCommand(key)"><i class="fa fa-minus"></i></button></span>
-
-                </li>
-
-              </ul>
-            </div> -->
-            <div class="row" style="margin:2rem 0px 2rem 0px;">
+             <div class="row" style="margin:2rem 0px 2rem 0px;">
               <div v-show="showSelect && objectSize( $store.state.docker_compose.services) > 0 && builder_tool == 'commands'" class="col-12 col-md-6" style="display:grid;">
                 <label>SELECT THE SERVICE</label>
                 <select class="custom-select" id="service" v-model='service' >
@@ -194,11 +114,113 @@
                 </div>
               </div>
             </div>
+            <div v-show="criteria != 'default'" class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
+              <h5 style="font-weight:700;padding-left:15px;">Builder settings</h5>
+              <p style="padding-left:15px;font-size:14px;">According to the programming language in use, you can choose between builders. As a catch-all builder you might prefer to use the list of commands that you commonly use for carrying out the work aligned with the given criterion.</p>
+              <div class="col-12 col-md-6">
+                <label> CHOOSE A BUILDER TOOL</label>
+                <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
+                  <option value="default">Select ...</option>
+                  <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
+                  <!-- <option value="tox">TOX</option>
+                  <option value="command">COMMANDS</option> -->
+                </select>
+              </div>
+            </div>
+            <div>
+              <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a builder tool.</span>
+            </div>
+
+            <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderTool">
+              <div v-for="(arg,key) in selected_tool.args" :key="key">
+
+                <label for="">{{arg.description}}</label>
+                <input v-if="arg.selectable ==true &&( typeof arg.repeatable == 'undefined' || arg.repeatable == false) && arg.format == 'string'" :id="'simple_input_'+key" style="margin-bottom:10px;" type="text"
+                  :placeholder="arg.value"
+                >
+
+                <!-- <base-input v-if="arg.selectable ==true &&( typeof arg.repeatable == 'undefined' || arg.repeatable == false) && arg.format == 'string'" :id="'simple_input_'+key" style="margin-bottom:10px;" type="text"
+                    :label="arg.description"
+                    :disabled="false"
+                    :placeholder="arg.value"
+                    >
+                </base-input> -->
+                    <!-- v-model="simple_input.value[key]" -->
+
+                <div v-if="arg.selectable ==true && arg.repeatable == true && arg.format == 'string'" class="form-group">
+                  <label id="array_input_label" for="">{{arg.description}}</label>
+                  <div class="bs-example">
+                    <input type="text" :id="'inputTag_'+key" value="" data-role="tagsinput">
+                  </div>
+                  <div class="text-right">
+                    <label id="array_input_label2" for="">Note: Type something and press Enter.</label>
+
+                  </div>
+                </div>
+
+              <!-- Para dropdownnnnnnnnnnnnnnnnn -->
+                <!-- <div class="col-12 col-md-6">
+                  <label> CHOOSE A BUILDER TOOL</label>
+                  <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
+                    <option value="default">Select ...</option>
+                    <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
+                  </select>
+                </div> -->
+              </div>
+            </div>
+            <div v-show="showBuilderTool" class="text-right" style="padding-top:1rem;padding-bottom:10px;">
+              <button type="button" class="btn btn-sm btn-info" @click="addTool()"><i class="fa fa-plus"></i>ADD TOOL</button>
+            </div>
+
+             <div v-show="array_selected_tools.length > 0" style="padding-top:40px;margin-bottom:2rem;">
+                <div class="text-center" style="padding-bottom:10px;">
+                  <span class="custom-table-title" style="te">Selected Tools</span>
+                </div>
+                <div class="table-responsive">
+                  <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <thead>
+                          <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Tool</th>
+                          <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Arguments</th>
+                          <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
+                      </thead>
+                      <tbody v-for="(tool, index) in array_selected_tools" :key="index">
+                        <tr
+                            style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                            <td
+                                style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                <div style="text-align:left;text-transform: uppercase;">
+                                    {{array_selected_tools[index].name}}
+                                </div>
+                            </td>
+                            <td
+                                style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                <div style="text-align:center;">
+                                    <p style='padding-bottom:0px;' v-for="(arg, index1) in array_selected_tools[index].args" :key="index1">
+                                    {{array_selected_tools[index].args[index1].type +': '+array_selected_tools[index].args[index1].value}}
+
+
+                                    </p>
+                                </div>
+
+                            </td>
+                            <td
+                                style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeTool(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                </button>
+                            </td>
+
+                        </tr>
+                      </tbody>
+                  </table>
+                </div>
+            </div>
+
+
             <div class="text-right" style="padding-top:4rem;padding-bottom:10px;">
               <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERION</button>
             </div>
 
-            <div v-show="showCriteria" style="padding-top:40px;margin-bottom:2rem;">
+            <div v-show="Object.keys(selected_criteria).length > 0" style="padding-top:40px;margin-bottom:2rem;">
                 <div class="text-center" style="padding-bottom:10px;">
                   <span class="custom-table-title" style="te">Configured Criteria</span>
                 </div>
@@ -248,53 +270,89 @@
                               </tr>
                               <tr>
 
-                                <td colspan="5">
-                                  <div :id="'criteria_'+index" class="row col-12" style="display:none;justify-content: flex-end;">
-                                    <div class="col-12 col-md-4" style="padding-top:28px;">
-                                      <select class="custom-select" :id="'select_when_'+index" @change="selectWhen(index)">
-                                        <!-- <option value="default"></option> -->
-                                        <option value="branch">branch</option>
-                                        <!-- <option value="tag">tag</option> -->
-                                        <option value="building_tag">building tag</option>
-                                      </select>
-
-
-                                    </div>
-                                    <!-- <div class="col-12 col-md-4" style="padding-top:28px;">
-                                      <select class="custom-select" :id="'select_comp_'+key" >
-                                        <option value="default"></option>
-                                        <option value="anyOf">anyOf</option>
-                                        <option value="allOf">allOf</option>
-                                        <option value="not">not</option>
-                                      </select>
-                                    </div> -->
-                                    <div class="col-12 col-md-4">
-                                      <div class="row">
-                                        <div class="display:grid;">
-                                          <base-input type="text"  class="no-margin"
-                                                  :label="'Branch'"
-                                                  placeholder="master"
-                                                  :id="'select_branch_'+index"
-                                                  @input="getBranch(index)"
-                                                  v-model="branches[index]"
-                                                  >
-                                          </base-input>
-                                          <!-- <span v-show="showErrorCommand" style="color:red; font-size:12px;">This field is required</span> -->
-
-                                        </div>
-                                        <!-- <div style="padding-top:30px;">
-                                          <button type="button" :id="'button_branch_'+key" class="btn-simple btn btn-xs btn-info" @click="addExecute(key)"><i class="fa fa-plus"></i>ADD</button>
-                                        </div> -->
+                                <td colspan="4" style="">
+                                  <div :id="'criteria_'+index" class="" style="display:none;justify-content: flex-end;">
+                                    <div class="row">
+                                      <div class="col-12 col-md-3" style="padding-top:28px;">
+                                        <select class="custom-select" :id="'select_when_'+index" @change="selectWhen(index)">
+                                          <!-- <option value="default"></option> -->
+                                          <option value="branch">branch</option>
+                                          <!-- <option value="tag">tag</option> -->
+                                          <option value="building_tag">building tag</option>
+                                        </select>
 
 
                                       </div>
+                                      <div class="col-12 col-md-3" style="padding-top:28px;">
+                                        <select class="custom-select" :id="'select_comp_'+index" >
+                                          <option value="equals">equals</option>
+                                          <option value="not">not</option>
+                                        </select>
+                                      </div>
+                                      <div class="col-12 col-md-3">
+                                        <div class="row">
+                                          <div class="display:grid;">
+                                            <base-input type="text"  class="no-margin"
+                                                    :label="'Branch'"
+                                                    placeholder="master"
+                                                    :id="'select_branch_'+index"
+                                                    @input="getBranch(index)"
+                                                    v-model="branches[index]"
+                                                    >
+                                            </base-input>
+                                            <!-- <span v-show="showErrorCommand" style="color:red; font-size:12px;">This field is required</span> -->
+
+                                          </div>
+                                          <!-- <div style="padding-top:30px;">
+                                            <button type="button" :id="'button_branch_'+key" class="btn-simple btn btn-xs btn-info" @click="addExecute(key)"><i class="fa fa-plus"></i>ADD</button>
+                                          </div> -->
+
+
+                                        </div>
+                                      </div>
+                                      <div class="col-12 col-md-2">
+                                          <button style="position:absolute;bottom:0;" type="button" class="btn-simple btn btn-xs btn-info" @click="addWhenProp(index)"><i class="fa fa-plus"></i>ADD</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="row col-12" style="justify-content: center;" >
+                                    <ul class="list-group" style="border:none;">
+                                      <li class="list-group-item d-flex justify-content-between" style="border:none;"
+                                        v-for="(env,key) in criterias_store_branch"
+                                        :key="key"
+                                      >
+                                      <span v-if="criterias_store_branch[key][index]">
+                                        branch : {{(criterias_store_branch[key][index])?criterias_store_branch[key][index]['comp']:''}} : {{(criterias_store_branch[key][index])?criterias_store_branch[key][index]['branch']:''}}<span><button type="button" class="btn-simple btn btn-xs btn-info" @click="removeOperator(key)"><i class="fa fa-minus"></i></button></span>
+
+                                      </span>
+
+                                      </li>
+
+                                    </ul>
+                                  </div>
+                                   <div class="row col-12" v-show="showOperation[index]" style="justify-content: center;" >
+                                      <span style="margin-top:3px;margin-right:10px;">Operation</span>
+
+                                        <div class="form-check form-check-inline">
+                                          <input class="form-check-input" type="radio" :name="'operator_'+index" :id="'operator_anyOf_'+index" value="anyof">
+                                          <label class="custom-label" style="padding-left:0px;" for="exampleRadios1" >
+                                           anyOf
+                                          </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                          <input class="form-check-input" type="radio" :name="'operator_'+index" :id="'operator_allOf_'+index" value="allof">
+                                          <label class="custom-label" style="padding-left:0px;" for="exampleRadios2">
+                                           allOf
+                                          </label>
+                                        </div>
+
+
+                                        <!-- <span class="custom-label">anyOf</span><base-checkbox name="workpace" :id="'anyof_'+index" v-model="anyof[index]" @change="changeCheckbox(index)"></base-checkbox>
+                                        <span class="custom-label">allOf</span><base-checkbox name="workspace" :id="'allof_'+index" v-model="allof[index]" ></base-checkbox> -->
+
                                     </div>
 
-
-                                  </div>
-
                                 </td>
-                                <td style="display: none;"></td>
                                 <td style="display: none;"></td>
                                 <td style="display: none;"></td>
                                 <td style="display: none;"></td>
@@ -371,12 +429,22 @@
         criterias_store:{},
         showCredInfo:false,
         builder_tool: 'default',
-        showToxBuilder:false,
+        showBuilderTool:false,
         showCommandBuilder:false,
         showErrorBuilderTool:false,
         disable_menu: false,
         array_criterias:[],
         array_tools:[],
+        selected_tool:{},
+        array_input_value:[],
+        simple_input:{
+          label:'',
+          placeholder:'',
+          value:[]
+        },
+        array_selected_tools:[],
+        criterias_store_branch:[],
+        showOperation:{},
         info:{
           'QC.Sty':{
             'p1':'"Use code style standards to guide your code writing so you let others  understand it."',
@@ -408,26 +476,6 @@
       }
     },
     watch:{
-      // 'builder_tool'(val){
-      //   console.log(val)
-      //   if(val=='tox'){
-      //     this.showToxBuilder = true;
-      //   }else{
-      //     this.showToxBuilder = false;
-      //   }
-      //   if(val=='command'){
-      //     this.showCommandBuilder = true;
-      //   }else{
-      //     this.showCommandBuilder = false;
-      //   }
-      //   if(val=='default'){
-      //     this.showToxBuilder = false;
-      //     this.showCommandBuilder = false;
-      //     this.showErrorBuilderTool = true;
-      //   }else{
-      //     this.showErrorBuilderTool = false;
-      //   }
-      // },
       'criteria'(val){
         if(val != "default"){
           this.show_link = true;
@@ -477,12 +525,55 @@
         if(val != ''){
           this.showErrorFile = false;
         }
+      },
+      'builder_tool'(val){
+        console.log(val)
+        for (var i in this.array_tools){
+          if(this.array_tools[i].name == val){
+            this.selected_tool = this.array_tools[i]
+          }
+        }
+        var test =  [
+                         {"type": "optional", "format": "string", "description": "", "option": "-H", "value": "'Content-Type: application/json'", "selectable": true},
+                         {"type": "optional", "format": "string", "description": "", "option": "-X", "value": "POST", "selectable": true},
+                         {"type": "optional", "format": "string",  "description": "", "option": "-d", "value": "'{\"id\": \"10261/157765\", \"repo\": \"oai-pmh\", \"oai_base\": \"http://digital.csic.es/dspace-oai/request\"}'", "selectable": true},
+                         {"type": "positional", "format": "string", "description": "Endpoint", "value": "http://localhost:9090/v1.0/rda/rda_all", "selectable": true}]
+        this.selected_tool.args = test;
+        console.log(this.selected_tool)
+        var _this = this;
+        setTimeout(function(){
+          for (var i in _this.selected_tool.args){
+            $("#inputTag_"+i).tagsinput({
+              trimValue: true
+            })
+          }
+
+        },100)
+        this.showBuilderTool = true
       }
     },
     methods:{
-      // get_string_builder(repos){
-
-      // },
+      addTool(){
+        for (var i in this.selected_tool.args){
+          if (this.selected_tool.args[i].selectable ==true && this.selected_tool.args[i].format == 'string'){
+            if(this.selected_tool.args[i].repeatable == true){
+              this.selected_tool.args[i].value = $("#inputTag_"+i).val()
+              setTimeout(function(){
+                $("#inputTag_"+i).tagsinput('removeAll');
+              },100)
+            }else {
+              // console.log($("#simple_input_"+i).val())
+              this.selected_tool.args[i].value = "uno";
+              console.log(this.selected_tool.args[i].value)
+              $("#simple_input_"+i).val('');
+            }
+          }
+        }
+        console.log(this.selected_tool)
+        this.builder_tool = 'default';
+        this.showBuilderTool = false;
+        this.array_selected_tools.push(this.selected_tool);
+      },
       get_string_repos(repos){
         var all_repos = ''
         for (let i = 0; i < repos.repos.length; i++) {
@@ -591,6 +682,26 @@
         console.log(key.replace(/\./g,"\\."))
         $('#criteria_'+key.replace(/\./g,"\\.")).toggleClass('open-criteria',500);
       },
+      addWhenProp(item){
+        console.log(item)
+        console.log($('#select_branch_'+item.replace(/\./g,"\\.")).val())
+        console.log( $('#select_comp_'+item.replace(/\./g,"\\.")).val())
+        var array_object = {}
+        array_object[item] = {
+          'comp': $('#select_comp_'+item.replace(/\./g,"\\.")).val(),
+          'branch': $('#select_branch_'+item.replace(/\./g,"\\.")).val()
+        };
+        this.criterias_store_branch.push(array_object)
+        console.log(this.criterias_store_branch)
+        console.log($('input[name=operator_'+item.replace(/\./g,"\\.")+']:checked').val())
+        if(this.criterias_store_branch.length > 1){
+          this.showOperation[item] = true;
+          $("#operator_anyOf_"+item.replace(/\./g,"\\.")).prop("checked", true);
+          // this.anyof[item] = true;
+        }else{
+          this.showOperation[item] = false;
+        }
+      },
        next(){
          for(const index in this.criterias_store ){
            if(Object.hasOwnProperty.call(this.$store.state.config_yaml.sqa_criteria, index)){
@@ -642,47 +753,14 @@
           if(this.builder_tool == 'commands' && this.service == 'default'){
             this.showErrorService = true;
           }
-          // if(this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0 ){
-          //   console.log('here here here')
-          //   this.showErrorRepo = true;
-          // }
-          // if(this.commands.length == 0 ){
-          //   if(this.builder_tool != 'default'){
-          //     if(this.builder_tool == 'command'){
-          //       if(this.command == ''){
-          //         this.showErrorCommand = true;
-          //       }
-          //     }
-          //     // else if(this.builder_tool == 'tox'){
-          //     //   if(this.tox.env == ''){
-          //     //     if(this.tox.env == '' ){
-          //     //       this.showErrorEnv = true
-          //     //     }
-          //     //   }
-          //     // }
-          //   }else{
-          //     this.showErrorBuilderTool = true;
-          //   }
-          // }
 
         }else{
-          // var commands = {
-          //   commands : this.commands
-          // }
-          // var tox = {}
-          // // commands=this.commands
-          // tox={
-          //   tox_file:this.tox.file,
-          //   testenv: this.testenv
-          // }
+
           this.showCriteria = true;
           this.disable_done = false;
-          // // this.clearCommand();
-          // this.showCommands = false;
           this.showErrorRepo = false;
           this.showErrorService = false;
           this.showErrorCriteria = false;
-          // this.show_tool_tox = false;
 
           this.repos["repos"]=[];
           var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria)
@@ -702,36 +780,17 @@
           repo={
                   repo_url: (this.repository!='default')?this.repository:'',
                   container: serv,
-                  tools:[]
+                  tools:(this.array_selected_tools.length>0)?this.array_selected_tools:''
             }
-          console.log(this.array_tools)
-          var selected_tool = {}
-          for (var i in this.array_tools){
-            if(this.array_tools[i].name == this.builder_tool){
-              selected_tool = this.array_tools[i]
-
-            }
-          }
-          repo['tools'].push(selected_tool)
-          // if (this.builder_tool == 'command'){
-          //   repo=Object.assign(repo, commands)
-          // }
-          //  if (this.builder_tool == 'tox'){
-          //   repo['tox']=Object.assign({},repo['tox'], tox)
-          // }
-
           this.repos["repos"].push(repo)
           this.selected_criteria[this.criteria]=Object.assign({}, this.selected_criteria[this.criteria], this.repos)
           this.$store.state.config_yaml.sqa_criteria[this.criteria] = Object.assign({}, this.$store.state.config_yaml.sqa_criteria[this.criteria], this.repos)
-          // this.clearTox();
-          // this.commands=[];
-          // this.tox.file='';
-          // this.testenv=[];
           this.showErrorFile = false;
-          console.log( this.$store.state.config_yaml.sqa_criteria);
-          console.log(this.selected_criteria)
           this.service = 'default'
-          this.builder_tool = 'default'
+          this.builder_tool = 'default';
+          this.array_selected_tools = [];
+          this.showBuilderTool = false;
+          console.log(this.selected_criteria)
         }
       },
       removeCriteria(key){
@@ -740,6 +799,13 @@
         if (this.isEmpty(this.selected_criteria)) {
           this.showCriteria = false;
           this.disable_done = true;
+        }
+
+      },
+      removeTool(key){
+        this.$delete(this.array_selected_tools,key)
+        if (this.isEmpty(this.array_selected_tools)) {
+          this.showBuilderTool = false;
         }
 
       },
@@ -823,12 +889,13 @@
     },
     mounted(){
        this.$eventHub.$emit('steps', 3);
+
     },
     created(){
       this.loading = true;
       this.getCriteriaCall(this.getCriteriaCallBack)
       console.log(this.info)
-      this.checkauthCall(this.checkauthCallBack);
+      // this.checkauthCall(this.checkauthCallBack);
       if(this.$store.state.config_yaml.config.credentials.length > 0){
         this.showCredInfo = true;
       }
@@ -939,4 +1006,84 @@ input[type=number]::-webkit-inner-spin-button {
     background-repeat: no-repeat;
     opacity:0.5;
 }
+
+
+</style>
+<style>
+.bootstrap-tagsinput{
+      width: 100%;
+  }
+  .label-info{
+      background-color: #17a2b8;
+
+  }
+  .label {
+      display: inline-block;
+      padding: .25em .4em;
+      font-size: 75%;
+      font-weight: 700;
+      line-height: 1;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: baseline;
+      border-radius: .25rem;
+      transition: color .15s ease-in-out,background-color .15s ease-in-out,
+      border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  }
+  .bootstrap-tagsinput {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  display: inline-block;
+  padding: 4px 6px;
+  color: #555;
+  vertical-align: middle;
+  border-radius: 4px;
+  max-width: 100%;
+  line-height: 22px;
+  cursor: text;
+}
+.bootstrap-tagsinput input {
+  border: none;
+  box-shadow: none;
+  outline: none;
+  background-color: transparent;
+  padding: 0 6px;
+  margin: 0;
+  width: auto;
+  max-width: inherit;
+}
+.bootstrap-tagsinput.form-control input::-moz-placeholder {
+  color: #777;
+  opacity: 1;
+}
+.bootstrap-tagsinput.form-control input:-ms-input-placeholder {
+  color: #777;
+}
+.bootstrap-tagsinput.form-control input::-webkit-input-placeholder {
+  color: #777;
+}
+.bootstrap-tagsinput input:focus {
+  border: none;
+  box-shadow: none;
+}
+.bootstrap-tagsinput .tag {
+  margin-right: 2px;
+  color: white;
+}
+.bootstrap-tagsinput .tag [data-role="remove"] {
+  margin-left: 8px;
+  cursor: pointer;
+}
+.bootstrap-tagsinput .tag [data-role="remove"]:after {
+  content: "x";
+  padding: 0px 2px;
+}
+.bootstrap-tagsinput .tag [data-role="remove"]:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.bootstrap-tagsinput .tag [data-role="remove"]:hover:active {
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+
 </style>
