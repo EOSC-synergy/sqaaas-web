@@ -223,16 +223,51 @@ export default {
 
         window.scrollTo(0, top);
       },
-        login_egi(){
-            var url =
-            this.env.url_authorize
-            + '?response_type=code token token_id'
-            + '&scope=openid profile'
-            + '&nonce=abc'
-            + '&client_id=' + this.env.client_id
-            + '&redirect_uri=' + this.env.redirect_uri;
-            // + '&redirect_uri=' + "http://localhost:8080/callback.html";
-            window.location.replace(url)
+      generateRandomString() {
+          const array = new Uint32Array(28);
+          crypto.getRandomValues(array);
+          return Array.from(array, dec => ('0' + dec.toString(16)).substr(-2)).join('');
+      },
+      pkceChallengeFromVerifier(v) {
+          const encoder = new TextEncoder();
+          const data = encoder.encode(v);
+          const hashed = crypto.subtle.digest('SHA-256', data);
+          console.log(data,hashed)
+          console.log('hashed')
+          console.log(crypto.createHmac('sha256').update(data).digest())
+          return this.base64urlencode(hashed)
+      },
+      base64urlencode(str) {
+          // Convert the ArrayBuffer to string using Uint8 array to convert to what btoa accepts.
+          // btoa accepts chars only within ascii 0-255 and base64 encodes them.
+          // Then convert the base64 encoded to base64url encoded
+          //   (replace + with -, replace / with _, trim trailing =)
+          return btoa(String.fromCharCode.apply(null, new Uint8Array(str)))
+              .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      },
+      login_egi(){
+          // const state = this.generateRandomString();
+          // const code_verifier = this.generateRandomString();
+          // localStorage.setItem('state',state);
+          // localStorage.setItem('code_verifier',code_verifier);
+          // // const code_challenge = this.pkceChallengeFromVerifier(code_verifier);
+          // const code_challenge = 'zEm2ZmTlaNsDyPYjVSCk4yg3-sMySMQS8XhLwYATwb0'
+          // const client_id = this.env.test_client_id;
+          // const redirect_uri = this.env.redirect_uri;
+          // const scope = 'openid profile email eduperson_entitlement';
+          // const params = {
+          //     response_type: 'code',
+          //     client_id,
+          //     state,
+          //     scope,
+          //     redirect_uri,
+          //     code_challenge,
+          //     code_challenge_method: 'S256'
+          // };
+          // console.log(params)
+          // var url = this.env.url_authorize + '?' + new URLSearchParams(params);
+          // console.log(url)
+          window.location.replace(this.env.redirect_uri);
     },
     created(){
         this.$store.state={
