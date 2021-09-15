@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div class="container-fluid">
-      <div class="col-12 col-sm-12 col-lg-8 mx-auto" >
+      <div class="col-12 col-sm-12 col-xl-8 col-lg-10 mx-auto" >
         <div class="" style="margin:auto;padding:0px;">
           <!-- <card >
 
@@ -902,7 +902,7 @@ import services from '../services/services'
       }
     }
 
-    this.checkauthCall(this.checkauthCallBack);
+    // this.checkauthCall(this.checkauthCallBack);
 
 
       },
@@ -986,7 +986,7 @@ input[type=number]::-webkit-inner-spin-button {
  }
 
  @media (min-width: 992px){
-    .col-lg-8 {
+    .col-lg-10 {
         -ms-flex: 0 0 83.333333%;
         -webkit-box-flex: 0;
         flex: 0 0 83.333333%;
@@ -995,7 +995,7 @@ input[type=number]::-webkit-inner-spin-button {
  }
 
  @media (min-width: 1200px) {
-    .col-lg-8 {
+    .col-lg-10 {
         -ms-flex: 0 0 83.333333%;
         -webkit-box-flex: 0;
         flex: 0 0 83.333333%;
