@@ -4,7 +4,7 @@
       <div  v-show="loading" class="loading-overlay is-active">
          <span class="fas fa-spinner fa-3x fa-spin"></span>
       </div>
-      <div class="col-12 col-sm-12 col-xl-8 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
+      <div class="col-12 col-sm-12 col-xl-6 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
         <!-- <card>
 
         </card> -->
@@ -134,10 +134,12 @@
             <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderTool">
               <div v-for="(arg,key) in selected_tool.args" :key="key">
 
-                <label for="">{{arg.description}}</label>
-                <input v-if="arg.selectable ==true &&( typeof arg.repeatable == 'undefined' || arg.repeatable == false) && arg.format == 'string'" :id="'simple_input_'+key" style="margin-bottom:10px;" type="text"
-                  :placeholder="arg.value"
-                >
+                <div v-if="arg.selectable ==true &&( typeof arg.repeatable == 'undefined' || arg.repeatable == false) && arg.format == 'string'" class="form-group" style="margin-bottom:0px;">
+                  <label :for="'simple_input_'+key">{{arg.description}}</label>
+                  <input :id="'simple_input_'+key" type="text" class="form-control"
+                    :placeholder="arg.value"
+                  >
+                </div>
 
                 <!-- <base-input v-if="arg.selectable ==true &&( typeof arg.repeatable == 'undefined' || arg.repeatable == false) && arg.format == 'string'" :id="'simple_input_'+key" style="margin-bottom:10px;" type="text"
                     :label="arg.description"
@@ -169,7 +171,7 @@
               </div>
             </div>
             <div v-show="showBuilderTool" class="text-right" style="padding-top:1rem;padding-bottom:10px;">
-              <button type="button" class="btn btn-sm btn-info" @click="addTool()"><i class="fa fa-plus"></i>ADD TOOL</button>
+              <button type="button" class="btn-simple btn btn-xs btn-info" @click="addTool()"><i class="fa fa-plus"></i>ADD TOOL</button>
             </div>
 
              <div v-show="array_selected_tools.length > 0" style="padding-top:40px;margin-bottom:2rem;">
@@ -195,7 +197,7 @@
                             <td
                                 style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                 <div style="text-align:center;">
-                                    <p style='padding-bottom:0px;' v-for="(arg, index1) in array_selected_tools[index].args" :key="index1">
+                                    <p style='margin-bottom:0px;' v-for="(arg, index1) in array_selected_tools[index].args" :key="index1">
                                     {{array_selected_tools[index].args[index1].type +': '+array_selected_tools[index].args[index1].value}}
 
 
@@ -230,11 +232,9 @@
                           <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Criteria</th>
                           <th v-show='$store.state.config_yaml.config.project_repos.length>0' style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">External Repos</th>
                           <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Services</th>
-                          <!-- <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Builder</th> -->
                           <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Customize Workspace</th>
                           <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
                       </thead>
-                      <!-- <tbody v-for="(repo, index) in selected_criteria" :key="index"> -->
                       <tbody v-for="(repo, index) in selected_criteria" :key="index">
                               <tr
                                   style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
@@ -246,17 +246,12 @@
                                   </td>
                                   <td v-show='$store.state.config_yaml.config.project_repos.length>0'
                                       style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                      <!-- {{Object.keys(repo.repos)}} -->
                                       {{get_string_repos(repo)}}
                                   </td>
                                   <td
                                       style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                       {{get_string_services(repo)}}
                                   </td>
-                                  <!-- <td
-                                      style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                      {{get_string_builder(repo)}}
-                                  </td> -->
                                   <td
                                       style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                       <base-checkbox name="workpace" @input="customize_criteria(index)"></base-checkbox>
@@ -275,9 +270,7 @@
                                     <div class="row">
                                       <div class="col-12 col-md-3" style="padding-top:28px;">
                                         <select class="custom-select" :id="'select_when_'+index" @change="selectWhen(index)">
-                                          <!-- <option value="default"></option> -->
                                           <option value="branch">branch</option>
-                                          <!-- <option value="tag">tag</option> -->
                                           <option value="building_tag">building tag</option>
                                         </select>
 
@@ -528,28 +521,24 @@
       },
       'builder_tool'(val){
         console.log(val)
-        for (var i in this.array_tools){
-          if(this.array_tools[i].name == val){
-            this.selected_tool = this.array_tools[i]
-          }
-        }
-        var test =  [
-                         {"type": "optional", "format": "string", "description": "", "option": "-H", "value": "'Content-Type: application/json'", "selectable": true},
-                         {"type": "optional", "format": "string", "description": "", "option": "-X", "value": "POST", "selectable": true},
-                         {"type": "optional", "format": "string",  "description": "", "option": "-d", "value": "'{\"id\": \"10261/157765\", \"repo\": \"oai-pmh\", \"oai_base\": \"http://digital.csic.es/dspace-oai/request\"}'", "selectable": true},
-                         {"type": "positional", "format": "string", "description": "Endpoint", "value": "http://localhost:9090/v1.0/rda/rda_all", "selectable": true}]
-        this.selected_tool.args = test;
-        console.log(this.selected_tool)
-        var _this = this;
-        setTimeout(function(){
-          for (var i in _this.selected_tool.args){
-            $("#inputTag_"+i).tagsinput({
-              trimValue: true
-            })
+        if(val != 'default'){
+          for (var i in this.array_tools){
+            if(this.array_tools[i].name == val){
+              this.selected_tool = this.array_tools[i]
+            }
           }
 
-        },100)
-        this.showBuilderTool = true
+          var _this = this;
+          setTimeout(function(){
+            for (var i in _this.selected_tool.args){
+              $("#inputTag_"+i).tagsinput({
+                trimValue: true
+              })
+            }
+
+          },100)
+          this.showBuilderTool = true
+        }
       }
     },
     methods:{
@@ -557,22 +546,23 @@
         for (var i in this.selected_tool.args){
           if (this.selected_tool.args[i].selectable ==true && this.selected_tool.args[i].format == 'string'){
             if(this.selected_tool.args[i].repeatable == true){
-              this.selected_tool.args[i].value = $("#inputTag_"+i).val()
+              this.selected_tool.args[i].value = $("#inputTag_"+i).val();
               setTimeout(function(){
                 $("#inputTag_"+i).tagsinput('removeAll');
               },100)
             }else {
-              // console.log($("#simple_input_"+i).val())
-              this.selected_tool.args[i].value = "uno";
+              this.selected_tool.args[i].value = $("#simple_input_"+i).val();
               console.log(this.selected_tool.args[i].value)
               $("#simple_input_"+i).val('');
             }
           }
         }
-        console.log(this.selected_tool)
+        console.log(this.selected_tool.args)
         this.builder_tool = 'default';
         this.showBuilderTool = false;
+        console.log(this.selected_tool)
         this.array_selected_tools.push(this.selected_tool);
+        console.log(this.array_selected_tools);
       },
       get_string_repos(repos){
         var all_repos = ''
@@ -983,7 +973,7 @@ input[type=number]::-webkit-inner-spin-button {
   display: flex!important;
 }
 @media (min-width: 992px){
-    .col-lg-8 {
+    .col-lg-10 {
         -ms-flex: 0 0 83.333333%;
         -webkit-box-flex: 0;
         flex: 0 0 83.333333%;
@@ -992,7 +982,7 @@ input[type=number]::-webkit-inner-spin-button {
  }
 
  @media (min-width: 1200px) {
-    .col-lg-8 {
+    .col-lg-10 {
         -ms-flex: 0 0 83.333333%;
         -webkit-box-flex: 0;
         flex: 0 0 83.333333%;
