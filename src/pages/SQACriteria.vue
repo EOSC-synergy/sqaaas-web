@@ -132,7 +132,43 @@
             </div>
 
             <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderTool">
-              <div v-for="(arg,key) in selected_tool.args" :key="key">
+
+              <div v-if="builder_tool == 'tox'" class="row">
+                <div class="col-6 form-group" style="margin-bottom:0px;">
+                  <label for="simple_input_tox">Tox file</label>
+                  <input style="height:32px;" id="'simple_input_tox" type="text" class="form-control"
+                    placeholder="/myrepo-test/tox.ini" v-model="tox.file"
+                  >
+                </div>
+                <div class="col-6 form-group">
+                  <label id="tox_input_tag_label" for="">Test ENV</label>
+                  <div class="bs-example">
+                    <input type="text" id="tox_input_tag" value="" data-role="tagsinput">
+                  </div>
+                  <div class="text-right">
+                    <label id="tox_input_tag2" for="">Note: Type something and press Enter.</label>
+
+                  </div>
+                </div>
+
+
+              </div>
+
+              <div v-else-if="builder_tool == 'commands'">
+                 <div class="col-6 form-group">
+                  <label id="commands_input_tag" for="">TestENV</label>
+                  <div class="bs-example">
+                    <input type="text" id="commands_input_tag" value="" data-role="tagsinput">
+                  </div>
+                  <div class="text-right">
+                    <label id="commands_input_tag2" for="">Note: Type something and press Enter.</label>
+
+                  </div>
+                </div>
+
+              </div>
+
+              <div v-else v-for="(arg,key) in selected_tool.args" :key="key">
 
                 <div v-if="arg.selectable ==true &&( typeof arg.repeatable == 'undefined' || arg.repeatable == false) && arg.format == 'string'" class="form-group" style="margin-bottom:0px;">
                   <label :for="'simple_input_'+key">{{arg.description}}</label>
@@ -140,14 +176,6 @@
                     :placeholder="arg.value"
                   >
                 </div>
-
-                <!-- <base-input v-if="arg.selectable ==true &&( typeof arg.repeatable == 'undefined' || arg.repeatable == false) && arg.format == 'string'" :id="'simple_input_'+key" style="margin-bottom:10px;" type="text"
-                    :label="arg.description"
-                    :disabled="false"
-                    :placeholder="arg.value"
-                    >
-                </base-input> -->
-                    <!-- v-model="simple_input.value[key]" -->
 
                 <div v-if="arg.selectable ==true && arg.repeatable == true && arg.format == 'string'" class="form-group">
                   <label id="array_input_label" for="">{{arg.description}}</label>
@@ -528,12 +556,27 @@
             }
           }
 
+          console.log(this.selected_tool)
+
           var _this = this;
+
           setTimeout(function(){
-            for (var i in _this.selected_tool.args){
-              $("#inputTag_"+i).tagsinput({
+            if (val == 'tox'){
+              $("#tox_input_tag").tagsinput({
                 trimValue: true
               })
+
+            }else if(val == 'commands'){
+              $("#commands_input_tag").tagsinput({
+                trimValue: true
+              })
+
+            }else{
+              for (var i in _this.selected_tool.args){
+                $("#inputTag_"+i).tagsinput({
+                  trimValue: true
+                })
+              }
             }
 
           },100)
@@ -543,6 +586,10 @@
     },
     methods:{
       addTool(){
+        console.log(this.selected_tool)
+        if(this.selected_tool.name == 'tox'){
+          console.log('tox')
+        }
         for (var i in this.selected_tool.args){
           if (this.selected_tool.args[i].selectable ==true && this.selected_tool.args[i].format == 'string'){
             if(this.selected_tool.args[i].repeatable == true){
@@ -867,8 +914,6 @@
       },
       getCriteriaCallBack(response){
         this.loading = false;
-        console.log(response)
-        console.log('here')
         if(response.status == 200){
           this.array_criterias = response.data
 
@@ -884,7 +929,6 @@
     created(){
       this.loading = true;
       this.getCriteriaCall(this.getCriteriaCallBack)
-      console.log(this.info)
       // this.checkauthCall(this.checkauthCallBack);
       if(this.$store.state.config_yaml.config.credentials.length > 0){
         this.showCredInfo = true;
