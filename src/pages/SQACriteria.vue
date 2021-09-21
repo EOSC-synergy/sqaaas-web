@@ -133,7 +133,7 @@
 
             <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderTool">
 
-              <div v-if="builder_tool == 'tox'" class="row">
+              <!-- <div v-if="builder_tool == 'tox'" class="row">
                 <div class="col-6 form-group" style="margin-bottom:0px;">
                   <label for="simple_input_tox">Tox file</label>
                   <input style="height:32px;" id="'simple_input_tox" type="text" class="form-control"
@@ -166,13 +166,13 @@
                   </div>
                 </div>
 
-              </div>
+              </div> -->
 
-              <div v-else v-for="(arg,key) in selected_tool.args" :key="key">
+              <div v-for="(arg,key) in selected_tool.args" :key="key">
 
                 <div v-if="arg.selectable ==true &&( typeof arg.repeatable == 'undefined' || arg.repeatable == false) && arg.format == 'string'" class="form-group" style="margin-bottom:0px;">
                   <label :for="'simple_input_'+key">{{arg.description}}</label>
-                  <input :id="'simple_input_'+key" type="text" class="form-control"
+                  <input :id="'simple_input_'+key" type="text" class="form-control" style="height:32px;"
                     :placeholder="arg.value"
                   >
                 </div>
@@ -561,26 +561,15 @@
           var _this = this;
 
           setTimeout(function(){
-            if (val == 'tox'){
-              $("#tox_input_tag").tagsinput({
+            for (var i in _this.selected_tool.args){
+              $("#inputTag_"+i).tagsinput({
                 trimValue: true
               })
-
-            }else if(val == 'commands'){
-              $("#commands_input_tag").tagsinput({
-                trimValue: true
-              })
-
-            }else{
-              for (var i in _this.selected_tool.args){
-                $("#inputTag_"+i).tagsinput({
-                  trimValue: true
-                })
-              }
             }
-
           },100)
-          this.showBuilderTool = true
+          this.showBuilderTool = true;
+        }else{
+          this.showBuilderTool = false;
         }
       }
     },
