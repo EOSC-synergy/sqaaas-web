@@ -133,54 +133,19 @@
 
             <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderTool">
 
-              <!-- <div v-if="builder_tool == 'tox'" class="row">
-                <div class="col-6 form-group" style="margin-bottom:0px;">
-                  <label for="simple_input_tox">Tox file</label>
-                  <input style="height:32px;" id="'simple_input_tox" type="text" class="form-control"
-                    placeholder="/myrepo-test/tox.ini" v-model="tox.file"
-                  >
-                </div>
-                <div class="col-6 form-group">
-                  <label id="tox_input_tag_label" for="">Test ENV</label>
-                  <div class="bs-example">
-                    <input type="text" id="tox_input_tag" value="" data-role="tagsinput">
-                  </div>
-                  <div class="text-right">
-                    <label id="tox_input_tag2" for="">Note: Type something and press Enter.</label>
-
-                  </div>
-                </div>
-
-
-              </div>
-
-              <div v-else-if="builder_tool == 'commands'">
-                 <div class="col-6 form-group">
-                  <label id="commands_input_tag" for="">TestENV</label>
-                  <div class="bs-example">
-                    <input type="text" id="commands_input_tag" value="" data-role="tagsinput">
-                  </div>
-                  <div class="text-right">
-                    <label id="commands_input_tag2" for="">Note: Type something and press Enter.</label>
-
-                  </div>
-                </div>
-
-              </div> -->
-
               <div v-for="(arg,key) in selected_tool.args" :key="key">
 
                 <div v-if="arg.selectable ==true &&( typeof arg.repeatable == 'undefined' || arg.repeatable == false) && arg.format == 'string'" class="form-group" style="margin-bottom:0px;">
                   <label :for="'simple_input_'+key">{{arg.description}}</label>
                   <input :id="'simple_input_'+key" type="text" class="form-control" style="height:32px;"
-                    :placeholder="arg.value"
+                    :placeholder="arg.value" :value="arg.value"
                   >
                 </div>
 
                 <div v-if="arg.selectable ==true && arg.repeatable == true && arg.format == 'string'" class="form-group">
                   <label id="array_input_label" for="">{{arg.description}}</label>
                   <div class="bs-example">
-                    <input type="text" :id="'inputTag_'+key" value="" data-role="tagsinput">
+                    <input type="text" :id="'inputTag_'+key" :value="arg.value" data-role="tagsinput">
                   </div>
                   <div class="text-right">
                     <label id="array_input_label2" for="">Note: Type something and press Enter.</label>
