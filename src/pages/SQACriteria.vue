@@ -567,7 +567,22 @@
               })
             }
           },100)
-          this.showBuilderTool = true;
+
+          var no_error = [];
+          for(var i in this.selected_tool.args){
+            if(this.selected_tool.args[i].selectable == true && this.selected_tool.args[i].format && this.selected_tool.args[i].type && this.selected_tool.args[i].value){
+              no_error.push(i)
+            }else if(this.selected_tool.args[i].selectable == false){
+              no_error.push(i)
+
+            }
+          }
+
+          if(no_error.length == this.selected_tool.args.length){
+            this.showBuilderTool = true;
+          }else{
+            this.notifyVue("There was an error bulding the arguments of the tool.")
+          }
         }else{
           this.showBuilderTool = false;
         }
