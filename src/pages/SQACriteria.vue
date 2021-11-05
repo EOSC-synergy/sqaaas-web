@@ -537,6 +537,9 @@
           for(var i in this.selected_tool.args){
             if(this.selected_tool.args[i].selectable == true && this.selected_tool.args[i].format && this.selected_tool.args[i].type && this.selected_tool.args[i].value){
               no_error.push(i)
+            }else if(this.selected_tool.args[i].selectable == false){
+              no_error.push(i)
+
             }
           }
 
