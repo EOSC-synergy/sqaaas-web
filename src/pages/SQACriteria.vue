@@ -533,19 +533,24 @@
             }
           },100)
 
-          var no_error = [];
+          var no_error = 0;
+          var count_true = 0
           for(var i in this.selected_tool.args){
             if(this.selected_tool.args[i].selectable == true && this.selected_tool.args[i].format && this.selected_tool.args[i].type && this.selected_tool.args[i].value){
-              no_error.push(i)
-            }else if(this.selected_tool.args[i].selectable == false){
-              no_error.push(i)
+              no_error +=1
+            }
+            if(this.selected_tool.args[i].selectable == true){
+              count_true +=1
 
             }
           }
+          console.log(no_error);
+          console.log(count_true);
 
-          if(no_error.length == this.selected_tool.args.length){
+          if(no_error == count_true){
             this.showBuilderTool = true;
           }else{
+            this.showBuilderTool = false;
             this.notifyVue("There was an error bulding the arguments of the tool.")
           }
         }else{
