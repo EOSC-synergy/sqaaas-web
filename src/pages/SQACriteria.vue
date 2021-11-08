@@ -463,6 +463,7 @@
     },
     watch:{
       'criteria'(val){
+        this.showBuilderTool=false;
         if(val != "default"){
           this.show_link = true;
           this.showSelect = true;
@@ -535,12 +536,8 @@
 
           var no_error = 0;
           for(var i in this.selected_tool.args){
-            console.log(this.selected_tool.args[i].selectable)
-            console.log(this.selected_tool.args[i].format)
-            console.log(this.selected_tool.args[i].type)
-            console.log(this.selected_tool.args[i].value)
-            if(this.selected_tool.args[i].selectable !== 'undefined' && this.selected_tool.args[i].format !== 'undefined' && this.selected_tool.args[i].type !== 'undefined' && this.selected_tool.args[i].value !== 'undefined'){
-              no_error +=1
+            if(typeof this.selected_tool.args[i].selectable !== 'undefined' && typeof this.selected_tool.args[i].format !== 'undefined' && typeof this.selected_tool.args[i].type !== 'undefined' && typeof this.selected_tool.args[i].value !== 'undefined'){
+             no_error = no_error + 1;
             }
           }
           if(no_error == this.selected_tool.args.length){
