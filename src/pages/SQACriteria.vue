@@ -534,20 +534,16 @@
           },100)
 
           var no_error = 0;
-          var count_true = 0
           for(var i in this.selected_tool.args){
-            if(this.selected_tool.args[i].selectable == true && this.selected_tool.args[i].format && this.selected_tool.args[i].type && this.selected_tool.args[i].value){
+            console.log(this.selected_tool.args[i].selectable)
+            console.log(this.selected_tool.args[i].format)
+            console.log(this.selected_tool.args[i].type)
+            console.log(this.selected_tool.args[i].value)
+            if(this.selected_tool.args[i].selectable !== 'undefined' && this.selected_tool.args[i].format !== 'undefined' && this.selected_tool.args[i].type !== 'undefined' && this.selected_tool.args[i].value !== 'undefined'){
               no_error +=1
             }
-            if(this.selected_tool.args[i].selectable == true){
-              count_true +=1
-
-            }
           }
-          console.log(no_error);
-          console.log(count_true);
-
-          if(no_error == count_true){
+          if(no_error == this.selected_tool.args.length){
             this.showBuilderTool = true;
           }else{
             this.showBuilderTool = false;
