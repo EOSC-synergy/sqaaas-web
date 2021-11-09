@@ -26,6 +26,7 @@ window.axios.interceptors.request.use(function (config) {
   // const AUTH_TOKEN = document.getElementsByName("token")["0"].content;
   var session = JSON.parse(localStorage.getItem("session"))
   const AUTH_TOKEN = session.user.access_token
+
   if(AUTH_TOKEN){
       config.headers.common['Authorization'] = `Bearer ${AUTH_TOKEN}`
   }

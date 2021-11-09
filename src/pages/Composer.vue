@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div class="container-fluid">
-      <div class="col-12 col-sm-12 col-lg-8 mx-auto" >
+      <div class="col-12 col-sm-12 col-xl-8 col-lg-10 mx-auto" >
         <div class="" style="margin:auto;padding:0px;">
           <!-- <card >
 
@@ -15,16 +15,16 @@
                         <!--<i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i>-->
                         Compose your environment by means of Docker containers, either pulling existing images from registries (e.g. from Docker Hub) or building your own (e.g. Dockerfiles)
                     </p>
-                    <!-- <div>
+                    <div>
                         <p>
 
                           <span style="text-decoration: underline;font-weight: bold;">This is an optional step:</span>
-                            those tools natively supported by the Pipeline as a Service module (check them out at the <span style="font-style:italic">'Criteria'</span> step) do not require a service definition.
+                          spa those tools natively supported by the Pipeline as a Service module (check them out at the <span style="font-style:italic">'Criteria'</span> step) do not require a service definition.
                         </p>
                         <div style="padding-top:15px;width:190px; margin:0 auto;">
                             <button class="btn btn-outline btn-info" style="border-style:solid;border-width:thin;padding:5px 5px;font-weight: bold;" @click="next()" >Skip this step for now ></button>
                         </div>
-                    </div> -->
+                    </div>
                   </div>
                   <div style="background-color:#e6ede8;padding-left:80px;padding-top:60px;padding-bottom:20px;width:30%">
                     <img src="../../static/service.png" alt="" style="opacity: 0.5">
@@ -410,7 +410,7 @@
                   <button @click="back()" type="button" class="btn btn-next-back btn-back" >
                       BACK
                   </button>
-                  <button @click="next()" type="button" :disabled="disable_done"  class="btn btn-next btn-next-back">
+                  <button @click="next()" type="button"  class="btn btn-next btn-next-back">
                       NEXT
                   </button>
               </div>
@@ -460,7 +460,7 @@ import services from '../services/services'
         showArg:false,
         showServices:false,
         showErrorCredID:false,
-        disable_done:true,
+        disable_done:false,
         id_credential: '',
         checked: true,
         id_cred_service:'',
@@ -768,7 +768,6 @@ import services from '../services/services'
 
           }
           this.showServices = true;
-          this.disable_done = false;
           this.$store.state.docker_compose.services = this.services;
           if($('#accordionBodyGeneral').hasClass('show')){
             $('#link_accordion').click();
@@ -804,7 +803,6 @@ import services from '../services/services'
         }
         if (this.isEmpty(this.services)) {
           this.showServices = false;
-          this.disable_done = true;
           this.push_image.yes = false;
         }
       },
@@ -899,14 +897,12 @@ import services from '../services/services'
 
       if(this.isEmpty(this.services)){
         this.showServices = false;
-        this.disable_done = true;
       }else {
-        this.disable_done = false;
         this.showServices = true
       }
     }
 
-    this.checkauthCall(this.checkauthCallBack);
+    // this.checkauthCall(this.checkauthCallBack);
 
 
       },
@@ -990,7 +986,7 @@ input[type=number]::-webkit-inner-spin-button {
  }
 
  @media (min-width: 992px){
-    .col-lg-8 {
+    .col-lg-10 {
         -ms-flex: 0 0 83.333333%;
         -webkit-box-flex: 0;
         flex: 0 0 83.333333%;
@@ -999,7 +995,7 @@ input[type=number]::-webkit-inner-spin-button {
  }
 
  @media (min-width: 1200px) {
-    .col-lg-8 {
+    .col-lg-10 {
         -ms-flex: 0 0 83.333333%;
         -webkit-box-flex: 0;
         flex: 0 0 83.333333%;
