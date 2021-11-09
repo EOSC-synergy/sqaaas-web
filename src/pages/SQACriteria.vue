@@ -535,12 +535,15 @@
           },100)
 
           var no_error = 0;
+          var select_false = 0;
           for(var i in this.selected_tool.args){
-            if(typeof this.selected_tool.args[i].selectable !== 'undefined' && typeof this.selected_tool.args[i].format !== 'undefined' && typeof this.selected_tool.args[i].type !== 'undefined' && typeof this.selected_tool.args[i].value !== 'undefined'){
+            if(typeof this.selected_tool.args[i].selectable !== 'undefined' && this.selected_tool.args[i].selectable == true  && typeof this.selected_tool.args[i].format !== 'undefined' && typeof this.selected_tool.args[i].type !== 'undefined' && typeof this.selected_tool.args[i].value !== 'undefined'){
              no_error = no_error + 1;
+            }else if(typeof this.selected_tool.args[i].selectable !== 'undefined' && this.selected_tool.args[i].selectable == false){
+              select_false = select_false + 1;
             }
           }
-          if(no_error == this.selected_tool.args.length){
+          if(no_error+select_false == this.selected_tool.args.length){
             this.showBuilderTool = true;
           }else{
             this.showBuilderTool = false;
@@ -750,7 +753,6 @@
         // || (this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0)
         // if(this.criteria == 'default' || this.service == "default" || (this.builder_tool == 'command' && this.commands.length == 0)) {
         if(this.criteria == 'default' || (this.builder_tool == 'commands' && this.service == 'default')) {
-          console.log('hereeeeeeeeeeeeeeeeeeeeeeeeee')
           if(this.criteria == 'default'){
             this.showErrorCriteria = true;
           }
