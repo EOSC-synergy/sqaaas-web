@@ -212,7 +212,7 @@
 
 
             <div class="text-right" style="padding-top:4rem;padding-bottom:10px;">
-              <button type="button" class="btn-outline btn btn-info" @click="addCriteria()"><i class="fa fa-plus"></i>ADD CRITERION</button>
+              <button type="button" class="btn-outline btn btn-info"  @click="addCriteria()" :disabled="array_selected_tools.length == 0"><i class="fa fa-plus"></i>ADD CRITERION</button>
             </div>
 
             <div v-show="Object.keys(selected_criteria).length > 0" style="padding-top:40px;margin-bottom:2rem;">
