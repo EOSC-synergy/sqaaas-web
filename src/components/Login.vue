@@ -223,16 +223,27 @@ export default {
 
         window.scrollTo(0, top);
       },
-        login_egi(){
-            var url =
-            this.env.url_authorize
-            + '?response_type=code token token_id'
-            + '&scope=openid profile'
-            + '&nonce=abc'
-            + '&client_id=' + this.env.client_id
-            + '&redirect_uri=' + this.env.redirect_uri;
-            // + '&redirect_uri=' + "http://localhost:8080/callback.html";
-            window.location.replace(url)
+      generateRandomString() {
+          const array = new Uint32Array(28);
+          crypto.getRandomValues(array);
+          return Array.from(array, dec => ('0' + dec.toString(16)).substr(-2)).join('');
+      },
+      pkceChallengeFromVerifier(v) {
+          const encoder = new TextEncoder();
+          const data = encoder.encode(v);
+          const hashed = crypto.subtle.digest('SHA-256', data);
+          console.log(data,hashed)
+          console.log('hashed')
+          console.log(crypto.createHmac('sha256').update(data).digest())
+          return this.base64urlencode(hashed)
+      },
+      base64urlencode(str) {
+
+          return btoa(String.fromCharCode.apply(null, new Uint8Array(str)))
+              .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      },
+      login_egi(){
+          window.location.replace(this.env.redirect_uri);
     },
     created(){
         this.$store.state={
