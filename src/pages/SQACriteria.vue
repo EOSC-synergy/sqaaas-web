@@ -522,13 +522,7 @@
 
           var _this = this;
 
-          setTimeout(function(){
-            for (var i in _this.selected_tool.args){
-              $("#inputTag_"+i).tagsinput({
-                trimValue: true
-              })
-            }
-          },100)
+
 
           var no_error = 0;
           var select_false = 0;
@@ -548,6 +542,16 @@
 
           //Painting Arg
           this.paintingArg(this.selected_tool.args, 0);
+
+            setTimeout(function(){
+            var count = 0;
+            for (var i in _this.selected_tool.args){
+               $("#inputTag_"+count+'_'+i).tagsinput({
+                trimValue: true
+              });
+              count=count*1+1;
+            }
+           },100)
         }else{
           this.showBuilderTool = false;
         }
@@ -597,7 +601,7 @@
               args[i].value = $("#inputTag_"+count+'_'+i).val();
               setTimeout(function(){
                 $("#inputTag_"+count+'_'+i).tagsinput('removeAll');
-              },100)
+              },500)
             }else {
               args[i].value = $("#simple_input_"+count+'_'+i).val();
               $("#simple_input_"+count+'_'+i).val('');
