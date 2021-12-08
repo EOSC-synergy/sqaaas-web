@@ -132,8 +132,7 @@
             </div>
 
             <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderTool">
-
-              <div v-for="(arg,key) in selected_tool.args" :key="key">
+              <!-- <div v-for="(arg,key) in selected_tool.args" :key="key">
 
                 <div v-if="arg.selectable ==true &&( typeof arg.repeatable == 'undefined' || arg.repeatable == false) && arg.format == 'string'" class="form-group" style="margin-bottom:0px;">
                   <label :for="'simple_input_'+key">{{arg.description}}</label>
@@ -152,17 +151,14 @@
 
                   </div>
                 </div>
-
-              <!-- Para dropdownnnnnnnnnnnnnnnnn -->
-                <!-- <div class="col-12 col-md-6">
-                  <label> CHOOSE A BUILDER TOOL</label>
-                  <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
-                    <option value="default">Select ...</option>
-                    <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
-                  </select>
-                </div> -->
-              </div>
+              </div> -->
+              <div id="ref-arg"></div>
             </div>
+
+            <div class="text-right">
+              <span v-show="showErrorArgs" style="color:red; font-size:12px;padding-left:20px;">Invalid value for the selected tool.</span>
+            </div>
+
             <div v-show="showBuilderTool" class="text-right" style="padding-top:1rem;padding-bottom:10px;">
               <button type="button" class="btn-simple btn btn-xs btn-info" @click="addTool()"><i class="fa fa-plus"></i>ADD TOOL</button>
             </div>
@@ -189,12 +185,8 @@
                             </td>
                             <td
                                 style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                <div style="text-align:center;">
-                                    <p style='margin-bottom:0px;' v-for="(arg, index1) in array_selected_tools[index].args" :key="index1">
-                                    {{array_selected_tools[index].args[index1].type +': '+array_selected_tools[index].args[index1].value}}
-
-
-                                    </p>
+                                <div :id="'list-arg'+index" style="text-align:center;">
+                                    {{listArg(tool['args'], index)}}
                                 </div>
 
                             </td>
@@ -403,6 +395,7 @@
         showErrorRepo:false,
         showErrorService:false,
         showErrorCriteria:false,
+        showErrorArgs:false,
         showErrorCommand: false,
         showErrorFile: false,
         showErrorEnv:false,
@@ -465,6 +458,9 @@
       'criteria'(val){
         this.showBuilderTool=false;
         if(val != "default"){
+          this.builder_tool = 'default';
+          this.showBuilderTool = false;
+          this.showErrorArgs = false;
           this.show_link = true;
           this.showSelect = true;
           for (var i in this.array_criterias){
@@ -549,37 +545,111 @@
             this.showBuilderTool = false;
             this.notifyVue("There was an error bulding the arguments of the tool.")
           }
+
+          //Painting Arg
+          this.paintingArg(this.selected_tool.args, 0);
         }else{
           this.showBuilderTool = false;
         }
       }
     },
     methods:{
-      addTool(){
-        console.log(this.selected_tool)
-        if(this.selected_tool.name == 'tox'){
-          console.log('tox')
+      async paintingArg(args, count){
+        var text = '', body = '';
+        for(var i in args){
+          text = '';
+          if(args[i].selectable ==true &&( typeof args[i].repeatable == 'undefined' || args[i].repeatable == false) && args[i].format == 'string'){
+          // if(args[i].selectable ==false &&( typeof args[i].repeatable == 'undefined' || args[i].repeatable == false)){
+            text += `<div class="form-group" style="margin-bottom:0px;">
+                    <label for="${'simple_input_'+count+'_'+i}">${args[i].description}</label>
+                    <input id="${'simple_input_'+count+'_'+i}" type="text" class="form-control" style="height:32px;"
+                      placeholder='${args[i].value.replace(/[']+/g, '')}' value='${args[i].value.replace(/[']+/g, '')}'
+                    >
+                  </div>`
+
+          }else if(args[i].selectable ==true && args[i].repeatable == true && args[i].format == 'string'){
+            text += `<div class="form-group">
+                  <label id="${'array_input_label'+count+'_'+i}" for="">${args[i].description}</label>
+                  <div class="bs-example">
+                    <input type="text" id="${'inputTag_'+count+'_'+i}" value='${args[i].value.replace(/[']+/g, '')}' data-role="tagsinput">
+                  </div>
+                  <div class="text-right">
+                    <label id="array_input_label2" for="">Note: Type something and press Enter.</label>
+
+                  </div>
+                </div>`
+          }
+
+          if(args[i].args && args[i].args.length > 0){
+            text += await this.paintingArg(args[i].args, (count*1+1))
+          }
+
+          body += text
         }
-        for (var i in this.selected_tool.args){
+        $('#ref-arg').html(body)
+        return body;
+      },
+      async adding(args, count){
+        for(var i in args){
           if (this.selected_tool.args[i].selectable ==true && this.selected_tool.args[i].format == 'string'){
-            if(this.selected_tool.args[i].repeatable == true){
-              this.selected_tool.args[i].value = $("#inputTag_"+i).val();
+          // if (args[i].selectable ==false ){
+            if(args[i].repeatable == true){
+              args[i].value = $("#inputTag_"+count+'_'+i).val();
               setTimeout(function(){
-                $("#inputTag_"+i).tagsinput('removeAll');
+                $("#inputTag_"+count+'_'+i).tagsinput('removeAll');
               },100)
             }else {
-              this.selected_tool.args[i].value = $("#simple_input_"+i).val();
-              console.log(this.selected_tool.args[i].value)
-              $("#simple_input_"+i).val('');
+              args[i].value = $("#simple_input_"+count+'_'+i).val();
+              $("#simple_input_"+count+'_'+i).val('');
             }
           }
+          if(args[i].args && args[i].args.length > 0){
+            await this.adding(args[i].args, (count*1+1))
+          }
         }
-        console.log(this.selected_tool.args)
-        this.builder_tool = 'default';
-        this.showBuilderTool = false;
-        console.log(this.selected_tool)
-        this.array_selected_tools.push(this.selected_tool);
-        console.log(this.array_selected_tools);
+
+        return args;
+      },
+      async listArg(args, index){
+        var text = '', body = '';
+
+        for(var i in args){
+          console.log(args[i].value)
+          text = '';
+          if(args[i].type && args[i].value){
+            text += `<p style='margin-bottom:0px;'>
+                      ${args[i].type} : ${args[i].value}
+                    </p>`
+          }
+          if(args[i].args && args[i].args.length > 0){
+            text += await this.listArg(args[i].args, index);
+          }
+          body += text;
+
+        }
+        console.log(body)
+        $('#list-arg'+index).html(body)
+        return body;
+      },
+      async addTool(){
+        let args = await this.adding(this.selected_tool.args, 0)
+        var error_args = false;
+        for (var i in args){
+          if(args[i].type == 'positional' && args[i].value == ''){
+            error_args = true;
+          }
+        }
+        console.log(error_args)
+        if(error_args == true){
+          this.showErrorArgs = true;
+        }else{
+          this.showErrorArgs = false;
+          this.selected_tool.args = args;
+          this.builder_tool = 'default';
+          this.showBuilderTool = false;
+          this.array_selected_tools.push(this.selected_tool);
+          console.log(this.showBuilderTool);
+        }
       },
       get_string_repos(repos){
         var all_repos = ''
