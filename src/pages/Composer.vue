@@ -208,7 +208,7 @@
                           class="collapsed ">
                           <i class="fa fa-angle-down" aria-hidden="true"></i>
                           <p>ADVANCED OPTIONS</p>
-                           <p>(Volumes, Env Vars)</p>
+                           <p>(Volumes)</p>
                         </a>
                       </div>
                     </div>
@@ -312,11 +312,11 @@
                           </table>
                         </div>
                       </div>
-                      <div class="row" style="padding-left:5px;margin-bottom:1rem;margin-top:2rem;">
+                      <!-- <div class="row" style="padding-left:5px;margin-bottom:1rem;margin-top:2rem;">
                         <span class="custom-label" style="font-size:17px;font-weight:bold">Does the current service need specific environment variables?</span>
                         <span class="custom-label">Yes</span><base-checkbox name="env" v-model="envComposeYesNo.yes"></base-checkbox>
                         <span class="custom-label">No</span><base-checkbox name="env" v-model="envComposeYesNo.no"></base-checkbox>
-                      </div>
+                      </div> -->
 
                       <div class="row" v-show='envComposeYesNo.yes' style="padding-left:10x;">
 

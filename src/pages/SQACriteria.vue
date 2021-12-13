@@ -92,7 +92,7 @@
               </div>
             </div>
              <div class="row" style="margin:2rem 0px 2rem 0px;">
-              <div v-show="showSelect && objectSize( $store.state.docker_compose.services) > 0 && builder_tool == 'commands'" class="col-12 col-md-6" style="display:grid;">
+              <div v-show="showSelect && objectSize( $store.state.docker_compose.services) > 0"  class="col-12 col-md-6" style="display:grid;">
                 <label>SELECT THE SERVICE</label>
                 <select class="custom-select" id="service" v-model='service' >
                   <option value="default">Choose a service...</option>
@@ -959,7 +959,8 @@
         this.loading = false;
         if(response.status == 200){
           this.array_criterias = response.data
-
+        }else{
+           this.notifyVue("We are having problems making the request.")
         }
       }
 
