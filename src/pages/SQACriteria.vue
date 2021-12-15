@@ -110,6 +110,7 @@
                     <option value="default">CHOOSE A REPOSITORY...</option>
                     <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="repo.repo">{{repo.repo}}</option>
                   </select>
+                  <p v-show="showErrorRepoCrit" style="color:red; font-size:12px;padding-left:20px; padding-top:10px;">Error: You can only select one repo per criteria.</p>
                   <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
                 </div>
               </div>
@@ -203,8 +204,9 @@
             </div>
 
 
+
             <div class="text-right" style="padding-top:4rem;padding-bottom:10px;">
-              <button type="button" class="btn-outline btn btn-info"  @click="addCriteria()" :disabled="array_selected_tools.length == 0"><i class="fa fa-plus"></i>ADD CRITERION</button>
+              <button type="button" class="btn-outline btn btn-info"  @click="addCriteria()" :disabled="array_selected_tools.length == 0 || disabled_add_crit == true"><i class="fa fa-plus"></i>ADD CRITERION</button>
             </div>
 
             <div v-show="Object.keys(selected_criteria).length > 0" style="padding-top:40px;margin-bottom:2rem;">
@@ -383,6 +385,8 @@
           file:'',
           env:''
         },
+        disabled_add_crit:false,
+        showErrorRepoCrit:false,
         showCommands:false,
         testenv:[],
         show_tool_tox:false,
@@ -455,6 +459,13 @@
       }
     },
     watch:{
+      'disable_menu'(val){
+        console.log(val)
+        if(val == false){
+          this.repository = 'default';
+          this.disabled_add_crit = false;
+        }
+      },
       'criteria'(val){
         this.showBuilderTool=false;
         if(val != "default"){
@@ -489,12 +500,15 @@
       'repository'(val){
         if(val != "default"){
           this.showErrorRepo = false;
-        }
-      },
-
-      'repository'(val){
-        if(val != "default"){
-          this.showErrorRepo = false;
+          for (var i in this.selected_criteria[this.criteria]['repos']){
+            if(this.selected_criteria[this.criteria]['repos'][i]['repo_url'] != ''){
+              this.showErrorRepoCrit = true;
+              this.disabled_add_crit = true;
+            }
+          }
+        }else{
+          this.showErrorRepoCrit = false;
+          this.disabled_add_crit = false;
         }
 
       },
@@ -831,7 +845,7 @@
           }
 
         }else{
-
+          this.showErrorRepoCrit = false;
           this.showCriteria = true;
           this.disable_done = false;
           this.showErrorRepo = false;
@@ -865,6 +879,8 @@
           this.service = 'default'
           this.builder_tool = 'default';
           this.array_selected_tools = [];
+          this.repository = 'default';
+          this.disable_menu = false;
           this.showBuilderTool = false;
           console.log(this.selected_criteria)
         }

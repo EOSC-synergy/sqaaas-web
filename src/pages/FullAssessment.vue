@@ -16,17 +16,49 @@
 						<template class="card-body">
               <div class="text-center" style="justify-content: center;margin-top:60px;">
                 <h2>Title</h2>
-                <div class="text-left col-12">
-                  <base-input type="text"
-                            label="Repository URL"
-                            :disabled="false"
-                            placeholder="Repository URL"
-                            v-model="params.url">
-                  </base-input>
+                <div class="text-left row">
+                  <div class="col-12 col-md-8">
+                    <base-input type="text"
+                              label="Repository URL"
+                              :disabled="false"
+                              placeholder="Repository URL"
+                              v-model="params.url">
+                    </base-input>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <base-input type="text"
+                              label="Branch"
+                              :disabled="false"
+                              placeholder="master"
+                              v-model="params.branch">
+                    </base-input>
+                  </div>
                 </div>
 
+                 <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
+                    <span class="custom-label">External repo for documentation?</span>
+                    <div class="custom-div-append">
+                      <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance">
+                        <i class="fa fa-question-circle"></i>
+                      </button>
+                  </div>
+                    <span class="custom-label" style="padding-left:75px;">Yes</span><base-checkbox name="credentials" v-model="doc.yes"></base-checkbox>
+                    <span class="custom-label">No</span><base-checkbox name="credentials" v-model="doc.no"></base-checkbox>
+                  </div>
+
+                  <!-- <div v-show='config.credentials.yes' style="padding-left:30px;">
+
+                    <base-input type="text" class="no-margin"
+                          label="JENKINS CREDENTIALS ID"
+                          :disabled="false"
+                          placeholder="userpass"
+                          v-model="credentials.id">
+                    </base-input>
+                    <span v-show="showErrorCredId" style="color:red;font-size:12px;">This field is required</span>
+                  </div> -->
+
                 <!-- Criteria Section  -->
-                <div class="text-left col-12">
+                <!-- <div class="text-left col-12">
                   <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left: 15px;">
                       <div class="" style="padding-bottom:10px">
                         <label style="color:black;"> CHOOSE A CRITERIA</label>
@@ -46,11 +78,11 @@
                     <span v-show="showErrorCriteria" style="color:red; font-size:12px;padding-left:20px;">You must select a valid criteria</span>
                   </div>
 
-                </div>
+                </div> -->
 
                 <!-- Services Section -->
 
-                <div class="text-left col-12">
+                <!-- <div class="text-left col-12">
                   <h4>Add external services (Optional)</h4>
                   <div class="row" style="padding-left:30px">
 
@@ -105,10 +137,11 @@
                         </div>
                       </div>
 
-                </div>
+                </div> -->
 
                 <div style="padding:20px;">
-                  <button class="btn btn-primary btn-fill" data-toggle="modal" data-target="#exampleModal" @click="getResults()">Execute</button>
+                  <!-- <button class="btn btn-primary btn-fill" data-toggle="modal" data-target="#exampleModal" @click="getResults()">Execute</button> -->
+                  <button class="btn btn-primary btn-fill" @click="getResults()">Execute</button>
                 </div>
               </div>
 						</template>
@@ -143,11 +176,13 @@
 
   import LTable from 'src/components/Table.vue'
   import Card from 'src/components/Cards/Card.vue'
+  import Services from '../services/services'
   export default {
     components: {
 		LTable,
 		Card
     },
+    mixins: [Services],
     data () {
       return {
         criteria:'default',
@@ -186,8 +221,13 @@
           }
         },
         params:{
-          url:''
-        }
+          url:'',
+          branch:''
+        },
+        doc:{
+          yes:false,
+          no:true
+        },
 
       }
     },
@@ -259,6 +299,7 @@
         }
       }
     },
+
     methods:{
       gotoCustomized(){
         this.$router.push({name: 'dashboard'});
@@ -271,7 +312,21 @@
       },
       getResults(){
         console.log('here')
+        var data = {
+          repo_code:{
+            repo:this.params.url,
+            branch:this.params.branch
+          },
+          repo_docs:{
+            repo:'',
+            branch:''
+          }
+        }
+        this.getPipelineAssessmentCall(data,this.getPipelineAssessmentCallBack)
 
+      },
+      getPipelineAssessmentCallBack(response){
+        console.log(response)
       },
       addService(){
         var key= this.service.name.replace(" ", "")
@@ -312,7 +367,117 @@
 }
 </script>
 <style scoped>
-.pos-buttons{
-  display: inline-flex!important;
+.custom-label{
+  padding-top:5px;
+  padding-left:20px;
+  color: #9A9A9A;
+
 }
+input[type=number]::-webkit-inner-spin-button {
+  opacity: 1;
+}
+
+.no-margin{
+  margin:0px!important;
+}
+
+.custom-append-button {
+  padding-top: 0px !important;
+  padding-bottom: 0.38rem !important;
+  padding-left:0.75rem !important;
+  padding-right:0.75rem !important;
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    /* line-height: 1.5; */
+    color: #495057;
+    /* text-align: center; */
+    /* white-space: nowrap; */
+
+    border: none;
+
+    height: 40px;
+}
+
+.btn-info {
+    border-color: #1185EB;
+    color: #1185EB;
+}
+
+.btn-next {
+    background-color: #1DC7EA !important;
+    color: black !important;
+    padding:1rem 0 1rem 0;
+    font-weight: bold;
+    border: 2px solid black;
+  }
+
+  .btn-next-back{
+    width: 20%!important;
+  }
+
+.btn-back{
+  padding:1rem 0 1rem 0;
+  background-color:#ccc!important;
+  margin-right:10%;
+  font-weight: bold;
+  border: 2px solid black;
+
+}
+.custom-div-append {
+  padding:0px 0px 0px 0px;
+  margin:0px;
+  margin-left: -3px;
+}
+
+
+
+
+@media (max-width: 576px) {
+  .container-fluid{
+    padding-left: 0px!important;
+    padding-right: 0px!important;
+  }
+
+
+ }
+
+ .accordion-head i{
+    font-size: 1.5em;
+    float: right;
+}
+
+.accordion-head > .collapsed > i:before{
+    content: "\f105";
+}
+
+@media (min-width: 992px){
+    .col-lg-10 {
+        -ms-flex: 0 0 83.333333%;
+        -webkit-box-flex: 0;
+        flex: 0 0 83.333333%;
+        max-width: 100%;
+  }
+ }
+
+ @media (min-width: 1200px) {
+    .col-lg-10 {
+        -ms-flex: 0 0 83.333333%;
+        -webkit-box-flex: 0;
+        flex: 0 0 83.333333%;
+        max-width: 70%;
+    }
+  }
+
+  .custom-table-title{
+  padding-top:5px;
+  /* padding-left:20px; */
+  text-transform: uppercase;
+  font-size:16px;
+  color:black;
+  font-weight:700;
+
+}
+
 </style>
+
