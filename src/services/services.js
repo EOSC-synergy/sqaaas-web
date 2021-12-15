@@ -197,6 +197,22 @@ export default {
          return callBackHandler(error.response);
      });
 
+    },
+
+    // Full Assessment Module
+
+    getPipelineAssessmentCall(data,callBackHandler){
+      axios({
+       method: 'post',
+       url: this.env.api +'/pipeline/assessment',
+       data:data
+     }).then(response => {
+         return callBackHandler(response);
+     })
+     .catch(error => {
+         return callBackHandler(error.response);
+     });
+
  },
   }
 }
