@@ -213,6 +213,18 @@ export default {
          return callBackHandler(error.response);
      });
 
- },
+  },
+  runAssessmentPipelineCall(data, callBackHandler){
+    axios({
+      method: 'post',
+      url: this.env.api +'/pipeline/'+data+'/run',
+    }).then(response => {
+        return callBackHandler(response);
+    })
+    .catch(error => {
+        return callBackHandler(error.response);
+    });
+
+  },
   }
 }
