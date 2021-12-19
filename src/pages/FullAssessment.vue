@@ -1,6 +1,27 @@
 <template>
   	<div class="content">
 		<div class="container-fluid">
+      <div id="test"  v-show="loading" class="loading-overlay is-active" >
+          <div style="padding: 20px;background-color: #ccc;border-radius: 5px;">
+            <div style="vertical-align: middle;display: flex;">
+              <span class="fas fa-cog fa-3x fa-spin"></span>
+              <p style="padding-left: 10px;text-transform: uppercase;font-weight: 700;margin-bottom: 0px;margin-top: 15px;">{{modal_message}}</p>
+            </div>
+            <div>
+              <p>Please, wait for this process to finish.</p>
+            </div>
+            <div v-show="build_status!=''" class="text-center">
+              <p style="font-size:18px;font-weight:700;">Current State: {{build_status}}</p>
+            </div>
+            <div class="text-center">
+                <a v-show="showBuildUrl" style="color:white;margin-right:10px;" class="btn btn-primary btn-fill btn-sm" :href="build_url" target="_blank">Check logs</a>
+                <button style="margin-left:10px;" class="btn btn-sm btn-danger btn-fill" :disabled="disable_cancel" @click="cancelExecution()">Cancel</button>
+              </div>
+            </div>
+        </div>
+        <div  v-show="loading_create" class="loading-overlay is-active">
+          <span class="fas fa-spinner fa-3x fa-spin"></span>
+        </div>
 			<div class="row">
 				<div class="col-12" style="margin-top:40px;">
 					<card class="strpied-tabled-with-hover"
@@ -46,16 +67,28 @@
                     <span class="custom-label">No</span><base-checkbox name="credentials" v-model="doc.no"></base-checkbox>
                   </div>
 
-                  <!-- <div v-show='config.credentials.yes' style="padding-left:30px;">
+                  <div v-show='doc.yes' class="text-left row">
+                      <div class="col-12 col-md-8">
+                        <base-input type="text" class="no-margin"
+                              label="Repo URL"
+                              :disabled="false"
+                              placeholder=""
+                              v-model="doc.url">
+                        </base-input>
+                        <!-- <span v-show="showErrorCredId" style="color:red;font-size:12px;">This field is required</span> -->
 
-                    <base-input type="text" class="no-margin"
-                          label="JENKINS CREDENTIALS ID"
-                          :disabled="false"
-                          placeholder="userpass"
-                          v-model="credentials.id">
-                    </base-input>
-                    <span v-show="showErrorCredId" style="color:red;font-size:12px;">This field is required</span>
-                  </div> -->
+                      </div>
+                      <div class="col-12 col-md-4">
+                        <base-input type="text" class="no-margin"
+                              label="Branch"
+                              :disabled="false"
+                              placeholder=""
+                              v-model="doc.branch">
+                        </base-input>
+                      </div>
+
+
+                  </div>
 
                 <!-- Criteria Section  -->
                 <!-- <div class="text-left col-12">
@@ -226,8 +259,14 @@
         },
         doc:{
           yes:false,
-          no:true
+          no:true,
+           url:'',
+          branch:''
         },
+        autoRefresh:false,
+        pipeline_id:'',
+        loading: false,
+        modal_message : '',
 
       }
     },
@@ -266,9 +305,7 @@
               this.selected_tool = this.array_tools[i]
             }
           }
-
           console.log(this.selected_tool)
-
           var _this = this;
 
           setTimeout(function(){
@@ -297,10 +334,40 @@
         }else{
           this.showBuilderTool = false;
         }
+      },
+      "doc.yes"(val){
+         if(val==true){
+          this.doc.no = false;
+        }else{
+          this.doc.no = true;
+        }
+
+      },
+      "doc.no"(val){
+        if(val==true){
+          this.doc.yes = false;
+          this.doc.url = "";
+          this.doc.branch = "";
+        }else{
+          this.doc.yes = true;
+        }
+      },
+      "autoRefresh"(val) {
+        console.log(val)
+        if (val) {
+            this.t = setInterval(() => {
+                this.checkStatus()
+            }, 3 * 1000)
+        } else {
+            clearInterval(this.t)
+        }
       }
+
+
     },
 
     methods:{
+
       gotoCustomized(){
         this.$router.push({name: 'dashboard'});
       },
@@ -314,12 +381,12 @@
         console.log('here')
         var data = {
           repo_code:{
-            repo:this.params.url,
-            branch:this.params.branch
+            repo:this.params.url.trim(),
+            branch:this.params.branch.trim()
           },
           repo_docs:{
-            repo:'',
-            branch:''
+            repo:this.doc.url.trim(),
+            branch:this.doc.branch.trim()
           }
         }
         this.getPipelineAssessmentCall(data,this.getPipelineAssessmentCallBack)
@@ -327,19 +394,37 @@
       },
       getPipelineAssessmentCallBack(response){
         console.log(response)
+        if(response.status == 201 && response.data.id){
+          this.pipeline_id = response.data.id;
+          this.loading = true;
+          this.modal_message = 'Submitting Pipeline ...';
+
+          this.runAssessmentPipelineCall(this.pipeline_id,this.runAssessmentPipelineCallBack)
+        }else{
+          this.notifyVue("There is some error")
+        }
+      },
+      runAssessmentPipelineCallBack(response){
+        if(response.status == 204){
+          this.autoRefresh = true;
+        }else if(response.status == 403){
+          this.$router.replace(this.$route.query.redirect || "/logout");
+          this.loading = false;
+        }else{
+          this.notifyVue("There is some error")
+        }
+
       },
       addService(){
         var key= this.service.name.replace(" ", "")
 				var value = this.service.url.replace(" ", "")
         this.all_services[key]=value
-        // this.$store.state.config_yaml.environment = this.config.all_envs;
         this.showService = true;
         this.cleanService()
 
       },
       removeService(item){
         this.$delete(this.all_services,item)
-        // this.$store.state.config_yaml.environment = this.config.all_envs;
         if (this.isEmpty(this.all_services)) {
           this.showService = false;
         }
@@ -362,6 +447,79 @@
         }
         return size;
       },
+      notifyVue (message) {
+        this.$notify(
+          {
+            title: "Error",
+            message: message,
+            icon: 'nc-icon nc-app',
+            timeout:3000,
+            horizontalAlign: 'right',
+            verticalAlign: 'top',
+            type: 'danger'
+          })
+      },
+       checkStatus(){
+        // this.showStatusBar = true;
+        this.modal_message = 'Executing Pipeline ...'
+        this.checkStatusCall(this.pipeline_id,this.checkStatusCallBack)
+      },
+       checkStatusCallBack(response){
+        if(response.status == 200){
+          this.disable_cancel = false;
+          if (response.data.build_status != 'NOT_EXECUTED'){
+            this.build_status = response.data.build_status;
+            this.$store.state.status = this.build_status;
+            this.showStatus = true;
+          }
+          if (response.data.build_url != '' && response.data.build_url != null){
+            this.showCard = true;
+            this.build_url = response.data.build_url;
+            this.$store.state.build_url = this.build_url;
+            this.showBuildUrl = true;
+          }
+
+          console.log(response.data.build_status)
+          if(response.data.build_status == 'SUCCESS'){
+            this.showStatusBar = false;
+            if(response.data.openbadge_id != null){
+              this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
+            }
+            this.loading = false;
+            this.autoRefresh = false;
+          }
+
+          if(this.build_status == "FAILURE"){
+            this.loading = false;
+            this.autoRefresh = false;
+          }
+
+        }else if(response.status == 403){
+          this.autoRefresh = false;
+          this.showStatus = false;
+          this.loading = false;
+          this.$router.replace(this.$route.query.redirect || "/logout");
+        }else if (response.status == 422){
+          this.autoRefresh = false;
+          this.showStatus = false;
+          this.showBuildUrl = false;
+          this.$store.state.status = '';
+          this.$store.state.build_url = '';
+          this.loading = false;
+          this.notifyVue("Error "+response.status +":", "Pipeline has not been execute",'nc-icon nc-simple-remove','danger')
+
+        }else{
+          this.autoRefresh = false;
+          this.showStatus = false;
+          this.notifyVue("Error "+response.status +":", (response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
+          this.loading = false;
+        }
+      },
+      cancelExecution(){
+      console.log('here')
+      this.autoRefresh = false;
+      this.loading = false;
+    },
 
   }
 }
