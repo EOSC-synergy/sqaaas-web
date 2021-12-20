@@ -162,7 +162,7 @@ export default {
         });
 
     },
-    getBadgeCallPOST(id,callBackHandler){
+    getBadgeCall(id,callBackHandler){
          axios({
           method: 'post',
           url: this.env.api +'/pipeline/'+ id+ '/badge',
@@ -213,11 +213,23 @@ export default {
          return callBackHandler(error.response);
      });
 
-  },
-  runAssessmentPipelineCall(data, callBackHandler){
-    axios({
-      method: 'post',
-      url: this.env.api +'/pipeline/'+data+'/run',
+    },
+    runAssessmentPipelineCall(data, callBackHandler){
+      axios({
+        method: 'post',
+        url: this.env.api +'/pipeline/'+data+'/run',
+      }).then(response => {
+          return callBackHandler(response);
+      })
+      .catch(error => {
+          return callBackHandler(error.response);
+      });
+
+    },
+    getOutputCall(id,callBackHandler){
+      axios({
+      method: 'get',
+      url: this.env.api+'/pipeline/'+id+'/output?validate=true',
     }).then(response => {
         return callBackHandler(response);
     })
@@ -225,6 +237,7 @@ export default {
         return callBackHandler(error.response);
     });
 
-  },
+    },
+
   }
 }
