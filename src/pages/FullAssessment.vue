@@ -1,6 +1,6 @@
 <template>
   	<div class="content">
-		<div class="container-fluid">
+		<div class="container-fluid" style="min-height:70vh;">
       <div id="test"  v-show="loading" class="loading-overlay is-active" >
           <div style="padding: 20px;background-color: #ccc;border-radius: 5px;">
             <div style="vertical-align: middle;display: flex;">
@@ -14,13 +14,10 @@
               <p style="font-size:18px;font-weight:700;">Current State: {{build_status}}</p>
             </div>
             <div class="text-center">
-                <a v-show="showBuildUrl" style="color:white;margin-right:10px;" class="btn btn-primary btn-fill btn-sm" :href="build_url" target="_blank">Check logs</a>
+                <a v-show="showBuildUrl" style="color:white;margin-right:10px;" class="btn btn-primary btn-fill btn-sm" :href="build_url" target="_blank">Check Logs</a>
                 <button style="margin-left:10px;" class="btn btn-sm btn-danger btn-fill" :disabled="disable_cancel" @click="cancelExecution()">Cancel</button>
               </div>
             </div>
-        </div>
-        <div  v-show="loading_create" class="loading-overlay is-active">
-          <span class="fas fa-spinner fa-3x fa-spin"></span>
         </div>
 			<div class="row">
 				<div class="col-12" style="margin-top:40px;">
@@ -29,14 +26,14 @@
 					>
 						<template slot="header" >
               <div style="display:inline-flex;">
-                <button class="btn btn-default btn-simple" @click="gotoSelect()"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
-                <h4 style="font-weight: bold;padding-top:5px;" class="card-title">Back</h4>
+                <button class="btn btn-default btn-simple" @click="gotoSelect()"><i class="fa fa-arrow-left" aria-hidden="true"></i><span style="font-weight: bold;padding-top:5px;font-size:18px;" class="card-title">Back</span></button>
               </div>
 						</template>
 
 						<template class="card-body">
-              <div class="text-center" style="justify-content: center;margin-top:60px;">
+              <div class="text-center" style="justify-content: center;margin-top:20px;">
                 <h2>Title</h2>
+                <p>Some text</p>
                 <div class="text-left row">
                   <div class="col-12 col-md-8">
                     <base-input type="text"
@@ -173,8 +170,9 @@
                 </div> -->
 
                 <div style="padding:20px;">
-                  <!-- <button class="btn btn-primary btn-fill" data-toggle="modal" data-target="#exampleModal" @click="getResults()">Execute</button> -->
-                  <button class="btn btn-primary btn-fill" @click="getResults()">Execute</button>
+                  <button v-show="!showReportBtn" class="btn btn-primary btn-fill" @click="getResults()">Start Assessment</button>
+                  <button v-show="showReportBtn" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#exampleModal">See Report</button>
+                  <button v-show="showReportBtn" class="btn btn-secondary btn-fill" @click="refresh()">Refresh</button>
                 </div>
               </div>
 						</template>
@@ -267,6 +265,11 @@
         pipeline_id:'',
         loading: false,
         modal_message : '',
+        disable_cancel : true,
+        build_url:'',
+        showBuildUrl:false,
+        build_status:'',
+        showReportBtn: false
 
       }
     },
@@ -378,7 +381,20 @@
         this.$router.push({name: 'SelectOption'});
       },
       getResults(){
-        console.log('here')
+        // var data = {}
+        // if(this.params.url != ''){
+        //   data['repo_code'] = {
+        //     repo:this.params.url.trim(),
+        //     branch:this.params.branch.trim()
+        //   }
+        // }
+        // if(this.doc.url != ''){
+        //   data['repo_docs'] = {
+        //     repo:this.doc.url.trim(),
+        //     branch:this.doc.branch.trim()
+        //   }
+        // }
+
         var data = {
           repo_code:{
             repo:this.params.url.trim(),
@@ -482,17 +498,21 @@
           console.log(response.data.build_status)
           if(response.data.build_status == 'SUCCESS'){
             this.showStatusBar = false;
-            if(response.data.openbadge_id != null){
-              this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
-            }
+            // if(response.data.openbadge_id != null){
+            //   this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
+            // }
             this.loading = false;
             this.autoRefresh = false;
+            this.getOutputCall(this.pipeline_id,this.getOutputCallBack);
+            this.showReportBtn = true;
           }
 
           if(this.build_status == "FAILURE"){
             this.loading = false;
             this.autoRefresh = false;
           }
+
+
 
         }else if(response.status == 403){
           this.autoRefresh = false;
@@ -506,7 +526,7 @@
           this.$store.state.status = '';
           this.$store.state.build_url = '';
           this.loading = false;
-          this.notifyVue("Error "+response.status +":", "Pipeline has not been execute",'nc-icon nc-simple-remove','danger')
+          this.notifyVue("Pipeline has not been execute");
 
         }else{
           this.autoRefresh = false;
@@ -516,10 +536,27 @@
         }
       },
       cancelExecution(){
-      console.log('here')
-      this.autoRefresh = false;
-      this.loading = false;
-    },
+        console.log('here')
+        this.autoRefresh = false;
+        this.loading = false;
+        this.showReportBtn = false;
+      },
+      getOutputCallBack(response){
+        console.log(response)
+        if(response.status == 201){
+          this.getBadgeCall(this.pipeline_id,this.getBadgeCallCallBack)
+        }
+      },
+      getBadgeCallCallBack(response){
+        console.log(response)
+      },
+      refresh(){
+        this.pipeline_id = '';
+        this.params.url = '';
+        this.params.brach = '';
+        this.doc.yes = false;
+        this.showReportBtn = false;
+      }
 
   }
 }
