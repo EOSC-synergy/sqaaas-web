@@ -187,7 +187,7 @@
                             <td
                                 style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                 <div :id="'list-arg'+index" style="text-align:center;">
-                                    {{listArg(tool['args'], index)}}
+                                    {{startListArg(tool['args'], index)}}
                                 </div>
 
                             </td>
@@ -555,18 +555,16 @@
           this.paintingArg(this.selected_tool.args, 0);
 
           setTimeout(function(){
-          var count = 0;
-          console.log('here')
-          for (var i in _this.selected_tool.args){
-            if(_this.selected_tool.args[i].repeatable && _this.selected_tool.args[i].repeatable == true){
-              $("#inputTag_"+count+'_'+i).tagsinput({
-              trimValue: true
-              });
-              console.log("#inputTag_"+count+'_'+i)
-              count=count*1+1;
+            var count = 0;
+            for (var i in _this.selected_tool.args){
+              if(_this.selected_tool.args[i].repeatable && _this.selected_tool.args[i].repeatable == true){
+                $("#inputTag_"+count+'_'+i).tagsinput({
+                trimValue: true
+                });
+                count=count*1+1;
+              }
             }
-          }
-           },100)
+            },100)
         }else{
           this.showBuilderTool = false;
         }
@@ -629,6 +627,21 @@
 
         return args;
       },
+      async startListArg(args,index){
+        let myPromise = new Promise((resolve, reject) => {
+          this.listArg(args, index).then(body => {
+            resolve(body);
+          }).catch(err => {
+              reject(err.message);
+          });
+        });
+        return myPromise.then(body => {
+            $('#list-arg'+index).html(body)
+            return body;
+        }).catch(err => {
+            console.log(err);
+        })
+      },
       async listArg(args, index){
         var text = '', body = '';
 
@@ -647,7 +660,7 @@
 
         }
         console.log(body)
-        $('#list-arg'+index).html(body)
+
         return body;
       },
       async addTool(){
