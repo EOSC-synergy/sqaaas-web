@@ -40,14 +40,17 @@
                               label="Repository URL"
                               :disabled="false"
                               placeholder="Repository URL"
+                              style="margin-bottom:0px"
                               v-model="params.url">
                     </base-input>
+                    <p v-show="showErrorURL" style="color:red; font-size:12px;padding-left:20px; padding-top:0px;">This field is required</p>
                   </div>
                   <div class="col-12 col-md-4">
                     <base-input type="text"
                               label="Branch"
                               :disabled="false"
                               placeholder="master"
+                              style="margin-bottom:0px"
                               v-model="params.branch">
                     </base-input>
                   </div>
@@ -171,8 +174,9 @@
 
                 <div style="padding:20px;">
                   <button v-show="!showReportBtn" class="btn btn-primary btn-fill" @click="getResults()">Start Assessment</button>
-                  <button v-show="showReportBtn" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#exampleModal">See Report</button>
-                  <button v-show="showReportBtn" class="btn btn-secondary btn-fill" @click="refresh()">Refresh</button>
+                  <!-- <button style="margin-right:20px;" v-show="showReportBtn" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#exampleModal">See Report</button> -->
+                  <button style="margin-right:20px;" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#exampleModal">See Report</button>
+                  <button v-show="showReportBtn" style="color: #fff;background-color: #6c757d;border-color: #6c757d;" class="btn  " @click="refresh()"><i class="fa fa-refresh" style="padding-right:5px;" aria-hidden="true"></i> Refresh</button>
                 </div>
               </div>
 						</template>
@@ -183,18 +187,22 @@
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+              <div class="modal-header ">
+                <h5 class="modal-title " id="exampleModalLabel">REPORT</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div class="modal-body">
-                ...
+                <div class="row">
+                  <card class="col-12 col-md-4" :class="(repo_info['report'][key]['valid'] == true)?'success':'failed'" v-for="(crit,key) in repo_info['report']" :key="key">
+                     <span>{{key}}<i v-if="repo_info['report'][key]['valid'] == true" style="padding-left:5px;" class="fa fa-check-square" aria-hidden="true"></i> <i style="padding-left:5px;" v-else class="fa fa-window-close" aria-hidden="true"></i></span>
+                  </card>
+                </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
               </div>
             </div>
           </div>
@@ -269,7 +277,106 @@
         build_url:'',
         showBuildUrl:false,
         build_status:'',
-        showReportBtn: false
+        showReportBtn: false,
+        showErrorURL:false,
+        repo_info:{
+	"report": {
+		"QC.Lic": {
+			"data": {
+				"REQUIRED": {
+					"licensee": {
+						"licenses": [{
+							"key": "gpl-3.0",
+							"spdx_id": "GPL-3.0",
+							"meta": {
+								"title": "GNU General Public License v3.0",
+								"source": "<a href='https://spdx.org/licenses/GPL-3.0.html'>https://spdx.org/licenses/GPL-3.0.html</a>",
+								"description": "Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights.",
+								"how": "Create a text file (typically named COPYING, as per GNU conventions) in the root of your source code and copy the text of the license into the file.",
+								"using": {
+									"Ansible": "<a href='https://github.com/ansible/ansible/blob/devel/COPYING'>https://github.com/ansible/ansible/blob/devel/COPYING</a>",
+									"Bash": "https://git.savannah.gnu.org/cgit/bash.git/tree/COPYING",
+									"GIMP": "https://git.gnome.org/browse/gimp/tree/COPYING"
+								},
+								"featured": true,
+								"hidden": false,
+								"nickname": "GNU GPLv3",
+								"note": "The Free Software Foundation recommends taking the additional step of adding a boilerplate notice to the top of each file. The boilerplate can be found at the end of the license."
+							},
+							"url": "<a href='http://choosealicense.com/licenses/gpl-3.0/'>http://choosealicense.com/licenses/gpl-3.0/</a>",
+							"rules": {
+								"permissions": [{
+									"tag": "commercial-use",
+									"label": "Commercial use",
+									"description": "The licensed material and derivatives may be used for commercial purposes."
+								}, {
+									"tag": "modifications",
+									"label": "Modification",
+									"description": "The licensed material may be modified."
+								}, {
+									"tag": "distribution",
+									"label": "Distribution",
+									"description": "The licensed material may be distributed."
+								}, {
+									"tag": "patent-use",
+									"label": "Patent use",
+									"description": "This license provides an express grant of patent rights from contributors."
+								}, {
+									"tag": "private-use",
+									"label": "Private use",
+									"description": "The licensed material may be used and modified in private."
+								}],
+								"conditions": [{
+									"tag": "include-copyright",
+									"label": "License and copyright notice",
+									"description": "A copy of the license and copyright notice must be included with the licensed material."
+								}, {
+									"tag": "document-changes",
+									"label": "State changes",
+									"description": "Changes made to the licensed material must be documented."
+								}, {
+									"tag": "disclose-source",
+									"label": "Disclose source",
+									"description": "Source code must be made available when the licensed material is distributed."
+								}, {
+									"tag": "same-license",
+									"label": "Same license",
+									"description": "Modifications must be released under the same license when distributing the licensed material. In some cases a similar or related license may be used."
+								}],
+								"limitations": [{
+									"tag": "liability",
+									"label": "Liability",
+									"description": "This license includes a limitation of liability."
+								}, {
+									"tag": "warranty",
+									"label": "Warranty",
+									"description": "This license explicitly states that it does NOT provide any warranty."
+								}]
+							},
+							"fields": [],
+							"other": false,
+							"gpl": true,
+							"lgpl": false,
+							"cc": false
+						}],
+						"matched_files": [{
+							"filename": "LICENSE",
+							"content_hash": "7d4cdf499d39e2e1ce27b2878e22872f0f5a74dd",
+							"matcher": {
+								"name": "exact",
+								"confidence": 100
+							},
+							"matched_license": "GPL-3.0",
+							"attribution": null
+						}]
+					}
+				}
+			},
+			"valid": true
+		}
+	},
+	"badge": {}
+}
 
       }
     },
@@ -356,7 +463,6 @@
         }
       },
       "autoRefresh"(val) {
-        console.log(val)
         if (val) {
             this.t = setInterval(() => {
                 this.checkStatus()
@@ -394,22 +500,26 @@
         //     branch:this.doc.branch.trim()
         //   }
         // }
-
-        var data = {
-          repo_code:{
-            repo:this.params.url.trim(),
-            branch:this.params.branch.trim()
-          },
-          repo_docs:{
-            repo:this.doc.url.trim(),
-            branch:this.doc.branch.trim()
+        if(this.params.url != ''){
+          var data = {
+            repo_code:{
+              repo:this.params.url.trim(),
+              branch:this.params.branch.trim()
+            },
+            repo_docs:{
+              repo:this.doc.url.trim(),
+              branch:this.doc.branch.trim()
+            }
           }
+          this.showErrorURL = false;
+          this.getPipelineAssessmentCall(data,this.getPipelineAssessmentCallBack)
+        }else{
+          this.showErrorURL = true;
         }
-        this.getPipelineAssessmentCall(data,this.getPipelineAssessmentCallBack)
+
 
       },
       getPipelineAssessmentCallBack(response){
-        console.log(response)
         if(response.status == 201 && response.data.id){
           this.pipeline_id = response.data.id;
           this.loading = true;
@@ -495,7 +605,6 @@
             this.showBuildUrl = true;
           }
 
-          console.log(response.data.build_status)
           if(response.data.build_status == 'SUCCESS'){
             this.showStatusBar = false;
             // if(response.data.openbadge_id != null){
@@ -536,19 +645,29 @@
         }
       },
       cancelExecution(){
-        console.log('here')
         this.autoRefresh = false;
         this.loading = false;
         this.showReportBtn = false;
       },
       getOutputCallBack(response){
-        console.log(response)
         if(response.status == 201){
           this.getBadgeCall(this.pipeline_id,this.getBadgeCallCallBack)
         }
       },
       getBadgeCallCallBack(response){
-        console.log(response)
+        if(response.status == 200){
+          this.repo_info = response.data;
+        }else if(response.status == 403){
+          this.autoRefresh = false;
+          this.showStatus = false;
+          this.loading = false;
+          this.$router.replace(this.$route.query.redirect || "/logout");
+        }else{
+          this.autoRefresh = false;
+          this.showStatus = false;
+          this.notifyVue("Error "+response.status +":", (response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
+          this.loading = false;
+        }
       },
       refresh(){
         this.pipeline_id = '';
@@ -672,6 +791,21 @@ input[type=number]::-webkit-inner-spin-button {
   color:black;
   font-weight:700;
 
+}
+
+.success{
+      background-color: #64C133;
+    border: 2px solid #275D0A;
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+}
+.failed{
+      background-color: #CF4D03;
+    border: 2px solid #A43B00;
+    color: black;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 </style>
