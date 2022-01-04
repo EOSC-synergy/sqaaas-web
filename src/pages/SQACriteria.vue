@@ -535,9 +535,6 @@
             }
           }
           var _this = this;
-
-
-
           var no_error = 0;
           var select_false = 0;
           for(var i in this.selected_tool.args){
@@ -557,15 +554,18 @@
           //Painting Arg
           this.paintingArg(this.selected_tool.args, 0);
 
-            setTimeout(function(){
+          setTimeout(function(){
             var count = 0;
             for (var i in _this.selected_tool.args){
-               $("#inputTag_"+count+'_'+i).tagsinput({
+              if(_this.selected_tool.args[i].repeatable && _this.selected_tool.args[i].repeatable == true){
+                $("#inputTag_"+count+'_'+i).tagsinput({
                 trimValue: true
-              });
-              count=count*1+1;
+                });
+                console.log("#inputTag_"+count+'_'+i)
+                count=count*1+1;
+              }
             }
-           },100)
+            },100)
         }else{
           this.showBuilderTool = false;
         }
