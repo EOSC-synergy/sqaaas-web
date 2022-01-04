@@ -786,9 +786,9 @@
           console.log(response.data.build_status)
           if(response.data.build_status == 'SUCCESS'){
             this.showStatusBar = false;
-            if(response.data.openbadge_id != null){
-              this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
-            }
+            // if(response.data.openbadge_id != null){
+            //   this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
+            // }
             this.loading = false;
             this.autoRefresh = false;
           }
@@ -931,7 +931,7 @@
              var parts = response.data[i].file_name.split("/");
              var file = {
                file_name:parts[parts.length - 1],
-               content: YAML.stringify(response.data[i].content, undefined, 2)
+               content: response.data[i].content
              }
              this.yamlConfig.push(file)
            }

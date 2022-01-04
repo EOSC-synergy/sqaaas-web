@@ -229,7 +229,7 @@ export default {
     getOutputCall(id,callBackHandler){
       axios({
       method: 'get',
-      url: this.env.api+'/pipeline/'+id+'/output?validate=true',
+      url: this.env.api+'/pipeline/assessment/'+id+'/output',
     }).then(response => {
         return callBackHandler(response);
     })

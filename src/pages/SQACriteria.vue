@@ -500,10 +500,13 @@
       'repository'(val){
         if(val != "default"){
           this.showErrorRepo = false;
-          for (var i in this.selected_criteria[this.criteria]['repos']){
-            if(this.selected_criteria[this.criteria]['repos'][i]['repo_url'] != ''){
-              this.showErrorRepoCrit = true;
-              this.disabled_add_crit = true;
+          console.log(this.selected_criteria[this.criteria])
+          if(this.selected_criteria[this.criteria] && this.selected_criteria[this.criteria]['repos']){
+            for (var i in this.selected_criteria[this.criteria]['repos']){
+              if(this.selected_criteria[this.criteria]['repos'][i]['repo_url'] != ''){
+                this.showErrorRepoCrit = true;
+                this.disabled_add_crit = true;
+              }
             }
           }
         }else{
@@ -531,9 +534,6 @@
               this.selected_tool = this.array_tools[i]
             }
           }
-
-          console.log(this.selected_tool)
-
           var _this = this;
 
 
