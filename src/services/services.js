@@ -197,6 +197,6 @@ export default {
          return callBackHandler(error.response);
      });
 
- },
+    },
   }
 }
