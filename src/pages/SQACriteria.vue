@@ -500,10 +500,13 @@
       'repository'(val){
         if(val != "default"){
           this.showErrorRepo = false;
-          for (var i in this.selected_criteria[this.criteria]['repos']){
-            if(this.selected_criteria[this.criteria]['repos'][i]['repo_url'] != ''){
-              this.showErrorRepoCrit = true;
-              this.disabled_add_crit = true;
+          console.log(this.selected_criteria[this.criteria])
+          if(this.selected_criteria[this.criteria] && this.selected_criteria[this.criteria]['repos']){
+            for (var i in this.selected_criteria[this.criteria]['repos']){
+              if(this.selected_criteria[this.criteria]['repos'][i]['repo_url'] != ''){
+                this.showErrorRepoCrit = true;
+                this.disabled_add_crit = true;
+              }
             }
           }
         }else{
@@ -531,19 +534,7 @@
               this.selected_tool = this.array_tools[i]
             }
           }
-
-          console.log(this.selected_tool)
-
           var _this = this;
-
-          setTimeout(function(){
-            for (var i in _this.selected_tool.args){
-              $("#inputTag_"+i).tagsinput({
-                trimValue: true
-              })
-            }
-          },100)
-
           var no_error = 0;
           var select_false = 0;
           for(var i in this.selected_tool.args){
@@ -562,6 +553,20 @@
 
           //Painting Arg
           this.paintingArg(this.selected_tool.args, 0);
+
+          setTimeout(function(){
+          var count = 0;
+          console.log('here')
+          for (var i in _this.selected_tool.args){
+            if(_this.selected_tool.args[i].repeatable && _this.selected_tool.args[i].repeatable == true){
+              $("#inputTag_"+count+'_'+i).tagsinput({
+              trimValue: true
+              });
+              console.log("#inputTag_"+count+'_'+i)
+              count=count*1+1;
+            }
+          }
+           },100)
         }else{
           this.showBuilderTool = false;
         }
