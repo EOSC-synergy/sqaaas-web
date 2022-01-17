@@ -110,6 +110,7 @@
                     <option value="default">CHOOSE A REPOSITORY...</option>
                     <option v-for="(repo,key) in $store.state.config_yaml.config.project_repos" :key="key" :value="repo.repo">{{repo.repo}}</option>
                   </select>
+                  <p v-show="showErrorRepoCrit" style="color:red; font-size:12px;padding-left:20px; padding-top:10px;">Error: You can only select one repo per criteria.</p>
                   <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
                 </div>
               </div>
@@ -186,7 +187,7 @@
                             <td
                                 style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                 <div :id="'list-arg'+index" style="text-align:center;">
-                                    {{listArg(tool['args'], index)}}
+                                    {{startListArg(tool['args'], index)}}
                                 </div>
 
                             </td>
@@ -203,8 +204,9 @@
             </div>
 
 
+
             <div class="text-right" style="padding-top:4rem;padding-bottom:10px;">
-              <button type="button" class="btn-outline btn btn-info"  @click="addCriteria()" :disabled="array_selected_tools.length == 0"><i class="fa fa-plus"></i>ADD CRITERION</button>
+              <button type="button" class="btn-outline btn btn-info"  @click="addCriteria()" :disabled="array_selected_tools.length == 0 || disabled_add_crit == true"><i class="fa fa-plus"></i>ADD CRITERION</button>
             </div>
 
             <div v-show="Object.keys(selected_criteria).length > 0" style="padding-top:40px;margin-bottom:2rem;">
@@ -383,6 +385,8 @@
           file:'',
           env:''
         },
+        disabled_add_crit:false,
+        showErrorRepoCrit:false,
         showCommands:false,
         testenv:[],
         show_tool_tox:false,
@@ -455,6 +459,13 @@
       }
     },
     watch:{
+      'disable_menu'(val){
+        console.log(val)
+        if(val == false){
+          this.repository = 'default';
+          this.disabled_add_crit = false;
+        }
+      },
       'criteria'(val){
         this.showBuilderTool=false;
         if(val != "default"){
@@ -489,12 +500,18 @@
       'repository'(val){
         if(val != "default"){
           this.showErrorRepo = false;
-        }
-      },
-
-      'repository'(val){
-        if(val != "default"){
-          this.showErrorRepo = false;
+          console.log(this.selected_criteria[this.criteria])
+          if(this.selected_criteria[this.criteria] && this.selected_criteria[this.criteria]['repos']){
+            for (var i in this.selected_criteria[this.criteria]['repos']){
+              if(this.selected_criteria[this.criteria]['repos'][i]['repo_url'] != ''){
+                this.showErrorRepoCrit = true;
+                this.disabled_add_crit = true;
+              }
+            }
+          }
+        }else{
+          this.showErrorRepoCrit = false;
+          this.disabled_add_crit = false;
         }
 
       },
@@ -517,13 +534,7 @@
               this.selected_tool = this.array_tools[i]
             }
           }
-
-          console.log(this.selected_tool)
-
           var _this = this;
-
-
-
           var no_error = 0;
           var select_false = 0;
           for(var i in this.selected_tool.args){
@@ -543,15 +554,17 @@
           //Painting Arg
           this.paintingArg(this.selected_tool.args, 0);
 
-            setTimeout(function(){
+          setTimeout(function(){
             var count = 0;
             for (var i in _this.selected_tool.args){
-               $("#inputTag_"+count+'_'+i).tagsinput({
+              if(_this.selected_tool.args[i].repeatable && _this.selected_tool.args[i].repeatable == true){
+                $("#inputTag_"+count+'_'+i).tagsinput({
                 trimValue: true
-              });
-              count=count*1+1;
+                });
+                count=count*1+1;
+              }
             }
-           },100)
+            },100)
         }else{
           this.showBuilderTool = false;
         }
@@ -614,6 +627,21 @@
 
         return args;
       },
+      async startListArg(args,index){
+        let myPromise = new Promise((resolve, reject) => {
+          this.listArg(args, index).then(body => {
+            resolve(body);
+          }).catch(err => {
+              reject(err.message);
+          });
+        });
+        return myPromise.then(body => {
+            $('#list-arg'+index).html(body)
+            return body;
+        }).catch(err => {
+            console.log(err);
+        })
+      },
       async listArg(args, index){
         var text = '', body = '';
 
@@ -632,7 +660,7 @@
 
         }
         console.log(body)
-        $('#list-arg'+index).html(body)
+
         return body;
       },
       async addTool(){
@@ -835,7 +863,7 @@
           }
 
         }else{
-
+          this.showErrorRepoCrit = false;
           this.showCriteria = true;
           this.disable_done = false;
           this.showErrorRepo = false;
@@ -869,6 +897,8 @@
           this.service = 'default'
           this.builder_tool = 'default';
           this.array_selected_tools = [];
+          this.repository = 'default';
+          this.disable_menu = false;
           this.showBuilderTool = false;
           console.log(this.selected_criteria)
         }
