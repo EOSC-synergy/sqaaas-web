@@ -7,6 +7,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
  state: {
+   report:{},
    count_cred:0,
    name:'',
    pipeline_id:'',

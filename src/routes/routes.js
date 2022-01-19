@@ -13,6 +13,7 @@ import Pipeline from 'src/pages/Pipeline.vue'
 import SelectOption from 'src/pages/SelectOption.vue'
 import PipelineName from 'src/pages/PipelineName.vue'
 import FullAssessment from 'src/pages/FullAssessment.vue'
+import FullAssessmentReport from 'src/pages/FullAssessmentReport.vue'
 
 function requireAuth (to, from, next) {
   localStorage.getItem('session');
@@ -95,6 +96,12 @@ const routes = [
         name: 'full_assessment',
         beforeEnter: requireAuth,
         component: FullAssessment
+      },
+      {
+        path: 'full-assessment/report',
+        name: 'full-assessment-report',
+        beforeEnter: requireAuth,
+        component: FullAssessmentReport
       },
       {
         path: 'user',
