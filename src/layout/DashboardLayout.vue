@@ -1,6 +1,6 @@
 <template>
 	<div class="wrapper">
-		<side-bar v-show="$route.path != '/auth/pipeline-name' && $route.path != '/auth/select-option' && $route.path != '/auth/full-assessment' ">
+		<side-bar v-show="$route.path != '/auth/pipeline-name' && $route.path != '/auth/select-option' && $route.path != '/auth/full-assessment' && $route.path != '/auth/full-assessment/report' ">
 
       <div class="widget-body ">
                 <p style="padding-left:20px;font-size: 30px;">Pipeline as a Service</p>
@@ -58,7 +58,7 @@
 			</sidebar-link>
       <mobile-menu></mobile-menu>
 		</side-bar>
-    <div v-if="$route.path == '/auth/pipeline-name' || $route.path == '/auth/select-option' || $route.path == '/auth/full-assessment' ">
+    <div v-if="$route.path == '/auth/pipeline-name' || $route.path == '/auth/select-option' || $route.path == '/auth/full-assessment' || $route.path == '/auth/full-assessment/report' ">
 			<top-navbar></top-navbar>
 
 			<dashboard-content @click="toggleSidebar">

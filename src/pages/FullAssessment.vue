@@ -171,8 +171,9 @@
 
                 <div style="padding:20px;">
                   <button v-show="!showReportBtn" class="btn btn-primary btn-fill" @click="getResults()">Start Assessment</button>
-                  <button v-show="showReportBtn" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#exampleModal">See Report</button>
-                  <button v-show="showReportBtn" class="btn btn-secondary btn-fill" @click="refresh()">Refresh</button>
+                  <!-- <button v-show="showReportBtn" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#exampleModal">See Report</button> -->
+                   <button v-show="showReportBtn" style="margin-right:20px;" class="btn btn-primary btn-fill" @click="goToReport()">See Report</button>
+                  <button v-show="showReportBtn" style="color: #fff;background-color: #6c757d;border-color: #6c757d;" class="btn  " @click="refresh()"><i class="fa fa-refresh" style="padding-right:5px;" aria-hidden="true"></i> Refresh</button>
                 </div>
               </div>
 						</template>
@@ -370,12 +371,11 @@
     },
 
     methods:{
-
+      goToReport(){
+        this.$router.push({name: 'full-assessment-report'});
+      },
       gotoCustomized(){
         this.$router.push({name: 'dashboard'});
-      },
-      gotoFull(){
-        this.$router.push({name: 'full_assessment'});
       },
       gotoSelect(){
         this.$router.push({name: 'SelectOption'});
@@ -507,7 +507,7 @@
             this.showReportBtn = true;
           }
 
-          if(this.build_status == "FAILURE"){
+          if(response.data.build_status == "FAILURE"){
             this.loading = false;
             this.autoRefresh = false;
           }
@@ -544,7 +544,8 @@
       getOutputCallBack(response){
         console.log(response)
         if(response.status == 201){
-          this.getBadgeCall(this.pipeline_id,this.getBadgeCallCallBack)
+          this.$store.state.report = response.data;
+          // this.getBadgeCall(this.pipeline_id,this.getBadgeCallCallBack)
         }
       },
       getBadgeCallCallBack(response){
