@@ -16,9 +16,9 @@
             <div class="text-center">
                 <a v-show="showBuildUrl" style="color:white;margin-right:10px;" class="btn btn-primary btn-fill btn-sm" :href="build_url" target="_blank">Check Logs</a>
                 <button style="margin-left:10px;" class="btn btn-sm btn-danger btn-fill" :disabled="disable_cancel" @click="cancelExecution()">Cancel</button>
-              </div>
             </div>
-        </div>
+          </div>
+      </div>
 			<div class="row">
 				<div class="col-12" style="margin-top:40px;">
 					<card class="strpied-tabled-with-hover"
@@ -31,7 +31,7 @@
 						</template>
 
 						<template class="card-body">
-              <div class="text-center" style="justify-content: center;margin-top:20px;">
+              <div class="text-center col-12 col-sm-12 col-xl-8 col-lg-10 mx-auto" style="justify-content: center;margin-top:20px;">
                 <h2>Title</h2>
                 <p>Some text</p>
                 <div class="text-left row">
@@ -612,7 +612,7 @@
             this.loading = false;
             this.autoRefresh = false;
             this.getOutputCall(this.pipeline_id,this.getOutputCallBack);
-            this.showReportBtn = true;
+
           }
 
           if(response.data.build_status == "FAILURE"){
@@ -639,7 +639,7 @@
         }else{
           this.autoRefresh = false;
           this.showStatus = false;
-          this.notifyVue("Error "+response.status +":", (response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error "+response.status +":", (response.data) ? response.data : '')
           this.loading = false;
         }
       },
@@ -649,9 +649,19 @@
         this.showReportBtn = false;
       },
       getOutputCallBack(response){
-        if(response.status == 201){
+        if(response.status == 200){
           this.$store.state.report = response.data;
+           this.showReportBtn = true;
           // this.getBadgeCall(this.pipeline_id,this.getBadgeCallCallBack)
+        }else if(response.status == 403){
+          this.autoRefresh = false;
+          this.showStatus = false;
+          this.loading = false;
+          this.$router.replace(this.$route.query.redirect || "/logout");
+          }else{
+          this.notifyVue("There is some error.");
+          this.$store.state.report = {};
+          this.build_status = '';
         }
       },
       getBadgeCallCallBack(response){
@@ -665,7 +675,7 @@
         }else{
           this.autoRefresh = false;
           this.showStatus = false;
-          this.notifyVue("Error "+response.status +":", (response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error "+response.status +":", (response.data) ? response.data : '')
           this.loading = false;
         }
       },
@@ -675,6 +685,7 @@
         this.params.brach = '';
         this.doc.yes = false;
         this.showReportBtn = false;
+        this.build_status = '';
       }
 
   }

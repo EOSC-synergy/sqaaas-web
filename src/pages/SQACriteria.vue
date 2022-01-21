@@ -4,10 +4,23 @@
       <div  v-show="loading" class="loading-overlay is-active">
          <span class="fas fa-spinner fa-3x fa-spin"></span>
       </div>
+      <div  v-show="loadingError" class="loading-overlay is-active">
+         <div class="text-center" style="padding: 20px;background-color: #ccc;border-radius: 5px;">
+            <div>
+              <p style="font-size:20px;">We are having problems making the request.</p>
+            </div>
+            <div class="text-center">
+              <i class="fa fa-times-circle fa-10x" style="color:red;width:auto" aria-hidden="true"></i>
+            </div>
+            <div style="padding-top:20px;">
+              <a style="font-size:18px;color:red; text-decoration:underline;"  href="https://github.com/EOSC-synergy/SQAaaS/issues/new/choose" target="_blank">Report the issue</a>
+            </div>
+            <div style="padding-top:20px;">
+                <button style="margin-left:10px;" class="btn btn-sm btn-danger btn-fill" @click="cancelExecution()">Cancel</button>
+            </div>
+          </div>
+      </div>
       <div class="col-12 col-sm-12 col-xl-6 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
-        <!-- <card>
-
-        </card> -->
 
         <card >
           <template slot="header">
@@ -374,6 +387,7 @@
     data () {
       return {
         loading:false,
+        loadingError:false,
         pipelineName:'',
         criteria:'default',
         repository:'default',
@@ -417,7 +431,6 @@
         showErrorBuilderTool:false,
         disable_menu: false,
         array_criterias:[],
-        array_criterias_copy:[],
         array_tools:[],
         selected_tool:{},
         array_input_value:[],
@@ -474,7 +487,6 @@
           this.showErrorArgs = false;
           this.show_link = true;
           this.showSelect = true;
-          console.log(this.array_criterias_copy)
           for (var i in this.array_criterias){
             if (this.array_criterias[i].id == val){
               this.array_tools = [...this.array_criterias[i]['tools']]
@@ -529,15 +541,11 @@
       },
       'builder_tool'(val){
         if(val != 'default'){
-          console.log('Copy',this.array_criterias_copy)
-          console.log('Original',this.array_criterias)
-          console.log('Array Tools',this.array_tools)
-          console.log(this.array_selected_tools)
-          console.log(this.selected_tool)
           this.selected_tool = {};
           for (var i in this.array_tools){
             if(this.array_tools[i].name == val){
-              this.selected_tool = Object.assign({},this.array_tools[i]);
+              // this.selected_tool = Object.assign({},this.array_tools[i]);
+              this.selected_tool = JSON.parse(JSON.stringify(this.array_tools[i]));
             }
           }
           var _this = this;
@@ -583,6 +591,9 @@
       }
     },
     methods:{
+      cancelExecution(){
+        this.$router.push({name: 'SelectOption'});
+      },
       async paintingArg(args, count){
         var text = '', body = '';
         for(var i in args){
@@ -685,7 +696,7 @@
         }else{
           this.showErrorArgs = false;
           console.log(typeof args)
-          this.selected_tool['args'] = Object.assign({},this.selected_tool['args'], args);
+          this.selected_tool['args'] =  args;
           this.builder_tool = 'default';
           this.showBuilderTool = false;
           console.log(this.selected_tool)
@@ -888,12 +899,16 @@
           }else{
             serv = this.service
           }
-          repo={
-                  repo_url: (this.repository!='default')?this.repository:'',
-                  container: serv,
-                  tools:(this.array_selected_tools.length>0)?this.array_selected_tools:''
-            }
-          this.repos["repos"].push(repo)
+          for(var i in this.array_selected_tools){
+            repo={
+                    repo_url: (this.repository!='default')?this.repository:'',
+                    container: serv,
+                    // tools:(this.array_selected_tools.length>0)?this.array_selected_tools:''
+                    tool:this.array_selected_tools[i]
+              }
+
+            this.repos["repos"].push(repo)
+          }
           this.selected_criteria[this.criteria]=Object.assign({}, this.selected_criteria[this.criteria], this.repos)
           this.$store.state.config_yaml.sqa_criteria[this.criteria] = Object.assign({}, this.$store.state.config_yaml.sqa_criteria[this.criteria], this.repos)
           this.showErrorFile = false;
@@ -903,6 +918,7 @@
           this.repository = 'default';
           this.disable_menu = false;
           this.showBuilderTool = false;
+          console.log(this.$store.state.config_yaml.sqa_criteria)
         }
       },
       removeCriteria(key){
@@ -989,11 +1005,14 @@
       },
       getCriteriaCallBack(response){
         this.loading = false;
+        this.array_criterias = [];
         if(response.status == 200){
-          this.array_criterias = response.data;
-          this.array_criterias_copy = response.data;
+          for(var i in response.data){
+            this.array_criterias.push(response.data[i])
+          }
         }else{
-           this.notifyVue("We are having problems making the request.")
+          this.loadingError = true;
+          this.notifyVue("We are having problems making the request.")
         }
       }
 
