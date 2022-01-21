@@ -13,14 +13,32 @@
               </template>
 
               <template class="card-body">
+
+                <div class="row" >
+                  <div v-show="showBadgeSoftware == true" class="col-12 col-md-4  text-center" id="badge-software" style="padding-top:20px;padding-left:15px;">
+                  </div>
+                  <div v-show="showBadgeService == true" class="col-12 col-md-4 text-center" id="badge-service" style="padding-top:20px;padding-left:15px;">
+                  </div>
+                  <div v-show="showBadgeFair == true" class="col-12 col-md-4 text-center" id="badge-fair" style="padding-top:20px;padding-left:15px;">
+                  </div>
+                </div>
+
+
+
+
+
+
+                <h3 class="text-center">Report</h3>
                   <div class="table-responsive">
                       <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                           <thead>
-                              <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">key</th>
-                              <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">value</th>
-                              <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">REMOVE</th>
+                              <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Criterion</th>
+                              <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Valid</th>
+                              <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Required</th>
+                              <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Recommended</th>
+                              <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Optional</th>
                           </thead>
-                          <tbody v-for="(env, index) in all_services" :key="index">
+                          <tbody v-for="(crit, index) in $store.state.report.report" :key="index">
                                   <tr
                                       style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
                                       <td
@@ -32,14 +50,57 @@
                                       <td
                                           style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                           <div style="text-align:center;">
-                                              {{env}}
+                                              {{crit['valid']}}
+                                          </div>
+                                      </td>
+                                      <td
+                                          style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                          <div  v-if="crit['data']['REQUIRED'] && crit['data']['REQUIRED'].length > 0" style="text-align:center;">
+                                              <p v-for="(tool, index1) in crit['data']['REQUIRED']" :key="index1">
+
+                                                <!-- {{crit['data']['REQUIRED'][index1]}} -->
+                                                {{Object.keys(tool)}}
+
+                                              </p>
+
+                                          </div>
+                                          <div v-else style="text-align:center;">
+                                              <span>-</span>
+                                          </div>
+                                      </td>
+                                      <td
+                                          style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                          <div  v-if="crit['data']['RECOMMENDED'] && crit['data']['RECOMMENDED'].length > 0" style="text-align:center;">
+                                              <p v-for="(tool, index1) in crit['data']['RECOMMENDED']" :key="index1">
+
+                                                {{crit['data']['RECOMMENDED'][index1]}}
+
+                                              </p>
+
+                                          </div>
+                                          <div v-else style="text-align:center;">
+                                              <span>-</span>
                                           </div>
                                       </td>
                                       <td
                                           style="text-align:right;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                          <div  v-if="crit['data']['OPTIONAL'] && crit['data']['OPTIONAL'].length > 0" style="text-align:center;">
+                                              <p style="text-align:center;" v-for="(tool, index1) in crit['data']['OPTIONAL']" :key="index1">
+
+                                                {{crit['data']['OPTIONAL'][index1]}}
+
+                                              </p>
+
+                                          </div>
+                                          <div v-else style="text-align:center;">
+                                              <span>-</span>
+                                          </div>
+                                      </td>
+                                      <!-- <td
+                                          style="text-align:right;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                           <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnv(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
                                           </button>
-                                      </td>
+                                      </td> -->
                                   </tr>
                           </tbody>
                       </table>
@@ -64,6 +125,9 @@
     mixins: [Services],
     data () {
       return {
+        showBadgeSoftware:false,
+        showBadgeService:false,
+        showBadgeFair:false,
 
       }
     },
@@ -82,6 +146,27 @@
   },
   created(){
     console.log(this.$store.state.report)
+    if(this.$store.state.report.badge['software']){
+      console.log('hereeeeeeeeeee')
+      this.showBadgeSoftware = true;
+      if($("#badge-software").has("blockquote").length == 0){
+        $( "#badge-software" ).append(this.$store.state.report.badge['software']);
+      }
+    }
+    if(this.$store.state.report.badge['service']){
+      this.showBadgeService = true;
+      if($("#badge-service").has("blockquote").length == 0){
+        $( "#badge-service" ).append(this.$store.state.report.badge['service']);
+      }
+    }
+    if(this.$store.state.report.badge['fair']){
+      this.showBadgeFair = true;
+      if($("#badge-fair").has("blockquote").length == 0){
+        $( "#badge-fair" ).append(this.$store.state.report.badge['fair']);
+      }
+    }
+    $('blockquote p').css('text-align','center');
+    $('blockquote p a').css('display','unset');
   }
 }
 </script>
