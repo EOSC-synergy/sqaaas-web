@@ -511,6 +511,8 @@
             }
           }
           this.showErrorURL = false;
+          this.loading = true;
+          this.modal_message = 'Submitting Pipeline ...';
           this.getPipelineAssessmentCall(data,this.getPipelineAssessmentCallBack)
         }else{
           this.showErrorURL = true;
@@ -521,8 +523,8 @@
       getPipelineAssessmentCallBack(response){
         if(response.status == 201 && response.data.id){
           this.pipeline_id = response.data.id;
-          this.loading = true;
-          this.modal_message = 'Submitting Pipeline ...';
+          // this.loading = true;
+          // this.modal_message = 'Submitting Pipeline ...';
 
           this.runAssessmentPipelineCall(this.pipeline_id,this.runAssessmentPipelineCallBack)
         }else{
