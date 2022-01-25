@@ -14,21 +14,16 @@
 
               <template class="card-body">
 
-                <div class="row" >
-                  <div v-show="showBadgeSoftware == true" class="col-12 col-md-4  text-center" id="badge-software" style="padding-top:20px;padding-left:15px;">
+                <div class="row">
+                  <div v-show="showBadgeSoftware == true" :class="{'col-md-4':showBadgeService == true && showBadgeFair == true, 'col-md-6':((showBadgeService == true && showBadgeFair == false) || (showBadgeService == false && showBadgeFair == true)), 'col-md-12':showBadgeService == false && showBadgeFair == false}" class="col-12 text-center" id="badge-software" style="padding-top:20px;padding-left:15px;">
                   </div>
-                  <div v-show="showBadgeService == true" class="col-12 col-md-4 text-center" id="badge-service" style="padding-top:20px;padding-left:15px;">
+                  <div v-show="showBadgeService == true" :class="{'col-md-4':showBadgeSoftware == true && showBadgeFair == true, 'col-md-6':((showBadgeSoftware == true && showBadgeFair == false) || (showBadgeSoftware == false && showBadgeFair == true)), 'col-md-12':showBadgeSoftware == false && showBadgeFair == false}" class="col-12 text-center" id="badge-service" style="padding-top:20px;padding-left:15px;">
                   </div>
-                  <div v-show="showBadgeFair == true" class="col-12 col-md-4 text-center" id="badge-fair" style="padding-top:20px;padding-left:15px;">
+                  <div v-show="showBadgeFair == true"  :class="{'col-md-4':showBadgeSoftware == true && showBadgeFair == true, 'col-md-6':((showBadgeSoftware == true && showBadgeFair == false) || (showBadgeSoftware == false && showBadgeFair == true)), 'col-md-12':showBadgeSoftware == false && showBadgeFair == false}" class="col-12 col-md-4 text-center" id="badge-fair" style="padding-top:20px;padding-left:15px;">
                   </div>
                 </div>
 
-
-
-
-
-
-                <h3 class="text-center">Report</h3>
+                <h3 class="text-center" style="margin-top:5rem;">Report</h3>
                   <div class="table-responsive">
                       <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                           <thead>
@@ -49,17 +44,18 @@
                                       </td>
                                       <td
                                           style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                          <div style="text-align:center;">
-                                              {{crit['valid']}}
+                                          <div v-if="crit['valid'] == true" style="text-align:center;">
+                                              <i style="color:#1BC10B;" class="fa fa-check-circle" aria-hidden="true"></i>
+                                          </div>
+                                          <div v-else style="text-align:center;">
+                                              <i style="color:red" class="fa fa-times-circle-o" aria-hidden="true"></i>
                                           </div>
                                       </td>
                                       <td
                                           style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                           <div  v-if="crit['data']['REQUIRED'] && crit['data']['REQUIRED'].length > 0" style="text-align:center;">
                                               <p v-for="(tool, index1) in crit['data']['REQUIRED']" :key="index1">
-
-                                                <!-- {{crit['data']['REQUIRED'][index1]}} -->
-                                                {{Object.keys(tool)}}
+                                                {{tool['name']}}
 
                                               </p>
 
@@ -73,7 +69,7 @@
                                           <div  v-if="crit['data']['RECOMMENDED'] && crit['data']['RECOMMENDED'].length > 0" style="text-align:center;">
                                               <p v-for="(tool, index1) in crit['data']['RECOMMENDED']" :key="index1">
 
-                                                {{crit['data']['RECOMMENDED'][index1]}}
+                                                {{tool['name']}}
 
                                               </p>
 
@@ -87,7 +83,7 @@
                                           <div  v-if="crit['data']['OPTIONAL'] && crit['data']['OPTIONAL'].length > 0" style="text-align:center;">
                                               <p style="text-align:center;" v-for="(tool, index1) in crit['data']['OPTIONAL']" :key="index1">
 
-                                                {{crit['data']['OPTIONAL'][index1]}}
+                                                {{tool['name']}}
 
                                               </p>
 
@@ -144,29 +140,41 @@
 
 
   },
+   mounted(){
+     this.$eventHub.$emit('steps', 5);
+     var _this = this
+     this.$nextTick(function () {
+       console.log(this.$store.state.report)
+        if(this.$store.state.report.badge['software']){
+          this.showBadgeSoftware = true;
+          if($("#badge-software").has("blockquote").length == 0){
+            console.log(this.$store.state.report.badge['software']['share'])
+            $( "#badge-software" ).append(this.$store.state.report.badge['software']['share']);
+          }
+        }
+        if(this.$store.state.report.badge['service']){
+          this.showBadgeService = true;
+          if($("#badge-service").has("blockquote").length == 0){
+            $( "#badge-service" ).append(this.$store.state.report.badge['service']['share']);
+          }
+        }
+        if(this.$store.state.report.badge['fair']){
+          this.showBadgeFair = true;
+          if($("#badge-fair").has("blockquote").length == 0){
+            $( "#badge-fair" ).append(this.$store.state.report.badge['fair']['share']);
+          }
+        }
+        $('blockquote p').css('text-align','center');
+        $('blockquote p a').css('display','unset');
+        $('blockquote img').css('height','300px');
+        $('blockquote img').css('width','300px');
+
+
+      })
+
+  },
   created(){
-    console.log(this.$store.state.report)
-    if(this.$store.state.report.badge['software']){
-      console.log('hereeeeeeeeeee')
-      this.showBadgeSoftware = true;
-      if($("#badge-software").has("blockquote").length == 0){
-        $( "#badge-software" ).append(this.$store.state.report.badge['software']);
-      }
-    }
-    if(this.$store.state.report.badge['service']){
-      this.showBadgeService = true;
-      if($("#badge-service").has("blockquote").length == 0){
-        $( "#badge-service" ).append(this.$store.state.report.badge['service']);
-      }
-    }
-    if(this.$store.state.report.badge['fair']){
-      this.showBadgeFair = true;
-      if($("#badge-fair").has("blockquote").length == 0){
-        $( "#badge-fair" ).append(this.$store.state.report.badge['fair']);
-      }
-    }
-    $('blockquote p').css('text-align','center');
-    $('blockquote p a').css('display','unset');
+
   }
 }
 </script>
@@ -281,6 +289,11 @@ input[type=number]::-webkit-inner-spin-button {
   color:black;
   font-weight:700;
 
+}
+
+.badgr-badge img{
+  height: 300px!important;
+  width: 300px!important;
 }
 
 </style>
