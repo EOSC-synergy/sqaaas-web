@@ -506,10 +506,6 @@
           console.log(response.data.build_status)
           if(response.data.build_status == 'SUCCESS'){
             this.showStatusBar = false;
-            // if(response.data.openbadge_id != null){
-            //   this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
-            // }
-            this.loading = false;
             this.autoRefresh = false;
             this.getOutputCall(this.pipeline_id,this.getOutputCallBack);
 
@@ -564,6 +560,7 @@
           this.$store.state.report = {};
           this.build_status = '';
         }
+        this.loading = false;
       },
       getBadgeCallCallBack(response){
         if(response.status == 200){
