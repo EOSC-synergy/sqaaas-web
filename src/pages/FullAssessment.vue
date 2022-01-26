@@ -395,14 +395,16 @@
         //   }
         // }
 
-        var data = {
-          repo_code:{
-            repo:this.params.url.trim(),
-            branch:this.params.branch.trim()
-          },
-          repo_docs:{
-            repo:this.doc.url.trim(),
-            branch:this.doc.branch.trim()
+        if(this.params.url != ''){
+          var data = {
+            repo_code:{
+              repo:this.params.url.trim(),
+              branch:this.params.branch.trim()
+            },
+            repo_docs:{
+              repo:this.doc.url.trim(),
+              branch:this.doc.branch.trim()
+            }
           }
           this.showErrorURL = false;
           this.loading = true;
@@ -411,7 +413,7 @@
         }else{
           this.showErrorURL = true;
         }
-        this.getPipelineAssessmentCall(data,this.getPipelineAssessmentCallBack)
+
 
       },
       getPipelineAssessmentCallBack(response){
