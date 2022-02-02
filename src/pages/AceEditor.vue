@@ -28,7 +28,6 @@ export default ({
       }
     },
     'resize' (value){
-      console.log(value)
       window.ace.resize(true)
     }
   },
