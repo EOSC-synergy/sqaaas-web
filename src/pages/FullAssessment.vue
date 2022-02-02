@@ -173,40 +173,15 @@
                 </div> -->
 
                 <div style="padding:20px;">
-                  <button v-show="!showReportBtn" class="btn btn-primary btn-fill" @click="getResults()">Start Assessment</button>
+                  <button class="btn btn-primary btn-fill" @click="getResults()">Start Assessment</button>
                   <!-- <button v-show="showReportBtn" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#exampleModal">See Report</button> -->
-                   <button v-show="showReportBtn" style="margin-right:20px;" class="btn btn-primary btn-fill" @click="goToReport()">See Report</button>
-                  <button v-show="showReportBtn" style="color: #fff;background-color: #6c757d;border-color: #6c757d;" class="btn  " @click="refresh()"><i class="fa fa-refresh" style="padding-right:5px;" aria-hidden="true"></i> Refresh</button>
+                   <!-- <button v-show="showReportBtn" style="margin-right:20px;" class="btn btn-primary btn-fill" @click="goToReport()">See Report</button> -->
+                  <!-- <button v-show="showReportBtn" style="color: #fff;background-color: #6c757d;border-color: #6c757d;" class="btn  " @click="refresh()"><i class="fa fa-refresh" style="padding-right:5px;" aria-hidden="true"></i> New Assessment</button> -->
                 </div>
               </div>
 						</template>
 					</card>
 				</div>
-
-       <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header ">
-                <h5 class="modal-title " id="exampleModalLabel">REPORT</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <div class="row">
-                  <card class="col-12 col-md-4" :class="(repo_info['report'][key]['valid'] == true)?'success':'failed'" v-for="(crit,key) in repo_info['report']" :key="key">
-                     <span>{{key}}<i v-if="repo_info['report'][key]['valid'] == true" style="padding-left:5px;" class="fa fa-check-square" aria-hidden="true"></i> <i style="padding-left:5px;" v-else class="fa fa-window-close" aria-hidden="true"></i></span>
-                  </card>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-              </div>
-            </div>
-          </div>
-        </div>
 			</div>
 		</div>
   	</div>
@@ -666,6 +641,7 @@
       getBadgeCallCallBack(response){
         if(response.status == 200){
           this.repo_info = response.data;
+          this.goToReport();
         }else if(response.status == 403){
           this.autoRefresh = false;
           this.showStatus = false;
@@ -678,15 +654,15 @@
           this.loading = false;
         }
       },
-      refresh(){
-        this.pipeline_id = '';
-        this.params.url = '';
-        this.params.brach = '';
-        this.doc.yes = false;
-        this.showReportBtn = false;
-        this.build_status = '';
-      }
 
+  },
+  created(){
+      this.pipeline_id = '';
+      this.params.url = '';
+      this.params.brach = '';
+      this.doc.yes = false;
+      this.showReportBtn = false;
+      this.build_status = '';
   }
 }
 </script>

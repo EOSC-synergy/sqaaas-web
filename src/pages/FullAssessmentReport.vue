@@ -1,18 +1,30 @@
 <template>
   	<div class="content">
       <div class="container-fluid" style="min-height:70vh;">
-        <div class="row">
+        <div class="row" style="overflow-y: auto;">
           	<div class="col-12" style="margin-top:40px;">
             <card class="strpied-tabled-with-hover"
               body-classes=""
             >
               <template slot="header" >
-                <div style="display:inline-flex;">
-                  <button class="btn btn-default btn-simple" @click="gotoFull()"><i class="fa fa-arrow-left" aria-hidden="true"></i><span style="font-weight: bold;padding-top:5px;font-size:18px;" class="card-title">Back</span></button>
+                <div class="row">
+                  <div class="col-6" style="display:inline-flex;">
+                    <button class="btn btn-default btn-simple" @click="gotoFull()"><i class="fa fa-arrow-left" aria-hidden="true"></i><span style="font-weight: bold;padding-top:5px;font-size:18px;" class="card-title">Back</span></button>
+                  </div>
+                  <div class="col-6 text-right">
+                    <button style="color: #fff;background-color: #6c757d;border-color: #6c757d;" class="btn  " @click="refresh()"><i class="fa fa-refresh" style="padding-right:5px;" aria-hidden="true"></i> New Assessment</button>
+                  </div>
+
                 </div>
               </template>
 
               <template class="card-body">
+
+                <h3 class="text-center" v-if="showBadgeSoftware== true || showBadgeService == true || showBadgeFair==true">Congratulations!!! the following badge/s have been awarded</h3>
+                <div class="text-center" v-else>
+                  <h3>Sorry, you have not earned any badges</h3>
+                  <i style="opacity: 0.5" class="fa fa-frown-o fa-10x" aria-hidden="true"></i>
+                </div>
 
                 <div class="row">
                   <div v-show="showBadgeSoftware == true" :class="{'col-md-4':showBadgeService == true && showBadgeFair == true, 'col-md-6':((showBadgeService == true && showBadgeFair == false) || (showBadgeService == false && showBadgeFair == true)), 'col-md-12':showBadgeService == false && showBadgeFair == false}" class="col-12 text-center" id="badge-software" style="padding-top:20px;padding-left:15px;">
@@ -23,7 +35,7 @@
                   </div>
                 </div>
 
-                <h3 class="text-center" style="margin-top:5rem;">Report</h3>
+                <h3 class="text-center" style="margin-top:2rem;">Report</h3>
                   <div class="table-responsive">
                       <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                           <thead>
@@ -48,16 +60,19 @@
                                               <i style="color:#1BC10B;" class="fa fa-check-circle" aria-hidden="true"></i>
                                           </div>
                                           <div v-else style="text-align:center;">
-                                              <i style="color:red" class="fa fa-times-circle-o" aria-hidden="true"></i>
+                                              <i style="color:red" class="fa fa-times-circle" aria-hidden="true"></i>
                                           </div>
                                       </td>
                                       <td
                                           style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                           <div  v-if="crit['data']['REQUIRED'] && crit['data']['REQUIRED'].length > 0" style="text-align:center;">
-                                              <p v-for="(tool, index1) in crit['data']['REQUIRED']" :key="index1">
+                                              <button v-for="(tool, index1) in crit['data']['REQUIRED']" :key="index1" class="btn btn-primary btn-link" style="border:none" data-toggle="modal" data-target="#exampleModal" @click="modalInfo(index,'REQUIRED',tool['name'])">
+                                                {{tool['name']}}
+                                              </button>
+                                              <!-- <p v-for="(tool, index1) in crit['data']['REQUIRED']" :key="index1">
                                                 {{tool['name']}}
 
-                                              </p>
+                                              </p> -->
 
                                           </div>
                                           <div v-else style="text-align:center;">
@@ -67,12 +82,9 @@
                                       <td
                                           style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                           <div  v-if="crit['data']['RECOMMENDED'] && crit['data']['RECOMMENDED'].length > 0" style="text-align:center;">
-                                              <p v-for="(tool, index1) in crit['data']['RECOMMENDED']" :key="index1">
-
+                                            <button v-for="(tool, index1) in crit['data']['RECOMMENDED']" :key="index1" class="btn btn-primary btn-link" style="border:none" data-toggle="modal" data-target="#exampleModal" @click="modalInfo(index,'RECOMMENDED',tool['name'])">
                                                 {{tool['name']}}
-
-                                              </p>
-
+                                              </button>
                                           </div>
                                           <div v-else style="text-align:center;">
                                               <span>-</span>
@@ -81,12 +93,9 @@
                                       <td
                                           style="text-align:right;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                           <div  v-if="crit['data']['OPTIONAL'] && crit['data']['OPTIONAL'].length > 0" style="text-align:center;">
-                                              <p style="text-align:center;" v-for="(tool, index1) in crit['data']['OPTIONAL']" :key="index1">
-
+                                            <button v-for="(tool, index1) in crit['data']['OPTIONAL']" :key="index1" class="btn btn-primary btn-link" style="border:none" data-toggle="modal" data-target="#exampleModal" @click="modalInfo(index,'OPTIONAL',tool['name'])">
                                                 {{tool['name']}}
-
-                                              </p>
-
+                                              </button>
                                           </div>
                                           <div v-else style="text-align:center;">
                                               <span>-</span>
@@ -100,6 +109,40 @@
                                   </tr>
                           </tbody>
                       </table>
+                       <!-- Modal -->
+                      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header ">
+                              <h5 class="modal-title " id="exampleModalLabel">REPORT</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="row">
+                                <card class="col-12">
+                                  <h3>Tool: {{modalInfoData ? modalInfoData.name: ''}}</h3>
+                                  <div v-if="modalInfoData && modalInfoData['ci'] && modalInfoData && modalInfoData['ci']['status'] == 'SUCCESS'" style="text-align:left;">
+                                      <a :href="modalInfoData && modalInfoData['ci']?modalInfoData['ci']['url']:'#'" target="_blank" style="font-size:18px;">Status: <i style="color:#1BC10B;" class="fa fa-check-circle" aria-hidden="true"></i></a>
+                                  </div>
+                                  <div v-else style="text-align:left;">
+                                      <a :href="modalInfoData && modalInfoData['ci']?modalInfoData['ci']['url']:'#'" target="_blank" style="font-size:18px;">Status: <i style="color:red" class="fa fa-times-circle" aria-hidden="true"></i></a>
+                                  </div>
+
+                                  <div v-show="showEditor" class="col-12" style="padding-top:2rem;height:40vh;overflow-y: auto;">
+                                    <editor  editor-id="'editor_modal'" lang="json" :content="modalUnstructured"  key="editor_modal" ></editor>
+                                  </div>
+                                </card>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                   </div>
               </template>
             </card>
@@ -113,10 +156,12 @@
   import LTable from 'src/components/Table.vue'
   import Card from 'src/components/Cards/Card.vue'
   import Services from '../services/services'
+  import Editor from './AceEditor'
   export default {
     components: {
 		LTable,
-		Card
+		Card,
+    'editor': Editor,
     },
     mixins: [Services],
     data () {
@@ -124,6 +169,10 @@
         showBadgeSoftware:false,
         showBadgeService:false,
         showBadgeFair:false,
+        modalInfoData:{},
+         editor: '',
+        modalUnstructured:'',
+        showEditor:false
 
       }
     },
@@ -134,9 +183,30 @@
     },
 
     methods:{
+      modalInfo(crit,type,tool){
+        if(crit != '' && type != '' && tool != ''){
+          for(var i in this.$store.state.report['report'][crit]['data'][type]){
+            console.log(tool, this.$store.state.report['report'][crit]['data'][type][i]['name'])
+            if(tool == this.$store.state.report['report'][crit]['data'][type][i]['name']){
+              this.modalInfoData = this.$store.state.report['report'][crit]['data'][type][i]
+            }
+          }
+        }
+        if(this.modalInfoData['data_unstructured']){
+          this.showEditor = true;
+          this.modalUnstructured = JSON.stringify(this.modalInfoData['data_unstructured'], null, '\t')
+        }else{
+          this.showEditor = false;
+          this.modalUnstructured = '';
+        }
+        console.log(this.modalInfoData)
+      },
       gotoFull(){
         this.$router.push({name: 'full_assessment'});
       },
+      refresh(){
+        this.$router.push({name: 'full_assessment'});
+      }
 
 
   },
