@@ -625,6 +625,7 @@
         if(response.status == 200){
           this.$store.state.report = response.data;
            this.showReportBtn = true;
+           this.goToReport();
           // this.getBadgeCall(this.pipeline_id,this.getBadgeCallCallBack)
         }else if(response.status == 403){
           this.autoRefresh = false;
