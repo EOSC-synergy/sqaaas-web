@@ -129,6 +129,7 @@
                                   <div v-else style="text-align:left;">
                                       <a :href="modalInfoData && modalInfoData['ci']?modalInfoData['ci']['url']:'#'" target="_blank" style="font-size:18px;">Status: <i style="color:red" class="fa fa-times-circle" aria-hidden="true"></i></a>
                                   </div>
+                                  <p v-if="modalInfoData && modalInfoData['reason']">Reason: {{modalInfoData['reason']}} </p>
 
                                   <div v-show="showEditor" class="col-12" style="padding-top:2rem;height:40vh;overflow-y: auto;">
                                     <editor  editor-id="'editor_modal'" lang="json" :content="modalUnstructured"  key="editor_modal" ></editor>
@@ -192,7 +193,7 @@
             }
           }
         }
-        if(this.modalInfoData['data_unstructured']){
+        if(this.modalInfoData['data_unstructured'] && Object.keys(this.modalInfoData['data_unstructured']).length > 0){
           this.showEditor = true;
           this.modalUnstructured = JSON.stringify(this.modalInfoData['data_unstructured'], null, '\t')
         }else{
