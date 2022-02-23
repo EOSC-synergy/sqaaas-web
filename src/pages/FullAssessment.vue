@@ -16,9 +16,9 @@
             <div class="text-center">
                 <a v-show="showBuildUrl" style="color:white;margin-right:10px;" class="btn btn-primary btn-fill btn-sm" :href="build_url" target="_blank">Check Logs</a>
                 <button style="margin-left:10px;" class="btn btn-sm btn-danger btn-fill" :disabled="disable_cancel" @click="cancelExecution()">Cancel</button>
-              </div>
             </div>
-        </div>
+          </div>
+      </div>
 			<div class="row">
 				<div class="col-12" style="margin-top:40px;">
 					<card class="strpied-tabled-with-hover"
@@ -31,7 +31,7 @@
 						</template>
 
 						<template class="card-body">
-              <div class="text-center" style="justify-content: center;margin-top:20px;">
+              <div class="text-center col-12 col-sm-12 col-xl-8 col-lg-10 mx-auto" style="justify-content: center;margin-top:20px;">
                 <h2>Title</h2>
                 <p>Some text</p>
                 <div class="text-left row">
@@ -170,35 +170,15 @@
                 </div> -->
 
                 <div style="padding:20px;">
-                  <button v-show="!showReportBtn" class="btn btn-primary btn-fill" @click="getResults()">Start Assessment</button>
-                  <button v-show="showReportBtn" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#exampleModal">See Report</button>
-                  <button v-show="showReportBtn" class="btn btn-secondary btn-fill" @click="refresh()">Refresh</button>
+                  <button class="btn btn-primary btn-fill" @click="getResults()">Start Assessment</button>
+                  <!-- <button v-show="showReportBtn" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#exampleModal">See Report</button> -->
+                   <!-- <button v-show="showReportBtn" style="margin-right:20px;" class="btn btn-primary btn-fill" @click="goToReport()">See Report</button> -->
+                  <!-- <button v-show="showReportBtn" style="color: #fff;background-color: #6c757d;border-color: #6c757d;" class="btn  " @click="refresh()"><i class="fa fa-refresh" style="padding-right:5px;" aria-hidden="true"></i> New Assessment</button> -->
                 </div>
               </div>
 						</template>
 					</card>
 				</div>
-
-       <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                ...
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-              </div>
-            </div>
-          </div>
-        </div>
 			</div>
 		</div>
   	</div>
@@ -370,12 +350,11 @@
     },
 
     methods:{
-
+      goToReport(){
+        this.$router.push({name: 'full-assessment-report'});
+      },
       gotoCustomized(){
         this.$router.push({name: 'dashboard'});
-      },
-      gotoFull(){
-        this.$router.push({name: 'full_assessment'});
       },
       gotoSelect(){
         this.$router.push({name: 'SelectOption'});
@@ -395,25 +374,33 @@
         //   }
         // }
 
-        var data = {
-          repo_code:{
-            repo:this.params.url.trim(),
-            branch:this.params.branch.trim()
-          },
-          repo_docs:{
-            repo:this.doc.url.trim(),
-            branch:this.doc.branch.trim()
+        if(this.params.url != ''){
+          var data = {
+            repo_code:{
+              repo:this.params.url.trim(),
+              branch:this.params.branch.trim()
+            },
+            repo_docs:{
+              repo:this.doc.url.trim(),
+              branch:this.doc.branch.trim()
+            }
           }
+          this.showErrorURL = false;
+          this.loading = true;
+          this.modal_message = 'Submitting Pipeline ...';
+          this.getPipelineAssessmentCall(data,this.getPipelineAssessmentCallBack)
+        }else{
+          this.showErrorURL = true;
         }
-        this.getPipelineAssessmentCall(data,this.getPipelineAssessmentCallBack)
+
 
       },
       getPipelineAssessmentCallBack(response){
         console.log(response)
         if(response.status == 201 && response.data.id){
           this.pipeline_id = response.data.id;
-          this.loading = true;
-          this.modal_message = 'Submitting Pipeline ...';
+          // this.loading = true;
+          // this.modal_message = 'Submitting Pipeline ...';
 
           this.runAssessmentPipelineCall(this.pipeline_id,this.runAssessmentPipelineCallBack)
         }else{
@@ -498,16 +485,12 @@
           console.log(response.data.build_status)
           if(response.data.build_status == 'SUCCESS'){
             this.showStatusBar = false;
-            // if(response.data.openbadge_id != null){
-            //   this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
-            // }
-            this.loading = false;
             this.autoRefresh = false;
             this.getOutputCall(this.pipeline_id,this.getOutputCallBack);
-            this.showReportBtn = true;
+
           }
 
-          if(this.build_status == "FAILURE"){
+          if(response.data.build_status == "FAILURE"){
             this.loading = false;
             this.autoRefresh = false;
           }
@@ -531,7 +514,7 @@
         }else{
           this.autoRefresh = false;
           this.showStatus = false;
-          this.notifyVue("Error "+response.status +":", (response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
+          this.notifyVue("Error "+response.status +":", (response.data) ? response.data : '')
           this.loading = false;
         }
       },
@@ -542,22 +525,48 @@
         this.showReportBtn = false;
       },
       getOutputCallBack(response){
-        console.log(response)
-        if(response.status == 201){
-          this.getBadgeCall(this.pipeline_id,this.getBadgeCallCallBack)
+        if(response.status == 200){
+          this.$store.state.report = response.data;
+           this.showReportBtn = true;
+           this.goToReport();
+          // this.getBadgeCall(this.pipeline_id,this.getBadgeCallCallBack)
+        }else if(response.status == 403){
+          this.autoRefresh = false;
+          this.showStatus = false;
+          this.loading = false;
+          this.$router.replace(this.$route.query.redirect || "/logout");
+          }else{
+          this.notifyVue("There is some error.");
+          this.$store.state.report = {};
+          this.build_status = '';
         }
+        this.loading = false;
       },
       getBadgeCallCallBack(response){
-        console.log(response)
+        if(response.status == 200){
+          this.repo_info = response.data;
+          this.goToReport();
+        }else if(response.status == 403){
+          this.autoRefresh = false;
+          this.showStatus = false;
+          this.loading = false;
+          this.$router.replace(this.$route.query.redirect || "/logout");
+        }else{
+          this.autoRefresh = false;
+          this.showStatus = false;
+          this.notifyVue("Error "+response.status +":", (response.data) ? response.data : '')
+          this.loading = false;
+        }
       },
-      refresh(){
-        this.pipeline_id = '';
-        this.params.url = '';
-        this.params.brach = '';
-        this.doc.yes = false;
-        this.showReportBtn = false;
-      }
 
+  },
+  created(){
+      this.pipeline_id = '';
+      this.params.url = '';
+      this.params.brach = '';
+      this.doc.yes = false;
+      this.showReportBtn = false;
+      this.build_status = '';
   }
 }
 </script>

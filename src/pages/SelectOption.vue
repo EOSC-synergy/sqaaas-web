@@ -25,7 +25,7 @@
                       <span style="color:white;">Custom CI/CD pipelines based according to the quality criteria from the Software as a Service.</span>
                     </div>
                   </div>
-                  <div class="row select-options disabled" style="background-color:#0D88B7;" @click="gotoFull()">
+                  <div class="row select-options" style="background-color:#0D88B7;" @click="gotoFull()">
                     <div class="col-2 col-md-2">
                       <i class="fa fa-chevron-right icons-select" aria-hidden="true"></i>
 

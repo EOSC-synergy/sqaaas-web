@@ -4,10 +4,23 @@
       <div  v-show="loading" class="loading-overlay is-active">
          <span class="fas fa-spinner fa-3x fa-spin"></span>
       </div>
+      <div  v-show="loadingError" class="loading-overlay is-active">
+         <div class="text-center" style="padding: 20px;background-color: #ccc;border-radius: 5px;">
+            <div>
+              <p style="font-size:20px;">We are having problems making the request.</p>
+            </div>
+            <div class="text-center">
+              <i class="fa fa-times-circle fa-10x" style="color:red;width:auto" aria-hidden="true"></i>
+            </div>
+            <div style="padding-top:20px;">
+              <a style="font-size:18px;color:red; text-decoration:underline;"  href="https://github.com/EOSC-synergy/SQAaaS/issues/new/choose" target="_blank">Report the issue</a>
+            </div>
+            <div style="padding-top:20px;">
+                <button style="margin-left:10px;" class="btn btn-sm btn-danger btn-fill" @click="cancelExecution()">Cancel</button>
+            </div>
+          </div>
+      </div>
       <div class="col-12 col-sm-12 col-xl-6 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
-        <!-- <card>
-
-        </card> -->
 
         <card >
           <template slot="header">
@@ -374,6 +387,7 @@
     data () {
       return {
         loading:false,
+        loadingError:false,
         pipelineName:'',
         criteria:'default',
         repository:'default',
@@ -460,7 +474,6 @@
     },
     watch:{
       'disable_menu'(val){
-        console.log(val)
         if(val == false){
           this.repository = 'default';
           this.disabled_add_crit = false;
@@ -476,7 +489,7 @@
           this.showSelect = true;
           for (var i in this.array_criterias){
             if (this.array_criterias[i].id == val){
-              this.array_tools = this.array_criterias[i]['tools']
+              this.array_tools = [...this.array_criterias[i]['tools']]
             }
           }
           this.showErrorCriteria = false;
@@ -494,13 +507,13 @@
         }else{
           this.show_link = false;
           this.showSelect = false;
+          this.array_tools = [];
           // this.showErrorCriteria = true;
         }
       },
       'repository'(val){
         if(val != "default"){
           this.showErrorRepo = false;
-          console.log(this.selected_criteria[this.criteria])
           if(this.selected_criteria[this.criteria] && this.selected_criteria[this.criteria]['repos']){
             for (var i in this.selected_criteria[this.criteria]['repos']){
               if(this.selected_criteria[this.criteria]['repos'][i]['repo_url'] != ''){
@@ -527,11 +540,12 @@
         }
       },
       'builder_tool'(val){
-        console.log(val)
         if(val != 'default'){
+          this.selected_tool = {};
           for (var i in this.array_tools){
             if(this.array_tools[i].name == val){
-              this.selected_tool = this.array_tools[i]
+              // this.selected_tool = Object.assign({},this.array_tools[i]);
+              this.selected_tool = JSON.parse(JSON.stringify(this.array_tools[i]));
             }
           }
           var _this = this;
@@ -544,14 +558,16 @@
               select_false = select_false + 1;
             }
           }
-          if(no_error+select_false == this.selected_tool.args.length){
+
+          // if(no_error+select_false == this.selected_tool.args.length){
             this.showBuilderTool = true;
-          }else{
-            this.showBuilderTool = false;
-            this.notifyVue("There was an error bulding the arguments of the tool.")
-          }
+          // }else{
+          //   this.showBuilderTool = false;
+          //   this.notifyVue("There was an error bulding the arguments of the tool.")
+          // }
 
           //Painting Arg
+          console.log(this.selected_tool.args)
           this.paintingArg(this.selected_tool.args, 0);
 
           setTimeout(function(){
@@ -568,9 +584,16 @@
         }else{
           this.showBuilderTool = false;
         }
+        console.log(this.array_criterias)
+          console.log(this.array_tools)
+          console.log(this.array_selected_tools)
+          console.log(this.selected_tool)
       }
     },
     methods:{
+      cancelExecution(){
+        this.$router.push({name: 'SelectOption'});
+      },
       async paintingArg(args, count){
         var text = '', body = '';
         for(var i in args){
@@ -646,7 +669,6 @@
         var text = '', body = '';
 
         for(var i in args){
-          console.log(args[i].value)
           text = '';
           if(args[i].type && args[i].value){
             text += `<p style='margin-bottom:0px;'>
@@ -659,8 +681,6 @@
           body += text;
 
         }
-        console.log(body)
-
         return body;
       },
       async addTool(){
@@ -671,16 +691,16 @@
             error_args = true;
           }
         }
-        console.log(error_args)
         if(error_args == true){
           this.showErrorArgs = true;
         }else{
           this.showErrorArgs = false;
-          this.selected_tool.args = args;
+          console.log(typeof args)
+          this.selected_tool['args'] =  args;
           this.builder_tool = 'default';
           this.showBuilderTool = false;
+          console.log(this.selected_tool)
           this.array_selected_tools.push(this.selected_tool);
-          console.log(this.showBuilderTool);
         }
       },
       get_string_repos(repos){
@@ -788,21 +808,16 @@
         }
       },
       customize_criteria(key){
-        console.log(key.replace(/\./g,"\\."))
         $('#criteria_'+key.replace(/\./g,"\\.")).toggleClass('open-criteria',500);
       },
       addWhenProp(item){
-        console.log(item)
-        console.log($('#select_branch_'+item.replace(/\./g,"\\.")).val())
-        console.log( $('#select_comp_'+item.replace(/\./g,"\\.")).val())
+
         var array_object = {}
         array_object[item] = {
           'comp': $('#select_comp_'+item.replace(/\./g,"\\.")).val(),
           'branch': $('#select_branch_'+item.replace(/\./g,"\\.")).val()
         };
         this.criterias_store_branch.push(array_object)
-        console.log(this.criterias_store_branch)
-        console.log($('input[name=operator_'+item.replace(/\./g,"\\.")+']:checked').val())
         if(this.criterias_store_branch.length > 1){
           this.showOperation[item] = true;
           $("#operator_anyOf_"+item.replace(/\./g,"\\.")).prop("checked", true);
@@ -832,7 +847,6 @@
 
 
           }
-          console.log(this.$store.state.config_yaml.sqa_criteria)
          this.$router.push({name: 'Files'});
       },
       back(){
@@ -885,12 +899,16 @@
           }else{
             serv = this.service
           }
-          repo={
-                  repo_url: (this.repository!='default')?this.repository:'',
-                  container: serv,
-                  tools:(this.array_selected_tools.length>0)?this.array_selected_tools:''
-            }
-          this.repos["repos"].push(repo)
+          for(var i in this.array_selected_tools){
+            repo={
+                    repo_url: (this.repository!='default')?this.repository:'',
+                    container: serv,
+                    // tools:(this.array_selected_tools.length>0)?this.array_selected_tools:''
+                    tool:this.array_selected_tools[i]
+              }
+
+            this.repos["repos"].push(repo)
+          }
           this.selected_criteria[this.criteria]=Object.assign({}, this.selected_criteria[this.criteria], this.repos)
           this.$store.state.config_yaml.sqa_criteria[this.criteria] = Object.assign({}, this.$store.state.config_yaml.sqa_criteria[this.criteria], this.repos)
           this.showErrorFile = false;
@@ -900,7 +918,7 @@
           this.repository = 'default';
           this.disable_menu = false;
           this.showBuilderTool = false;
-          console.log(this.selected_criteria)
+          console.log(this.$store.state.config_yaml.sqa_criteria)
         }
       },
       removeCriteria(key){
@@ -987,10 +1005,14 @@
       },
       getCriteriaCallBack(response){
         this.loading = false;
+        this.array_criterias = [];
         if(response.status == 200){
-          this.array_criterias = response.data
+          for(var i in response.data){
+            this.array_criterias.push(response.data[i])
+          }
         }else{
-           this.notifyVue("We are having problems making the request.")
+          this.loadingError = true;
+          this.notifyVue("We are having problems making the request.")
         }
       }
 
@@ -1010,7 +1032,6 @@
       // this.pipelineName = this.$store.state.name
       var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
       var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
-      console.log(this.$store.state.docker_compose.services)
       // if(sizeRepos == 0 || sizeServices == 0){
       // if(sizeServices == 0){
       //   this.notifyVue("Error you must add at least one service")
