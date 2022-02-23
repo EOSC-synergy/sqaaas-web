@@ -445,7 +445,6 @@
   import Card from 'src/components/Cards/Card.vue'
   import YAML from 'json-to-pretty-yaml'
   import Services from '../services/services'
-import services from '../services/services'
   export default {
     components: {
       Card
