@@ -41,6 +41,7 @@
                           <thead>
                               <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Criterion</th>
                               <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Valid</th>
+                              <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Subcriteria</th>
                               <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Required</th>
                               <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Recommended</th>
                               <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Optional</th>
@@ -65,11 +66,11 @@
                                       </td>
                                       <td
                                           style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                          <div  v-if="crit['data']['REQUIRED'] && crit['data']['REQUIRED'].length > 0" style="text-align:center;">
-                                              <button v-for="(tool, index1) in crit['data']['REQUIRED']" :key="index1" class="btn btn-primary btn-link" style="border:none" data-toggle="modal" data-target="#exampleModal" @click="modalInfo(index,'REQUIRED',tool['name'])">
-                                                {{tool['name']}}
+                                          <div  v-if="crit['validator_data']['subcriteria'] && crit['validator_data']['subcriteria'].length > 0" style="text-align:center;">
+                                              <button v-for="(subcrit, index1) in crit['validator_data']['subcriteria']" :key="index1" class="btn btn-primary btn-link" style="border:none" data-toggle="modal" data-target="#subCritModal" @click="modalInfoSubCrit(index,subcrit['id'])">
+                                                {{subcrit['id']}}
                                               </button>
-                                              <!-- <p v-for="(tool, index1) in crit['data']['REQUIRED']" :key="index1">
+                                              <!-- <p v-for="(tool, index1) in crit['validator_data']['tool']['REQUIRED']" :key="index1">
                                                 {{tool['name']}}
 
                                               </p> -->
@@ -81,8 +82,24 @@
                                       </td>
                                       <td
                                           style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                          <div  v-if="crit['data']['RECOMMENDED'] && crit['data']['RECOMMENDED'].length > 0" style="text-align:center;">
-                                            <button v-for="(tool, index1) in crit['data']['RECOMMENDED']" :key="index1" class="btn btn-primary btn-link" style="border:none" data-toggle="modal" data-target="#exampleModal" @click="modalInfo(index,'RECOMMENDED',tool['name'])">
+                                          <div  v-if="crit['validator_data']['tool']['REQUIRED'] && crit['validator_data']['tool']['REQUIRED'].length > 0" style="text-align:center;">
+                                              <button v-for="(tool, index1) in crit['validator_data']['tool']['REQUIRED']" :key="index1" class="btn btn-primary btn-link" style="border:none" data-toggle="modal" data-target="#exampleModal" @click="modalInfo(index,'REQUIRED',tool['name'])">
+                                                {{tool['name']}}
+                                              </button>
+                                              <!-- <p v-for="(tool, index1) in crit['validator_data']['tool']['REQUIRED']" :key="index1">
+                                                {{tool['name']}}
+
+                                              </p> -->
+
+                                          </div>
+                                          <div v-else style="text-align:center;">
+                                              <span>-</span>
+                                          </div>
+                                      </td>
+                                      <td
+                                          style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                          <div  v-if="crit['validator_data']['tool']['RECOMMENDED'] && crit['validator_data']['tool']['RECOMMENDED'].length > 0" style="text-align:center;">
+                                            <button v-for="(tool, index1) in crit['validator_data']['tool']['RECOMMENDED']" :key="index1" class="btn btn-primary btn-link" style="border:none" data-toggle="modal" data-target="#exampleModal" @click="modalInfo(index,'RECOMMENDED',tool['name'])">
                                                 {{tool['name']}}
                                               </button>
                                           </div>
@@ -92,8 +109,8 @@
                                       </td>
                                       <td
                                           style="text-align:right;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                          <div  v-if="crit['data']['OPTIONAL'] && crit['data']['OPTIONAL'].length > 0" style="text-align:center;">
-                                            <button v-for="(tool, index1) in crit['data']['OPTIONAL']" :key="index1" class="btn btn-primary btn-link" style="border:none" data-toggle="modal" data-target="#exampleModal" @click="modalInfo(index,'OPTIONAL',tool['name'])">
+                                          <div  v-if="crit['validator_data']['tool']['OPTIONAL'] && crit['validator_data']['tool']['OPTIONAL'].length > 0" style="text-align:center;">
+                                            <button v-for="(tool, index1) in crit['validator_data']['tool']['OPTIONAL']" :key="index1" class="btn btn-primary btn-link" style="border:none" data-toggle="modal" data-target="#exampleModal" @click="modalInfo(index,'OPTIONAL',tool['name'])">
                                                 {{tool['name']}}
                                               </button>
                                           </div>
@@ -144,6 +161,42 @@
                           </div>
                         </div>
                       </div>
+                       <!-- Modal Subcriteria -->
+                      <div class="modal fade" id="subCritModal" tabindex="-1" role="dialog" aria-labelledby="subCritModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header ">
+                              <h5 class="modal-title " id="exampleModalLabel">REPORT</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="row">
+                                <card class="col-12">
+                                  <h3>Subcriteria: <span style="color:#6495ed">{{modalInfoSubcriteriaData && modalInfoSubcriteriaData.id  ? modalInfoSubcriteriaData.id: ''}}</span></h3>
+                                  <p>Description: {{modalInfoSubcriteriaData && modalInfoSubcriteriaData.description  ? modalInfoSubcriteriaData.description: ''}}</p>
+                                  <p>Evidence: {{modalInfoSubcriteriaData && modalInfoSubcriteriaData.evidence  ? modalInfoSubcriteriaData.evidence: ''}}</p>
+                                  <div class="row" style="margin-left:2px;">
+                                    <span>Valid:</span>
+                                      <div v-if="modalInfoSubcriteriaData && modalInfoSubcriteriaData.valid == true" >
+                                          <i style="color:#1BC10B;" class="fa fa-check-circle" aria-hidden="true"></i>
+                                      </div>
+                                      <div v-else >
+                                          <i style="color:red" class="fa fa-times-circle" aria-hidden="true"></i>
+                                      </div>
+
+                                  </div>
+                                </card>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                   </div>
               </template>
             </card>
@@ -171,6 +224,7 @@
         showBadgeService:false,
         showBadgeFair:false,
         modalInfoData:{},
+        modalInfoSubcriteriaData:{},
          editor: '',
         modalUnstructured:'',
         showEditor:false
@@ -186,10 +240,9 @@
     methods:{
       modalInfo(crit,type,tool){
         if(crit != '' && type != '' && tool != ''){
-          for(var i in this.$store.state.report['report'][crit]['data'][type]){
-            console.log(tool, this.$store.state.report['report'][crit]['data'][type][i]['name'])
-            if(tool == this.$store.state.report['report'][crit]['data'][type][i]['name']){
-              this.modalInfoData = this.$store.state.report['report'][crit]['data'][type][i]
+          for(var i in this.$store.state.report['report'][crit]['validator_data']['tool'][type]){
+            if(tool == this.$store.state.report['report'][crit]['validator_data'][type]['tool'][i]['name']){
+              this.modalInfoData = this.$store.state.report['report'][crit]['validator_data']['tool'][type][i]
             }
           }
         }
@@ -201,6 +254,15 @@
           this.modalUnstructured = '';
         }
         console.log(this.modalInfoData)
+      },
+      modalInfoSubCrit(crit,subcrit){
+        if(crit != '' && subcrit != ''){
+          for(var i in this.$store.state.report['report'][crit]['validator_data']['subcriteria']){
+            if(subcrit == this.$store.state.report['report'][crit]['validator_data']['subcriteria'][i]['id']){
+              this.modalInfoSubcriteriaData = this.$store.state.report['report'][crit]['validator_data']['subcriteria'][i]
+            }
+          }
+        }
       },
       gotoFull(){
         this.$router.push({name: 'full_assessment'});
