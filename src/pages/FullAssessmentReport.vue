@@ -35,6 +35,63 @@
                   </div>
                 </div>
 
+                <h2>Criterion Report</h2>
+
+                 <card v-for="(crit, index) in $store.state.report.report" :key="index" style="padding:0px!important;">
+                    <template class="custom-header" slot="header" style="background-color:#f9f9f9!important;">
+                      <div  class="row"  style="padding:1.5rem!important;background-color:#f9f9f9!important;border-bottom:1px solid #dee2e6">
+                        <div class="col-2">
+                          <div v-if="crit['valid'] == true" style="text-align:center;">
+                              <i style="color:#1BC10B;" class="fa fa-4x fa-check-circle" aria-hidden="true"></i>
+                          </div>
+                          <div v-else style="text-align:center;">
+                              <i style="color:red" class="fa fa-4x fa-times-circle" aria-hidden="true"></i>
+                          </div>
+
+                        </div>
+                        <div class="col-10">
+                          <h4 style="font-weight: 700;">{{index}}</h4>
+
+                        </div>
+
+                      </div>
+                    </template>
+
+                     <template class="card-body">
+                       <div>
+                          <div class="table-responsive">
+                            <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tbody v-for="(subcrit, index1) in crit['validator_data']['subcriteria']" :key="index1">
+                                        <tr
+                                            style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                            <td style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              <div v-if="crit['valid'] == true" style="text-align:center;">
+                                                  <i style="color:#1BC10B;" class="fa fa-check-circle" aria-hidden="true"></i>
+                                              </div>
+                                              <div v-else style="text-align:center;">
+                                                  <i style="color:red" class="fa fa-times-circle" aria-hidden="true"></i>
+                                              </div>
+
+                                            </td>
+
+                                             <td
+                                                style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                                <div>
+                                                  <p style="margin-bottom:0px;">{{subcrit['id']}} {{subcrit['description']}}</p>
+                                                  <p style="margin-top:0px;color: #6c757d!important;">{{subcrit['evidence']}}</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                          </div>
+
+                       </div>
+
+                    </template>
+
+                  </card>
+
                 <h3 class="text-center" style="margin-top:5rem;">Report</h3>
                   <div class="table-responsive">
                       <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -126,78 +183,79 @@
                                   </tr>
                           </tbody>
                       </table>
-                       <!-- Modal -->
-                      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-xl" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header ">
-                              <h5 class="modal-title " id="exampleModalLabel">REPORT</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body">
-                              <div class="row">
-                                <card class="col-12">
-                                  <h3>Tool: {{modalInfoData ? modalInfoData.name: ''}}</h3>
-                                  <div v-if="modalInfoData && modalInfoData['ci'] && modalInfoData && modalInfoData['ci']['status'] == 'SUCCESS'" style="text-align:left;">
-                                      <a :href="modalInfoData && modalInfoData['ci']?modalInfoData['ci']['url']:'#'" target="_blank" style="font-size:18px;">Status: <i style="color:#1BC10B;" class="fa fa-check-circle" aria-hidden="true"></i></a>
-                                  </div>
-                                  <div v-else style="text-align:left;">
-                                      <a :href="modalInfoData && modalInfoData['ci']?modalInfoData['ci']['url']:'#'" target="_blank" style="font-size:18px;">Status: <i style="color:red" class="fa fa-times-circle" aria-hidden="true"></i></a>
-                                  </div>
-                                  <p v-if="modalInfoData && modalInfoData['reason']">Reason: {{modalInfoData['reason']}} </p>
+                    </div>
+                      <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-xl" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header ">
+                            <h5 class="modal-title " id="exampleModalLabel">REPORT</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <div class="row">
+                              <card class="col-12">
+                                <h3>Tool: {{modalInfoData ? modalInfoData.name: ''}}</h3>
+                                <div v-if="modalInfoData && modalInfoData['ci'] && modalInfoData && modalInfoData['ci']['status'] == 'SUCCESS'" style="text-align:left;">
+                                    <a :href="modalInfoData && modalInfoData['ci']?modalInfoData['ci']['url']:'#'" target="_blank" style="font-size:18px;">Status: <i style="color:#1BC10B;" class="fa fa-check-circle" aria-hidden="true"></i></a>
+                                </div>
+                                <div v-else style="text-align:left;">
+                                    <a :href="modalInfoData && modalInfoData['ci']?modalInfoData['ci']['url']:'#'" target="_blank" style="font-size:18px;">Status: <i style="color:red" class="fa fa-times-circle" aria-hidden="true"></i></a>
+                                </div>
+                                <p v-if="modalInfoData && modalInfoData['reason']">Reason: {{modalInfoData['reason']}} </p>
 
-                                  <div v-show="showEditor" class="col-12" style="padding-top:2rem;height:40vh;overflow-y: auto;">
-                                    <editor  editor-id="'editor_modal'" lang="json" :content="modalUnstructured"  key="editor_modal" ></editor>
-                                  </div>
-                                </card>
-                              </div>
+                                <div v-show="showEditor" class="col-12" style="padding-top:2rem;height:40vh;overflow-y: auto;">
+                                  <editor  editor-id="'editor_modal'" lang="json" :content="modalUnstructured"  key="editor_modal" ></editor>
+                                </div>
+                              </card>
                             </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
                           </div>
                         </div>
                       </div>
-                       <!-- Modal Subcriteria -->
-                      <div class="modal fade" id="subCritModal" tabindex="-1" role="dialog" aria-labelledby="subCritModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header ">
-                              <h5 class="modal-title " id="exampleModalLabel">REPORT</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body">
-                              <div class="row">
-                                <card class="col-12">
-                                  <h3>Subcriteria: <span style="color:#6495ed">{{modalInfoSubcriteriaData && modalInfoSubcriteriaData.id  ? modalInfoSubcriteriaData.id: ''}}</span></h3>
-                                  <p>Description: {{modalInfoSubcriteriaData && modalInfoSubcriteriaData.description  ? modalInfoSubcriteriaData.description: ''}}</p>
-                                  <p>Evidence: {{modalInfoSubcriteriaData && modalInfoSubcriteriaData.evidence  ? modalInfoSubcriteriaData.evidence: ''}}</p>
-                                  <div class="row" style="margin-left:2px;">
-                                    <span>Valid:</span>
-                                      <div v-if="modalInfoSubcriteriaData && modalInfoSubcriteriaData.valid == true" >
-                                          <i style="color:#1BC10B;" class="fa fa-check-circle" aria-hidden="true"></i>
-                                      </div>
-                                      <div v-else >
-                                          <i style="color:red" class="fa fa-times-circle" aria-hidden="true"></i>
-                                      </div>
+                    </div>
+                      <!-- Modal Subcriteria -->
+                    <div class="modal fade" id="subCritModal" tabindex="-1" role="dialog" aria-labelledby="subCritModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header ">
+                            <h5 class="modal-title " id="exampleModalLabel">REPORT</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <div class="row">
+                              <card class="col-12">
+                                <h3>Subcriteria: <span style="color:#6495ed">{{modalInfoSubcriteriaData && modalInfoSubcriteriaData.id  ? modalInfoSubcriteriaData.id: ''}}</span></h3>
+                                <p>Description: {{modalInfoSubcriteriaData && modalInfoSubcriteriaData.description  ? modalInfoSubcriteriaData.description: ''}}</p>
+                                <p>Evidence: {{modalInfoSubcriteriaData && modalInfoSubcriteriaData.evidence  ? modalInfoSubcriteriaData.evidence: ''}}</p>
+                                <div class="row" style="margin-left:2px;">
+                                  <span>Valid:</span>
+                                    <div v-if="modalInfoSubcriteriaData && modalInfoSubcriteriaData.valid == true" >
+                                        <i style="color:#1BC10B;" class="fa fa-check-circle" aria-hidden="true"></i>
+                                    </div>
+                                    <div v-else >
+                                        <i style="color:red" class="fa fa-times-circle" aria-hidden="true"></i>
+                                    </div>
 
-                                  </div>
-                                </card>
-                              </div>
+                                </div>
+                              </card>
                             </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
                           </div>
                         </div>
                       </div>
-                  </div>
+                    </div>
+
               </template>
             </card>
           </div>
@@ -434,5 +492,8 @@ input[type=number]::-webkit-inner-spin-button {
   width: 300px!important;
 }
 
+.card .card-header{
+ padding: 0px!important
+}
 </style>
 
