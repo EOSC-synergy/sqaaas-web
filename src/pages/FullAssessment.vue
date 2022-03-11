@@ -404,7 +404,7 @@
 
           this.runAssessmentPipelineCall(this.pipeline_id,this.runAssessmentPipelineCallBack)
         }else if(response.status == 500){
-          this.notifyVue(response.details?response.details:'Error')
+          this.notifyVue(response.detail?response.detail:'Error')
         }else{
           this.notifyVue(response.reason?response.reason:'Error')
         }
@@ -416,7 +416,7 @@
           this.$router.replace(this.$route.query.redirect || "/logout");
           this.loading = false;
         }else if(response.status == 500){
-          this.notifyVue(response.details?response.details:'Error')
+          this.notifyVue(response.detail?response.detail:'Error')
           this.loading = false;
         }else{
           this.notifyVue(response.reason?response.reason:'Error')
@@ -518,7 +518,7 @@
           this.notifyVue(response.reason?response.reason:"Pipeline has not been execute");
 
         }else if(response.status == 500){
-          this.notifyVue(response.details?response.details:'Error')
+          this.notifyVue(response.detail?response.detail:'Error')
           this.autoRefresh = false;
           this.showStatus = false;
           this.loading = false;
@@ -547,7 +547,7 @@
           this.loading = false;
           this.$router.replace(this.$route.query.redirect || "/logout");
         }else if(response.status == 500){
-          this.notifyVue(response.details?response.details:'Error')
+          this.notifyVue(response.detail?response.detail:'Error')
           this.$store.state.report = {};
           this.build_status = '';
         }else{
@@ -567,7 +567,7 @@
           this.loading = false;
           this.$router.replace(this.$route.query.redirect || "/logout");
          }else if(response.status == 500){
-          this.notifyVue(response.details?response.details:'Error')
+          this.notifyVue(response.detail?response.detail:'Error')
          this.autoRefresh = false;
           this.showStatus = false;
           this.loading = false;
