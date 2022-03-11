@@ -403,8 +403,10 @@
           // this.modal_message = 'Submitting Pipeline ...';
 
           this.runAssessmentPipelineCall(this.pipeline_id,this.runAssessmentPipelineCallBack)
+        }else if(response.status == 500){
+          this.notifyVue(response.details?response.details:'Error')
         }else{
-          this.notifyVue("There is some error")
+          this.notifyVue(response.reason?response.reason:'Error')
         }
       },
       runAssessmentPipelineCallBack(response){
@@ -413,8 +415,12 @@
         }else if(response.status == 403){
           this.$router.replace(this.$route.query.redirect || "/logout");
           this.loading = false;
+        }else if(response.status == 500){
+          this.notifyVue(response.details?response.details:'Error')
+          this.loading = false;
         }else{
-          this.notifyVue("There is some error")
+          this.notifyVue(response.reason?response.reason:'Error')
+          this.loading = false;
         }
 
       },
@@ -509,12 +515,17 @@
           this.$store.state.status = '';
           this.$store.state.build_url = '';
           this.loading = false;
-          this.notifyVue("Pipeline has not been execute");
+          this.notifyVue(response.reason?response.reason:"Pipeline has not been execute");
 
-        }else{
+        }else if(response.status == 500){
+          this.notifyVue(response.details?response.details:'Error')
           this.autoRefresh = false;
           this.showStatus = false;
-          this.notifyVue("Error "+response.status +":", (response.data) ? response.data : '')
+          this.loading = false;
+        }else{
+          this.notifyVue(response.reason?response.reason:'Error')
+          his.autoRefresh = false;
+          this.showStatus = false;
           this.loading = false;
         }
       },
@@ -535,8 +546,12 @@
           this.showStatus = false;
           this.loading = false;
           this.$router.replace(this.$route.query.redirect || "/logout");
-          }else{
-          this.notifyVue("There is some error.");
+        }else if(response.status == 500){
+          this.notifyVue(response.details?response.details:'Error')
+          this.$store.state.report = {};
+          this.build_status = '';
+        }else{
+          this.notifyVue(response.reason?response.reason:'Error')
           this.$store.state.report = {};
           this.build_status = '';
         }
@@ -551,10 +566,15 @@
           this.showStatus = false;
           this.loading = false;
           this.$router.replace(this.$route.query.redirect || "/logout");
+         }else if(response.status == 500){
+          this.notifyVue(response.details?response.details:'Error')
+         this.autoRefresh = false;
+          this.showStatus = false;
+          this.loading = false;
         }else{
+          this.notifyVue(response.reason?response.reason:'Error')
           this.autoRefresh = false;
           this.showStatus = false;
-          this.notifyVue("Error "+response.status +":", (response.data) ? response.data : '')
           this.loading = false;
         }
       },
