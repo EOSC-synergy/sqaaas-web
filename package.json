@@ -11,7 +11,8 @@
     "lint": "vue-cli-service lint",
     "dev": "vue-cli-service serve --open",
     "lint-fix": "vue-cli-service lint --fix",
-    "deploy": "npm install && npm run build && echo 'sqaaas.eosc-synergy.eu' > dist/CNAME  && gh-pages -d dist/",
+    "sectigo": "mkdir ./well-known/pki-validation && echo 'db84835821b77a534a02f7cb666a6ae51f72ece1ec9f1cb122e6581dba3f5fdc\nsectigo.com' > D2925A17EA716FB94CD8104042D5E96D.txt",
+    "deploy": "npm install && npm run build && echo 'sqaaas.eosc-synergy.eu' > dist/CNAME && npm run -s sectigo && gh-pages -d dist/",
     "stage": "sed -i '/api/c\\ \\ \\ \\ \"api\" : \"https://api-staging.sqaaas.eosc-synergy.eu/v1\",' src/env.js && sed -i '/redirect_uri/c\\ \\ \\ \\ \"redirect_uri\" : \"http://localhost:8080/callback.html\",' src/env.js && npm install && npm run dev",
     "prod": "sed -i '/api/c\\ \\ \\ \\ \"api\" : \"https://api.sqaaas.eosc-synergy.eu/v1\",' src/env.js && sed -i '/redirect_uri/c\\ \\ \\ \\ \"redirect_uri\" : \"https://eosc-synergy.github.io/sqaaas-web/callback\",' src/env.js && npm install && npm run dev"
   },
