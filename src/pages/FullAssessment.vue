@@ -505,6 +505,7 @@
         }else if(response.status == 500){
           this.notifyVue(response.detail?response.detail:'Error')
         }else{
+          console.log(response)
           this.notifyVue(response.reason?response.reason:'Error')
         }
       },
@@ -518,6 +519,7 @@
           this.notifyVue(response.detail?response.detail:'Error')
           this.loading = false;
         }else{
+          console.log(response)
           this.notifyVue(response.reason?response.reason:'Error')
           this.loading = false;
         }
@@ -621,6 +623,7 @@
           this.showStatus = false;
           this.loading = false;
         }else{
+          console.log(response)
           this.notifyVue(response.reason?response.reason:'Error')
           his.autoRefresh = false;
           this.showStatus = false;
@@ -648,6 +651,7 @@
           this.$store.state.report = {};
           this.build_status = '';
         }else{
+          console.log(response)
           this.notifyVue(response.reason?response.reason:'Error')
           this.$store.state.report = {};
           this.build_status = '';
@@ -669,6 +673,7 @@
           this.showStatus = false;
           this.loading = false;
         }else{
+          console.log(response)
           this.notifyVue(response.reason?response.reason:'Error')
           this.autoRefresh = false;
           this.showStatus = false;

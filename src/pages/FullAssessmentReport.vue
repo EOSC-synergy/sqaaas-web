@@ -11,7 +11,7 @@
                   <div class="col-6" style="display:inline-flex;">
                     <button class="btn btn-default btn-simple" @click="gotoFull()"><i class="fa fa-arrow-left" aria-hidden="true"></i><span style="font-weight: bold;padding-top:5px;font-size:18px;" class="card-title">Back</span></button>
                   </div>
-                  <div class="col-6 text-right">
+                  <div class="col-6 text-right mt-2 ">
                     <button style="color: #fff;background-color: #6c757d;border-color: #6c757d;" class="btn  " @click="refresh()"><i class="fa fa-refresh" style="padding-right:5px;" aria-hidden="true"></i> New Assessment</button>
                   </div>
 
@@ -23,10 +23,13 @@
                 <h3 class="text-center" v-if="showBadgeSoftware== true || showBadgeService == true || showBadgeFair==true">Congratulations!!! the following badge/s have been awarded</h3>
                 <div class="text-center" v-else>
                   <h3>Sorry, you have not earned any badges</h3>
-                  <i style="opacity: 0.5" class="fa fa-frown-o fa-10x" aria-hidden="true"></i>
+                  <div style="padding-right: 150px;">
+                    <i style="opacity: 0.5" class="fa fa-frown-o fa-10x" aria-hidden="true"></i>
+
+                  </div>
                 </div>
 
-                <div class="row">
+                <div class="row" style="margin-bottom:4rem;">
                   <div v-show="showBadgeSoftware == true" :class="{'col-md-4':showBadgeService == true && showBadgeFair == true, 'col-md-6':((showBadgeService == true && showBadgeFair == false) || (showBadgeService == false && showBadgeFair == true)), 'col-md-12':showBadgeService == false && showBadgeFair == false}" class="col-12 text-center" id="badge-software" style="padding-top:20px;padding-left:15px;">
                   </div>
                   <div v-show="showBadgeService == true" :class="{'col-md-4':showBadgeSoftware == true && showBadgeFair == true, 'col-md-6':((showBadgeSoftware == true && showBadgeFair == false) || (showBadgeSoftware == false && showBadgeFair == true)), 'col-md-12':showBadgeSoftware == false && showBadgeFair == false}" class="col-12 text-center" id="badge-service" style="padding-top:20px;padding-left:15px;">
@@ -35,64 +38,97 @@
                   </div>
                 </div>
 
-                <h2>Criterion Report</h2>
+                <div class="col-12 col-sm-12 col-xl-8 col-lg-10 mx-auto">
+                  <h4 class="text-center">Criterion Report</h4>
+                  <card v-for="(crit, index) in $store.state.report.report" :key="index" style="padding:0px!important;max-width:1000px;">
+                      <template slot='header' style="background-color:#E8E6E5!important;">
+                        <div  style="padding:1.5rem!important;background-color:#E8E6E5!important;border-bottom:1px solid #dee2e6">
+                          <!-- <div class="col-2">
+                            <div style="text-align:right;margin-top:30px;">
+                              <i style="color:#7C7572" class="fa fa-2x" :class="mapping_icon[index]?mapping_icon[index]:mapping_icon['default']" aria-hidden="true"></i>
+                            </div>
+                          </div> -->
+                          <div class="row" style="margin-right:0px; margin-left:0px;">
+                            <div class="col-10">
+                              <div class="row">
+                                <div style="margin-top: 30px;margin-right: 30px;">
+                                  <i style="color:#7C7572" class="fa fa-2x" :class="mapping_icon[index]?mapping_icon[index]:mapping_icon['default']" aria-hidden="true"></i>
+                                </div>
+                                <h4 style="font-weight: 700;">{{index}}</h4>
+                              </div>
 
-                 <card v-for="(crit, index) in $store.state.report.report" :key="index" style="padding:0px!important;">
-                    <template class="custom-header" slot="header" style="background-color:#f9f9f9!important;">
-                      <div  class="row"  style="padding:1.5rem!important;background-color:#f9f9f9!important;border-bottom:1px solid #dee2e6">
-                        <div class="col-2">
-                          <div v-if="crit['valid'] == true" style="text-align:center;">
-                              <i style="color:#1BC10B;" class="fa fa-4x fa-check-circle" aria-hidden="true"></i>
+                            </div>
+
+                            <div class="col-2">
+                              <div v-if="crit['valid'] == true" style="text-align:center;margin-top:30px;">
+                                  <i style="color:#1BC10B;" class="fa fa-2x fa-check-circle" aria-hidden="true"></i>
+                              </div>
+                              <div v-else style="text-align:center;margin-top:30px;">
+                                  <i style="color:red" class="fa fa-2x fa-times-circle" aria-hidden="true"></i>
+                              </div>
+
+                            </div>
+
                           </div>
-                          <div v-else style="text-align:center;">
-                              <i style="color:red" class="fa fa-4x fa-times-circle" aria-hidden="true"></i>
+                          <div class="row" v-if="crit['filtered_reason']">
+                            <p v-for="(fr, z) in crit['filtered_reason']" :key="z" style="margin-bottom:0px; font-size:12px; color:rgb(108, 117, 125)">
+                              {{crit['filtered_reason'][z]}}
+
+                            </p>
+
                           </div>
-
-                        </div>
-                        <div class="col-10">
-                          <h4 style="font-weight: 700;">{{index}}</h4>
-
                         </div>
 
-                      </div>
-                    </template>
+                      </template>
 
-                     <template class="card-body">
-                       <div>
-                          <div class="table-responsive">
-                            <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
-                                <tbody v-for="(subcrit, index1) in crit['validator_data']['subcriteria']" :key="index1">
-                                        <tr
-                                            style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
-                                            <td style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                              <div v-if="crit['valid'] == true" style="text-align:center;">
-                                                  <i style="color:#1BC10B;" class="fa fa-check-circle" aria-hidden="true"></i>
-                                              </div>
-                                              <div v-else style="text-align:center;">
-                                                  <i style="color:red" class="fa fa-times-circle" aria-hidden="true"></i>
-                                              </div>
-
-                                            </td>
-
-                                             <td
-                                                style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                                <div>
-                                                  <p style="margin-bottom:0px;">{{subcrit['id']}} {{subcrit['description']}}</p>
-                                                  <p style="margin-top:0px;color: #6c757d!important;">{{subcrit['evidence']}}</p>
+                      <template class="card-body">
+                        <div>
+                            <div class="table-responsive">
+                              <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                                  <tbody v-for="(subcrit, index1) in crit['subcriteria']" :key="index1">
+                                          <tr
+                                              style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                              <td style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                                <div v-if="crit['valid'] == true" style="text-align:center;">
+                                                    <i style="color:#1BC10B;" class="fa fa-check-circle" aria-hidden="true"></i>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                </tbody>
-                            </table>
-                          </div>
+                                                <div v-else style="text-align:center;">
+                                                    <i style="color:red" class="fa fa-times-circle" aria-hidden="true"></i>
+                                                </div>
 
-                       </div>
+                                              </td>
 
-                    </template>
+                                              <td
+                                                  style="padding-right: 10px; padding-left: 10px; padding-top: 20px;">
+                                                  <div>
+                                                    <p style="margin-bottom:0px;">{{subcrit['id']}} {{subcrit['description']}}</p>
+                                                    <p v-for="(e,a) in subcrit['evidence']" :key="a" style="margin-top:0px;color: #6c757d!important;">{{subcrit['evidence'][0]['message']}}</p>
+                                                  </div>
+                                              </td>
+                                              <td
+                                                  style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                                      <div style="margin-top:10px;text-align:right; width: 100%;">
+                                                        <button class="btn btn-primary btn-link" style="border:none" data-toggle="modal" data-target="#subCritModal" @click="modalInfo(index,'REQUIRED',tool['name'])">
+                                                          More Info
+                                                        </button>
+                                                      </div>
 
-                  </card>
+                                              </td>
+                                          </tr>
+                                  </tbody>
+                              </table>
+                            </div>
 
-                <h3 class="text-center" style="margin-top:5rem;">Report</h3>
+                        </div>
+
+                      </template>
+
+                    </card>
+
+                </div>
+
+
+                <!-- <h3 class="text-center" style="margin-top:5rem;">Report</h3>
                   <div class="table-responsive">
                       <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                           <thead>
@@ -127,10 +163,7 @@
                                               <button v-for="(subcrit, index1) in crit['validator_data']['subcriteria']" :key="index1" class="btn btn-primary btn-link" style="border:none" data-toggle="modal" data-target="#subCritModal" @click="modalInfoSubCrit(index,subcrit['id'])">
                                                 {{subcrit['id']}}
                                               </button>
-                                              <!-- <p v-for="(tool, index1) in crit['validator_data']['tool']['REQUIRED']" :key="index1">
-                                                {{tool['name']}}
 
-                                              </p> -->
 
                                           </div>
                                           <div v-else style="text-align:center;">
@@ -143,10 +176,7 @@
                                               <button v-for="(tool, index1) in crit['validator_data']['tool']['REQUIRED']" :key="index1" class="btn btn-primary btn-link" style="border:none" data-toggle="modal" data-target="#exampleModal" @click="modalInfo(index,'REQUIRED',tool['name'])">
                                                 {{tool['name']}}
                                               </button>
-                                              <!-- <p v-for="(tool, index1) in crit['validator_data']['tool']['REQUIRED']" :key="index1">
-                                                {{tool['name']}}
 
-                                              </p> -->
 
                                           </div>
                                           <div v-else style="text-align:center;">
@@ -175,15 +205,11 @@
                                               <span>-</span>
                                           </div>
                                       </td>
-                                      <!-- <td
-                                          style="text-align:right;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                          <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnv(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
-                                          </button>
-                                      </td> -->
+
                                   </tr>
                           </tbody>
                       </table>
-                    </div>
+                    </div> -->
                       <!-- Modal -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog modal-xl" role="document">
@@ -285,7 +311,19 @@
         modalInfoSubcriteriaData:{},
          editor: '',
         modalUnstructured:'',
-        showEditor:false
+        showEditor:false,
+        mapping_icon:{
+          'default': 'fa-certificate',
+          'QC.Acc':'fa-certificate',
+          'QC.Doc':'fa-book',
+          'QC.FAIR':'fa-certificate',
+          'QC.Fun':'fa-filter',
+          'QC.Lic':'fa-id-card',
+          'QC.Met':'fa-database',
+          'QC.Sec':'fa-lock',
+          'QC.Sty':'fa-bullseye',
+          'QC.Uni':'fa-cogs',
+        }
 
       }
     },
@@ -494,6 +532,10 @@ input[type=number]::-webkit-inner-spin-button {
 
 .card .card-header{
  padding: 0px!important
+}
+
+.no-margin-card{
+  padding-top: 0px!important;
 }
 </style>
 
