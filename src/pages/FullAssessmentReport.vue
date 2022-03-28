@@ -38,7 +38,7 @@
                     </div>
                   </div>
 
-                  <div class="col-12 col-sm-12 col-md-12 col-lg-10 mx-auto">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-6 mx-auto">
                     <h4 class="text-center">Criterion Report</h4>
                     <card v-for="(crit, index) in $store.state.report.report" :key="index" style="padding:0px!important;max-width:1000px;">
                         <template slot='header' style="background-color:#E8E6E5!important;">
