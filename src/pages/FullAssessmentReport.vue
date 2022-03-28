@@ -35,7 +35,7 @@
                   </div>
                 </div>
 
-                <h3 class="text-center" style="margin-top:2rem;">Report</h3>
+                <h3 class="text-center" style="margin-top:5rem;">Report</h3>
                   <div class="table-responsive">
                       <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                           <thead>
@@ -219,20 +219,25 @@
         if(this.$store.state.report.badge['software']){
           this.showBadgeSoftware = true;
           if($("#badge-software").has("blockquote").length == 0){
-            console.log(this.$store.state.report.badge['software']['share'])
             $( "#badge-software" ).append(this.$store.state.report.badge['software']['share']);
+            var btn1 = `<a style="font-size:18px; border:1px solid" target="blank" href="${this.$store.state.report.badge["software"]["verification_url"]}"><span style="margin:20px;">Verify & Share</span></a>`;
+            $("#badge-software").append(btn1)
           }
         }
         if(this.$store.state.report.badge['service']){
           this.showBadgeService = true;
           if($("#badge-service").has("blockquote").length == 0){
             $( "#badge-service" ).append(this.$store.state.report.badge['service']['share']);
+            var btn2 = `<a style="font-size:18px; border:1px solid" target="blank" href="${this.$store.state.report.badge["service"]["verification_url"]}"><span style="margin:20px;">Verify & Share</span></a>`;
+            $("#badge-software").append(btn2)
           }
         }
         if(this.$store.state.report.badge['fair']){
           this.showBadgeFair = true;
           if($("#badge-fair").has("blockquote").length == 0){
             $( "#badge-fair" ).append(this.$store.state.report.badge['fair']['share']);
+            var btn3 = `<a style="font-size:18px; border:1px solid" target="blank" href="${this.$store.state.report.badge["fair"]["verification_url"]}"><span style="margin:20px;">Verify & Share</span></a>`;
+            $("#badge-software").append(btn3)
           }
         }
         $('blockquote p').css('text-align','center');
