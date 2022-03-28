@@ -32,8 +32,8 @@
 
 						<template class="card-body">
               <div class="text-center col-12 col-sm-12 col-xl-8 col-lg-10 mx-auto" style="justify-content: center;margin-top:20px;">
-                <h2>Title</h2>
-                <p>Some text</p>
+                <h2 style="color: #76BAC6; font-weight: bold;">Take credit for the quality achievements of your code!</h2>
+                <h4>Fill in the form below to trigger the assessment process</h4>
                 <div class="text-left row">
                   <div class="col-12 col-md-8">
                     <base-input type="text"
