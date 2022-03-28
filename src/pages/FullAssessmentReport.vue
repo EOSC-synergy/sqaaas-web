@@ -38,7 +38,7 @@
                     </div>
                   </div>
 
-                  <div class="col-12 col-sm-12 col-xl-8 col-lg-10 mx-auto">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-10 mx-auto">
                     <h4 class="text-center">Criterion Report</h4>
                     <card v-for="(crit, index) in $store.state.report.report" :key="index" style="padding:0px!important;max-width:1000px;">
                         <template slot='header' style="background-color:#E8E6E5!important;">
@@ -285,9 +285,20 @@
         if(this.$store.state.report.badge['software']){
           this.showBadgeSoftware = true;
           if($("#badge-software").has("blockquote").length == 0){
-            $( "#badge-software" ).append(this.$store.state.report.badge['software']['share']);
-            var btn1 = `<a style="font-size:18px; border:1px solid" target="blank" href="${this.$store.state.report.badge["software"]["verification_url"]}"><span style="margin:20px;">Verify & Share</span></a>`;
-            $("#badge-software").append(btn1)
+            var _div = `
+                <div class="text-center">
+
+                <img style="width:400px;height:400px" src="${this.$store.state.report.badge["software"]["data"]['image']}"></img>
+                <div class="row" style="justify-content: center;">
+                    <a style="font-size:18px; border:1px solid; margin-right: 0.25rem;" target="blank" href="${this.$store.state.report.badge["software"]["verification_url"]}"><span style="margin:20px;">Verify</span></a>
+                    <a style="font-size:18px; border:1px solid; margin-left: 0.25rem;" target="blank" href="${this.$store.state.report.badge["software"]["data"]["issuerOpenBadgeId"]}"><span style="margin:20px;">Share</span></a>
+
+                </div>
+
+                </div>`
+            // $( "#badge-software" ).append(img);
+            // var btn1 = `<a target="blank" href="${this.$store.state.report.badge["software"]["verification_url"]}"><span style="margin:20px;">Verify</span></a>`;
+            $("#badge-software").append(_div)
           }
         }
         if(this.$store.state.report.badge['service']){
