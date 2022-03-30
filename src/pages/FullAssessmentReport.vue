@@ -42,7 +42,7 @@
                     <h3 style="padding-bottom:10px; font-weight:bold;">Criteria Report</h3>
                     <card v-for="(crit, index) in $store.state.report.report" :key="index" style="padding:0px!important;max-width:1000px;">
                         <template slot='header' style="background-color:#E8E6E5!important;">
-                          <div  style="padding:1.5rem!important;background-color:#E8E6E5!important;border-bottom:1px solid #dee2e6">
+                          <div  style="padding-left:1.5rem;background-color:#E8E6E5!important;border-bottom:1px solid #dee2e6">
                             <!-- <div class="col-2">
                               <div style="text-align:right;margin-top:30px;">
                                 <i style="color:#7C7572" class="fa fa-2x" :class="mapping_icon[index]?mapping_icon[index]:mapping_icon['default']" aria-hidden="true"></i>
@@ -54,7 +54,7 @@
                                   <div style="margin-top: 30px;margin-right: 30px;">
                                     <i style="color:#7C7572" class="fa fa-2x" :class="mapping_icon[index]?mapping_icon[index]:mapping_icon['default']" aria-hidden="true"></i>
                                   </div>
-                                  <h4 style="font-weight: 700;">{{index}}</h4>
+                                  <h4 style="font-weight: 700;">{{mapping_criteria_name[index]?mapping_criteria_name[index]:index}}</h4>
                                 </div>
 
                               </div>
@@ -88,45 +88,36 @@
                                     <tbody v-for="(subcrit, index1) in crit['subcriteria']" :key="index1">
                                             <tr
                                                 style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
-                                                <td style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                                <td style="padding-right: 10px; padding-left: 10px;padding-bottom:0px;">
                                                   <div class="row" style="padding:0px 20px;">
 
                                                     <div v-if="subcrit['valid'] == true" style="text-align:center;">
-                                                        <i style="color:#1BC10B;" class="fa fa-check-circle" aria-hidden="true"></i>
+                                                      <p style="font-size:18px;margin-bottom:0px;"><span style="font-weight:700!important; padding-right:10px;"><i style="color:#1BC10B;padding-right: 20px;" class="fa fa-check-circle" aria-hidden="true"></i>{{index1}}</span>{{subcrit['id']}} {{subcrit['description']}}</p>
                                                     </div>
                                                     <div v-else style="text-align:center;">
-                                                        <i style="color:red" class="fa fa-times-circle" aria-hidden="true"></i>
+                                                      <p style="font-size:18px;margin-bottom:0px;"><span style="font-weight:700!important; padding-right:10px;"><i style="color:red;padding-right: 20px;" class="fa fa-times-circle" aria-hidden="true"></i>{{index1}}</span>{{subcrit['id']}} {{subcrit['description']}}</p>
                                                     </div>
-                                                    <div style="padding-left:20px;">
-                                                        <p style="margin-bottom:0px;"><span style="font-weight:700!important; padding-right:10px;">{{index1}}</span>{{subcrit['id']}} {{subcrit['description']}}</p>
-                                                        <!-- <p v-for="(e,a) in subcrit['evidence']" :key="a" style="margin-top:0px;color: #6c757d!important;">{{subcrit['evidence'][0]['message']}}</p> -->
-                                                      </div>
                                                   </div>
-
                                                 </td>
-
                                             </tr>
                                             <tr>
                                               <td
-                                                    style="padding-right: 10px; padding-left: 60px; ">
+                                                    style="padding-right: 10px; padding-left: 60px;padding-bottom:0px; ">
 
-                                                  <div style="padding:0px 60px;" class="row" v-for="(e,a) in subcrit['evidence']" :key="a">
+                                                  <div style="padding:0px 10px;" class="row" v-for="(e,a) in subcrit['evidence']" :key="a">
                                                       <div class="col-9">
-                                                        <div class="row" style="margin-top:5px;">
-                                                          <div v-if="subcrit['evidence'][a]['valid'] == true" style="text-align:center;">
-                                                            <i style="color:#1BC10B;" class="fa fa-check" aria-hidden="true"></i>
+                                                        <div class="row">
+                                                          <div v-if="subcrit['evidence'][a]['valid'] == true" style="text-align:left;">
+                                                            <p  style="font-size:18px;margin-top:0px;color: #6c757d!important;"><i style="color:#1BC10B;padding-right:5px;" class="fa fa-check" aria-hidden="true"></i>{{subcrit['evidence'][a]['message']}}</p>
                                                           </div>
-                                                          <div v-else style="text-align:center;">
-                                                              <i style="color:red" class="fa fa-times" aria-hidden="true"></i>
-                                                          </div>
-                                                          <div>
-                                                            <p  style="margin-top:0px;color: #6c757d!important;">{{subcrit['evidence'][a]['message']}}</p>
+                                                          <div v-else style="text-align:left;">
+                                                              <p  style="font-size:18px;margin-top:0px;color: #6c757d!important;"><i style="color:red; padding-right:5px;" class="fa fa-times" aria-hidden="true"></i>{{subcrit['evidence'][a]['message']}}</p>
                                                           </div>
                                                         </div>
                                                       </div>
                                                       <div class="col-3">
                                                         <div style="text-align:right; width: 100%;">
-                                                          <button class="btn btn-primary btn-link" style="border:none" data-toggle="modal" data-target="#exampleModal" @click="modalInfo(subcrit['evidence'][a])">
+                                                          <button class="btn btn-primary btn-link" style="border:none; font-size:18px;" data-toggle="modal" data-target="#exampleModal" @click="modalInfo(subcrit['evidence'][a])">
                                                             More Info
                                                           </button>
                                                         </div>
@@ -237,6 +228,18 @@
           'QC.Sec':'fa-lock',
           'QC.Sty':'fa-bullseye',
           'QC.Uni':'fa-cogs',
+        },
+        mapping_criteria_name:{
+          'QC.Acc':'Code Accessibility',
+          'QC.Doc':'Documentation',
+          'QC.FAIR':'FAIRness level of Digital Objects',
+          'QC.Fun':'Functional',
+          'QC.Lic':'Licensing',
+          'QC.Met':'Code metadata',
+          'QC.Sec':'Security',
+          'QC.Sty':'Code Style',
+          'QC.Uni':'Unit Testing'
+
         }
 
       }
