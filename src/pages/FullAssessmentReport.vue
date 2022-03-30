@@ -49,21 +49,14 @@
                               </div>
                             </div> -->
                             <div class="row" style="margin-right:0px; margin-left:0px;">
-                              <div class="col-10">
-                                <div class="row">
-                                  <div style="margin-top: 30px;margin-right: 30px;">
-                                    <i style="color:#7C7572" class="fa fa-2x" :class="mapping_icon[index]?mapping_icon[index]:mapping_icon['default']" aria-hidden="true"></i>
-                                  </div>
-                                  <h4 style="font-weight: 700;">{{mapping_criteria_name[index]?mapping_criteria_name[index]:index}}</h4>
-                                </div>
-
+                              <div class="col-10" style="padding-top:20px;">
+                                  <p style="font-weight: 700; font-size:24px;"> <i style="margin-right: 50px;color:#7C7572; font-size:28px;" class="fa fa-2x" :class="mapping_icon[index]?mapping_icon[index]:mapping_icon['default']" aria-hidden="true"></i>{{mapping_criteria_name[index]?mapping_criteria_name[index]:index}}</p>
                               </div>
-
-                              <div class="col-2">
-                                <div v-if="crit['valid'] == true" style="text-align:center;margin-top:30px;">
+                              <div class="col-2" style="padding-top:20px;">
+                                <div v-if="crit['valid'] == true" style="text-align:center;">
                                     <i style="color:#1BC10B;" class="fa fa-2x fa-check-circle" aria-hidden="true"></i>
                                 </div>
-                                <div v-else style="text-align:center;margin-top:30px;">
+                                <div v-else style="text-align:center;">
                                     <i style="color:red" class="fa fa-2x fa-times-circle" aria-hidden="true"></i>
                                 </div>
 
@@ -92,10 +85,10 @@
                                                   <div class="row" style="padding:0px 20px;">
 
                                                     <div v-if="subcrit['valid'] == true" style="text-align:center;">
-                                                      <p style="font-size:18px;margin-bottom:0px;"><span style="font-weight:700!important; padding-right:10px;"><i style="color:#1BC10B;padding-right: 20px;" class="fa fa-check-circle" aria-hidden="true"></i>{{index1}}</span>{{subcrit['id']}} {{subcrit['description']}}</p>
+                                                      <p style="font-size:18px;margin-bottom:0px;"><span style="font-weight:700!important; padding-right:30px;"><i style="color:#1BC10B;padding-right: 40px;" class="fa fa-check-circle" aria-hidden="true"></i>{{index1}}</span>{{subcrit['id']}} {{subcrit['description']}}</p>
                                                     </div>
                                                     <div v-else style="text-align:center;">
-                                                      <p style="font-size:18px;margin-bottom:0px;"><span style="font-weight:700!important; padding-right:10px;"><i style="color:red;padding-right: 20px;" class="fa fa-times-circle" aria-hidden="true"></i>{{index1}}</span>{{subcrit['id']}} {{subcrit['description']}}</p>
+                                                      <p style="font-size:18px;margin-bottom:0px;"><span style="font-weight:700!important; padding-right:30px;"><i style="color:red;padding-right: 40px;" class="fa fa-times-circle" aria-hidden="true"></i>{{index1}}</span>{{subcrit['id']}} {{subcrit['description']}}</p>
                                                     </div>
                                                   </div>
                                                 </td>
@@ -108,10 +101,10 @@
                                                       <div class="col-9">
                                                         <div class="row">
                                                           <div v-if="subcrit['evidence'][a]['valid'] == true" style="text-align:left;">
-                                                            <p  style="font-size:18px;margin-top:0px;color: #6c757d!important;"><i style="color:#1BC10B;padding-right:5px;" class="fa fa-check" aria-hidden="true"></i>{{subcrit['evidence'][a]['message']}}</p>
+                                                            <p  style="font-size:18px;margin-top:0px;color: #6c757d!important;"><i style="color:#1BC10B;padding-right:30px;" class="fa fa-check" aria-hidden="true"></i>{{subcrit['evidence'][a]['message']}}</p>
                                                           </div>
                                                           <div v-else style="text-align:left;">
-                                                              <p  style="font-size:18px;margin-top:0px;color: #6c757d!important;"><i style="color:red; padding-right:5px;" class="fa fa-times" aria-hidden="true"></i>{{subcrit['evidence'][a]['message']}}</p>
+                                                              <p  style="font-size:18px;margin-top:0px;color: #6c757d!important;"><i style="color:red; padding-right:30px;" class="fa fa-times" aria-hidden="true"></i>{{subcrit['evidence'][a]['message']}}</p>
                                                           </div>
                                                         </div>
                                                       </div>
