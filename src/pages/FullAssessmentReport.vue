@@ -20,7 +20,7 @@
 
                 <template class="card-body">
 
-                  <h3 class="text-center" v-if="showBadgeSoftware== true || showBadgeService == true || showBadgeFair==true">Congratulations!!! the following badge/s have been awarded</h3>
+                  <h2 class="text-center" v-if="showBadgeSoftware== true || showBadgeService == true || showBadgeFair==true" style="color: #6c757d; font-weight: bold;">Congratulations!!! the following badge/s have been awarded</h2>
                   <div class="text-center" v-else>
                     <h3>Sorry, you have not earned any badges</h3>
                     <div style="padding-right: 150px;">
@@ -39,7 +39,7 @@
                   </div>
 
                   <div class="col-12 col-sm-12 col-md-12 col-lg-6 mx-auto">
-                    <h4 class="text-center">Criterion Report</h4>
+                    <h3 style="padding-bottom:10px; font-weight:bold;">Criteria Report</h3>
                     <card v-for="(crit, index) in $store.state.report.report" :key="index" style="padding:0px!important;max-width:1000px;">
                         <template slot='header' style="background-color:#E8E6E5!important;">
                           <div  style="padding:1.5rem!important;background-color:#E8E6E5!important;border-bottom:1px solid #dee2e6">
@@ -291,7 +291,7 @@
                 <img style="width:400px;height:400px" src="${this.$store.state.report.badge["software"]["data"]['image']}"></img>
                 <div class="row" style="justify-content: center;">
                     <a style="font-size:18px; border:1px solid; margin-right: 0.25rem;" target="blank" href="${this.$store.state.report.badge["software"]["verification_url"]}"><span style="margin:20px;">Verify</span></a>
-                    <a style="font-size:18px; border:1px solid; margin-left: 0.25rem;" target="blank" href="${this.$store.state.report.badge["software"]["data"]["issuerOpenBadgeId"]}"><span style="margin:20px;">Share</span></a>
+                    <a style="font-size:18px; border:1px solid; margin-left: 0.25rem;" target="blank" href="${this.$store.state.report.badge["software"]["data"]["openBadgeId"]}"><span style="margin:20px;">Share</span></a>
 
                 </div>
 
