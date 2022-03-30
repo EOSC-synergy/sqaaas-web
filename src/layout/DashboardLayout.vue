@@ -20,7 +20,7 @@
                                         <li @click="menuChange('2')" data-target="#step2" class="step2 general-step">
                                           <sidebar-link  to="/auth/composer-options">
                                             <!-- <i class="nc-icon nc-tag-content"></i> -->
-                                            <span class="step">2</span> <span class="title">Services</span>
+                                            <span class="step">2</span> <span class="title">Tooling</span>
                                           </sidebar-link>
                                             <!-- <a href="#tab2" data-toggle="tab"> <span class="step">2</span> <span class="title">Billing information</span> </a> -->
                                         </li>
