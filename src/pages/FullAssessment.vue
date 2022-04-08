@@ -91,7 +91,7 @@
                 <!-- <div class="text-left col-12">
                   <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left: 15px;">
                       <div class="" style="padding-bottom:10px">
-                        <label style="color:black;"> CHOOSE A CRITERIA</label>
+                        <label style="color:black;"> CHOOSE A CRITERION</label>
                         <select style="font-family: console;font-weight: 700;" class="custom-select" id="sqacriteria" v-model='criteria'>
                           <option value="default">Select ...</option>
                           <option v-for="(crit,key) in array_criterias" :key="key" :value="crit['id']">{{crit['id']}}</option>
