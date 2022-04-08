@@ -86,9 +86,11 @@
                     <card  class="strpied-tabled-with-hover"
                               body-classes=""
                         >
-                      <template slot="header" >
+                      <!--
+		      <template slot="header" >
                         <h4 class="text-center" style="padding-bottom:1rem;font-weight:700;">Pipeline files (JePL format)</h4>
                       </template>
+                      -->
                       <template >
                         <div class="col-12 col-md-8">
                           <p class="text-left" style="font-size:14px;margin-bottom:1rem;">
@@ -231,9 +233,11 @@
                     <card  class="strpied-tabled-with-hover"
                             body-classes=""
                       >
+                      <!--
                       <template slot="header" >
                         <h4 class="text-center" style="padding-bottom:1rem;font-weight:700;">Pipeline files (JePL format)</h4>
                       </template>
+                      -->
                        <template >
                             <!-- <div class="row">
                               <div class="col-12 text-center">
@@ -306,9 +310,11 @@
                   <card  class="strpied-tabled-with-hover"
                               body-classes=""
                         >
+                    <!--
                     <template slot="header" >
                       <h4 class="text-center" style="font-weight:700;padding-bottom:1rem;">Pull Request</h4>
                     </template>
+                    -->
                     <template >
                       <div class="col-12 col-md-6 mx-auto mb-3">
 
@@ -336,10 +342,11 @@
                     <card  class="strpied-tabled-with-hover"
                               body-classes=""
                         >
+                    <!--
                     <template slot="header" >
                       <h4 class="card-title text-center" style="padding-bottom:1rem;font-weight:700;">Pipeline Execution</h4>
                     </template>
-
+                    -->
                     <template >
                       <div style="padding-bottom:20px;padding-bottom: 3rem;padding-left:20px;padding-right:20px;">
 
