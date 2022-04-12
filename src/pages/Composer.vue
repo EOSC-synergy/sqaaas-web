@@ -13,13 +13,12 @@
                     <h3 style="margin-top:0px;font-weight:700;" class="card-title">Services make up the testing and building environment</h3>
                     <p style="padding-top:20px">
                         <!--<i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i>-->
-                        Compose your environment by means of Docker containers, either pulling existing images from registries (e.g. from Docker Hub) or building your own (e.g. Dockerfiles)
+                        Compose your environment, i.e. the tools that run the checks to be defined in the next <span style="font-style:italic">'Criteria'</span> step. Here you will be able to define the containers that provide those tools, either by pulling existing images from registries (e.g. from Docker Hub) or building your own (e.g. Dockerfiles)
                     </p>
                     <div>
                         <p>
-
                           <span style="text-decoration: underline;font-weight: bold;">This is an optional step:</span>
-                          spa those tools natively supported by the Pipeline as a Service module (check them out at the <span style="font-style:italic">'Criteria'</span> step) do not require a service definition.
+                          some tools are natively supported by the Pipeline as a Service module. If your tool is not listed in the next <span style="font-style:italic">'Criteria'</span> step, come back here a define the service.
                         </p>
                         <div style="padding-top:15px;width:190px; margin:0 auto;">
                             <button class="btn btn-outline btn-info" style="border-style:solid;border-width:thin;padding:5px 5px;font-weight: bold;" @click="next()" >Skip this step for now ></button>
