@@ -249,7 +249,10 @@
         build_url:'',
         showBuildUrl:false,
         build_status:'',
-        showReportBtn: false
+        showReportBtn: false,
+        showErrorURL:false,
+        repo_info:{}
+       
 
       }
     },

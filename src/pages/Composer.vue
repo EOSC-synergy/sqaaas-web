@@ -202,12 +202,11 @@
                 <div class="card">
                   <div class="card-header" role="tab" id="accordionHeadingGeneral">
                     <div class="mb-0 row">
-                      <div class="col-12 no-padding accordion-head">
+                      <div class="col-12 accordion-head" style="padding:0px 20px 0px 20px;">
                         <a data-toggle="collapse" id='link_accordion' data-parent="#accordion_general" href="#accordionBodyGeneral" aria-expanded="false" aria-controls="accordionBodyGeneral"
                           class="collapsed ">
                           <i class="fa fa-angle-down" aria-hidden="true"></i>
-                          <p>ADVANCED OPTIONS</p>
-                           <p>(Volumes)</p>
+                          <p>ADVANCED OPTIONS (Volumes)</p>
                         </a>
                       </div>
                     </div>

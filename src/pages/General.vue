@@ -145,12 +145,12 @@
                   <div class="card">
                     <div class="card-header" role="tab" id="accordionHeadingGeneralOptions">
                       <div class="mb-0 row">
-                        <div class="col-12 no-padding accordion-head">
+                        <div class="col-12 accordion-head" style="padding:0px 20px 0px 20px;">
                           <a data-toggle="collapse" data-parent="#accordion_general_options" href="#accordionBodyGeneralOptions" aria-expanded="false" aria-controls="accordionBodyGeneral"
                             class="collapsed ">
                             <i class="fa fa-angle-down" aria-hidden="true"></i>
-                            <p style="margin-bottom: 0px;">ADVANCED OPTIONS</p>
-                            <p>(Credencials, Env Vars)</p>
+                            <p style="margin-bottom: 0px;">ADVANCED OPTIONS (Credencials, Env Vars)</p>
+                            <!-- <p>(Credencials, Env Vars)</p> -->
                           </a>
                         </div>
                       </div>
