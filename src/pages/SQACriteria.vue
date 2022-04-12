@@ -146,26 +146,6 @@
             </div>
 
             <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderTool">
-              <!-- <div v-for="(arg,key) in selected_tool.args" :key="key">
-
-                <div v-if="arg.selectable ==true &&( typeof arg.repeatable == 'undefined' || arg.repeatable == false) && arg.format == 'string'" class="form-group" style="margin-bottom:0px;">
-                  <label :for="'simple_input_'+key">{{arg.description}}</label>
-                  <input :id="'simple_input_'+key" type="text" class="form-control" style="height:32px;"
-                    :placeholder="arg.value" :value="arg.value"
-                  >
-                </div>
-
-                <div v-if="arg.selectable ==true && arg.repeatable == true && arg.format == 'string'" class="form-group">
-                  <label id="array_input_label" for="">{{arg.description}}</label>
-                  <div class="bs-example">
-                    <input type="text" :id="'inputTag_'+key" :value="arg.value" data-role="tagsinput">
-                  </div>
-                  <div class="text-right">
-                    <label id="array_input_label2" for="">Note: Type something and press Enter.</label>
-
-                  </div>
-                </div>
-              </div> -->
               <div id="ref-arg"></div>
             </div>
 
@@ -293,14 +273,8 @@
                                                     v-model="branches[index]"
                                                     >
                                             </base-input>
-                                            <!-- <span v-show="showErrorCommand" style="color:red; font-size:12px;">This field is required</span> -->
 
                                           </div>
-                                          <!-- <div style="padding-top:30px;">
-                                            <button type="button" :id="'button_branch_'+key" class="btn-simple btn btn-xs btn-info" @click="addExecute(key)"><i class="fa fa-plus"></i>ADD</button>
-                                          </div> -->
-
-
                                         </div>
                                       </div>
                                       <div class="col-12 col-md-2">
@@ -338,11 +312,6 @@
                                            allOf
                                           </label>
                                         </div>
-
-
-                                        <!-- <span class="custom-label">anyOf</span><base-checkbox name="workpace" :id="'anyof_'+index" v-model="anyof[index]" @change="changeCheckbox(index)"></base-checkbox>
-                                        <span class="custom-label">allOf</span><base-checkbox name="workspace" :id="'allof_'+index" v-model="allof[index]" ></base-checkbox> -->
-
                                     </div>
 
                                 </td>
@@ -368,7 +337,6 @@
             </div>
           </template>
         </card>
-      <!-- </div> -->
       </div>
     </div>
   </div>
@@ -508,7 +476,6 @@
           this.show_link = false;
           this.showSelect = false;
           this.array_tools = [];
-          // this.showErrorCriteria = true;
         }
       },
       'repository'(val){
@@ -544,7 +511,6 @@
           this.selected_tool = {};
           for (var i in this.array_tools){
             if(this.array_tools[i].name == val){
-              // this.selected_tool = Object.assign({},this.array_tools[i]);
               this.selected_tool = JSON.parse(JSON.stringify(this.array_tools[i]));
             }
           }
@@ -559,15 +525,8 @@
             }
           }
 
-          // if(no_error+select_false == this.selected_tool.args.length){
             this.showBuilderTool = true;
-          // }else{
-          //   this.showBuilderTool = false;
-          //   this.notifyVue("There was an error bulding the arguments of the tool.")
-          // }
-
           //Painting Arg
-          console.log(this.selected_tool.args)
           this.paintingArg(this.selected_tool.args, 0);
 
           setTimeout(function(){
@@ -584,10 +543,6 @@
         }else{
           this.showBuilderTool = false;
         }
-        console.log(this.array_criterias)
-          console.log(this.array_tools)
-          console.log(this.array_selected_tools)
-          console.log(this.selected_tool)
       }
     },
     methods:{
@@ -618,6 +573,16 @@
 
                   </div>
                 </div>`
+          }else if(args[i].selectable ==true &&( typeof args[i].repeatable == 'undefined' || args[i].repeatable == false) && args[i].format == 'array'){
+            text += `<div class="form-group">
+                  <label id="${'array_input_label'+count+'_'+i}" for="">${args[i].description}</label>
+                  <div class="bs-example">
+                     <select class="custom-select select-options" id="${'select_'+count+'_'+i}" data-index='select-val'>
+                     ${this.paintSelectOpt(args[i].value)}
+                    </select>
+                  </div>
+                 
+                </div>`
           }
 
           if(args[i].args && args[i].args.length > 0){
@@ -626,13 +591,26 @@
 
           body += text
         }
+        
         $('#ref-arg').html(body)
+        $('.select-options').on('change', function(){
+          console.log($(this).attr('data-index'))
+          console.log($(this).val())
+        })
         return body;
+      },
+      paintSelectOpt(opts){
+        console.log(opts)
+        let message = "<option selected disabled value=''>Selected option ...</option>"
+        for(var i in opts){
+          message += `<option value="${opts[i]}">${opts[i]}</option>`
+        }
+        
+        return message;
       },
       async adding(args, count){
         for(var i in args){
           if (this.selected_tool.args[i].selectable ==true && this.selected_tool.args[i].format == 'string'){
-          // if (args[i].selectable ==false ){
             if(args[i].repeatable == true){
               args[i].value = $("#inputTag_"+count+'_'+i).val();
               setTimeout(function(){
@@ -642,6 +620,9 @@
               args[i].value = $("#simple_input_"+count+'_'+i).val();
               $("#simple_input_"+count+'_'+i).val('');
             }
+          }else if(this.selected_tool.args[i].selectable ==true && this.selected_tool.args[i].format == 'array'){
+              console.log($('#select_'+count+'_'+i).val())
+              args[i].value = $('#select_'+count+'_'+i).val();
           }
           if(args[i].args && args[i].args.length > 0){
             await this.adding(args[i].args, (count*1+1))
@@ -695,11 +676,9 @@
           this.showErrorArgs = true;
         }else{
           this.showErrorArgs = false;
-          console.log(typeof args)
           this.selected_tool['args'] =  args;
           this.builder_tool = 'default';
           this.showBuilderTool = false;
-          console.log(this.selected_tool)
           this.array_selected_tools.push(this.selected_tool);
         }
       },
@@ -735,59 +714,16 @@
           building_tag: false,
           pattern:$('#select_branch_'+item.replace(/\./g,"\\.")).val()
         }
-        // this.$store.state.config_yaml.sqa_criteria[item]['when']={
-
-        //     'branch':{
-        //       "pattern": $('#select_branch_'+item).val()
-        //     },
-        //     'building_tag':false,
-
-        // };
-        // console.log(this.$store.state.config_yaml.sqa_criteria)
-        console.log(this.criterias_store)
       },
-      // addExecute(item){
-      //    if($('#select_when_'+item).val() == 'branch'){
-      //     var branch = {
-      //       comparator: $('#select_comp_'+item).val(),
-      //       type: 'branch'
-      //     }
-      //     var branch_name =  $('#select_branch_'+item).val();
-      //     this.$store.state.config_yaml.sqa_criteria[item]['when']['branch'][branch_name] = branch;
-      //    }
-      //   console.log( this.$store.state.config_yaml.sqa_criteria[item])
-      // },
       selectWhen(item){
         if($('#select_when_'+item.replace(/\./g,"\\.")).val() == 'building_tag'){
           $('#select_comp_'+item.replace(/\./g,"\\.")).prop('disabled', true);
           $('#select_branch_'+item.replace(/\./g,"\\.")).prop('disabled', true);
           $('#button_branch_'+item.replace(/\./g,"\\.")).prop('disabled', true);
-          // this.criterias.when.building_tag = true;
-          // for(var i in _this.store_criteria ){
-          //   console.log(_this.store_criteria[i])
-          //   if(i == item){
-          //     console.log('here')
-          //     // this.store_criteria[i].when.building_tag = true
-          //     // this.store_criteria[i]={}
-          //     _this.store_criteria[item]['when']={
-          //       'building_tag':true
-          //     }
-          //   }
-          // }
           this.criterias_store[item]={
             'building_tag': true,
             'pattern': ''
           }
-          // if(this.$store.state.config_yaml.sqa_criteria[item]){
-          //   // this.$store.state.config_yaml.sqa_criteria[item]['when']['building_tag']=true
-          //   this.$store.state.config_yaml.sqa_criteria[item]['when']={
-          //       'branch':{
-          //         "pattern": ""
-          //       },
-          //       'building_tag':true,
-          //   };
-          // }
-          console.log(this.criterias_store)
 
         }else{
             $('#select_comp_'+item).prop('disabled', false);
@@ -797,14 +733,6 @@
               'building_tag': false,
               'pattern': ''
             }
-            // if(this.$store.state.config_yaml.sqa_criteria[item]){
-            //   this.$store.state.config_yaml.sqa_criteria[item]['when']={
-            //       'branch':{
-            //         "pattern": ""
-            //       },
-            //       'building_tag':false,
-            //   };
-            // }
         }
       },
       customize_criteria(key){
@@ -821,7 +749,6 @@
         if(this.criterias_store_branch.length > 1){
           this.showOperation[item] = true;
           $("#operator_anyOf_"+item.replace(/\./g,"\\.")).prop("checked", true);
-          // this.anyof[item] = true;
         }else{
           this.showOperation[item] = false;
         }
@@ -838,9 +765,6 @@
              }else{
                this.$store.state.config_yaml.sqa_criteria[index]['when'] = Object.assign({},this.$store.state.config_yaml.sqa_criteria[index]['when'], {
                  building_tag: this.criterias_store[index].building_tag,
-                //  branch:{
-                //    pattern:this.criterias_store[index].pattern
-                //  }
                  })
              }
            }
@@ -866,8 +790,6 @@
           })
       },
       addCriteria(){
-        // || (this.repository == 'default' && this.objectSize(this.$store.state.config_yaml.config.project_repos) > 0)
-        // if(this.criteria == 'default' || this.service == "default" || (this.builder_tool == 'command' && this.commands.length == 0)) {
         if(this.criteria == 'default' || (this.builder_tool == 'commands' && this.service == 'default')) {
           if(this.criteria == 'default'){
             this.showErrorCriteria = true;
@@ -903,7 +825,6 @@
             repo={
                     repo_url: (this.repository!='default')?this.repository:'',
                     container: serv,
-                    // tools:(this.array_selected_tools.length>0)?this.array_selected_tools:''
                     tool:this.array_selected_tools[i]
               }
 
@@ -918,7 +839,6 @@
           this.repository = 'default';
           this.disable_menu = false;
           this.showBuilderTool = false;
-          console.log(this.$store.state.config_yaml.sqa_criteria)
         }
       },
       removeCriteria(key){
@@ -1025,32 +945,25 @@
     created(){
       this.loading = true;
       this.getCriteriaCall(this.getCriteriaCallBack)
-      // this.checkauthCall(this.checkauthCallBack);
+      this.checkauthCall(this.checkauthCallBack);
       if(this.$store.state.config_yaml.config.credentials.length > 0){
         this.showCredInfo = true;
       }
-      // this.pipelineName = this.$store.state.name
       var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
       var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
-      // if(sizeRepos == 0 || sizeServices == 0){
-      // if(sizeServices == 0){
-      //   this.notifyVue("Error you must add at least one service")
-      //   this.$router.push({name:"composer"})
-      // }else
-      // {
-        var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
-        var getCriteria = this.$store.state.config_yaml.sqa_criteria
-        for (var i in getCriteria){
-          this.selected_criteria[i] = getCriteria[i];
-        }
-        if(sizeCriteria != 0){
-          this.showCriteria = true;
-          this.disable_done = false;
-        }else{
-          this.showCriteria = false;
-          this.disable_done = true;
-        }
-      // }
+     
+      var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
+      var getCriteria = this.$store.state.config_yaml.sqa_criteria
+      for (var i in getCriteria){
+        this.selected_criteria[i] = getCriteria[i];
+      }
+      if(sizeCriteria != 0){
+        this.showCriteria = true;
+        this.disable_done = false;
+      }else{
+        this.showCriteria = false;
+        this.disable_done = true;
+      }
 
     }
   }
@@ -1061,7 +974,6 @@
 }
 .custom-table-title{
   padding-top:5px;
-  /* padding-left:20px; */
   text-transform: uppercase;
   font-size:16px;
   color:black;
