@@ -34,7 +34,7 @@
                     </div>
                   </div>
                   <div style="background-color:#c2edd6;padding-left:80px;padding-top:20px;width:40%">
-                    <img src="../../static/pipeline.png" alt="" style="opacity: 0.5;">
+                    <img src="../../static/pipeline.png" alt="" class="responsive" style="opacity: 0.5;">
                   </div>
                 </div>
               </template>
@@ -1191,5 +1191,10 @@
 
 blockquote p{
   text-align: center!important;
+}
+
+.responsive {
+  width: 100%;
+  height: auto;
 }
 </style>

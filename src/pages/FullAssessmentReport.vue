@@ -452,5 +452,9 @@ input[type=number]::-webkit-inner-spin-button {
 .no-margin-card{
   padding-top: 0px!important;
 }
+
+.modal-dialog{
+  transform:none!important;
+}
 </style>
 

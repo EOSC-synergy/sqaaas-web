@@ -46,7 +46,7 @@
                         <div class="quote-custom">
                         <!--<p style="margin-bottom:0px;padding-left:100px;padding-top:20px">
                           <span style="padding-left:150px;font-weight:700;font-size:40px;font-family: consola;"> {{criteria}}: </span>-->
-                          <p style="font-weight:700;font-size:18px;font-style:italic;width:90%;padding-left:40px">{{(info[criteria]) ? info[criteria].p1 : ''}}
+                          <p style="font-weight:700;font-size:16px;font-style:italic;padding-left:40px">{{(info[criteria]) ? info[criteria].p1 : ''}}
                           (<a style="text-decoration: underline" :href="(info[criteria]) ? info[criteria]['link'] : ''" target="_blank">See More</a>)</p>
                         <!--</p>-->
                         </div>
@@ -61,7 +61,7 @@
                 </div>
               </div>
               <div style="background-color:#e6ede8;padding-left:80px;padding-top:35px;padding-bottom:10px;width:30%">
-                <img src="../../static/criteria.png" alt="" style="opacity: 0.4;padding-top:40px;">
+                <img src="../../static/criteria.png" class="responsive" alt="" style="opacity: 0.4;padding-top:40px;">
               </div>
             </div>
           </template>
@@ -105,12 +105,14 @@
               </div>
             </div>
              <div class="row" style="margin:2rem 0px 2rem 0px;">
-              <div v-show="showSelect && objectSize( $store.state.docker_compose.services) > 0"  class="col-12 col-md-6" style="display:grid;">
+               <!-- v-show="showSelect && objectSize( $store.state.docker_compose.services) > 0" -->
+              <div v-show="showSelect"  class="col-12 col-md-6" style="display:grid;">
                 <label>SELECT THE SERVICE</label>
                 <select class="custom-select" id="service" v-model='service' >
                   <option value="default">Choose a service...</option>
                   <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
                 </select>
+                <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal()"><i class="fa fa-plus"></i>Service</button>
                 <span v-show="showErrorService" style="color:red; font-size:12px;">For the selected tool you must select a service.</span>
               </div>
 
@@ -338,18 +340,39 @@
           </template>
         </card>
       </div>
+      <div class="modal" id="myModal" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modal-xl" role="document" style="max-height:650px;">
+          <div class="modal-content">
+            <div class="modal-header" style="border-bottom:1px solid #ccc;padding-bottom:20px;">
+              <h5 style='font-weight:700' class="modal-title">Add New Services</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" style="border-bottom:1px solid #ccc;padding-bottom:0px;max-height:70vh;overflow-y:auto">
+              <composer></composer>
+            </div>
+            <div class="modal-footer" style="padding-top:20px;">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary btn-fill" @click="checkServices()" data-dismiss="modal">Done</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
   import Card from 'src/components/Cards/Card.vue'
+  import Composer from './Composer.vue'
   import jwtDecode from "jwt-decode"
   import YAML from 'json-to-pretty-yaml'
   import Mustache from 'mustache';
   import Services from '../services/services'
   export default {
     components: {
-      Card
+      Card,
+      Composer
     },
     mixins: [Services],
     data () {
@@ -546,6 +569,12 @@
       }
     },
     methods:{
+      checkServices(){
+        console.log(this.$store.state.docker_compose.services);
+      },
+       openModal(item){
+        $('#myModal').modal('show');
+      },
       cancelExecution(){
         this.$router.push({name: 'SelectOption'});
       },
@@ -1042,7 +1071,6 @@ input[type=number]::-webkit-inner-spin-button {
   }
 
 .quote-custom {
-    height:90px;
     /* background-image: url("../../static/quote.png"); */
     background-repeat: no-repeat;
     opacity:0.5;
@@ -1127,4 +1155,12 @@ input[type=number]::-webkit-inner-spin-button {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
 
+.responsive {
+  width: 100%;
+  height: auto;
+}
+
+.modal-dialog{
+  transform:none!important;
+}
 </style>
