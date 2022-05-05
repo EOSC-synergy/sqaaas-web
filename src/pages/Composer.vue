@@ -8,11 +8,10 @@
           </card> -->
           <card>
             <template slot="header">
-                <div style="display:flex;flex-direction:row;padding-bottom:15px;">
-                  <div style="background-color:#e6ede8;padding-left:100px;padding-top:20px;padding-bottom:10px;width:80%">
+                <div style="display:flex;flex-direction:row;">
+                  <div style="background-color:#e6ede8;padding:10px 20px;width:100%">
                     <h3 style="margin-top:0px;font-weight:700;" class="card-title">Services make up the testing and building environment</h3>
-                    <p style="padding-top:20px">
-                        <!--<i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i>-->
+                    <p style="">
                         Compose your environment, i.e. the tools that run the checks to be defined in the next <span style="font-style:italic">'Criteria'</span> step. Here you will be able to define the containers that provide those tools, either by pulling existing images from registries (e.g. from Docker Hub) or building your own (e.g. Dockerfiles)
                     </p>
                     <div>
@@ -20,18 +19,18 @@
                           <span style="text-decoration: underline;font-weight: bold;">This is an optional step:</span>
                           some tools are natively supported by the Pipeline as a Service module. If your tool is not listed in the next <span style="font-style:italic">'Criteria'</span> step, come back here a define the service.
                         </p>
-                        <div style="padding-top:15px;width:190px; margin:0 auto;">
+                        <!-- <div style="padding-top:15px;width:190px; margin:0 auto;">
                             <button class="btn btn-outline btn-info" style="border-style:solid;border-width:thin;padding:5px 5px;font-weight: bold;" @click="next()" >Skip this step for now ></button>
-                        </div>
+                        </div> -->
                     </div>
                   </div>
-                  <div style="background-color:#e6ede8;padding-left:80px;padding-top:60px;padding-bottom:20px;width:30%">
+                  <!-- <div style="background-color:#e6ede8;padding-left:80px;padding-top:60px;padding-bottom:20px;width:30%">
                     <img src="../../static/service.png" alt="" style="opacity: 0.5">
-                  </div>
+                  </div> -->
                 </div>
             </template>
             <template>
-              <div class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
+              <div class="row" style="padding-left:20px;margin-bottom:1rem;">
                 <div class="col-12 col-md-6">
                   <base-input style="margin-bottom:0px;" type="text"
                       label="SERVICE NAME"
@@ -358,7 +357,7 @@
                 <button type="button" class="btn-outline btn btn-info" @click="addService()"><i class="fa fa-plus"></i>ADD SERVICE</button>
               </div>
 
-              <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;">
+              <div v-show="showServices" style="padding-top:20px;">
                 <div class="text-center" style="padding-bottom:10px;">
                   <span class="custom-table-title">Configured Services</span>
                 </div>
@@ -405,12 +404,12 @@
             </template>
             <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
               <div class="col-12 col-md-12 text-center">
-                  <button @click="back()" type="button" class="btn btn-next-back btn-back" >
+                  <!-- <button @click="back()" type="button" class="btn btn-next-back btn-back" >
                       BACK
-                  </button>
-                  <button @click="next()" type="button"  class="btn btn-next btn-next-back">
-                      NEXT
-                  </button>
+                  </button> -->
+                  <!-- <button @click="next()" type="button"  class="btn btn-next btn-next-back">
+
+                  </button> -->
               </div>
             </div>
           </card>

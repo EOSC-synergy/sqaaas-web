@@ -34,7 +34,7 @@
                     </div>
                   </div>
                   <div style="background-color:#c2edd6;padding-left:80px;padding-top:20px;width:40%">
-                    <img src="../../static/pipeline.png" alt="" style="opacity: 0.5;">
+                    <img src="../../static/pipeline.png" alt="" class="responsive" style="opacity: 0.5;">
                   </div>
                 </div>
               </template>
@@ -381,6 +381,25 @@
                             <p style="font-style:italic;color: #A7A1A0;margin-bottom:0px;"><i style="color:#A7A1A0;" class="fa fa-bell" aria-hidden="true"></i> Repositories MUST be public for the checkout to work.</p>
                           </div>
 
+                           <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
+                              <div style="display:contents" class="col-12 col-md-6">
+                                <span class="custom-label" style="font-weight:bold;font-size:17px">Do you want the pipeline stop if one stage fail?</span>
+                                <div class="custom-div-append">
+                                  <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="External repositories are those different from the one that will contain the current pipeline">
+                                    <i class="fa fa-question-circle"></i>
+                                  </button>
+                                </div>
+                              </div>
+                              <div style="display:contents" class="col-12 col-md-6">
+                                <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="keepgoing_yes"></base-checkbox>
+                                <span class="custom-label">No</span><base-checkbox name="workspace" v-model="keepgoing_no"></base-checkbox>
+                              </div>
+                            </div>
+
+
+
+
+
                           <div class="text-center" style="padding-top:20px;">
                             <button @click="runPipeline()" type="button" class="btn btn-sm btn-primary btn-fill">
                                 Run/Try Pipeline
@@ -498,10 +517,26 @@
         },
         showFeature:'summary',
         pipeline_create_message:'',
-        createSuccess:true
+        createSuccess:true,
+        keepgoing_yes:false,
+        keepgoing_no:true,
 		}
     },
     watch:{
+       'keepgoing_yes'(val){
+        if(val==true){
+          this.keepgoing_no = false;
+        }else{
+          this.keepgoing_no = true;
+        }
+      },
+      'keepgoing_no'(val){
+         if(val==true){
+          this.keepgoing_yes = false;
+        }else{
+          this.keepgoing_yes = true;
+        }
+      },
       "repo_pull_request"(val){
         if(val != ''){
           this.showErrorPullRequest = false;
@@ -732,7 +767,8 @@
         var data = {
           id:this.pipeline_id,
           url:this.repo_url_mimic,
-          branch:this.repo_branch_mimic
+          branch:this.repo_branch_mimic,
+          keepgoing: this.keepgoing_yes
         }
         if(this.showFieldsPipeline == false){
           this.loading = true;
@@ -1198,5 +1234,41 @@
 
 blockquote p{
   text-align: center!important;
+}
+
+.responsive {
+  width: 100%;
+  height: auto;
+}
+
+.custom-append-button {
+  padding-top: 0px !important;
+  padding-bottom: 0.38rem !important;
+  padding-left:0.75rem !important;
+  padding-right:0.75rem !important;
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    /* line-height: 1.5; */
+    color: #495057;
+    /* text-align: center; */
+    /* white-space: nowrap; */
+
+    border: none;
+
+    height: 40px;
+}
+
+.custom-div-append {
+  padding:0px 0px 0px 0px;
+  margin:0px;
+  margin-left: -3px;
+}
+
+.custom-label{
+  padding-top:5px;
+  padding-left:20px;
+  color: #9A9A9A;
+
 }
 </style>

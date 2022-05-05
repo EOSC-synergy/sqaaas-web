@@ -27,7 +27,7 @@
                     </div>
                   </div>
                   <div style="background-color:#e6ede8;padding-left:80px;padding-top:55px;padding-bottom:10px;width:30%">
-                    <img src="../../static/git.png" alt="" style="opacity: 0.5;">
+                    <img src="../../static/git.png" alt="" class="responsive" style="opacity: 0.5;">
                   </div>
                 </div>
               </template>
@@ -544,7 +544,7 @@
         if(this.repo.path != ''){
           this.$store.state.config_yaml.config.deploy_template = this.repo.path.trim()
         }
-         this.$router.push({name: 'composer'});
+        this.$router.push({name: 'SQACriteria'});
       },
       back(){
          this.$router.push({name: 'PipelineName'});
@@ -911,6 +911,11 @@ input[type=number]::-webkit-inner-spin-button {
   color:black;
   font-weight:700;
 
+}
+
+.responsive {
+  width: 100%;
+  height: auto;
 }
 
 </style>
