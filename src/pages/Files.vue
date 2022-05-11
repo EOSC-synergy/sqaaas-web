@@ -383,9 +383,9 @@
 
                            <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
                               <div style="display:contents" class="col-12 col-md-6">
-                                <span class="custom-label" style="font-weight:bold;font-size:17px">Do you want the pipeline stop if one stage fail?</span>
+                                <span class="custom-label" style="font-weight:bold;font-size:17px">Force the pipeline to run to completion</span>
                                 <div class="custom-div-append">
-                                  <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="External repositories are those different from the one that will contain the current pipeline">
+                                  <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Enabling this option makes the pipeline run past failed stages">
                                     <i class="fa fa-question-circle"></i>
                                   </button>
                                 </div>
