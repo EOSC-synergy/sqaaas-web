@@ -106,15 +106,7 @@
             </div>
              <div class="row" style="margin:2rem 0px 2rem 0px;">
                <!-- v-show="showSelect && objectSize( $store.state.docker_compose.services) > 0" -->
-              <div v-show="showSelect"  class="col-12 col-md-6" style="display:grid;">
-                <label>SELECT THE SERVICE</label>
-                <select class="custom-select" id="service" v-model='service' >
-                  <option value="default">Choose a service...</option>
-                  <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
-                </select>
-                <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal()"><i class="fa fa-plus"></i>Service</button>
-                <span v-show="showErrorService" style="color:red; font-size:12px;">For the selected tool you must select a service.</span>
-              </div>
+
 
               <div v-show="showSelect && objectSize($store.state.config_yaml.config.project_repos) > 0" class="col-12 col-md-6" style="display:grid;">
                 <div class="row">
@@ -142,6 +134,9 @@
                   <option value="command">COMMANDS</option> -->
                 </select>
               </div>
+              <div v-show="showBuilderTool" class="text-left col-12 col-md-6" style="padding-top:25px;">
+                <button style="max-height:40px;" type="button" class="btn  btn-info" @click="addTool()"><i class="fa fa-plus"></i>ADD TOOL</button>
+              </div>
             </div>
             <div>
               <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a builder tool.</span>
@@ -155,9 +150,21 @@
               <span v-show="showErrorArgs" style="color:red; font-size:12px;padding-left:20px;">Invalid value for the selected tool.</span>
             </div>
 
-            <div v-show="showBuilderTool" class="text-right" style="padding-top:1rem;padding-bottom:10px;">
-              <button type="button" class="btn-simple btn btn-xs btn-info" @click="addTool()"><i class="fa fa-plus"></i>ADD TOOL</button>
+            <div class="col-12">
+              <span>Image: {{builder_tool}}</span>
             </div>
+
+             <div v-show="showSelect"  class="col-12 col-md-6" style="display:grid;">
+                <label>SELECT THE SERVICE</label>
+                <select class="custom-select" id="service" v-model='service' >
+                  <option value="default">Choose a service...</option>
+                  <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
+                </select>
+                <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal()"><i class="fa fa-plus"></i>Service</button>
+                <span v-show="showErrorService" style="color:red; font-size:12px;">For the selected tool you must select a service.</span>
+              </div>
+
+
 
              <div v-show="array_selected_tools.length > 0" style="padding-top:40px;margin-bottom:2rem;">
                 <div class="text-center" style="padding-bottom:10px;">
