@@ -166,7 +166,7 @@
           </div>
           <div class="col-12 col-md-4 text-center">
             <span class="fa-stack fa-3x">
-                <a class='section_docs' href="#">
+                <a class='section_docs' href="https://github.com/eosc-synergy/SQAaaS" target="blank">
                     <i class="fa fa-circle fa-stack-2x text-primary"></i>
                     <i class="fa fa-github fa-stack-1x fa-inverse"></i>
                 </a>
