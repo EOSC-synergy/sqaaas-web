@@ -168,6 +168,10 @@
                       </div>
 
                 </div> -->
+                <div class="text-center" v-show="showErrorAPI">
+                  <h2 style="color: red; font-weight: bold;">An unexpected error occurred while running the assessment</h2>
+                  <p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>
+                </div>
 
                 <div style="padding:20px;">
                   <button class="btn btn-primary btn-fill" @click="getResults()">Start Assessment</button>
@@ -251,8 +255,9 @@
         build_status:'',
         showReportBtn: false,
         showErrorURL:false,
-        repo_info:{}
-       
+        repo_info:{},
+        showErrorAPI:false,
+
 
       }
     },
@@ -376,7 +381,7 @@
         //     branch:this.doc.branch.trim()
         //   }
         // }
-
+        this.showErrorAPI = false;
         if(this.params.url != ''){
           var data = {
             repo_code:{
@@ -399,7 +404,6 @@
 
       },
       getPipelineAssessmentCallBack(response){
-        console.log(response)
         if(response.status == 201 && response.data.id){
           this.pipeline_id = response.data.id;
           // this.loading = true;
@@ -407,9 +411,10 @@
 
           this.runAssessmentPipelineCall(this.pipeline_id,this.runAssessmentPipelineCallBack)
         }else if(response.status == 500){
-          this.notifyVue(response.detail?response.detail:'Error')
+          this.notifyVue(response.detail?response.detail:'Error');
+          this.loading =false;
+          this.showErrorAPI = true;
         }else{
-          console.log(response)
           this.notifyVue(response.reason?response.reason:'Error')
         }
       },
@@ -422,6 +427,7 @@
         }else if(response.status == 500){
           this.notifyVue(response.detail?response.detail:'Error')
           this.loading = false;
+          this.showErrorAPI = true;
         }else{
           console.log(response)
           this.notifyVue(response.reason?response.reason:'Error')
@@ -556,6 +562,7 @@
           this.notifyVue(response.detail?response.detail:'Error')
           this.$store.state.report = {};
           this.build_status = '';
+          this.showErrorAPI = true;
         }else{
           console.log(response)
           this.notifyVue(response.reason?response.reason:'Error')
@@ -578,6 +585,7 @@
          this.autoRefresh = false;
           this.showStatus = false;
           this.loading = false;
+          this.showErrorAPI = true;
         }else{
           console.log(response)
           this.notifyVue(response.reason?response.reason:'Error')
