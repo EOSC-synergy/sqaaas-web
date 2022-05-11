@@ -94,7 +94,7 @@
                 <!-- <div class="text-left col-12">
                   <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left: 15px;">
                       <div class="" style="padding-bottom:10px">
-                        <label style="color:black;"> CHOOSE A CRITERIA</label>
+                        <label style="color:black;"> CHOOSE A CRITERION</label>
                         <select style="font-family: console;font-weight: 700;" class="custom-select" id="sqacriteria" v-model='criteria'>
                           <option value="default">Select ...</option>
                           <option v-for="(crit,key) in array_criterias" :key="key" :value="crit['id']">{{crit['id']}}</option>
@@ -171,6 +171,10 @@
                       </div>
 
                 </div> -->
+                <div class="text-center" v-show="showErrorAPI">
+                  <h2 style="color: red; font-weight: bold;">An unexpected error occurred while running the assessment</h2>
+                  <p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>
+                </div>
 
                 <div style="padding:20px;">
                   <button class="btn btn-primary btn-fill" @click="getResults()">Start Assessment</button>
@@ -254,8 +258,9 @@
         build_status:'',
         showReportBtn: false,
         showErrorURL:false,
-        repo_info:{}
-       
+        repo_info:{},
+        showErrorAPI:false,
+
 
       }
     },
@@ -378,6 +383,7 @@
         //     branch:this.doc.branch.trim()
         //   }
         // }
+        this.showErrorAPI = false;
         if(this.params.url != ''){
           var data = {
             repo_code:{
@@ -407,9 +413,10 @@
 
           this.runAssessmentPipelineCall(this.pipeline_id,this.runAssessmentPipelineCallBack)
         }else if(response.status == 500){
-          this.notifyVue(response.detail?response.detail:'Error')
+          this.notifyVue(response.detail?response.detail:'Error');
+          this.loading =false;
+          this.showErrorAPI = true;
         }else{
-          console.log(response)
           this.notifyVue(response.reason?response.reason:'Error')
         }
       },
@@ -422,6 +429,7 @@
         }else if(response.status == 500){
           this.notifyVue(response.detail?response.detail:'Error')
           this.loading = false;
+          this.showErrorAPI = true;
         }else{
           console.log(response)
           this.notifyVue(response.reason?response.reason:'Error')
@@ -554,6 +562,7 @@
           this.notifyVue(response.detail?response.detail:'Error')
           this.$store.state.report = {};
           this.build_status = '';
+          this.showErrorAPI = true;
         }else{
           console.log(response)
           this.notifyVue(response.reason?response.reason:'Error')
@@ -576,6 +585,7 @@
          this.autoRefresh = false;
           this.showStatus = false;
           this.loading = false;
+          this.showErrorAPI = true;
         }else{
           console.log(response)
           this.notifyVue(response.reason?response.reason:'Error')

@@ -44,7 +44,7 @@
                 <li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-668" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-668 nav-item"><a title="About" target='_blank' href="https://www.eosc-synergy.eu/about/" class="nav-link text-white">About</a></li>
                 <li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-47" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-47 nav-item"><a title="Partners" target='_blank' href="https://www.eosc-synergy.eu/partners/" class="nav-link text-white">Partners</a></li>
                 <li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-790" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-790 nav-item"><a title="Contact us" target='_blank' href="https://www.eosc-synergy.eu/contact-us/" class="nav-link text-white">Contact us</a></li>
-                <li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-790" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-790 nav-item"><a title="Help" target='_blank' href="https://docs.sqaaas.eosc-synergy.eu/" class="nav-link text-white"><i style='padding-right:5px' class="fa fa-question-circle" aria-hidden="true"></i></a></li>
+                <li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-790" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-790 nav-item"><a title="Help" target='_blank' href="https://docs.sqaaas.eosc-synergy.eu/" class="nav-link text-white"><span style='padding-top:10px;'>Doc</span><i style='padding-left:5px' class="fa fa-book" aria-hidden="true"></i></a></li>
                 <li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-668" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-668 nav-item"> <button type="button" class=" btn btn-outline btn-login" @click="login_egi()">Sign In</button></li>
                 </ul></div>										</div><!-- .container -->
 
@@ -155,7 +155,7 @@
         <div class="row">
           <div class="col-12 col-md-4 text-center">
             <span class="fa-stack fa-3x">
-                <a class='section_docs' href="#">
+                <a class='section_docs' target='_blank' href="https://docs.sqaaas.eosc-synergy.eu/">
                     <i class="fa fa-circle fa-stack-2x text-primary"></i>
                     <i class="fa fa-book fa-stack-1x fa-inverse"></i>
                 </a>

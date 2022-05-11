@@ -16,9 +16,8 @@
                     </p>
                     <div>
                         <p>
-
                           <span style="text-decoration: underline;font-weight: bold;">This is an optional step:</span>
-                          spa those tools natively supported by the Pipeline as a Service module (check them out at the <span style="font-style:italic">'Criteria'</span> step) do not require a service definition.
+                          some tools are natively supported by the Pipeline as a Service module. If your tool is not listed in the next <span style="font-style:italic">'Criteria'</span> step, come back here a define the service.
                         </p>
                         <!-- <div style="padding-top:15px;width:190px; margin:0 auto;">
                             <button class="btn btn-outline btn-info" style="border-style:solid;border-width:thin;padding:5px 5px;font-weight: bold;" @click="next()" >Skip this step for now ></button>
@@ -82,12 +81,12 @@
                       <div class="col-12 text-right">
                         <span v-show="showErrorPathDockerfile" style="color:red;font-size:12px;">This field is required</span>
                     </div>
-                      <base-input style="padding-top:1rem;" type="text" class="no-margin"
+                      <!-- <base-input style="padding-top:1rem;" type="text" class="no-margin"
                           label="DOCKER REGISTRY URL (OPTIONAL)"
                           :disabled="false"
                           placeholder="https://hub.docker.com/"
                           v-model="url_service">
-                    </base-input>
+                    </base-input> -->
                     <label for="" style="padding-top:20px;">BUILD ARGUMENTS (OPTIONAL)</label>
                     <div class="row" >
                       <base-input class="col-12 col-md-5" type="text"
@@ -464,7 +463,6 @@
         showErrorImageName: false,
         showErrorPathDockerfile: false,
         showErrorContName: false,
-        url_service:'',
         service:{
           image:'',
           container_name:'',
@@ -551,10 +549,6 @@
       'id_cred_service'(val){
         if(val != ''){
           this.showErrorCredID = false;
-        }
-      },
-      'url_service'(val){
-        if(val != ''){
         }
       },
       'envComposeYesNo.yes'(val){
@@ -723,7 +717,6 @@
               image: {
               name: '',
               registry:{
-                url: '',
                 push: false,
                 credential_id:''
 
@@ -743,7 +736,6 @@
           }
           if(this.pull_build == 'build'){
             // this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
-            this.services[this.service.container_name].image.registry.url = this.url_service;
             this.services[this.service.container_name].build.dockerfile = this.path_dockerfile;
             this.services[this.service.container_name].build.args = this.arg_push;
 
@@ -842,7 +834,6 @@
         this.cleanArg();
         this.arg_push = {};
         this.showArg = false;
-        this.url_service = '';
         this.id_cred_service = '';
         this.showErrorCredID = false;
         this.pull_build = 'default';
@@ -919,12 +910,10 @@
                 //  _this.$store.state.docker_compose.push_services.push(array_name[1]);
                  _this.$store.state.docker_compose.services[array_name[1]].image.registry.push=true;
                  _this.$store.state.docker_compose.services[array_name[1]].image.registry.credential_id=this.id_cred_service;
-                 _this.$store.state.docker_compose.services[array_name[1]].image.registry.url=this.url_service;
                }else{
                  // _this.$store.state.docker_compose.push_services.splice(index, 1);
                   _this.$store.state.docker_compose.services[array_name[1]].image.registry.push=false;
                  _this.$store.state.docker_compose.services[array_name[1]].image.registry.credential_id='';
-                 _this.$store.state.docker_compose.services[array_name[1]].image.registry.url='https://hub.docker.com/';
                }
              }
            }

@@ -34,7 +34,7 @@
                 <div>
                   <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left: 15px;">
                       <div class="" style="padding-bottom:10px">
-                        <label style="color:black;"> CHOOSE A CRITERIA</label>
+                        <label style="color:black;"> CHOOSE A CRITERION</label>
                         <select style="font-family: console;font-weight: 700;" class="custom-select" id="sqacriteria" v-model='criteria'>
                           <option value="default">Select ...</option>
                           <option v-for="(crit,key) in array_criterias" :key="key" :value="crit['id']">{{crit['id']}}</option>
@@ -610,7 +610,6 @@
                      ${this.paintSelectOpt(args[i].value)}
                     </select>
                   </div>
-                 
                 </div>`
           }
 
@@ -620,7 +619,6 @@
 
           body += text
         }
-        
         $('#ref-arg').html(body)
         $('.select-options').on('change', function(){
           console.log($(this).attr('data-index'))
@@ -634,7 +632,6 @@
         for(var i in opts){
           message += `<option value="${opts[i]}">${opts[i]}</option>`
         }
-        
         return message;
       },
       async adding(args, count){
@@ -803,7 +800,7 @@
          this.$router.push({name: 'Files'});
       },
       back(){
-         this.$router.push({name: 'composer'});
+         this.$router.push({name: 'general'});
       },
       notifyVue (message) {
 
@@ -968,7 +965,7 @@
 
     },
     mounted(){
-       this.$eventHub.$emit('steps', 3);
+       this.$eventHub.$emit('steps', 2);
 
     },
     created(){
@@ -980,7 +977,6 @@
       }
       var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
       var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
-     
       var sizeCriteria = this.objectSize(this.$store.state.config_yaml.sqa_criteria);
       var getCriteria = this.$store.state.config_yaml.sqa_criteria
       for (var i in getCriteria){
