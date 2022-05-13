@@ -108,7 +108,7 @@
                <!-- v-show="showSelect && objectSize( $store.state.docker_compose.services) > 0" -->
 
 
-              <div v-show="showSelect && objectSize($store.state.config_yaml.config.project_repos) > 0" class="col-12 col-md-6" style="display:grid;">
+              <div v-show="objectSize($store.state.config_yaml.config.project_repos) > 0" class="col-12 col-md-6" style="display:grid;">
                 <div class="row">
                   <span class="custom-label" style="text-transform:uppercase;font-size: 12px;">Does the criterion apply to an outside repo?</span><base-checkbox style="font-size:12px;" name="env" v-model="disable_menu"></base-checkbox>
                 </div>
@@ -150,11 +150,25 @@
               <span v-show="showErrorArgs" style="color:red; font-size:12px;padding-left:20px;">Invalid value for the selected tool.</span>
             </div>
 
-            <div class="col-12">
-              <span>Image: {{builder_tool}}</span>
+            <div v-show="builder_tool != 'default'" class="col-12 mt-2">
+              <label style="font-size:16px; max-width: inherit;">Image: {{docker_image}}</label>
+              <div class="row" style="margin-bottom:1rem;">
+                <div style="display:contents" class="col-12 col-md-6">
+                  <span class="custom-label" style="font-weight:bold;font-size:16px;">Change default image?</span>
+                  <div class="custom-div-append">
+                    <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Change default image.">
+                      <i class="fa fa-question-circle"></i>
+                    </button>
+                  </div>
+                </div>
+                <div style="display:contents" class="col-12 col-md-6">
+                  <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="change_image_yes"></base-checkbox>
+                  <span class="custom-label">No</span><base-checkbox name="workspace" v-model="change_image_no"></base-checkbox>
+                </div>
+              </div>
             </div>
 
-             <div v-show="showSelect"  class="col-12 col-md-6" style="display:grid;">
+             <div v-show="change_image_yes"  class="col-12 col-md-6" style="display:grid;">
                 <label>SELECT THE SERVICE</label>
                 <select class="custom-select" id="service" v-model='service' >
                   <option value="default">Choose a service...</option>
@@ -357,7 +371,7 @@
               </button>
             </div>
             <div class="modal-body" style="border-bottom:1px solid #ccc;padding-bottom:0px;max-height:70vh;overflow-y:auto">
-              <composer></composer>
+              <composer @service_name="getServiceName"></composer>
             </div>
             <div class="modal-footer" style="padding-top:20px;">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -440,6 +454,10 @@
         array_selected_tools:[],
         criterias_store_branch:[],
         showOperation:{},
+        change_image_yes: false,
+        change_image_no: true,
+        docker_image: '',
+        service_name: '',
         info:{
           'QC.Sty':{
             'p1':'"Use code style standards to guide your code writing so you let others  understand it."',
@@ -471,6 +489,23 @@
       }
     },
     watch:{
+       'change_image_yes'(val){
+        if(val==true){
+          this.change_image_no = false;
+        }else{
+          this.change_image_no = true;
+        }
+      },
+      'change_image_no'(val){
+         if(val==true){
+          this.change_image_yes = false;
+          this.docker_image = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.image) ? this.selected_tool.docker.image : (this.Object.keys(selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.dockerfile)?this.selected_tool.docker.dockerfile:''
+
+        }else{
+           this.change_image_yes = true;
+        }
+      },
+
       'disable_menu'(val){
         if(val == false){
           this.repository = 'default';
@@ -484,7 +519,6 @@
           this.showBuilderTool = false;
           this.showErrorArgs = false;
           this.show_link = true;
-          this.showSelect = true;
           for (var i in this.array_criterias){
             if (this.array_criterias[i].id == val){
               this.array_tools = [...this.array_criterias[i]['tools']]
@@ -504,7 +538,6 @@
           }
         }else{
           this.show_link = false;
-          this.showSelect = false;
           this.array_tools = [];
         }
       },
@@ -564,20 +597,29 @@
             for (var i in _this.selected_tool.args){
               if(_this.selected_tool.args[i].repeatable && _this.selected_tool.args[i].repeatable == true){
                 $("#inputTag_"+count+'_'+i).tagsinput({
-                trimValue: true
+                  trimValue: true
                 });
                 count=count*1+1;
               }
             }
             },100)
+            this.docker_image = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.image) ? this.selected_tool.docker.image : (this.Object.keys(selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.dockerfile)?this.selected_tool.docker.dockerfile:''
         }else{
           this.showBuilderTool = false;
         }
       }
     },
     methods:{
+      getServiceName(event){
+        this.service_name = event;
+        this.service = event;
+        $('#myModal').modal('hide');
+      },
       checkServices(){
-        console.log(this.$store.state.docker_compose.services);
+        if(!Object.hasOwnProperty.call(this.$store.state.docker_compose.services, this.service)){
+          this.service = Object.keys(this.$store.state.docker_compose.services)[0];
+        }
+        this.docker_image = this.service;
       },
        openModal(item){
         $('#myModal').modal('show');
@@ -854,6 +896,7 @@
           }else{
             serv = this.service
           }
+          console.log(serv)
           for(var i in this.array_selected_tools){
             repo={
                     repo_url: (this.repository!='default')?this.repository:'',
@@ -1166,4 +1209,29 @@ input[type=number]::-webkit-inner-spin-button {
 .modal-dialog{
   transform:none!important;
 }
+
+.custom-append-button {
+  padding-top: 0px !important;
+  padding-bottom: 0.38rem !important;
+  padding-left:0.75rem !important;
+  padding-right:0.75rem !important;
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    /* line-height: 1.5; */
+    color: #495057;
+    /* text-align: center; */
+    /* white-space: nowrap; */
+
+    border: none;
+
+    height: 40px;
+}
+
+.custom-div-append {
+  padding:0px 0px 0px 0px;
+  margin:0px;
+  margin-left: -3px;
+}
+
 </style>

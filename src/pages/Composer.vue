@@ -7,7 +7,7 @@
 
           </card> -->
           <card>
-            <template slot="header">
+            <!-- <template slot="header">
                 <div style="display:flex;flex-direction:row;">
                   <div style="background-color:#e6ede8;padding:10px 20px;width:100%">
                     <h3 style="margin-top:0px;font-weight:700;" class="card-title">Services make up the testing and building environment</h3>
@@ -19,16 +19,16 @@
                           <span style="text-decoration: underline;font-weight: bold;">This is an optional step:</span>
                           some tools are natively supported by the Pipeline as a Service module. If your tool is not listed in the next <span style="font-style:italic">'Criteria'</span> step, come back here a define the service.
                         </p>
-                        <!-- <div style="padding-top:15px;width:190px; margin:0 auto;">
+                        <div style="padding-top:15px;width:190px; margin:0 auto;">
                             <button class="btn btn-outline btn-info" style="border-style:solid;border-width:thin;padding:5px 5px;font-weight: bold;" @click="next()" >Skip this step for now ></button>
-                        </div> -->
+                        </div>
                     </div>
                   </div>
-                  <!-- <div style="background-color:#e6ede8;padding-left:80px;padding-top:60px;padding-bottom:20px;width:30%">
+                  <div style="background-color:#e6ede8;padding-left:80px;padding-top:60px;padding-bottom:20px;width:30%">
                     <img src="../../static/service.png" alt="" style="opacity: 0.5">
-                  </div> -->
+                  </div>
                 </div>
-            </template>
+            </template> -->
             <template>
               <div class="row" style="padding-left:20px;margin-bottom:1rem;">
                 <div class="col-12 col-md-6">
@@ -712,7 +712,7 @@
           this.showErrorImageName = false;
           this.showErrorContName = false;
           this.showErrorSelectOption = false;
-
+          this.$emit('service_name', this.service.container_name);
           this.services[this.service.container_name]={
               image: {
               name: '',
