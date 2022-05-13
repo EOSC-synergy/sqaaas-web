@@ -168,14 +168,40 @@
                       </div>
 
                 </div> -->
-                <div class="text-center" v-show="showErrorAPI">
-                  <h2 style="color: red; font-weight: bold;">An unexpected error occurred while running the assessment</h2>
-                  <p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>
+
+                <div class="modal fade bd-example-modal-lg" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header ">
+                        <h5 class="modal-title " style="font-weight:700; font-size:18px;" id="errorModalLabel">REPORT</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body" style="">
+                        <div class="row">
+                          <div class="text-center" v-show="showErrorFailure">
+                            <h2 style="color: red; font-weight: bold;">An unexpected error occurred while running the assessment</h2>
+                            <p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>
+                          </div>
+                          <div class="text-center" v-show="showErrorAPI">
+                            <h2 style="color: red; font-weight: bold;">"The quality assessment has failed to complete"</h2>
+                            <a  style="color:white;margin-right:10px;" class="btn btn-primary btn-fill btn-sm" :href="build_url" target="_blank">Show Details</a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer" style="justify-content: end;">
+                        <button type="button" class="btn btn-secondary" style="color: #fff!important;background-color: #6c757d!important;border-color: #6c757d!important;" data-dismiss="modal">Close</button>
+                        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                      </div>
+                    </div>
+                  </div>
                 </div>
+
 
                 <div style="padding:20px;">
                   <button class="btn btn-primary btn-fill" @click="getResults()">Start Assessment</button>
-                  <!-- <button v-show="showReportBtn" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#exampleModal">See Report</button> -->
+                  <!-- <button v-show="showReportBtn" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#errorModal">See Report</button> -->
                    <!-- <button v-show="showReportBtn" style="margin-right:20px;" class="btn btn-primary btn-fill" @click="goToReport()">See Report</button> -->
                   <!-- <button v-show="showReportBtn" style="color: #fff;background-color: #6c757d;border-color: #6c757d;" class="btn  " @click="refresh()"><i class="fa fa-refresh" style="padding-right:5px;" aria-hidden="true"></i> New Assessment</button> -->
                 </div>
@@ -257,6 +283,8 @@
         showErrorURL:false,
         repo_info:{},
         showErrorAPI:false,
+        showErrorFailure:false,
+        message_error: ''
 
 
       }
@@ -414,7 +442,10 @@
           this.notifyVue(response.detail?response.detail:'Error');
           this.loading =false;
           this.showErrorAPI = true;
+          $('#errorModal').modal('show');
         }else{
+          this.showErrorFailure = true;
+          $('#errorModal').modal('show');
           this.notifyVue(response.reason?response.reason:'Error')
         }
       },
@@ -428,9 +459,12 @@
           this.notifyVue(response.detail?response.detail:'Error')
           this.loading = false;
           this.showErrorAPI = true;
+          $('#errorModal').modal('show');
         }else{
           console.log(response)
           this.notifyVue(response.reason?response.reason:'Error')
+          this.showErrorFailure;
+          $('#errorModal').modal('show');
           this.loading = false;
         }
 
@@ -533,12 +567,15 @@
           this.autoRefresh = false;
           this.showStatus = false;
           this.loading = false;
+          $('#errorModal').modal('show');
         }else{
           console.log(response)
           this.notifyVue(response.reason?response.reason:'Error')
-          his.autoRefresh = false;
+          this.autoRefresh = false;
           this.showStatus = false;
           this.loading = false;
+          this.showErrorFailure;
+          $('#errorModal').modal('show');
         }
       },
       cancelExecution(){
@@ -563,8 +600,11 @@
           this.$store.state.report = {};
           this.build_status = '';
           this.showErrorAPI = true;
+          $('#errorModal').modal('show');
         }else{
           console.log(response)
+          this.showErrorFailure = true;
+          $('#errorModal').modal('show');
           this.notifyVue(response.reason?response.reason:'Error')
           this.$store.state.report = {};
           this.build_status = '';
@@ -586,12 +626,15 @@
           this.showStatus = false;
           this.loading = false;
           this.showErrorAPI = true;
+          $('#errorModal').modal('show');
         }else{
           console.log(response)
           this.notifyVue(response.reason?response.reason:'Error')
           this.autoRefresh = false;
           this.showStatus = false;
           this.loading = false;
+          this.showErrorFailure = true;
+          $('#errorModal').modal('show');
         }
       },
 
@@ -717,6 +760,10 @@ input[type=number]::-webkit-inner-spin-button {
   color:black;
   font-weight:700;
 
+}
+
+.modal-dialog{
+  transform:none!important;
 }
 
 </style>
