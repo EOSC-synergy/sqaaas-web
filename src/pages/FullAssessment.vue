@@ -171,14 +171,10 @@
                       </div>
 
                 </div> -->
-                <div class="text-center" v-show="showErrorAPI">
-                  <h2 style="color: red; font-weight: bold;">An unexpected error occurred while running the assessment</h2>
-                  <p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>
-                </div>
 
                 <div style="padding:20px;">
                   <button class="btn btn-primary btn-fill" @click="getResults()">Start Assessment</button>
-                  <!-- <button v-show="showReportBtn" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#exampleModal">See Report</button> -->
+                  <!-- <button v-show="showReportBtn" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#errorModal">See Report</button> -->
                    <!-- <button v-show="showReportBtn" style="margin-right:20px;" class="btn btn-primary btn-fill" @click="goToReport()">See Report</button> -->
                   <!-- <button v-show="showReportBtn" style="color: #fff;background-color: #6c757d;border-color: #6c757d;" class="btn  " @click="refresh()"><i class="fa fa-refresh" style="padding-right:5px;" aria-hidden="true"></i> New Assessment</button> -->
                 </div>
@@ -260,6 +256,8 @@
         showErrorURL:false,
         repo_info:{},
         showErrorAPI:false,
+        showErrorFailure:false,
+        message_error: ''
 
 
       }
@@ -406,18 +404,29 @@
 
       },
       getPipelineAssessmentCallBack(response){
+        console.log(response)
         if(response.status == 201 && response.data.id){
           this.pipeline_id = response.data.id;
-          // this.loading = true;
-          // this.modal_message = 'Submitting Pipeline ...';
-
           this.runAssessmentPipelineCall(this.pipeline_id,this.runAssessmentPipelineCallBack)
         }else if(response.status == 500){
-          this.notifyVue(response.detail?response.detail:'Error');
+          this.$swal.fire({
+            title: 'An unexpected error occurred while running the assessment!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+            confirmButtonColor: '#E14726',
+          })
           this.loading =false;
-          this.showErrorAPI = true;
         }else{
-          this.notifyVue(response.reason?response.reason:'Error')
+           this.$swal.fire({
+            title: 'The quality assessment has failed to complete!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#E14726',
+          })
+          this.loading =false;
         }
       },
       runAssessmentPipelineCallBack(response){
@@ -427,12 +436,23 @@
           this.$router.replace(this.$route.query.redirect || "/logout");
           this.loading = false;
         }else if(response.status == 500){
-          this.notifyVue(response.detail?response.detail:'Error')
+           this.$swal.fire({
+            title: 'An unexpected error occurred while running the assessment!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+            confirmButtonColor: '#E14726',
+          })
           this.loading = false;
-          this.showErrorAPI = true;
         }else{
-          console.log(response)
-          this.notifyVue(response.reason?response.reason:'Error')
+          this.$swal.fire({
+             title: 'The quality assessment has failed to complete!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#E14726',
+          })
           this.loading = false;
         }
 
@@ -511,6 +531,25 @@
           if(response.data.build_status == "FAILURE"){
             this.loading = false;
             this.autoRefresh = false;
+            this.$swal.fire({
+              title: 'The execution of the pipeline has failed!',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              confirmButtonColor: '#E14726',
+              footer: `<a style='color:red' href="${this.build_url}" target="_blank">Why do I have this issue?</a>`
+            })
+          }
+
+          if(response.data.build_status == "ABORTED"){
+            this.loading = false;
+            this.autoRefresh = false;
+            this.$swal.fire({
+              title: 'The execution of the pipeline has failed!',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              confirmButtonColor: '#E14726',
+              footer: `<a style='color:red' href="${this.build_url}" target="_blank">Why do I have this issue?</a>`
+            })
           }
 
 
@@ -527,19 +566,40 @@
           this.$store.state.status = '';
           this.$store.state.build_url = '';
           this.loading = false;
-          this.notifyVue(response.reason?response.reason:"Pipeline has not been execute");
+          this.$swal.fire({
+             title: 'Pipeline has not been execute!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#E14726',
+          })
 
         }else if(response.status == 500){
-          this.notifyVue(response.detail?response.detail:'Error')
+           this.$swal.fire({
+             title: 'The quality assessment has failed to complete!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#E14726',
+            footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+          })
           this.autoRefresh = false;
           this.showStatus = false;
           this.loading = false;
+
         }else{
-          console.log(response)
-          this.notifyVue(response.reason?response.reason:'Error')
-          his.autoRefresh = false;
+           this.$swal.fire({
+            title: 'Error!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            footer: `<a :href="${this.build_url}" target="_blank">Why do I have this issue?</a>`
+          })
+          this.autoRefresh = false;
           this.showStatus = false;
           this.loading = false;
+          this.showErrorFailure;
+
         }
       },
       cancelExecution(){
@@ -559,13 +619,25 @@
           this.loading = false;
           this.$router.replace(this.$route.query.redirect || "/logout");
         }else if(response.status == 500){
-          this.notifyVue(response.detail?response.detail:'Error')
+           this.$swal.fire({
+             title: 'An unexpected error occurred while running the assessment!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+            confirmButtonColor: '#E14726',
+          })
           this.$store.state.report = {};
           this.build_status = '';
-          this.showErrorAPI = true;
+
         }else{
-          console.log(response)
-          this.notifyVue(response.reason?response.reason:'Error')
+          this.$swal.fire({
+            title: 'The quality assessment has failed to complete!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#E14726',
+          })
           this.$store.state.report = {};
           this.build_status = '';
         }
@@ -581,14 +653,25 @@
           this.loading = false;
           this.$router.replace(this.$route.query.redirect || "/logout");
          }else if(response.status == 500){
-          this.notifyVue(response.detail?response.detail:'Error')
-         this.autoRefresh = false;
+           this.$swal.fire({
+             title: 'An unexpected error occurred while running the assessment!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+            confirmButtonColor: '#E14726',
+          })
+          this.autoRefresh = false;
           this.showStatus = false;
           this.loading = false;
-          this.showErrorAPI = true;
         }else{
-          console.log(response)
-          this.notifyVue(response.reason?response.reason:'Error')
+           this.$swal.fire({
+            title: 'The quality assessment has failed to complete!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#E14726',
+          })
           this.autoRefresh = false;
           this.showStatus = false;
           this.loading = false;
@@ -597,6 +680,7 @@
 
   },
   created(){
+
       this.pipeline_id = '';
       this.params.url = '';
       this.params.brach = '';
@@ -719,19 +803,8 @@ input[type=number]::-webkit-inner-spin-button {
 
 }
 
-.success{
-      background-color: #64C133;
-    border: 2px solid #275D0A;
-    color: white;
-    font-size: 20px;
-    font-weight: 600;
-}
-.failed{
-      background-color: #CF4D03;
-    border: 2px solid #A43B00;
-    color: black;
-    font-size: 20px;
-    font-weight: 600;
+.modal-dialog{
+  transform:none!important;
 }
 
 </style>

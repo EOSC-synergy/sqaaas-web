@@ -753,6 +753,8 @@
           this.showErrorArgs = false;
           this.selected_tool['args'] =  args;
           this.builder_tool = 'default';
+          this.change_image_yes = false;
+          this.change_image_no = true;
           this.showBuilderTool = false;
           this.array_selected_tools.push(this.selected_tool);
         }
