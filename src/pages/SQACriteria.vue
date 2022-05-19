@@ -151,7 +151,7 @@
             </div>
 
             <div v-show="builder_tool != 'default'" class="col-12 mt-2">
-              <label style="font-size:16px; max-width: inherit;">Image: {{docker_image}}</label>
+              <label style="font-size:16px; max-width: inherit;"><span style='font-size:16px; color:black; font-weight: 700;'>Image:</span> {{docker_image}}</label>
               <div class="row" style="margin-bottom:1rem;">
                 <div style="display:contents" class="col-12 col-md-6">
                   <span class="custom-label" style="font-weight:bold;font-size:16px;">Change default image?</span>

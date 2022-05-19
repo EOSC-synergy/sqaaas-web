@@ -69,7 +69,7 @@
                         </template>
 
                         <template class="card-body">
-                          <div class="row" v-for="(crit, index) in $store.state.report.report" :key="index">
+                          <div class="row" style="padding:20px">
                               <div v-if="crit['filtered_reason']">
                                 <p v-for="(fr, z) in crit['filtered_reason']" :key="z" style="margin-bottom:0px; font-size:12px; color:rgb(108, 117, 125)">
                                   {{crit['filtered_reason'][z]}}
