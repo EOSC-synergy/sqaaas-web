@@ -75,6 +75,13 @@
                         </template>
 
                         <template class="card-body">
+                          <div class="row" style="padding:20px">
+                              <div v-if="crit['filtered_reason']">
+                                <p v-for="(fr, z) in crit['filtered_reason']" :key="z" style="margin-bottom:0px; font-size:12px; color:rgb(108, 117, 125)">
+                                  {{crit['filtered_reason'][z]}}
+                                </p>
+                              </div>
+                            </div>
                           <div>
                               <div class="table-responsive">
                                 <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
