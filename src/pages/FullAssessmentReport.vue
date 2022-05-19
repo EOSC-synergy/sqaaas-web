@@ -220,6 +220,7 @@
           'QC.Sec':'fa-lock',
           'QC.Sty':'fa-bullseye',
           'QC.Uni':'fa-cogs',
+          'QC.Ver':'fa-code-fork'
         },
         mapping_criteria_name:{
           'QC.Acc':'Code Accessibility',
@@ -230,8 +231,8 @@
           'QC.Met':'Code metadata',
           'QC.Sec':'Security',
           'QC.Sty':'Code Style',
-          'QC.Uni':'Unit Testing'
-
+          'QC.Uni':'Unit Testing',
+          'QC.Ver':'Versioning'
         }
 
       }
