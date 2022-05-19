@@ -67,19 +67,13 @@
                               </div>
 
                             </div>
-                            <div class="row" v-if="crit['filtered_reason']">
-                              <p v-for="(fr, z) in crit['filtered_reason']" :key="z" style="margin-bottom:0px; font-size:12px; color:rgb(108, 117, 125)">
-                                {{crit['filtered_reason'][z]}}
 
-                              </p>
-
-                            </div>
                           </div>
 
                         </template>
 
                         <template class="card-body">
-                          <div class="row" style="padding:20px">
+                          <div class="row" v-for="(crit, index) in $store.state.report.report" :key="index">
                               <div v-if="crit['filtered_reason']">
                                 <p v-for="(fr, z) in crit['filtered_reason']" :key="z" style="margin-bottom:0px; font-size:12px; color:rgb(108, 117, 125)">
                                   {{crit['filtered_reason'][z]}}
@@ -90,6 +84,7 @@
                               <div class="table-responsive">
                                 <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                                     <tbody v-for="(subcrit, index1) in crit['subcriteria']" :key="index1">
+
                                             <tr
                                                 style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
                                                 <td style="padding-right: 10px; padding-left: 10px;padding-bottom:0px;">
@@ -289,7 +284,7 @@
      var _this = this
      this.$nextTick(function () {
        console.log(this.$store.state.report)
-        if(this.$store.state.report.badge['software']){
+        if(this.$store.state.report.badge['software'] && this.$store.state.report.badge['software']['data']){
           this.showBadgeSoftware = true;
           if($("#badge-software").has("blockquote").length == 0){
             var _div = `
@@ -308,7 +303,7 @@
             $("#badge-software").append(_div)
           }
         }
-        if(this.$store.state.report.badge['service']){
+        if(this.$store.state.report.badge['service'] && this.$store.state.report.badge['service']['data']){
           this.showBadgeService = true;
           if($("#badge-service").has("blockquote").length == 0){
             $( "#badge-service" ).append(this.$store.state.report.badge['service']['share']);
@@ -316,7 +311,7 @@
             $("#badge-software").append(btn2)
           }
         }
-        if(this.$store.state.report.badge['fair']){
+        if(this.$store.state.report.badge['fair'] && this.$store.state.report.badge['fair']['data'] ){
           this.showBadgeFair = true;
           if($("#badge-fair").has("blockquote").length == 0){
             $( "#badge-fair" ).append(this.$store.state.report.badge['fair']['share']);
