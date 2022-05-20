@@ -29,6 +29,10 @@
                     </div>
                   </div>
 
+                  <div class="text-center">
+                    <h4><a href="https://docs.sqaaas.eosc-synergy.eu/quality_assessment_and_awarding/synergy_badging_approach" target="blank">Learn more about the EOSC-Synergy badging approach</a></h4>
+                  </div>
+
                   <div class="row" style="margin-bottom:4rem;">
                     <div v-show="showBadgeSoftware == true" :class="{'col-md-4':showBadgeService == true && showBadgeFair == true, 'col-md-6':((showBadgeService == true && showBadgeFair == false) || (showBadgeService == false && showBadgeFair == true)), 'col-md-12':showBadgeService == false && showBadgeFair == false}" class="col-12 text-center" id="badge-software" style="padding-top:20px;padding-left:15px;">
                     </div>
