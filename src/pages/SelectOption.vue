@@ -12,18 +12,16 @@
 						<template>
               <h3 style="color:#6c757d;border-bottom:2px solid rgba(0,0,0,0.6);font-weight:bold;opacity:0.6">Module selection</h3>
               <div class="row text-center">
-                  <div class="col-12 col-md-6 select-options text-center" @click="gotoCustomized()">
-                      <div class="m-auto"  style="background-color:#F1A190;max-width: 500px;height: 500px;padding: 40px;">
+                  <div class="col-12 col-md-6 select-options" @click="gotoCustomized()">
+                      <div class="m-auto"  style="border:1px solid #F1A190;max-width: 500px;padding: 40px;">
                         <img src="../../static/paas.png" alt="" class="responsive" style="opacity: 0.9;">
                         <h2 class="custom-title">Pipeline as a Service</h2>
                         <span style="color:black;">Compose customized CI/CD pipelines for your code repositories.</span>
                       </div>
                   </div>
 
-
-
-                  <div class="col-12 col-md-6 select-options text-center"  @click="gotoFull()">
-                    <div class="m-auto" style="background-color:  #90C7F1;max-width: 500px;height: 500px;padding: 40px;">
+                  <div class="col-12 col-md-6 select-options text-center" @click="gotoFull()">
+                    <div class="m-auto" style="border:1px solid #90C7F1;max-width: 500px;padding: 40px;">
                       <img src="../../static/qaa.png" alt="" class="responsive" style="opacity: 0.9;">
                       <h2 class="custom-title">Quality Assessment & Awarding</h2>
                       <span style="color:black;">Take credit of the achievements in terms of software and service quality.</span>
