@@ -10,6 +10,7 @@
 						</template>
 
 						<template>
+              <h3 style="color:#6c757d;border-bottom:2px solid rgba(0,0,0,0.6);font-weight:bold;opacity:0.6">Module selection</h3>
               <div class="row text-center">
                   <div class="col-12 col-md-6 select-options text-center" @click="gotoCustomized()">
                       <div class="m-auto"  style="background-color:#F1A190;max-width: 500px;height: 500px;padding: 40px;">
