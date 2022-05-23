@@ -24,7 +24,7 @@
 
         <card >
           <template slot="header">
-            <div style="display:flex;flex-direction:row;padding-bottom:15px;">
+            <div style="display:flex;flex-direction:row">
               <div style="background-color:#e6ede8;padding-left:100px;padding-top:20px;padding-bottom:10px;width:80%">
                 <h3 style="margin-top:0px;font-weight:700;" class="card-title">Quality criteria define the CI/CD pipeline work</h3>
                 <p style="padding-top:20px">
