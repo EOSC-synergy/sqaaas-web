@@ -169,13 +169,16 @@
             </div>
 
              <div v-show="change_image_yes"  class="col-12 col-md-6" style="display:grid;">
-                <label>SELECT THE SERVICE</label>
+                <span style="padding-left:15px">
+                <p style="font-size:14px;font-style:italic">A new container/service definition is required to change the default image. Please select an existing service or add a new one:</p>
+                <!-- <label>SELECT A SERVICE</label> -->
                 <select class="custom-select" id="service" v-model='service' >
                   <option value="default">Choose a service...</option>
                   <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
                 </select>
-                <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal()"><i class="fa fa-plus"></i>Service</button>
+                <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal()"><i class="fa fa-plus"></i>ADD SERVICE</button>
                 <span v-show="showErrorService" style="color:red; font-size:12px;">For the selected tool you must select a service.</span>
+                </span>
             </div>
 
             </div> <!-- -->
