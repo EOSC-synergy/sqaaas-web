@@ -67,7 +67,6 @@
           </template>
           <template class="card-body">
 
-
             <div v-show="showCredInfo" style="padding-top:20px;margin-bottom:2rem;">
               <span class="custom-label">Credentials</span>
               <div class="table-responsive">
@@ -123,10 +122,10 @@
               </div>
             </div>
             <div v-show="criteria != 'default'" class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
-              <h5 style="font-weight:700;padding-left:15px;">Builder settings</h5>
-              <p style="padding-left:15px;font-size:14px;">According to the programming language in use, you can choose between builders. As a catch-all builder you might prefer to use the list of commands that you commonly use for carrying out the work aligned with the given criterion.</p>
+              <h4 style="font-weight:700;padding-left:15px;">Tool selection</h4>
+              <p style="padding-left:15px;font-size:15px;">A set of supported tools will be available for selection according to the criterion selected above. The catch-all <em>commands</em> tool can be used to execute alternative commands and/or additional non-supported tools.</p>
               <div class="col-12 col-md-6">
-                <label> CHOOSE A BUILDER TOOL</label>
+                <label> CHOOSE A TOOL</label>
                 <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
                   <option value="default">Select ...</option>
                   <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
@@ -139,7 +138,7 @@
               </div>
             </div>
             <div>
-              <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a builder tool.</span>
+              <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a tool to define some pipeline work.</span>
             </div>
 
             <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderTool">
