@@ -24,7 +24,7 @@
 
         <card >
           <template slot="header">
-            <div style="display:flex;flex-direction:row;padding-bottom:15px;">
+            <div style="display:flex;flex-direction:row">
               <div style="background-color:#e6ede8;padding-left:100px;padding-top:20px;padding-bottom:10px;width:80%">
                 <h3 style="margin-top:0px;font-weight:700;" class="card-title">Quality criteria define the CI/CD pipeline work</h3>
                 <p style="padding-top:20px">
@@ -66,7 +66,6 @@
             </div>
           </template>
           <template class="card-body">
-
 
             <div v-show="showCredInfo" style="padding-top:20px;margin-bottom:2rem;">
               <span class="custom-label">Credentials</span>
@@ -123,10 +122,10 @@
               </div>
             </div>
             <div v-show="criteria != 'default'" class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
-              <h5 style="font-weight:700;padding-left:15px;">Builder settings</h5>
-              <p style="padding-left:15px;font-size:14px;">According to the programming language in use, you can choose between builders. As a catch-all builder you might prefer to use the list of commands that you commonly use for carrying out the work aligned with the given criterion.</p>
+              <h4 style="font-weight:700;padding-left:15px;">Tool selection</h4>
+              <p style="padding-left:15px;font-size:15px;">A set of supported tools will be available for selection according to the criterion selected above. The catch-all <em>commands</em> tool can be used to execute alternative commands and/or additional non-supported tools.</p>
               <div class="col-12 col-md-6">
-                <label> CHOOSE A BUILDER TOOL</label>
+                <label> CHOOSE A TOOL</label>
                 <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
                   <option value="default">Select ...</option>
                   <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
@@ -139,7 +138,7 @@
               </div>
             </div>
             <div>
-              <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a builder tool.</span>
+              <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a tool to define some pipeline work.</span>
             </div>
 
             <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderTool">
@@ -150,8 +149,9 @@
               <span v-show="showErrorArgs" style="color:red; font-size:12px;padding-left:20px;">Invalid value for the selected tool.</span>
             </div>
 
+            <div style="padding-left:20px"><!-- -->
             <div v-show="builder_tool != 'default'" class="col-12 mt-2">
-              <label style="font-size:16px; max-width: inherit;"><span style='font-size:16px; color:black; font-weight: 700;'>Image:</span> {{docker_image}}</label>
+              <label style="font-size:16px; max-width: inherit;padding-left:5px"><span style='font-size:16px;padding-right:10px'>Default image:</span><span style="padding:5px 5px 5px 5px;border-radius:25px;background-color:#C6CBCC;color:#fff;font-weight:bold">{{docker_image}}</span></label>
               <div class="row" style="margin-bottom:1rem;">
                 <div style="display:contents" class="col-12 col-md-6">
                   <span class="custom-label" style="font-weight:bold;font-size:16px;">Change default image?</span>
@@ -169,16 +169,19 @@
             </div>
 
              <div v-show="change_image_yes"  class="col-12 col-md-6" style="display:grid;">
-                <label>SELECT THE SERVICE</label>
+                <span style="padding-left:15px">
+                <p style="font-size:14px;font-style:italic">A new container/service definition is required to change the default image. Please select an existing service or add a new one:</p>
+                <!-- <label>SELECT A SERVICE</label> -->
                 <select class="custom-select" id="service" v-model='service' >
                   <option value="default">Choose a service...</option>
                   <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
                 </select>
-                <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal()"><i class="fa fa-plus"></i>Service</button>
+                <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal()"><i class="fa fa-plus"></i>ADD SERVICE</button>
                 <span v-show="showErrorService" style="color:red; font-size:12px;">For the selected tool you must select a service.</span>
-              </div>
+                </span>
+            </div>
 
-
+            </div> <!-- -->
 
              <div v-show="array_selected_tools.length > 0" style="padding-top:40px;margin-bottom:2rem;">
                 <div class="text-center" style="padding-bottom:10px;">
