@@ -149,8 +149,9 @@
               <span v-show="showErrorArgs" style="color:red; font-size:12px;padding-left:20px;">Invalid value for the selected tool.</span>
             </div>
 
+            <div style="padding-left:20px"><!-- -->
             <div v-show="builder_tool != 'default'" class="col-12 mt-2">
-              <label style="font-size:16px; max-width: inherit;"><span style='font-size:16px; color:black; font-weight: 700;'>Image:</span> {{docker_image}}</label>
+              <label style="font-size:16px; max-width: inherit;padding-left:5px"><span style='font-size:16px;padding-right:10px'>Default image:</span><span style="padding:5px 5px 5px 5px;border-radius:25px;background-color:#C6CBCC;color:#fff;font-weight:bold">{{docker_image}}</span></label>
               <div class="row" style="margin-bottom:1rem;">
                 <div style="display:contents" class="col-12 col-md-6">
                   <span class="custom-label" style="font-weight:bold;font-size:16px;">Change default image?</span>
@@ -175,9 +176,9 @@
                 </select>
                 <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal()"><i class="fa fa-plus"></i>Service</button>
                 <span v-show="showErrorService" style="color:red; font-size:12px;">For the selected tool you must select a service.</span>
-              </div>
+            </div>
 
-
+            </div> <!-- -->
 
              <div v-show="array_selected_tools.length > 0" style="padding-top:40px;margin-bottom:2rem;">
                 <div class="text-center" style="padding-bottom:10px;">
