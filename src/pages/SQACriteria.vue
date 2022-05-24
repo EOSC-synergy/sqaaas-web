@@ -581,7 +581,8 @@
               }
             }
             },100)
-            console.log(this.selected_tool.docker);
+            this.change_image_yes = false;
+            this.change_image_no = true;
             this.docker_image = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.image) ? this.selected_tool.docker.image : (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.dockerfile)?'Dockerfile':''
             this.docker_lang = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.lang) ? this.selected_tool.lang : ''
             this.docker_version = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.version) ? this.selected_tool.version : ''

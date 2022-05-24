@@ -12,21 +12,21 @@
 						<template>
               <div class="row text-center">
                 <div class="col-12 col-md-4">
-                    <h2 style="line-height: 20rem; color:#007bff; text-decoration: underline;">Modules</h2>
+                    <h2 style="line-height: 25rem; color:#007bff; text-decoration: underline;">Modules</h2>
 
 
                 </div>
                 <div class="col-12 col-md-8 text-center">
                  <div class="row">
                    <div class="col-12 col-md-6 select-options text-center" @click="gotoCustomized()">
-                       <div class="text-center"  style="border: 2px solid #F1A190;max-width: 400px;height: 400px;padding: 40px;">
+                       <div class="float-right"  style="border: 2px solid #F1A190;max-width: 500px;height: 500px;padding: 40px;">
                          <img src="../../static/paas.png" alt="" class="responsive" style="opacity: 0.9;">
                          <h2 class="custom-title">Pipeline as a Service</h2>
                          <span style="color:black;">Compose customized CI/CD pipelines for your code repositories.</span>
                        </div>
                    </div>
                   <div class="col-12 col-md-6 select-options text-center"  @click="gotoFull()">
-                    <div class="text-center" style="border: 2px solid #90C7F1;max-width: 400px;height: 400px;padding: 40px;">
+                    <div class="text-center" style="border: 2px solid #90C7F1;max-width: 500px;height: 500px;padding: 40px;">
                       <img src="../../static/qaa.png" alt="" class="responsive" style="opacity: 0.9;">
                       <h2 class="custom-title">Quality Assessment & Awarding</h2>
                       <span style="color:black;">Take credit of the achievements in terms of software and service quality.</span>
@@ -74,10 +74,10 @@
 <style scoped>
 
 .responsive {
-  max-width:150px;
+  max-width:250px;
   width: 100%;
   height: auto;
-  max-height: 150px;
+  max-height: 250px;
 }
 .pos-buttons{
   display: inline-flex!important;
