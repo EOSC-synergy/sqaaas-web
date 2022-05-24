@@ -151,7 +151,7 @@
                 <div style="display:contents" class="col-12 col-md-6">
                   <span class="custom-label" style="font-weight:bold;font-size:16px;">Use custom service?</span>
                   <div class="custom-div-append">
-                    <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Define your own container service.">
+                    <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Define your own container service <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_2_criteria#running-the-tools-with-your-own-services'>more info</a>">
                       <i class="fa fa-question-circle"></i>
                     </button>
                   </div>
