@@ -220,7 +220,7 @@
                         placeholder="Container hostname. Example: processing"
                          :help="true"
                           link = 'https://docs.docker.com/compose/compose-file/compose-file-v3/#domainname-hostname-ipc-mac_address-privileged-read_only-shm_size-stdin_open-tty-user-working_dir'
-                          message = 'Docker compose oficial documentation'
+                          message = 'Docker compose official documentation'
                         v-model="service.hostname">
                       </base-input>
                       <div class="row" style="padding-left:5px;">
@@ -246,7 +246,7 @@
                                 placeholder="./"
                                 :help="true"
                                 link = 'https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes'
-                                message = 'Docker compose oficial documentation'
+                                message = 'Docker compose official documentation'
                                 v-model="volume.source">
                         </base-input>
                         <base-input class="col-12 col-md-4" type="text"
@@ -255,7 +255,7 @@
                                 placeholder="/sqaaas-build"
                                 :help="true"
                                 link = 'https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes'
-                                message = 'Docker compose oficial documentation'
+                                message = 'Docker compose official documentation'
                                 v-model="volume.target">
                         </base-input>
 

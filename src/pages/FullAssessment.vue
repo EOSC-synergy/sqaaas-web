@@ -598,7 +598,7 @@
           this.autoRefresh = false;
           this.showStatus = false;
           this.loading = false;
-          this.showErrorFailure;          
+          this.showErrorFailure;
         }
       },
       cancelExecution(){
