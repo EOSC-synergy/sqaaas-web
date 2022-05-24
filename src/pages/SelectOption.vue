@@ -15,7 +15,7 @@
                       <div class="m-auto"  style="background-color:#F1A190;max-width: 500px;height: 500px;padding: 40px;">
                         <img src="../../static/paas.png" alt="" class="responsive" style="opacity: 0.9;">
                         <h2 class="custom-title">Pipeline as a Service</h2>
-                        <span style="color:black;">Custom CI/CD pipelines based according to the quality criteria from the Software as a Service.</span>
+                        <span style="color:black;">Compose customized CI/CD pipelines for your code repositories.</span>
                       </div>
                   </div>
 
@@ -25,7 +25,7 @@
                     <div class="m-auto" style="background-color:  #90C7F1;max-width: 500px;height: 500px;padding: 40px;">
                       <img src="../../static/qaa.png" alt="" class="responsive" style="opacity: 0.9;">
                       <h2 class="custom-title">Quality Assessment & Awarding</h2>
-                      <span style="color:black;">Evaluates the level of compliance of a source code repository or running service according to the quality criteria from the Software & Service baseline.</span>
+                      <span style="color:black;">Take credit of the achievements in terms of software and service quality.</span>
                     </div>
                   </div>
               </div>
@@ -148,7 +148,7 @@
   color:black;
   font-size: 20px;
   font-weight: 700;
-  
+
 }
 
  }
