@@ -184,9 +184,9 @@
                           <span class="custom-label">No</span><base-checkbox name="credentials" v-model="config.credentials.no"></base-checkbox>
                         </div>
                         <div v-show='config.credentials.yes' style="padding-left:30px;">
-
+                          <i class="fa fa-bell" /> Credentials shall be pre-defined in Jenkins before being used in the pipeline. <a href='https://jenkins.eosc-synergy.eu/credentials/'>Head to our Jenkins instance</a> and then fill in the form below.
                           <base-input type="text" class="no-margin"
-                                label="JENKINS CREDENTIALS ID"
+                                label="JENKINS CREDENTIAL ID"
                                 :disabled="false"
                                 placeholder="userpass"
                                 v-model="credentials.id">
