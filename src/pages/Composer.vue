@@ -7,12 +7,11 @@
 
           </card> -->
           <card>
-            <template slot="header">
-                <div style="display:flex;flex-direction:row;padding-bottom:15px;">
-                  <div style="background-color:#e6ede8;padding-left:100px;padding-top:20px;padding-bottom:10px;width:80%">
+            <!-- <template slot="header">
+                <div style="display:flex;flex-direction:row;">
+                  <div style="background-color:#e6ede8;padding:10px 20px;width:100%">
                     <h3 style="margin-top:0px;font-weight:700;" class="card-title">Services make up the testing and building environment</h3>
-                    <p style="padding-top:20px">
-                        <!--<i style="color: #0073ff;" class="fa fa-info-circle" aria-hidden="true"></i>-->
+                    <p style="">
                         Compose your environment, i.e. the tools that run the checks to be defined in the next <span style="font-style:italic">'Criteria'</span> step. Here you will be able to define the containers that provide those tools, either by pulling existing images from registries (e.g. from Docker Hub) or building your own (e.g. Dockerfiles)
                     </p>
                     <div>
@@ -29,9 +28,9 @@
                     <img src="../../static/service.png" alt="" style="opacity: 0.5">
                   </div>
                 </div>
-            </template>
+            </template> -->
             <template>
-              <div class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
+              <div class="row" style="padding-left:20px;margin-bottom:1rem;">
                 <div class="col-12 col-md-6">
                   <base-input style="margin-bottom:0px;" type="text"
                       label="SERVICE NAME"
@@ -82,12 +81,12 @@
                       <div class="col-12 text-right">
                         <span v-show="showErrorPathDockerfile" style="color:red;font-size:12px;">This field is required</span>
                     </div>
-                      <base-input style="padding-top:1rem;" type="text" class="no-margin"
+                      <!-- <base-input style="padding-top:1rem;" type="text" class="no-margin"
                           label="DOCKER REGISTRY URL (OPTIONAL)"
                           :disabled="false"
                           placeholder="https://hub.docker.com/"
                           v-model="url_service">
-                    </base-input>
+                    </base-input> -->
                     <label for="" style="padding-top:20px;">BUILD ARGUMENTS (OPTIONAL)</label>
                     <div class="row" >
                       <base-input class="col-12 col-md-5" type="text"
@@ -181,7 +180,7 @@
               <!-- <div  class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
                 <span class="custom-label">Push Image to Registry?</span>
                 <div class="custom-div-append">
-                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Push the docker-compose service image to the Docker Registry <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html?highlight=push#environment' title='test add link'>More info</a>">
+                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Push the docker-compose service image to the Docker Registry <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html?highlight=push#environment' title='test add link'>more info</a>">
                           <i class="fa fa-question-circle"></i>
                         </button>
                       </div>
@@ -202,12 +201,11 @@
                 <div class="card">
                   <div class="card-header" role="tab" id="accordionHeadingGeneral">
                     <div class="mb-0 row">
-                      <div class="col-12 no-padding accordion-head">
+                      <div class="col-12 accordion-head" style="padding:0px 20px 0px 20px;">
                         <a data-toggle="collapse" id='link_accordion' data-parent="#accordion_general" href="#accordionBodyGeneral" aria-expanded="false" aria-controls="accordionBodyGeneral"
                           class="collapsed ">
                           <i class="fa fa-angle-down" aria-hidden="true"></i>
-                          <p>ADVANCED OPTIONS</p>
-                           <p>(Volumes)</p>
+                          <p>ADVANCED OPTIONS (Volumes)</p>
                         </a>
                       </div>
                     </div>
@@ -222,7 +220,7 @@
                         placeholder="Container hostname. Example: processing"
                          :help="true"
                           link = 'https://docs.docker.com/compose/compose-file/compose-file-v3/#domainname-hostname-ipc-mac_address-privileged-read_only-shm_size-stdin_open-tty-user-working_dir'
-                          message = 'Docker compose oficial documentation'
+                          message = 'Docker compose official documentation'
                         v-model="service.hostname">
                       </base-input>
                       <div class="row" style="padding-left:5px;">
@@ -230,7 +228,7 @@
                           <div class="row">
                             <span class="custom-label" style="font-size: 12px;text-transform: uppercase;padding-top:10px;">Volume Type</span>
                             <div class="custom-div-append">
-                              <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Docker compose oficial documentation <a target='blank' href='https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes' title='test add link'>More info</a>">
+                              <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Docker compose official documentation <a target='blank' href='https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes' title='test add link'>more info</a>">
                                 <i class="fa fa-question-circle"></i>
                               </button>
                             </div>
@@ -248,7 +246,7 @@
                                 placeholder="./"
                                 :help="true"
                                 link = 'https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes'
-                                message = 'Docker compose oficial documentation'
+                                message = 'Docker compose official documentation'
                                 v-model="volume.source">
                         </base-input>
                         <base-input class="col-12 col-md-4" type="text"
@@ -257,7 +255,7 @@
                                 placeholder="/sqaaas-build"
                                 :help="true"
                                 link = 'https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes'
-                                message = 'Docker compose oficial documentation'
+                                message = 'Docker compose official documentation'
                                 v-model="volume.target">
                         </base-input>
 
@@ -359,7 +357,7 @@
                 <button type="button" class="btn-outline btn btn-info" @click="addService()"><i class="fa fa-plus"></i>ADD SERVICE</button>
               </div>
 
-              <div v-show="showServices" style="padding-top:20px;margin-bottom:2rem;">
+              <div v-show="showServices" style="padding-top:20px;">
                 <div class="text-center" style="padding-bottom:10px;">
                   <span class="custom-table-title">Configured Services</span>
                 </div>
@@ -406,12 +404,12 @@
             </template>
             <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
               <div class="col-12 col-md-12 text-center">
-                  <button @click="back()" type="button" class="btn btn-next-back btn-back" >
+                  <!-- <button @click="back()" type="button" class="btn btn-next-back btn-back" >
                       BACK
-                  </button>
-                  <button @click="next()" type="button"  class="btn btn-next btn-next-back">
-                      NEXT
-                  </button>
+                  </button> -->
+                  <!-- <button @click="next()" type="button"  class="btn btn-next btn-next-back">
+
+                  </button> -->
               </div>
             </div>
           </card>
@@ -465,7 +463,6 @@
         showErrorImageName: false,
         showErrorPathDockerfile: false,
         showErrorContName: false,
-        url_service:'',
         service:{
           image:'',
           container_name:'',
@@ -552,10 +549,6 @@
       'id_cred_service'(val){
         if(val != ''){
           this.showErrorCredID = false;
-        }
-      },
-      'url_service'(val){
-        if(val != ''){
         }
       },
       'envComposeYesNo.yes'(val){
@@ -719,12 +712,11 @@
           this.showErrorImageName = false;
           this.showErrorContName = false;
           this.showErrorSelectOption = false;
-
+          this.$emit('service_name', this.service.container_name);
           this.services[this.service.container_name]={
               image: {
               name: '',
               registry:{
-                url: '',
                 push: false,
                 credential_id:''
 
@@ -744,7 +736,6 @@
           }
           if(this.pull_build == 'build'){
             // this.services[this.service.container_name].image.registry.credential_id = this.id_cred_service;
-            this.services[this.service.container_name].image.registry.url = this.url_service;
             this.services[this.service.container_name].build.dockerfile = this.path_dockerfile;
             this.services[this.service.container_name].build.args = this.arg_push;
 
@@ -843,7 +834,6 @@
         this.cleanArg();
         this.arg_push = {};
         this.showArg = false;
-        this.url_service = '';
         this.id_cred_service = '';
         this.showErrorCredID = false;
         this.pull_build = 'default';
@@ -920,12 +910,10 @@
                 //  _this.$store.state.docker_compose.push_services.push(array_name[1]);
                  _this.$store.state.docker_compose.services[array_name[1]].image.registry.push=true;
                  _this.$store.state.docker_compose.services[array_name[1]].image.registry.credential_id=this.id_cred_service;
-                 _this.$store.state.docker_compose.services[array_name[1]].image.registry.url=this.url_service;
                }else{
                  // _this.$store.state.docker_compose.push_services.splice(index, 1);
                   _this.$store.state.docker_compose.services[array_name[1]].image.registry.push=false;
                  _this.$store.state.docker_compose.services[array_name[1]].image.registry.credential_id='';
-                 _this.$store.state.docker_compose.services[array_name[1]].image.registry.url='https://hub.docker.com/';
                }
              }
            }

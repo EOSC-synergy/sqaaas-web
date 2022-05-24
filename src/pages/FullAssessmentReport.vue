@@ -29,6 +29,10 @@
                     </div>
                   </div>
 
+                  <div class="text-center">
+                    <h4><a href="https://docs.sqaaas.eosc-synergy.eu/quality_assessment_and_awarding/synergy_badging_approach" target="blank">Learn more about the EOSC-Synergy badging approach</a></h4>
+                  </div>
+
                   <div class="row" style="margin-bottom:4rem;">
                     <div v-show="showBadgeSoftware == true" :class="{'col-md-4':showBadgeService == true && showBadgeFair == true, 'col-md-6':((showBadgeService == true && showBadgeFair == false) || (showBadgeService == false && showBadgeFair == true)), 'col-md-12':showBadgeService == false && showBadgeFair == false}" class="col-12 text-center" id="badge-software" style="padding-top:20px;padding-left:15px;">
                     </div>
@@ -63,22 +67,24 @@
                               </div>
 
                             </div>
-                            <div class="row" v-if="crit['filtered_reason']">
-                              <p v-for="(fr, z) in crit['filtered_reason']" :key="z" style="margin-bottom:0px; font-size:12px; color:rgb(108, 117, 125)">
-                                {{crit['filtered_reason'][z]}}
 
-                              </p>
-
-                            </div>
                           </div>
 
                         </template>
 
                         <template class="card-body">
+                          <div class="row" style="padding:0px 20px;">
+                              <div v-if="crit['filtered_reason']">
+                                <p v-for="(fr, z) in crit['filtered_reason']" :key="z" style="margin-bottom:0px; font-size:12px; color:rgb(108, 117, 125)">
+                                  {{crit['filtered_reason'][z]}}
+                                </p>
+                              </div>
+                            </div>
                           <div>
                               <div class="table-responsive">
                                 <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                                     <tbody v-for="(subcrit, index1) in crit['subcriteria']" :key="index1">
+
                                             <tr
                                                 style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
                                                 <td style="padding-right: 10px; padding-left: 10px;padding-bottom:0px;">
@@ -220,6 +226,7 @@
           'QC.Sec':'fa-lock',
           'QC.Sty':'fa-bullseye',
           'QC.Uni':'fa-cogs',
+          'QC.Ver':'fa-code-fork'
         },
         mapping_criteria_name:{
           'QC.Acc':'Code Accessibility',
@@ -230,8 +237,8 @@
           'QC.Met':'Code metadata',
           'QC.Sec':'Security',
           'QC.Sty':'Code Style',
-          'QC.Uni':'Unit Testing'
-
+          'QC.Uni':'Unit Testing',
+          'QC.Ver':'Versioning'
         }
 
       }
@@ -277,39 +284,46 @@
      var _this = this
      this.$nextTick(function () {
        console.log(this.$store.state.report)
-        if(this.$store.state.report.badge['software']){
+        if(this.$store.state.report.badge['software'] && this.$store.state.report.badge['software']['data']){
           this.showBadgeSoftware = true;
           if($("#badge-software").has("blockquote").length == 0){
             var _div = `
                 <div class="text-center">
-
-                <img style="width:400px;height:400px" src="${this.$store.state.report.badge["software"]["data"]['image']}"></img>
-                <div class="row" style="justify-content: center;">
-                    <a style="font-size:18px; border:1px solid; margin-right: 0.25rem;" target="blank" href="${this.$store.state.report.badge["software"]["verification_url"]}"><span style="margin:20px;">Verify</span></a>
-                    <a style="font-size:18px; border:1px solid; margin-left: 0.25rem;" target="blank" href="${this.$store.state.report.badge["software"]["data"]["openBadgeId"]}"><span style="margin:20px;">Share</span></a>
-
-                </div>
-
+                  <img style="width:400px;height:400px" src="${this.$store.state.report.badge["software"]["data"]['image']}"></img>
+                  <div class="row" style="justify-content: center;">
+                      <a style="font-size:18px; border:1px solid; margin-right: 0.25rem;" target="blank" href="${this.$store.state.report.badge["software"]["verification_url"]}"><span style="margin:20px;">Verify</span></a>
+                      <a style="font-size:18px; border:1px solid; margin-left: 0.25rem;" target="blank" href="${this.$store.state.report.badge["software"]["data"]["openBadgeId"]}"><span style="margin:20px;">Go to Badgr's award page</span></a>
+                  </div>
                 </div>`
-            // $( "#badge-software" ).append(img);
-            // var btn1 = `<a target="blank" href="${this.$store.state.report.badge["software"]["verification_url"]}"><span style="margin:20px;">Verify</span></a>`;
             $("#badge-software").append(_div)
           }
         }
-        if(this.$store.state.report.badge['service']){
+        if(this.$store.state.report.badge['service'] && this.$store.state.report.badge['service']['data']){
           this.showBadgeService = true;
           if($("#badge-service").has("blockquote").length == 0){
-            $( "#badge-service" ).append(this.$store.state.report.badge['service']['share']);
-            var btn2 = `<a style="font-size:18px; border:1px solid" target="blank" href="${this.$store.state.report.badge["service"]["verification_url"]}"><span style="margin:20px;">Verify & Share</span></a>`;
-            $("#badge-software").append(btn2)
+            var _div = `
+                <div class="text-center">
+                  <img style="width:400px;height:400px" src="${this.$store.state.report.badge["service"]["data"]['image']}"></img>
+                  <div class="row" style="justify-content: center;">
+                      <a style="font-size:18px; border:1px solid; margin-right: 0.25rem;" target="blank" href="${this.$store.state.report.badge["service"]["verification_url"]}"><span style="margin:20px;">Verify</span></a>
+                      <a style="font-size:18px; border:1px solid; margin-left: 0.25rem;" target="blank" href="${this.$store.state.report.badge["service"]["data"]["openBadgeId"]}"><span style="margin:20px;">Go to Badgr's award page</span></a>
+                  </div>
+                </div>`
+            $("#badge-service").append(_div)
           }
         }
-        if(this.$store.state.report.badge['fair']){
+        if(this.$store.state.report.badge['fair'] && this.$store.state.report.badge['fair']['data'] ){
           this.showBadgeFair = true;
           if($("#badge-fair").has("blockquote").length == 0){
-            $( "#badge-fair" ).append(this.$store.state.report.badge['fair']['share']);
-            var btn3 = `<a style="font-size:18px; border:1px solid" target="blank" href="${this.$store.state.report.badge["fair"]["verification_url"]}"><span style="margin:20px;">Verify & Share</span></a>`;
-            $("#badge-software").append(btn3)
+            var _div = `
+                <div class="text-center">
+                  <img style="width:400px;height:400px" src="${this.$store.state.report.badge["fair"]["data"]['image']}"></img>
+                  <div class="row" style="justify-content: center;">
+                      <a style="font-size:18px; border:1px solid; margin-right: 0.25rem;" target="blank" href="${this.$store.state.report.badge["fair"]["verification_url"]}"><span style="margin:20px;">Verify</span></a>
+                      <a style="font-size:18px; border:1px solid; margin-left: 0.25rem;" target="blank" href="${this.$store.state.report.badge["fair"]["data"]["openBadgeId"]}"><span style="margin:20px;">Go to Badgr's award page</span></a>
+                  </div>
+                </div>`
+            $("#badge-fair").append(_div)
           }
         }
         $('blockquote p').css('text-align','center');
@@ -450,6 +464,10 @@ input[type=number]::-webkit-inner-spin-button {
 
 .no-margin-card{
   padding-top: 0px!important;
+}
+
+.modal-dialog{
+  transform:none!important;
 }
 </style>
 

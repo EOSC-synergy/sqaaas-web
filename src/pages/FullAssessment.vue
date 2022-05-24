@@ -56,7 +56,7 @@
                  <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
                     <span class="custom-label">External repo for documentation?</span>
                     <div class="custom-div-append">
-                      <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance">
+                      <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>more info</a>">
                         <i class="fa fa-question-circle"></i>
                       </button>
                   </div>
@@ -169,9 +169,10 @@
 
                 </div> -->
 
+
                 <div style="padding:20px;">
                   <button class="btn btn-primary btn-fill" @click="getResults()">Start Assessment</button>
-                  <!-- <button v-show="showReportBtn" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#exampleModal">See Report</button> -->
+                  <!-- <button v-show="showReportBtn" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#errorModal">See Report</button> -->
                    <!-- <button v-show="showReportBtn" style="margin-right:20px;" class="btn btn-primary btn-fill" @click="goToReport()">See Report</button> -->
                   <!-- <button v-show="showReportBtn" style="color: #fff;background-color: #6c757d;border-color: #6c757d;" class="btn  " @click="refresh()"><i class="fa fa-refresh" style="padding-right:5px;" aria-hidden="true"></i> New Assessment</button> -->
                 </div>
@@ -249,7 +250,13 @@
         build_url:'',
         showBuildUrl:false,
         build_status:'',
-        showReportBtn: false
+        showReportBtn: false,
+        showErrorURL:false,
+        repo_info:{},
+        showErrorAPI:false,
+        showErrorFailure:false,
+        message_error: ''
+
 
       }
     },
@@ -373,7 +380,7 @@
         //     branch:this.doc.branch.trim()
         //   }
         // }
-
+        this.showErrorAPI = false;
         if(this.params.url != ''){
           var data = {
             repo_code:{
@@ -399,15 +406,26 @@
         console.log(response)
         if(response.status == 201 && response.data.id){
           this.pipeline_id = response.data.id;
-          // this.loading = true;
-          // this.modal_message = 'Submitting Pipeline ...';
-
           this.runAssessmentPipelineCall(this.pipeline_id,this.runAssessmentPipelineCallBack)
         }else if(response.status == 500){
-          this.notifyVue(response.detail?response.detail:'Error')
+          this.$swal.fire({
+            title: 'An unexpected error occurred while running the assessment!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+            confirmButtonColor: '#E14726',
+          })
+          this.loading =false;
         }else{
-          console.log(response)
-          this.notifyVue(response.reason?response.reason:'Error')
+           this.$swal.fire({
+            title: 'The quality assessment has failed to complete!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#E14726',
+          })
+          this.loading =false;
         }
       },
       runAssessmentPipelineCallBack(response){
@@ -417,11 +435,23 @@
           this.$router.replace(this.$route.query.redirect || "/logout");
           this.loading = false;
         }else if(response.status == 500){
-          this.notifyVue(response.detail?response.detail:'Error')
+           this.$swal.fire({
+            title: 'An unexpected error occurred while running the assessment!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+            confirmButtonColor: '#E14726',
+          })
           this.loading = false;
         }else{
-          console.log(response)
-          this.notifyVue(response.reason?response.reason:'Error')
+          this.$swal.fire({
+             title: 'The quality assessment has failed to complete!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#E14726',
+          })
           this.loading = false;
         }
 
@@ -501,6 +531,25 @@
           if(response.data.build_status == "FAILURE"){
             this.loading = false;
             this.autoRefresh = false;
+            this.$swal.fire({
+              title: 'The execution of the pipeline has failed!',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              confirmButtonColor: '#E14726',
+              footer: `<a style='color:red' href="${this.build_url}" target="_blank">Why do I have this issue?</a>`
+            })
+          }
+
+          if(response.data.build_status == "ABORTED"){
+            this.loading = false;
+            this.autoRefresh = false;
+            this.$swal.fire({
+              title: 'The execution of the pipeline has failed!',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              confirmButtonColor: '#E14726',
+              footer: `<a style='color:red' href="${this.build_url}" target="_blank">Why do I have this issue?</a>`
+            })
           }
 
 
@@ -517,19 +566,39 @@
           this.$store.state.status = '';
           this.$store.state.build_url = '';
           this.loading = false;
-          this.notifyVue(response.reason?response.reason:"Pipeline has not been execute");
+          this.$swal.fire({
+             title: 'Pipeline has not been execute!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#E14726',
+          })
 
         }else if(response.status == 500){
-          this.notifyVue(response.detail?response.detail:'Error')
+           this.$swal.fire({
+             title: 'The quality assessment has failed to complete!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#E14726',
+            footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+          })
           this.autoRefresh = false;
           this.showStatus = false;
           this.loading = false;
+
         }else{
-          console.log(response)
-          this.notifyVue(response.reason?response.reason:'Error')
-          his.autoRefresh = false;
+           this.$swal.fire({
+            title: 'Error!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            footer: `<a :href="${this.build_url}" target="_blank">Why do I have this issue?</a>`
+          })
+          this.autoRefresh = false;
           this.showStatus = false;
           this.loading = false;
+          this.showErrorFailure;
         }
       },
       cancelExecution(){
@@ -550,12 +619,25 @@
           this.loading = false;
           this.$router.replace(this.$route.query.redirect || "/logout");
         }else if(response.status == 500){
-          this.notifyVue(response.detail?response.detail:'Error')
+           this.$swal.fire({
+             title: 'An unexpected error occurred while running the assessment!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+            confirmButtonColor: '#E14726',
+          })
           this.$store.state.report = {};
           this.build_status = '';
+
         }else{
-          console.log(response)
-          this.notifyVue(response.reason?response.reason:'Error')
+          this.$swal.fire({
+            title: 'The quality assessment has failed to complete!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#E14726',
+          })
           this.$store.state.report = {};
           this.build_status = '';
         }
@@ -571,21 +653,36 @@
           this.loading = false;
           this.$router.replace(this.$route.query.redirect || "/logout");
          }else if(response.status == 500){
-          this.notifyVue(response.detail?response.detail:'Error')
-         this.autoRefresh = false;
-          this.showStatus = false;
-          this.loading = false;
-        }else{
-          console.log(response)
-          this.notifyVue(response.reason?response.reason:'Error')
+           this.$swal.fire({
+             title: 'An unexpected error occurred while running the assessment!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+            confirmButtonColor: '#E14726',
+          })
           this.autoRefresh = false;
           this.showStatus = false;
           this.loading = false;
+        }else{
+           this.$swal.fire({
+            title: 'The quality assessment has failed to complete!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#E14726',
+          })
+          this.autoRefresh = false;
+          this.showStatus = false;
+          this.loading = false;
+          this.showErrorFailure = true;
+          $('#errorModal').modal('show');
         }
       },
 
   },
   created(){
+
       this.pipeline_id = '';
       this.params.url = '';
       this.params.brach = '';
@@ -706,6 +803,10 @@ input[type=number]::-webkit-inner-spin-button {
   color:black;
   font-weight:700;
 
+}
+
+.modal-dialog{
+  transform:none!important;
 }
 
 </style>

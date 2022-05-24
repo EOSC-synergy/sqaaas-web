@@ -11,7 +11,7 @@
         <!-- <div class="custom-div-append"> -->
             <button v-if="help == true" style="padding: 0.3rem 0.75rem;margin-bottom: 0 !important;font-size: 1rem !important;font-weight: 400 !important;color: #495057 !important;border: none !important;
                                         height: 40px !important;"
-            type="button" class="btn" data-toggle="tooltip" data-html="true" data-placement="top" :title="message + ' ' + '<a target=`blank` href=' + link + '>More info</a>'">
+            type="button" class="btn" data-toggle="tooltip" data-html="true" data-placement="top" :title="message + ' ' + '<a target=`blank` href=' + link + '>more info</a>'">
               <i class="fa fa-question-circle"></i>
             </button>
           <!-- </div> -->
