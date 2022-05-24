@@ -73,7 +73,7 @@
                         </template>
 
                         <template class="card-body">
-                          <div class="row" v-for="(crit, index) in $store.state.report.report" :key="index">
+                          <div class="row" style="padding:0px 20px;">
                               <div v-if="crit['filtered_reason']">
                                 <p v-for="(fr, z) in crit['filtered_reason']" :key="z" style="margin-bottom:0px; font-size:12px; color:rgb(108, 117, 125)">
                                   {{crit['filtered_reason'][z]}}
@@ -289,34 +289,41 @@
           if($("#badge-software").has("blockquote").length == 0){
             var _div = `
                 <div class="text-center">
-
-                <img style="width:400px;height:400px" src="${this.$store.state.report.badge["software"]["data"]['image']}"></img>
-                <div class="row" style="justify-content: center;">
-                    <a style="font-size:18px; border:1px solid; margin-right: 0.25rem;" target="blank" href="${this.$store.state.report.badge["software"]["verification_url"]}"><span style="margin:20px;">Verify</span></a>
-                    <a style="font-size:18px; border:1px solid; margin-left: 0.25rem;" target="blank" href="${this.$store.state.report.badge["software"]["data"]["openBadgeId"]}"><span style="margin:20px;">Share</span></a>
-
-                </div>
-
+                  <img style="width:400px;height:400px" src="${this.$store.state.report.badge["software"]["data"]['image']}"></img>
+                  <div class="row" style="justify-content: center;">
+                      <a style="font-size:18px; border:1px solid; margin-right: 0.25rem;" target="blank" href="${this.$store.state.report.badge["software"]["verification_url"]}"><span style="margin:20px;">Verify</span></a>
+                      <a style="font-size:18px; border:1px solid; margin-left: 0.25rem;" target="blank" href="${this.$store.state.report.badge["software"]["data"]["openBadgeId"]}"><span style="margin:20px;">Go to Badgr's award page</span></a>
+                  </div>
                 </div>`
-            // $( "#badge-software" ).append(img);
-            // var btn1 = `<a target="blank" href="${this.$store.state.report.badge["software"]["verification_url"]}"><span style="margin:20px;">Verify</span></a>`;
             $("#badge-software").append(_div)
           }
         }
         if(this.$store.state.report.badge['service'] && this.$store.state.report.badge['service']['data']){
           this.showBadgeService = true;
           if($("#badge-service").has("blockquote").length == 0){
-            $( "#badge-service" ).append(this.$store.state.report.badge['service']['share']);
-            var btn2 = `<a style="font-size:18px; border:1px solid" target="blank" href="${this.$store.state.report.badge["service"]["verification_url"]}"><span style="margin:20px;">Verify & Share</span></a>`;
-            $("#badge-software").append(btn2)
+            var _div = `
+                <div class="text-center">
+                  <img style="width:400px;height:400px" src="${this.$store.state.report.badge["service"]["data"]['image']}"></img>
+                  <div class="row" style="justify-content: center;">
+                      <a style="font-size:18px; border:1px solid; margin-right: 0.25rem;" target="blank" href="${this.$store.state.report.badge["service"]["verification_url"]}"><span style="margin:20px;">Verify</span></a>
+                      <a style="font-size:18px; border:1px solid; margin-left: 0.25rem;" target="blank" href="${this.$store.state.report.badge["service"]["data"]["openBadgeId"]}"><span style="margin:20px;">Go to Badgr's award page</span></a>
+                  </div>
+                </div>`
+            $("#badge-service").append(_div)
           }
         }
         if(this.$store.state.report.badge['fair'] && this.$store.state.report.badge['fair']['data'] ){
           this.showBadgeFair = true;
           if($("#badge-fair").has("blockquote").length == 0){
-            $( "#badge-fair" ).append(this.$store.state.report.badge['fair']['share']);
-            var btn3 = `<a style="font-size:18px; border:1px solid" target="blank" href="${this.$store.state.report.badge["fair"]["verification_url"]}"><span style="margin:20px;">Verify & Share</span></a>`;
-            $("#badge-software").append(btn3)
+            var _div = `
+                <div class="text-center">
+                  <img style="width:400px;height:400px" src="${this.$store.state.report.badge["fair"]["data"]['image']}"></img>
+                  <div class="row" style="justify-content: center;">
+                      <a style="font-size:18px; border:1px solid; margin-right: 0.25rem;" target="blank" href="${this.$store.state.report.badge["fair"]["verification_url"]}"><span style="margin:20px;">Verify</span></a>
+                      <a style="font-size:18px; border:1px solid; margin-left: 0.25rem;" target="blank" href="${this.$store.state.report.badge["fair"]["data"]["openBadgeId"]}"><span style="margin:20px;">Go to Badgr's award page</span></a>
+                  </div>
+                </div>`
+            $("#badge-fair").append(_div)
           }
         }
         $('blockquote p').css('text-align','center');
