@@ -41,12 +41,12 @@
                           <option v-for="(crit,key) in array_criterias" :key="key" :value="crit['id']">{{crit['id']}}</option>
                         </select>
                       </div>
-                      <div v-show="criteria != 'default'" style="margin:auto;border-radius:5px;">
+                      <div v-show="criteria != 'default'" style="border-radius:5px;">
                         <div class="quote-custom">
-                          <p v-show="info && info['msg']" style="font-weight:700;font-size:16px;font-style:italic;padding-left:40px; margin-bottom:0px;">{{(info) ? info['msg'] : ''}}
+
+                          <p v-show="info && info['msg']" style="font-weight:700;font-size:16px;padding-left:20px; margin-bottom:0px;"><span class="badge badge-light">Scope</span> <em>{{(info) ? info['msg'] : ''}}</em> <span v-show="info && info['docs']">(<a style="text-decoration: underline" :href="(info) ? info['docs'] : ''" target="_blank">more details</a>)</span>
                           </p>
-                          <p v-show="info && info['improves']" style="font-weight:700;font-size:16px;font-style:italic;padding-left:40px; ; margin-bottom:0px;">{{(info) ? 'Improves: '+info['improves'] : ''}}
-                          <span v-show="info && info['docs']">(<a style="text-decoration: underline" :href="(info) ? info['docs'] : ''" target="_blank">See More</a>)</span>
+                          <p v-show="info && info['improves']" style="font-weight:700;font-size:16px;padding-left:20px;margin-bottom:0px"><span class="badge badge-light">Improves</span> {{(info) ? info['improves'] : ''}}
                           </p>
 
                         </div>
