@@ -151,7 +151,9 @@
 
             <div style="padding-left:20px"><!-- -->
             <div v-show="builder_tool != 'default'" class="col-12 mt-2">
-              <label style="font-size:16px; max-width: inherit;padding-left:5px"><span style='font-size:16px;padding-right:10px'>Default image:</span><span style="padding:5px 5px 5px 5px;border-radius:25px;background-color:#C6CBCC;color:#fff;font-weight:bold">{{docker_image}}</span></label>
+
+              <label style="font-size:16px; max-width: inherit;padding:5px 5px 5px 5px;border-radius:25px;background-color:#B5B8B8;color:#fff">image:<span style="font-weight:bold"> {{docker_image}}</span></label>
+
               <div class="row" style="margin-bottom:1rem;">
                 <div style="display:contents" class="col-12 col-md-6">
                   <span class="custom-label" style="font-weight:bold;font-size:16px;">Change default image?</span>
