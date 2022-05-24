@@ -147,7 +147,7 @@
               <span v-show="docker_lang !=''" style="margin:0px 5px;" class="badge badge-primary">lang:<span style="font-weight:bold"> {{docker_lang}}</span></span>
               <span v-show="docker_version !=''" style="margin:0px 5px;" class="badge badge-danger">version:<span style="font-weight:bold"> {{docker_version}}</span></span>
 
-              <div class="row" style="margin-bottom:1rem;">
+              <div class="row" style="padding-top:20px">
                 <div style="display:contents" class="col-12 col-md-6">
                   <span class="custom-label" style="font-weight:bold;font-size:16px;">Use custom service?</span>
                   <div class="custom-div-append">
