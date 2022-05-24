@@ -12,9 +12,7 @@
 						<template>
               <div class="row text-center">
                 <div class="col-12 col-md-4">
-                    <h2 style="line-height: 25rem; color:#007bff; text-decoration: underline;">Modules</h2>
-
-
+                    <h1 style="font-size:50px;font-weight:bold;color:#76BAC6;padding-top:100px">SQAaaS module selection</h1>
                 </div>
                 <div class="col-12 col-md-8 text-center">
                  <div class="row">
@@ -35,7 +33,7 @@
 
                  </div>
                 </div>
-                
+
 
               </div>
 
