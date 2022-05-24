@@ -151,12 +151,14 @@
 
             <div style="padding-left:20px"><!-- -->
             <div v-show="builder_tool != 'default'" class="col-12 mt-2">
-              <label style="font-size:16px; max-width: inherit;padding-left:5px"><span style='font-size:16px;padding-right:10px'>Default image:</span><span style="padding:5px 5px 5px 5px;border-radius:25px;background-color:#C6CBCC;color:#fff;font-weight:bold">{{docker_image}}</span></label>
+
+              <label style="font-size:16px; max-width: inherit;padding:5px 5px 5px 5px;border-radius:25px;background-color:#B5B8B8;color:#fff">image:<span style="font-weight:bold"> {{docker_image}}</span></label>
+
               <div class="row" style="margin-bottom:1rem;">
                 <div style="display:contents" class="col-12 col-md-6">
-                  <span class="custom-label" style="font-weight:bold;font-size:16px;">Change default image?</span>
+                  <span class="custom-label" style="font-weight:bold;font-size:16px;">Use custom service?</span>
                   <div class="custom-div-append">
-                    <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Change default image.">
+                    <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Use your own service to run the selected tool.">
                       <i class="fa fa-question-circle"></i>
                     </button>
                   </div>
@@ -170,7 +172,7 @@
 
              <div v-show="change_image_yes"  class="col-12 col-md-6" style="display:grid;">
                 <span style="padding-left:15px">
-                <p style="font-size:14px;font-style:italic">A new container/service definition is required to change the default image. Please select an existing service or add a new one:</p>
+                <p style="font-size:14px;font-style:italic">Please select an existing service or add a new one:</p>
                 <!-- <label>SELECT A SERVICE</label> -->
                 <select class="custom-select" id="service" v-model='service' >
                   <option value="default">Choose a service...</option>
