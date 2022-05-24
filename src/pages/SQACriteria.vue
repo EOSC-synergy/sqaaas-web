@@ -44,11 +44,11 @@
                       <div v-show="criteria != 'default'" style="margin:auto;border-radius:5px;">
                         <div class="quote-custom">
                           <p v-show="info && info['msg']" style="font-weight:700;font-size:16px;font-style:italic;padding-left:40px; margin-bottom:0px;">{{(info) ? info['msg'] : ''}}
-                          </p> 
+                          </p>
                           <p v-show="info && info['improves']" style="font-weight:700;font-size:16px;font-style:italic;padding-left:40px; ; margin-bottom:0px;">{{(info) ? 'Improves: '+info['improves'] : ''}}
                           <span v-show="info && info['docs']">(<a style="text-decoration: underline" :href="(info) ? info['docs'] : ''" target="_blank">See More</a>)</span>
                           </p>
-                          
+
                         </div>
                       </div>
                   </div>
@@ -149,9 +149,9 @@
 
               <div class="row" style="margin-bottom:1rem;">
                 <div style="display:contents" class="col-12 col-md-6">
-                  <span class="custom-label" style="font-weight:bold;font-size:16px;">Change default image?</span>
+                  <span class="custom-label" style="font-weight:bold;font-size:16px;">Use custom service?</span>
                   <div class="custom-div-append">
-                    <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Change default image.">
+                    <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Define your own container service.">
                       <i class="fa fa-question-circle"></i>
                     </button>
                   </div>
@@ -164,7 +164,7 @@
             </div>
 
              <div v-show="change_image_yes"  class="col-12 col-md-6" style="display:grid;">
-                <label>SELECT THE SERVICE</label>
+                <!--<label>SELECT THE SERVICE</label>-->
                 <select class="custom-select" id="service" v-model='service' >
                   <option value="default">Choose a service...</option>
                   <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
@@ -496,7 +496,7 @@
           for (var i in this.array_criterias){
             if (this.array_criterias[i].id == val){
               this.array_tools = [...this.array_criterias[i]['tools']]
-              this.info = this.array_criterias[i]['description']             
+              this.info = this.array_criterias[i]['description']
             }
           }
           this.showErrorCriteria = false;
@@ -603,7 +603,7 @@
       checkServices(){
         if(!Object.hasOwnProperty.call(this.$store.state.docker_compose.services, this.service)){
           this.service = Object.keys(this.$store.state.docker_compose.services)[0];
-        }        
+        }
         this.docker_image = this.service;
         this.docker_lang = '';
         this.docker_version = '';
