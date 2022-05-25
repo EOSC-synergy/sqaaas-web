@@ -183,7 +183,7 @@
                                                   {{index}}
                                               </div>
                                           </td>
-                                          <td  
+                                          <td
                                               style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                               <div v-for="(repo_criteria, index) in criteria.repos" :key="index" >
                                                 <div class="row">
@@ -199,9 +199,9 @@
                                                     <p class="text-center" style="font-size:14px;margin-bottom:0px;">
                                                       -
                                                     </p>
-                                                   
+
                                                   </div>
-                                                  
+
                                                 </div>
                                               </div>
 
@@ -375,9 +375,9 @@
                           </div> -->
 
 
-                          <div class="row" v-show="showFieldsPipeline">
+                          <div class="row">
                             <base-input class="col-12 col-md-6 no-margin" type="text"
-                              label="URL of the pipeline's target repository"
+                              label="resultModal pipeline's target repository"
                               :disabled="false"
                               placeholder="https://github.com/EOSC-synergy/sqaaas-web.git"
                               v-model="repo_url_mimic">
@@ -389,7 +389,7 @@
                                 v-model="repo_branch_mimic">
                             </base-input>
                           </div>
-                          <div class="text-center" v-show="showFieldsPipeline">
+                          <div class="text-center">
                             <p style="font-style:italic;color: #A7A1A0;margin-bottom:0px;"><i style="color:#A7A1A0;" class="fa fa-bell" aria-hidden="true"></i> Repositories MUST be public for the checkout to work.</p>
                           </div>
 
@@ -408,21 +408,6 @@
                               </div>
                             </div>
 
-
-                         
-                          <div style="padding-bottom:15px;padding-top:20px;" class="text-center col-12" v-show="showStatus">
-                              <span v-if="build_status == 'SUCCESS'" class="badge badge-success"  style="font-size:18px;font-weight:700;">Pipeline was executed successfully! <i style="color:white;" class="fa fa-check" aria-hidden="true"></i></span>
-                              <span  v-else-if="build_status == 'FAILURE'" class="badge badge-danger"  style="font-size:18px;font-weight:700;">Oops, something went wrong while executing the pipeline! <i style="color:white;" class="fa fa-times" aria-hidden="true"></i></span>
-                          </div>
-                          <div class="row">
-                            <div class="text-center col-12" style="padding-top:25px;" v-show="showBuildUrl">
-                              <a style="color:white;" class="btn btn-primary btn-fill btn-sm" :href="build_url" target="_blank">
-                                <p><img src="../../static/jenkins.png" alt="" style="padding-bottom:10px;max-width:150px;"></p>
-                                <p style="font-size:18px;font-weight:bold">See the build in Jenkins</p>
-                              </a>
-                            </div>
-                          </div>
-
                            <div class="text-center" style="padding-top:40px;">
                             <button @click="runPipeline()" type="button" class="btn btn-sm btn-primary btn-fill">
                                 Run/Try Pipeline
@@ -432,10 +417,12 @@
 
                     </template>
                   </card>
+
                   </div>
                 </div>
               </template>
           </card>
+
           <!-- <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
               <div class="col-12 col-md-12 text-center">
                   <button @click="back()" type="button" class="btn btn-next-back btn-back" >
@@ -659,7 +646,7 @@
               confirmButtonText: 'Close',
               footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
               confirmButtonColor: '#E14726',
-            })            
+            })
           }
         }
         this.loading = false;
@@ -785,7 +772,7 @@
               footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
               confirmButtonColor: '#E14726',
             })
-            
+
 
           }
         }
@@ -872,20 +859,29 @@
             this.$store.state.build_url = this.build_url;
             this.showBuildUrl = true;
           }
-
-          console.log(response.data.build_status)
           if(response.data.build_status == 'SUCCESS'){
             this.showStatusBar = false;
-            // if(response.data.openbadge_id != null){
-            //   this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
-            // }
             this.loading = false;
             this.autoRefresh = false;
+            this.$swal.fire({
+              title: 'Pipeline was executed successfully!',
+              icon: 'success',
+              confirmButtonText: 'Close',
+              footer: `<a style='color:red' href="${this.build_url}" target="_blank">See the build in Jenkins?</a>`,
+              confirmButtonColor: '#28a745',
+            })
           }
 
           if(this.build_status == "FAILURE"){
             this.loading = false;
             this.autoRefresh = false;
+            this.$swal.fire({
+              title: 'Oops, something went wrong while executing the pipeline!',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              footer: `<a style='color:red' href="${this.build_url}" target="_blank">See the build in Jenkins?</a>`,
+              confirmButtonColor: '#E14726',
+            })
           }
 
         }else if(response.status == 403){
@@ -908,7 +904,7 @@
               footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
               confirmButtonColor: '#E14726',
             })
-          
+
 
         }else{
           this.autoRefresh = false;
@@ -1141,6 +1137,7 @@
 
   },
   created(){
+
     this.checkauthCall(this.checkauthCallBack);
     this.$store.state.status = '';
     this.$store.state.build_url = '';
