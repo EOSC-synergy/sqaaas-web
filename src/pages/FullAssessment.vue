@@ -593,7 +593,7 @@
             text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
             icon: 'error',
             confirmButtonText: 'Close',
-            footer: `<a :href="${this.build_url}" target="_blank">Why do I have this issue?</a>`
+            footer: `<a href="${this.build_url}" target="_blank">Why do I have this issue?</a>`
           })
           this.autoRefresh = false;
           this.showStatus = false;
