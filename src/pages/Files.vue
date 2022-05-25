@@ -15,6 +15,7 @@
             </div>
             <div class="text-center">
                 <a v-show="showBuildUrl" style="color:white;margin-right:10px;" class="btn btn-primary btn-fill btn-sm" :href="build_url" target="_blank">Check logs</a>
+                <a v-show="build_status == 'WAITING_SCAN_ORG'" style="color:white;margin-right:10px;" class="btn btn-primary btn-fill btn-sm" href="https://docs.sqaaas.eosc-synergy.eu/advanced/jenkins_scan_organisation" target="_blank">About this status</a>
                 <button style="margin-left:10px;" class="btn btn-sm btn-danger btn-fill" :disabled="disable_cancel" @click="cancelExecution()">Cancel</button>
               </div>
             </div>
@@ -377,7 +378,7 @@
 
                           <div class="row">
                             <base-input class="col-12 col-md-6 no-margin" type="text"
-                              label="resultModal pipeline's target repository"
+                              label="URL of the pipeline's target repository"
                               :disabled="false"
                               placeholder="https://github.com/EOSC-synergy/sqaaas-web.git"
                               v-model="repo_url_mimic">
@@ -586,7 +587,6 @@
 
       },
       cancelExecution(){
-        console.log('here')
         this.autoRefresh = false;
         this.loading = false;
       },
