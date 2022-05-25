@@ -1,7 +1,7 @@
 <template>
   <nav class="bg-blue navbar navbar-expand-lg" style="padding-bottom:2px;padding-top:3px">
     <div class="container-fluid">
-      <a class="navbar-brand res-size" style="color:white;" href="#">Software Quality Assurance as a Service</a>
+      <a class="navbar-brand res-size" style="color:white;" href="/#/auth/select-option">Software Quality Assurance as a Service</a>
       <button style="color:white;" type="button"
               class="navbar-toggler navbar-toggler-right"
               :class="{toggled: $sidebar.showSidebar}"

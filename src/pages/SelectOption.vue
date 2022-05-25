@@ -11,23 +11,30 @@
 
 						<template>
               <div class="row text-center">
-                  <div class="col-12 col-md-6 select-options text-center" @click="gotoCustomized()">
-                      <div class="m-auto"  style="background-color:#F1A190;max-width: 500px;height: 500px;padding: 40px;">
-                        <img src="../../static/paas.png" alt="" class="responsive" style="opacity: 0.9;">
-                        <h2 class="custom-title">Pipeline as a Service</h2>
-                        <span style="color:black;">Custom CI/CD pipelines based according to the quality criteria from the Software as a Service.</span>
-                      </div>
-                  </div>
-
-
-
+                <div class="col-12 col-md-4">
+                    <h1 style="font-size:50px;font-weight:bold;color:#76BAC6;padding-top:100px">SQAaaS module selection</h1>
+                </div>
+                <div class="col-12 col-md-8 text-center">
+                 <div class="row">
+                   <div class="col-12 col-md-6 select-options text-center" @click="gotoCustomized()">
+                       <div class="float-right"  style="border: 2px solid #F1A190;max-width: 500px;height: 500px;padding: 40px;">
+                         <img src="../../static/paas.png" alt="" class="responsive" style="opacity: 0.9;">
+                         <h2 class="custom-title">Pipeline as a Service</h2>
+                         <span style="color:black;">Compose customized CI/CD pipelines for your code repositories.</span>
+                       </div>
+                   </div>
                   <div class="col-12 col-md-6 select-options text-center"  @click="gotoFull()">
-                    <div class="m-auto" style="background-color:  #90C7F1;max-width: 500px;height: 500px;padding: 40px;">
+                    <div class="text-center" style="border: 2px solid #90C7F1;max-width: 500px;height: 500px;padding: 40px;">
                       <img src="../../static/qaa.png" alt="" class="responsive" style="opacity: 0.9;">
                       <h2 class="custom-title">Quality Assessment & Awarding</h2>
-                      <span style="color:black;">Evaluates the level of compliance of a source code repository or running service according to the quality criteria from the Software & Service baseline.</span>
+                      <span style="color:black;">Take credit of the achievements in terms of software and service quality.</span>
                     </div>
                   </div>
+
+                 </div>
+                </div>
+
+
               </div>
 
 						</template>
@@ -65,10 +72,10 @@
 <style scoped>
 
 .responsive {
-  max-width:300px;
+  max-width:250px;
   width: 100%;
   height: auto;
-  max-height: 300px;
+  max-height: 250px;
 }
 .pos-buttons{
   display: inline-flex!important;
@@ -148,7 +155,6 @@
   color:black;
   font-size: 20px;
   font-weight: 700;
-  
 }
 
  }

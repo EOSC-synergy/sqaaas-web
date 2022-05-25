@@ -59,7 +59,7 @@
                  <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
                     <span class="custom-label">External repo for documentation?</span>
                     <div class="custom-div-append">
-                      <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance">
+                      <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>more info</a>">
                         <i class="fa fa-question-circle"></i>
                       </button>
                   </div>
@@ -599,7 +599,6 @@
           this.showStatus = false;
           this.loading = false;
           this.showErrorFailure;
-
         }
       },
       cancelExecution(){

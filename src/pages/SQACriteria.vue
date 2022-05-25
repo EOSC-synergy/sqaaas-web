@@ -20,11 +20,12 @@
             </div>
           </div>
       </div>
+
       <div class="col-12 col-sm-12 col-xl-6 col-lg-10 mx-auto" style="margin:auto;padding:0px;">
 
         <card >
           <template slot="header">
-            <div style="display:flex;flex-direction:row;padding-bottom:15px;">
+            <div style="display:flex;flex-direction:row">
               <div style="background-color:#e6ede8;padding-left:100px;padding-top:20px;padding-bottom:10px;width:80%">
                 <h3 style="margin-top:0px;font-weight:700;" class="card-title">Quality criteria define the CI/CD pipeline work</h3>
                 <p style="padding-top:20px">
@@ -38,21 +39,17 @@
                         <select style="font-family: console;font-weight: 700;" class="custom-select" id="sqacriteria" v-model='criteria'>
                           <option value="default">Select ...</option>
                           <option v-for="(crit,key) in array_criterias" :key="key" :value="crit['id']">{{crit['id']}}</option>
-
-
                         </select>
                       </div>
-                      <div v-show="criteria != 'default'" style="margin:auto;border-radius:5px;">
+                      <div v-show="criteria != 'default'" style="border-radius:5px;">
                         <div class="quote-custom">
-                        <!--<p style="margin-bottom:0px;padding-left:100px;padding-top:20px">
-                          <span style="padding-left:150px;font-weight:700;font-size:40px;font-family: consola;"> {{criteria}}: </span>-->
-                          <p style="font-weight:700;font-size:16px;font-style:italic;padding-left:40px">{{(info[criteria]) ? info[criteria].p1 : ''}}
-                          (<a style="text-decoration: underline" :href="(info[criteria]) ? info[criteria]['link'] : ''" target="_blank">See More</a>)</p>
-                        <!--</p>-->
+
+                          <p v-show="info && info['msg']" style="font-weight:700;font-size:16px;padding-left:20px; margin-bottom:0px;"><span class="badge badge-light">Scope</span> <em>{{(info) ? info['msg'] : ''}}</em> <span v-show="info && info['docs']">(<a style="text-decoration: underline" :href="(info) ? info['docs'] : ''" target="_blank">more details</a>)</span>
+                          </p>
+                          <p v-show="info && info['improves']" style="font-weight:700;font-size:16px;padding-left:20px;margin-bottom:0px"><span class="badge badge-light">Improves</span> {{(info) ? info['improves'] : ''}}
+                          </p>
+
                         </div>
-    <!--
-                        <p style="margin-bottom:0px"><i><u>Improves:</u></i> {{(info[criteria]) ? info[criteria].p2 : ''}}</p>
-    -->
                       </div>
                   </div>
                   <div class="text-center">
@@ -66,7 +63,6 @@
             </div>
           </template>
           <template class="card-body">
-
 
             <div v-show="showCredInfo" style="padding-top:20px;margin-bottom:2rem;">
               <span class="custom-label">Credentials</span>
@@ -106,8 +102,6 @@
             </div>
              <div class="row" style="margin:2rem 0px 2rem 0px;">
                <!-- v-show="showSelect && objectSize( $store.state.docker_compose.services) > 0" -->
-
-
               <div v-show="objectSize($store.state.config_yaml.config.project_repos) > 0" class="col-12 col-md-6" style="display:grid;">
                 <div class="row">
                   <span class="custom-label" style="text-transform:uppercase;font-size: 12px;">Does the criterion apply to an outside repo?</span><base-checkbox style="font-size:12px;" name="env" v-model="disable_menu"></base-checkbox>
@@ -121,27 +115,25 @@
                   <span v-show="showErrorRepo" style="color:red; font-size:12px;">You must select a respository</span>
                 </div>
               </div>
-            </div>
-            <div v-show="criteria != 'default'" class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
-              <h5 style="font-weight:700;padding-left:15px;">Builder settings</h5>
-              <p style="padding-left:15px;font-size:14px;">According to the programming language in use, you can choose between builders. As a catch-all builder you might prefer to use the list of commands that you commonly use for carrying out the work aligned with the given criterion.</p>
-              <div class="col-12 col-md-6">
-                <label> CHOOSE A BUILDER TOOL</label>
-                <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
-                  <option value="default">Select ...</option>
-                  <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
-                  <!-- <option value="tox">TOX</option>
-                  <option value="command">COMMANDS</option> -->
-                </select>
+              <div v-show="criteria != 'default'" class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
+                <h4 style="font-weight:700;padding-left:15px;">Tool selection</h4>
+                <p style="padding-left:15px;font-size:15px;">A set of supported tools will be available for selection according to the criterion selected above. The catch-all <em>commands</em> tool can be used to execute alternative commands and/or additional non-supported tools.</p>
+                <div class="col-12 col-md-6">
+                  <label> CHOOSE A TOOL</label>
+                  <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
+                    <option value="default">Select ...</option>
+                    <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
+                    <!-- <option value="tox">TOX</option>
+                    <option value="command">COMMANDS</option> -->
+                  </select>
+                </div>
+                <div v-show="showBuilderTool" class="text-left col-12 col-md-6" style="padding-top:25px;">
+                  <button style="max-height:40px;" type="button" class="btn  btn-info" @click="addTool()"><i class="fa fa-plus"></i>ADD TOOL</button>
+                </div>
               </div>
-              <div v-show="showBuilderTool" class="text-left col-12 col-md-6" style="padding-top:25px;">
-                <button style="max-height:40px;" type="button" class="btn  btn-info" @click="addTool()"><i class="fa fa-plus"></i>ADD TOOL</button>
+              <div>
+                <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a tool to define some pipeline work.</span>
               </div>
-            </div>
-            <div>
-              <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a builder tool.</span>
-            </div>
-
             <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderTool">
               <div id="ref-arg"></div>
             </div>
@@ -151,12 +143,15 @@
             </div>
 
             <div v-show="builder_tool != 'default'" class="col-12 mt-2">
-              <label style="font-size:16px; max-width: inherit;"><span style='font-size:16px; color:black; font-weight: 700;'>Image:</span> {{docker_image}}</label>
-              <div class="row" style="margin-bottom:1rem;">
+              <span v-show="docker_image !=''" class="badge badge-secondary">image:<span style="font-weight:bold"> {{docker_image}}</span></span>
+              <span v-show="docker_lang !=''" style="margin:0px 5px;" class="badge badge-primary">lang:<span style="font-weight:bold"> {{docker_lang}}</span></span>
+              <span v-show="docker_version !=''" style="margin:0px 5px;" class="badge badge-danger">version:<span style="font-weight:bold"> {{docker_version}}</span></span>
+
+              <div class="row" style="padding-top:20px">
                 <div style="display:contents" class="col-12 col-md-6">
-                  <span class="custom-label" style="font-weight:bold;font-size:16px;">Change default image?</span>
+                  <span class="custom-label" style="font-weight:bold;font-size:16px;">Use custom service?</span>
                   <div class="custom-div-append">
-                    <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Change default image.">
+                    <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Define your own container service <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_2_criteria#running-the-tools-with-your-own-services'>more info</a>">
                       <i class="fa fa-question-circle"></i>
                     </button>
                   </div>
@@ -169,16 +164,16 @@
             </div>
 
              <div v-show="change_image_yes"  class="col-12 col-md-6" style="display:grid;">
-                <label>SELECT THE SERVICE</label>
+                <!--<label>SELECT THE SERVICE</label>-->
                 <select class="custom-select" id="service" v-model='service' >
                   <option value="default">Choose a service...</option>
                   <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
                 </select>
-                <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal()"><i class="fa fa-plus"></i>Service</button>
+                <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal()"><i class="fa fa-plus"></i>ADD SERVICE</button>
                 <span v-show="showErrorService" style="color:red; font-size:12px;">For the selected tool you must select a service.</span>
-              </div>
+            </div>
 
-
+            </div> <!-- -->
 
              <div v-show="array_selected_tools.length > 0" style="padding-top:40px;margin-bottom:2rem;">
                 <div class="text-center" style="padding-bottom:10px;">
@@ -457,34 +452,10 @@
         change_image_yes: false,
         change_image_no: true,
         docker_image: '',
+        docker_lang: '',
+        docker_version: '',
         service_name: '',
-        info:{
-          'QC.Sty':{
-            'p1':'"Use code style standards to guide your code writing so you let others  understand it."',
-            'p2':'readability, reusability',
-            'link':'https://indigo-dc.github.io/sqa-baseline/#code-style-qc.sty'
-          },
-          'QC.Uni':{
-            'p1':'"Test the behaviour of segments or units within your code (e.g. conditionals, loops, functions)."',
-            'p2':'design, bug detection',
-            'link':'https://indigo-dc.github.io/sqa-baseline/#unit-testing-qc.uni'
-          },
-          'QC.Fun':{
-            'p1':'"Ensure compliance with the functional requirements to meet your users’ expectations."',
-            'p2':'end-user satisfaction',
-            'link':'https://indigo-dc.github.io/sqa-baseline/#functional-testing-qc.fun'
-          },
-          'QC.Sec':{
-            'p1':'"Secure your software by finding (statically) common issues associated to the programming language in use and look for disclosed security vulnerabilities."',
-            'p2':'security issues detection',
-            'link':'https://indigo-dc.github.io/sqa-baseline/#security-qc.sec'
-          },
-          'QC.Doc':{
-            'p1':'"Treat documentation as code by using markup languages to automatically build and place it in online repositories."',
-            'p2':'outreach capacity, documentation maintenance',
-            'link':'https://indigo-dc.github.io/sqa-baseline/#documentation-qc.doc'
-          }
-        }
+        info:{}
 
       }
     },
@@ -499,7 +470,9 @@
       'change_image_no'(val){
          if(val==true){
           this.change_image_yes = false;
-          this.docker_image = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.image) ? this.selected_tool.docker.image : (this.Object.keys(selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.dockerfile)?this.selected_tool.docker.dockerfile:''
+          this.docker_image = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.image) ? this.selected_tool.docker.image : (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.dockerfile)?'Dockerfile':''
+          this.docker_lang = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.lang) ? this.selected_tool.lang : ''
+          this.docker_version = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.version) ? this.selected_tool.version : ''
 
         }else{
            this.change_image_yes = true;
@@ -519,9 +492,11 @@
           this.showBuilderTool = false;
           this.showErrorArgs = false;
           this.show_link = true;
+          this.info = {};
           for (var i in this.array_criterias){
             if (this.array_criterias[i].id == val){
               this.array_tools = [...this.array_criterias[i]['tools']]
+              this.info = this.array_criterias[i]['description']
             }
           }
           this.showErrorCriteria = false;
@@ -561,6 +536,9 @@
       'service'(val){
         if(val != "default"){
           this.showErrorService = false;
+          this.docker_image = val;
+          this.docker_lang = '';
+          this.docker_version = '';
         }
 
       },
@@ -603,7 +581,11 @@
               }
             }
             },100)
-            this.docker_image = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.image) ? this.selected_tool.docker.image : (this.Object.keys(selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.dockerfile)?this.selected_tool.docker.dockerfile:''
+            this.change_image_yes = false;
+            this.change_image_no = true;
+            this.docker_image = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.image) ? this.selected_tool.docker.image : (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.dockerfile)?'Dockerfile':''
+            this.docker_lang = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.lang) ? this.selected_tool.lang : ''
+            this.docker_version = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.version) ? this.selected_tool.version : ''
         }else{
           this.showBuilderTool = false;
         }
@@ -613,6 +595,9 @@
       getServiceName(event){
         this.service_name = event;
         this.service = event;
+        this.docker_image = event;
+        this.docker_lang = '';
+        this.docker_version = '';
         $('#myModal').modal('hide');
       },
       checkServices(){
@@ -620,6 +605,8 @@
           this.service = Object.keys(this.$store.state.docker_compose.services)[0];
         }
         this.docker_image = this.service;
+        this.docker_lang = '';
+        this.docker_version = '';
       },
        openModal(item){
         $('#myModal').modal('show');

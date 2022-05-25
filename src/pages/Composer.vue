@@ -180,7 +180,7 @@
               <!-- <div  class="row" style="padding-left:20px;margin-bottom:1rem;margin-top:2rem;">
                 <span class="custom-label">Push Image to Registry?</span>
                 <div class="custom-div-append">
-                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Push the docker-compose service image to the Docker Registry <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html?highlight=push#environment' title='test add link'>More info</a>">
+                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Push the docker-compose service image to the Docker Registry <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html?highlight=push#environment' title='test add link'>more info</a>">
                           <i class="fa fa-question-circle"></i>
                         </button>
                       </div>
@@ -220,7 +220,7 @@
                         placeholder="Container hostname. Example: processing"
                          :help="true"
                           link = 'https://docs.docker.com/compose/compose-file/compose-file-v3/#domainname-hostname-ipc-mac_address-privileged-read_only-shm_size-stdin_open-tty-user-working_dir'
-                          message = 'Docker compose oficial documentation'
+                          message = 'Docker compose official documentation'
                         v-model="service.hostname">
                       </base-input>
                       <div class="row" style="padding-left:5px;">
@@ -228,7 +228,7 @@
                           <div class="row">
                             <span class="custom-label" style="font-size: 12px;text-transform: uppercase;padding-top:10px;">Volume Type</span>
                             <div class="custom-div-append">
-                              <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Docker compose oficial documentation <a target='blank' href='https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes' title='test add link'>More info</a>">
+                              <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Docker compose official documentation <a target='blank' href='https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes' title='test add link'>more info</a>">
                                 <i class="fa fa-question-circle"></i>
                               </button>
                             </div>
@@ -246,7 +246,7 @@
                                 placeholder="./"
                                 :help="true"
                                 link = 'https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes'
-                                message = 'Docker compose oficial documentation'
+                                message = 'Docker compose official documentation'
                                 v-model="volume.source">
                         </base-input>
                         <base-input class="col-12 col-md-4" type="text"
@@ -255,7 +255,7 @@
                                 placeholder="/sqaaas-build"
                                 :help="true"
                                 link = 'https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes'
-                                message = 'Docker compose oficial documentation'
+                                message = 'Docker compose official documentation'
                                 v-model="volume.target">
                         </base-input>
 
