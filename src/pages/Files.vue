@@ -867,7 +867,7 @@
               title: 'Pipeline was executed successfully!',
               icon: 'success',
               confirmButtonText: 'Close',
-              footer: `<a style='color:red' href="${this.build_url}" target="_blank">See the build in Jenkins?</a>`,
+              footer: `<a class='btn btn-info btn-fill btn-sm' style='color:white; font-weight:700; font-size:16px;' href="${this.build_url}" target="_blank">See the build in Jenkins</a>`,
               confirmButtonColor: '#28a745',
             })
           }
@@ -879,7 +879,7 @@
               title: 'Oops, something went wrong while executing the pipeline!',
               icon: 'error',
               confirmButtonText: 'Close',
-              footer: `<a style='color:red' href="${this.build_url}" target="_blank">See the build in Jenkins?</a>`,
+              footer: `<a class='btn btn-info btn-fill btn-sm' style='color:white; font-weight:700; font-size:16px;' href="${this.build_url}" target="_blank">See the build in Jenkins</a>`,
               confirmButtonColor: '#E14726',
             })
           }
