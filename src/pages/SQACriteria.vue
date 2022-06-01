@@ -34,14 +34,21 @@
                 </p>
                 <div>
                   <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left: 15px;">
-                      <div class="" style="padding-bottom:10px">
-                        <label style="color:black;"> CHOOSE A CRITERION</label>
-                        <select style="font-family: console;font-weight: 700;" class="custom-select" id="sqacriteria" v-model='criteria'>
+                      <div class="col-12 col-md-6" style="padding-bottom:10px">
+                        <label style="color:black;"> CHOOSE A SOFTWARE CRITERION</label>
+                        <select  style="font-family: console;font-weight: 700;" class="custom-select" id="sqacriteria" v-model='criteria_soft'>
                           <option value="default">Select ...</option>
-                          <option v-for="(crit,key) in array_criterias" :key="key" :value="crit['id']">{{crit['id']}}</option>
+                          <option v-for="(crit,key)  in array_criterias" v-if="crit['type']=='software'" :key="key" :value="crit['id']">{{crit['id']}}</option>
                         </select>
                       </div>
-                      <div v-show="criteria != 'default'" style="border-radius:5px;">
+                      <div class="col-12 col-md-6" style="padding-bottom:10px">
+                        <label style="color:black;"> CHOOSE A SERVICE CRITERION</label>
+                        <select style="font-family: console;font-weight: 700;" class="custom-select" id="sqacriteria" v-model='criteria_serv'>
+                          <option value="default">Select ...</option>
+                          <option v-for="(crit,key) in array_criterias" v-if="crit['type']=='service'" :disabled="crit['id'] != 'SvcQC.Dep' || ( crit['id'] != 'SvcQC.Dep' && $store.state.config_yaml.sqa_criteria.hasOwnProperty('SvcQC.Dep')  )" :key="key" :value="crit['id']">{{crit['id']}}</option>
+                        </select>
+                      </div>
+                      <div class="col-12" v-show="criteria != 'default'" style="border-radius:5px;">
                         <div class="quote-custom">
 
                           <p v-show="info && info['msg']" style="font-weight:700;font-size:16px;padding-left:20px; margin-bottom:0px;"><span class="badge badge-light">Scope</span> <em>{{(info) ? info['msg'] : ''}}</em> <span v-show="info && info['docs']">(<a style="text-decoration: underline" :href="(info) ? info['docs'] : ''" target="_blank">more details</a>)</span>
@@ -397,6 +404,8 @@
         loadingError:false,
         pipelineName:'',
         criteria:'default',
+        criteria_soft:'default',
+        criteria_serv:'default',
         repository:'default',
         service:'default',
         repos:{"repos":{}},
@@ -484,6 +493,20 @@
           this.repository = 'default';
           this.disabled_add_crit = false;
         }
+      },
+      'criteria_soft'(val){
+        if(val != 'default'){
+          this.criteria_serv = 'default';
+          this.criteria = val
+        }
+
+      },
+      'criteria_serv'(val){
+        if(val != 'default'){
+          this.criteria_soft = 'default';
+          this.criteria = val
+        }
+
       },
       'criteria'(val){
         this.showBuilderTool=false;
@@ -888,7 +911,6 @@
           }else{
             serv = this.service
           }
-          console.log(serv)
           for(var i in this.array_selected_tools){
             repo={
                     repo_url: (this.repository!='default')?this.repository:'',
@@ -905,8 +927,10 @@
           this.builder_tool = 'default';
           this.array_selected_tools = [];
           this.repository = 'default';
+          this.cri
           this.disable_menu = false;
           this.showBuilderTool = false;
+          console.log(this.$store.state.config_yaml.sqa_criteria.hasOwnProperty('SvcQC.Dep'))
         }
       },
       removeCriteria(key){
