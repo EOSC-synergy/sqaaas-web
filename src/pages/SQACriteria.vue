@@ -45,7 +45,7 @@
                         <label style="color:black;"> CHOOSE A SERVICE CRITERION</label>
                         <select style="font-family: console;font-weight: 700;" class="custom-select" id="sqacriteria" v-model='criteria_serv'>
                           <option value="default">Select ...</option>
-                          <option v-for="(crit,key) in array_criterias" v-if="crit['type']=='service'" :disabled="crit['id'] != 'SvcQC.Dep' || ( crit['id'] != 'SvcQC.Dep' && $store.state.config_yaml.sqa_criteria.hasOwnProperty('SvcQC.Dep')  )" :key="key" :value="crit['id']">{{crit['id']}}</option>
+                          <option v-for="(crit,key) in array_criterias" :id="crit['id']" name="select_service" v-if="crit['type']=='service'" :disabled="crit['id'] != 'SvcQC.Dep' && !$store.state.config_yaml.sqa_criteria.hasOwnProperty('SvcQC.Dep')" :key="key" :value="crit['id']">{{crit['id']}}</option>
                         </select>
                       </div>
                       <div class="col-12" v-show="criteria != 'default'" style="border-radius:5px;">
@@ -495,6 +495,10 @@
         }
       },
       'criteria_soft'(val){
+        this.builder_tool = 'default';
+        this.docker_image = '';
+        this.docker_lang = '';
+        this.docker_version = '';
         if(val != 'default'){
           this.criteria_serv = 'default';
           this.criteria = val
@@ -502,6 +506,10 @@
 
       },
       'criteria_serv'(val){
+        this.builder_tool = 'default';
+        this.docker_image = '';
+        this.docker_lang = '';
+        this.docker_version = '';
         if(val != 'default'){
           this.criteria_soft = 'default';
           this.criteria = val
@@ -512,6 +520,7 @@
         this.showBuilderTool=false;
         if(val != "default"){
           this.builder_tool = 'default';
+
           this.showBuilderTool = false;
           this.showErrorArgs = false;
           this.show_link = true;
@@ -573,6 +582,8 @@
       'builder_tool'(val){
         if(val != 'default'){
           this.selected_tool = {};
+          console.log(this.array_tools, val)
+
           for (var i in this.array_tools){
             if(this.array_tools[i].name == val){
               this.selected_tool = JSON.parse(JSON.stringify(this.array_tools[i]));
@@ -606,11 +617,17 @@
             },100)
             this.change_image_yes = false;
             this.change_image_no = true;
+            console.log(this.selected_tool)
             this.docker_image = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.image) ? this.selected_tool.docker.image : (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.dockerfile)?'Dockerfile':''
             this.docker_lang = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.lang) ? this.selected_tool.lang : ''
             this.docker_version = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.version) ? this.selected_tool.version : ''
+
+
         }else{
           this.showBuilderTool = false;
+          this.docker_image = '';
+          this.docker_lang = '';
+          this.docker_version = '';
         }
       }
     },
@@ -930,15 +947,53 @@
           this.cri
           this.disable_menu = false;
           this.showBuilderTool = false;
-          console.log(this.$store.state.config_yaml.sqa_criteria.hasOwnProperty('SvcQC.Dep'))
+          if(this.$store.state.config_yaml.sqa_criteria.hasOwnProperty('SvcQC.Dep')){
+            $("[name='select_service']").prop('disabled', false);
+          }
         }
       },
       removeCriteria(key){
-        this.$delete(this.selected_criteria,key)
-        this.$store.state.config_yaml.sqa_criteria = this.selected_criteria;
-        if (this.isEmpty(this.selected_criteria)) {
-          this.showCriteria = false;
-          this.disable_done = true;
+        if(key == 'SvcQC.Dep'){
+          this.$swal.fire({
+              title: 'Warning!',
+              text: 'If you remove this criterion all the services criterion will be removed!',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+              /* Read more about isConfirmed, isDenied below */
+              if (result.isConfirmed) {
+                  this.criteria_serv = 'default';
+                   $("[id='select_service']").prop('disabled', true);
+                   $("#SvcQC.Dep").prop('disabled', false);
+                   var _array_service_crit = [];
+                   for (var i in this.array_criterias){
+                     console.log(this.array_criterias[i])
+                     if(this.array_criterias[i].type == 'service' && this.$store.state.config_yaml.sqa_criteria[this.array_criterias[i].id]){
+                       _array_service_crit.push(this.array_criterias[i].id)
+                     }
+                   }
+                   console.log(_array_service_crit);
+                   for (var i in _array_service_crit){
+                     this.$delete(this.selected_criteria,_array_service_crit[i]);
+                   }
+                    this.$store.state.config_yaml.sqa_criteria = this.selected_criteria;
+                    if (this.isEmpty(this.selected_criteria)) {
+                      this.showCriteria = false;
+                      this.disable_done = true;
+                    }
+              }
+            })
+        }else{
+          this.$delete(this.selected_criteria,key)
+          this.$store.state.config_yaml.sqa_criteria = this.selected_criteria;
+          if (this.isEmpty(this.selected_criteria)) {
+            this.showCriteria = false;
+            this.disable_done = true;
+          }
+
         }
 
       },
@@ -1031,13 +1086,22 @@
 
     },
     mounted(){
-       this.$eventHub.$emit('steps', 2);
+      this.$eventHub.$emit('steps', 2);
+      // this.$nextTick(function () {
+      //     setTimeout(function(){
+      //       if(this.$store.state.config_yaml.sqa_criteria.hasOwnProperty('SvcQC.Dep')){
+      //         $("[name='select_service']").prop('disabled', false);
+      //       }
+      //     },500)
+
+      //   })
+
 
     },
     created(){
       this.loading = true;
       this.getCriteriaCall(this.getCriteriaCallBack)
-      this.checkauthCall(this.checkauthCallBack);
+      // this.checkauthCall(this.checkauthCallBack);
       if(this.$store.state.config_yaml.config.credentials.length > 0){
         this.showCredInfo = true;
       }
