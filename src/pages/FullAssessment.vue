@@ -56,121 +56,159 @@
                   </div>
                 </div>
 
-                 <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
-                    <span class="custom-label">External repo for documentation?</span>
-                    <div class="custom-div-append">
-                      <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>more info</a>">
-                        <i class="fa fa-question-circle"></i>
-                      </button>
+                <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
+                  <span class="custom-label">External repo for documentation?</span>
+                  <div class="custom-div-append">
+                    <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>more info</a>">
+                      <i class="fa fa-question-circle"></i>
+                    </button>
                   </div>
-                    <span class="custom-label" style="padding-left:75px;">Yes</span><base-checkbox name="credentials" v-model="doc.yes"></base-checkbox>
-                    <span class="custom-label">No</span><base-checkbox name="credentials" v-model="doc.no"></base-checkbox>
-                  </div>
+                  <span class="custom-label" style="padding-left:75px;">Yes</span><base-checkbox name="credentials" v-model="doc.yes"></base-checkbox>
+                  <span class="custom-label">No</span><base-checkbox name="credentials" v-model="doc.no"></base-checkbox>
+                </div>
 
-                  <div v-show='doc.yes' class="text-left row">
-                      <div class="col-12 col-md-8">
+                <div v-show='doc.yes' class="text-left row">
+                    <div class="col-12 col-md-8">
+                      <base-input type="text" class="no-margin"
+                            label="Repo URL"
+                            :disabled="false"
+                            placeholder=""
+                            v-model="doc.url">
+                      </base-input>
+                      <!-- <span v-show="showErrorCredId" style="color:red;font-size:12px;">This field is required</span> -->
+
+                    </div>
+                    <div class="col-12 col-md-4">
+                      <base-input type="text" class="no-margin"
+                            label="Branch"
+                            :disabled="false"
+                            placeholder=""
+                            v-model="doc.branch">
+                      </base-input>
+                    </div>
+
+
+                </div>
+
+                 <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
+                  <span class="custom-label">Deploy a service?</span>
+                  <div class="custom-div-append">
+                    <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>more info</a>">
+                      <i class="fa fa-question-circle"></i>
+                    </button>
+                  </div>
+                  <span class="custom-label" style="padding-left:75px;">Yes</span><base-checkbox name="credentials" v-model="deploy.yes"></base-checkbox>
+                  <span class="custom-label">No</span><base-checkbox name="credentials" v-model="deploy.no"></base-checkbox>
+                </div>
+
+                <div v-show='deploy.yes' class="text-left" style="padding-left:20px;">
+
+                    <div class="row mb-2" style="padding-left:15px;">
+                       <div class="col-12 col-md-8">
                         <base-input type="text" class="no-margin"
-                              label="Repo URL"
+                              label="Deployment repository URL (optional)"
                               :disabled="false"
                               placeholder=""
-                              v-model="doc.url">
+                              v-model="deploy.url">
                         </base-input>
                         <!-- <span v-show="showErrorCredId" style="color:red;font-size:12px;">This field is required</span> -->
 
                       </div>
                       <div class="col-12 col-md-4">
                         <base-input type="text" class="no-margin"
-                              label="Branch"
+                              label="Deployment repository Branch (optional)"
                               :disabled="false"
                               placeholder=""
-                              v-model="doc.branch">
+                              v-model="deploy.branch">
                         </base-input>
                       </div>
 
+                    </div>
 
-                  </div>
-
-                <!-- Criteria Section  -->
-                <!-- <div class="text-left col-12">
-                  <div class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left: 15px;">
-                      <div class="" style="padding-bottom:10px">
-                        <label style="color:black;"> CHOOSE A CRITERION</label>
-                        <select style="font-family: console;font-weight: 700;" class="custom-select" id="sqacriteria" v-model='criteria'>
+                    <div v-show="criteria != 'default'" class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
+                      <!-- <h4 style="font-weight:700;padding-left:15px;">Tool selection</h4>
+                      <p style="padding-left:15px;font-size:15px;">A set of supported tools will be available for selection according to the criterion selected above. The catch-all <em>commands</em> tool can be used to execute alternative commands and/or additional non-supported tools.</p> -->
+                      <div class="col-12 col-md-6">
+                        <label> CHOOSE A TOOL (required)</label>
+                        <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
                           <option value="default">Select ...</option>
-                          <option v-for="(crit,key) in array_criterias" :key="key" :value="crit['id']">{{crit['id']}}</option>
+                          <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
+                          <!-- <option value="tox">TOX</option>
+                          <option value="command">COMMANDS</option> -->
                         </select>
                       </div>
-                      <div v-show="criteria != 'default'" style="margin:auto;border-radius:5px;">
-                        <div class="quote-custom">
-                          <p style="font-weight:700;font-size:18px;font-style:italic;width:90%;padding-left:40px">{{(info[criteria]) ? info[criteria].p1 : ''}}
-                          (<a style="text-decoration: underline" :href="(info[criteria]) ? info[criteria]['link'] : ''" target="_blank">See More</a>)</p>
+                      <div v-show="showBuilderTool" class="text-left col-12 col-md-6" style="padding-top:25px;">
+                        <button style="max-height:40px;" type="button" class="btn  btn-info" @click="addTool()"><i class="fa fa-plus"></i>ADD TOOL</button>
+                      </div>
+                    </div>
+                    <div>
+                      <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a tool to define some pipeline work.</span>
+                    </div>
+                    <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderTool">
+                      <div id="ref-arg"></div>
+                    </div>
+
+
+                    <div v-show="builder_tool != 'default'" class="col-12 mt-2">
+                      <span v-show="docker_image !=''" class="badge badge-secondary">image:<span style="font-weight:bold"> {{docker_image}}</span></span>
+                      <span v-show="docker_lang !=''" style="margin:0px 5px;" class="badge badge-primary">lang:<span style="font-weight:bold"> {{docker_lang}}</span></span>
+                      <span v-show="docker_version !=''" style="margin:0px 5px;" class="badge badge-danger">version:<span style="font-weight:bold"> {{docker_version}}</span></span>
+
+                      <div class="row" style="padding-top:20px">
+                        <div style="display:contents" class="col-12 col-md-6">
+                          <span class="custom-label" style="font-weight:bold;font-size:16px;">Use custom service?</span>
+                          <div class="custom-div-append">
+                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Define your own container service <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_2_criteria#running-the-tools-with-your-own-services'>more info</a>">
+                              <i class="fa fa-question-circle"></i>
+                            </button>
+                          </div>
                         </div>
+                        <div style="display:contents" class="col-12 col-md-6">
+                          <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="change_image_yes"></base-checkbox>
+                          <span class="custom-label">No</span><base-checkbox name="workspace" v-model="change_image_no"></base-checkbox>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div v-show="array_selected_tools.length > 0" style="padding-top:40px;margin-bottom:2rem;">
+                      <div class="text-center" style="padding-bottom:10px;">
+                        <span class="custom-table-title" style="te">Selected Tools</span>
+                      </div>
+                      <div class="table-responsive">
+                        <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <thead>
+                                <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Tool</th>
+                                <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Arguments</th>
+                                <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
+                            </thead>
+                            <tbody v-for="(tool, index) in array_selected_tools" :key="index">
+                              <tr
+                                  style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                  <td
+                                      style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <div style="text-align:left;text-transform: uppercase;">
+                                          {{array_selected_tools[index].name}}
+                                      </div>
+                                  </td>
+                                  <td
+                                      style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <div :id="'list-arg'+index" style="text-align:center;">
+                                          {{startListArg(tool['args'], index)}}
+                                      </div>
+
+                                  </td>
+                                  <td
+                                      style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeTool(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                      </button>
+                                  </td>
+
+                              </tr>
+                            </tbody>
+                        </table>
                       </div>
                   </div>
-                  <div class="text-center">
-                    <span v-show="showErrorCriteria" style="color:red; font-size:12px;padding-left:20px;">You must select a valid criteria</span>
-                  </div>
-
-                </div> -->
-
-                <!-- Services Section -->
-
-                <!-- <div class="text-left col-12">
-                  <h4>Add external services (Optional)</h4>
-                  <div class="row" style="padding-left:30px">
-
-                        <base-input class="col-md-6" type="text"
-                              label="Name"
-                              :disabled="false"
-                              placeholder=""
-                              v-model="service.name">
-                        </base-input>
-                        <base-input class="col-md-6" type="text"
-                              label="Docker Image"
-                              :disabled="false"
-                              placeholder=""
-                              v-model="service.url">
-                        </base-input>
-                        <div style="margin-bottom:10px;width:95%;" class="text-right">
-                          <button type="button" class="btn-simple btn btn-xs btn-info" @click="addService()"><i class="fa fa-plus"></i>ADD Service</button>
-                        </div>
-                      </div>
-                      <div v-show="showService" style="padding-top:5px;margin-bottom:1rem;">
-                        <span class="custom-label">Env Vars</span>
-                        <div class="table-responsive">
-                          <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
-                              <thead>
-                                  <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">key</th>
-                                  <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">value</th>
-                                  <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">REMOVE</th>
-                              </thead>
-                              <tbody v-for="(env, index) in all_services" :key="index">
-                                      <tr
-                                          style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
-                                          <td
-                                              style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                              <div style="text-align:left;">
-                                                  {{index}}
-                                              </div>
-                                          </td>
-                                          <td
-                                              style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                              <div style="text-align:center;">
-                                                  {{env}}
-                                              </div>
-                                          </td>
-                                          <td
-                                              style="text-align:right;justify-content:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                              <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeEnv(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
-                                              </button>
-                                          </td>
-                                      </tr>
-                              </tbody>
-                          </table>
-                        </div>
-                      </div>
-
-                </div> -->
+                </div>
 
                 <div style="padding:20px;">
                   <button class="btn btn-primary btn-fill" @click="getResults()">Start Assessment</button>
@@ -207,33 +245,6 @@
         },
         all_services:{},
         showService:false,
-        info:{
-          'QC.Sty':{
-            'p1':'"Use code style standards to guide your code writing so you let others  understand it."',
-            'p2':'readability, reusability',
-            'link':'https://indigo-dc.github.io/sqa-baseline/#code-style-qc.sty'
-          },
-          'QC.Uni':{
-            'p1':'"Test the behaviour of segments or units within your code (e.g. conditionals, loops, functions)."',
-            'p2':'design, bug detection',
-            'link':'https://indigo-dc.github.io/sqa-baseline/#unit-testing-qc.uni'
-          },
-          'QC.Fun':{
-            'p1':'"Ensure compliance with the functional requirements to meet your users’ expectations."',
-            'p2':'end-user satisfaction',
-            'link':'https://indigo-dc.github.io/sqa-baseline/#functional-testing-qc.fun'
-          },
-          'QC.Sec':{
-            'p1':'"Secure your software by finding (statically) common issues associated to the programming language in use and look for disclosed security vulnerabilities."',
-            'p2':'security issues detection',
-            'link':'https://indigo-dc.github.io/sqa-baseline/#security-qc.sec'
-          },
-          'QC.Doc':{
-            'p1':'"Treat documentation as code by using markup languages to automatically build and place it in online repositories."',
-            'p2':'outreach capacity, documentation maintenance',
-            'link':'https://indigo-dc.github.io/sqa-baseline/#documentation-qc.doc'
-          }
-        },
         params:{
           url:'',
           branch:''
@@ -242,6 +253,12 @@
           yes:false,
           no:true,
            url:'',
+          branch:''
+        },
+        deploy:{
+          yes:false,
+          no:true,
+          url:'',
           branch:''
         },
         autoRefresh:false,
@@ -257,12 +274,42 @@
         repo_info:{},
         showErrorAPI:false,
         showErrorFailure:false,
-        message_error: ''
+        message_error: '',
+        array_criterias:[],
+        change_image_yes: false,
+        change_image_no: true,
+        docker_image: '',
+        docker_lang: '',
+        docker_version: '',
+        builder_tool: 'default',
+        showBuilderTool:false,
+        array_tools:[],
+        selected_tool:{},
+        showErrorBuilderTool:false,
+        array_selected_tools:[],
 
 
       }
     },
      watch:{
+        'change_image_yes'(val){
+        if(val==true){
+          this.change_image_no = false;
+        }else{
+          this.change_image_no = true;
+        }
+      },
+      'change_image_no'(val){
+         if(val==true){
+          this.change_image_yes = false;
+          this.docker_image = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.image) ? this.selected_tool.docker.image : (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.dockerfile)?'Dockerfile':''
+          this.docker_lang = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.lang) ? this.selected_tool.lang : ''
+          this.docker_version = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.version) ? this.selected_tool.version : ''
+
+        }else{
+           this.change_image_yes = true;
+        }
+      },
       'criteria'(val){
         this.showBuilderTool=false;
         if(val != "default"){
@@ -344,6 +391,21 @@
           this.doc.yes = true;
         }
       },
+       "deploy.yes"(val){
+         if(val==true){
+          this.deploy.no = false;
+        }else{
+          this.deploy.no = true;
+        }
+
+      },
+      "deploy.no"(val){
+        if(val==true){
+          this.deploy.yes = false;
+        }else{
+          this.deploy.yes = true;
+        }
+      },
       "autoRefresh"(val) {
         if (val) {
             this.t = setInterval(() => {
@@ -351,6 +413,57 @@
             }, 3 * 1000)
         } else {
             clearInterval(this.t)
+        }
+      },
+      'builder_tool'(val){
+        if(val != 'default'){
+          this.selected_tool = {};
+          console.log(this.array_tools, val)
+
+          for (var i in this.array_tools){
+            if(this.array_tools[i].name == val){
+              this.selected_tool = JSON.parse(JSON.stringify(this.array_tools[i]));
+            }
+          }
+          var _this = this;
+          var no_error = 0;
+          var select_false = 0;
+          for(var i in this.selected_tool.args){
+            if(typeof this.selected_tool.args[i].selectable !== 'undefined' && this.selected_tool.args[i].selectable == true  && typeof this.selected_tool.args[i].format !== 'undefined' && typeof this.selected_tool.args[i].type !== 'undefined' && typeof this.selected_tool.args[i].value !== 'undefined'){
+             no_error = no_error + 1;
+            }else if(typeof this.selected_tool.args[i].selectable !== 'undefined' && this.selected_tool.args[i].selectable == false){
+              select_false = select_false + 1;
+            }
+          }
+
+            this.showBuilderTool = true;
+          //Painting Arg
+          this.paintingArg(this.selected_tool.args, 0);
+
+          setTimeout(function(){
+            var count = 0;
+            for (var i in _this.selected_tool.args){
+              if(_this.selected_tool.args[i].repeatable && _this.selected_tool.args[i].repeatable == true){
+                $("#inputTag_"+count+'_'+i).tagsinput({
+                  trimValue: true
+                });
+                count=count*1+1;
+              }
+            }
+            },100)
+            this.change_image_yes = false;
+            this.change_image_no = true;
+            console.log(this.selected_tool)
+            this.docker_image = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.image) ? this.selected_tool.docker.image : (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.dockerfile)?'Dockerfile':''
+            this.docker_lang = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.lang) ? this.selected_tool.lang : ''
+            this.docker_version = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.version) ? this.selected_tool.version : ''
+
+
+        }else{
+          this.showBuilderTool = false;
+          this.docker_image = '';
+          this.docker_lang = '';
+          this.docker_version = '';
         }
       }
 
@@ -382,6 +495,7 @@
         //   }
         // }
         this.showErrorAPI = false;
+        console.log(this.array_selected_tools)
         if(this.params.url != ''){
           var data = {
             repo_code:{
@@ -393,10 +507,22 @@
               branch:this.doc.branch.trim()
             }
           }
+          if(this.deploy.yes){
+            data['deployment'] = {
+              'repo_deploy':{
+                repo:this.deploy.url.trim(),
+                branch:this.deploy.branch.trim()
+              },
+              'deploy_tool':{
+
+              }
+            }
+
+          }
           this.showErrorURL = false;
-          this.loading = true;
+          // this.loading = true;
           this.modal_message = 'Submitting Pipeline ...';
-          this.getPipelineAssessmentCall(data,this.getPipelineAssessmentCallBack)
+          // this.getPipelineAssessmentCall(data,this.getPipelineAssessmentCallBack)
         }else{
           this.showErrorURL = true;
         }
@@ -677,9 +803,166 @@
         }
       },
 
+      getCriteriaCallBack(response){
+        this.array_criterias = [];
+        if(response.status == 200){
+          for(var i in response.data){
+            this.array_criterias.push(response.data[i]);
+            this.criteria = 'SvcQC.Dep';
+          }
+        }else{
+          this.loadingError = true;
+          this.notifyVue("We are having problems making the request.")
+        }
+      },
+
+      async addTool(){
+        let args = await this.adding(this.selected_tool.args, 0)
+        var error_args = false;
+        for (var i in args){
+          if(args[i].type == 'positional' && args[i].value == ''){
+            error_args = true;
+          }
+        }
+        if(error_args == true){
+          this.showErrorArgs = true;
+        }else{
+          this.showErrorArgs = false;
+          this.selected_tool['args'] =  args;
+          this.builder_tool = 'default';
+          this.change_image_yes = false;
+          this.change_image_no = true;
+          this.showBuilderTool = false;
+          this.array_selected_tools.push(this.selected_tool);
+        }
+      },
+
+      async paintingArg(args, count){
+        var text = '', body = '';
+        for(var i in args){
+          text = '';
+          if(args[i].selectable ==true &&( typeof args[i].repeatable == 'undefined' || args[i].repeatable == false) && args[i].format == 'string'){
+          // if(args[i].selectable ==false &&( typeof args[i].repeatable == 'undefined' || args[i].repeatable == false)){
+            text += `<div class="form-group" style="margin-bottom:0px;">
+                    <label for="${'simple_input_'+count+'_'+i}">${args[i].description}</label>
+                    <input id="${'simple_input_'+count+'_'+i}" type="text" class="form-control" style="height:32px;"
+                      placeholder='${args[i].value.replace(/[']+/g, '')}' value='${args[i].value.replace(/[']+/g, '')}'
+                    >
+                  </div>`
+
+          }else if(args[i].selectable ==true && args[i].repeatable == true && args[i].format == 'string'){
+            text += `<div class="form-group">
+                  <label id="${'array_input_label'+count+'_'+i}" for="">${args[i].description}</label>
+                  <div class="bs-example">
+                    <input type="text" id="${'inputTag_'+count+'_'+i}" value='${args[i].value.replace(/[']+/g, '')}' data-role="tagsinput">
+                  </div>
+                  <div class="text-right">
+                    <label id="array_input_label2" for="">Note: Type something and press Enter.</label>
+
+                  </div>
+                </div>`
+          }else if(args[i].selectable ==true &&( typeof args[i].repeatable == 'undefined' || args[i].repeatable == false) && args[i].format == 'array'){
+            text += `<div class="form-group">
+                  <label id="${'array_input_label'+count+'_'+i}" for="">${args[i].description}</label>
+                  <div class="bs-example">
+                     <select class="custom-select select-options" id="${'select_'+count+'_'+i}" data-index='select-val'>
+                     ${this.paintSelectOpt(args[i].value)}
+                    </select>
+                  </div>
+
+                </div>`
+          }
+
+          if(args[i].args && args[i].args.length > 0){
+            text += await this.paintingArg(args[i].args, (count*1+1))
+          }
+
+          body += text
+        }
+
+        $('#ref-arg').html(body)
+        $('.select-options').on('change', function(){
+          console.log($(this).attr('data-index'))
+          console.log($(this).val())
+        })
+        return body;
+      },
+      paintSelectOpt(opts){
+        console.log(opts)
+        let message = "<option selected disabled value=''>Selected option ...</option>"
+        for(var i in opts){
+          message += `<option value="${opts[i]}">${opts[i]}</option>`
+        }
+
+        return message;
+      },
+      async adding(args, count){
+        for(var i in args){
+          if (this.selected_tool.args[i].selectable ==true && this.selected_tool.args[i].format == 'string'){
+            if(args[i].repeatable == true){
+              args[i].value = $("#inputTag_"+count+'_'+i).val();
+              setTimeout(function(){
+                $("#inputTag_"+count+'_'+i).tagsinput('removeAll');
+              },500)
+            }else {
+              args[i].value = $("#simple_input_"+count+'_'+i).val();
+              $("#simple_input_"+count+'_'+i).val('');
+            }
+          }else if(this.selected_tool.args[i].selectable ==true && this.selected_tool.args[i].format == 'array'){
+              console.log($('#select_'+count+'_'+i).val())
+              args[i].value = $('#select_'+count+'_'+i).val();
+          }
+          if(args[i].args && args[i].args.length > 0){
+            await this.adding(args[i].args, (count*1+1))
+          }
+        }
+
+        return args;
+      },
+      async startListArg(args,index){
+        let myPromise = new Promise((resolve, reject) => {
+          this.listArg(args, index).then(body => {
+            resolve(body);
+          }).catch(err => {
+              reject(err.message);
+          });
+        });
+        return myPromise.then(body => {
+            $('#list-arg'+index).html(body)
+            return body;
+        }).catch(err => {
+            console.log(err);
+        })
+      },
+      async listArg(args, index){
+        var text = '', body = '';
+
+        for(var i in args){
+          text = '';
+          if(args[i].type && args[i].value){
+            text += `<p style='margin-bottom:0px;'>
+                      ${args[i].type} : ${args[i].value}
+                    </p>`
+          }
+          if(args[i].args && args[i].args.length > 0){
+            text += await this.listArg(args[i].args, index);
+          }
+          body += text;
+
+        }
+        return body;
+      },
+      removeTool(key){
+        this.$delete(this.array_selected_tools,key)
+        if (this.isEmpty(this.array_selected_tools)) {
+          this.showBuilderTool = false;
+        }
+
+      },
+
   },
   created(){
-
+      this.getCriteriaCall(this.getCriteriaCallBack);
       this.pipeline_id = '';
       this.params.url = '';
       this.params.brach = '';
