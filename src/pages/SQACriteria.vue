@@ -495,6 +495,7 @@
         }
       },
       'criteria_soft'(val){
+        console.log(val)
         this.builder_tool = 'default';
         this.docker_image = '';
         this.docker_lang = '';
@@ -502,6 +503,8 @@
         if(val != 'default'){
           this.criteria_serv = 'default';
           this.criteria = val
+        }else{
+         this.criteria = 'default';
         }
 
       },
@@ -513,6 +516,8 @@
         if(val != 'default'){
           this.criteria_soft = 'default';
           this.criteria = val
+        }else{
+         this.criteria = 'default';
         }
 
       },

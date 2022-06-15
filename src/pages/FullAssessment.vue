@@ -56,6 +56,10 @@
                   </div>
                 </div>
 
+                <hr/>
+
+
+
                 <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
                   <span class="custom-label">External repo for documentation?</span>
                   <div class="custom-div-append">
@@ -67,7 +71,7 @@
                   <span class="custom-label">No</span><base-checkbox name="credentials" v-model="doc.no"></base-checkbox>
                 </div>
 
-                <div v-show='doc.yes' class="text-left row">
+                <div v-show='doc.yes' class="text-left row" style="padding-left:40px;">
                     <div class="col-12 col-md-8">
                       <base-input type="text" class="no-margin"
                             label="Repo URL"
@@ -90,8 +94,132 @@
 
                 </div>
 
-                 <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
-                  <span class="custom-label">Deploy a service?</span>
+                <hr/>
+
+                <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
+                  <span class="custom-label">Deployment settings?</span>
+                  <div class="custom-div-append">
+                    <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>more info</a>">
+                      <i class="fa fa-question-circle"></i>
+                    </button>
+                  </div>
+                  <span class="custom-label" style="padding-left:75px;">Yes</span><base-checkbox name="credentials" v-model="deploy.yes"></base-checkbox>
+                  <span class="custom-label">No</span><base-checkbox name="credentials" v-model="deploy.no"></base-checkbox>
+                </div>
+
+                <div v-show='deploy.yes' class="text-left" style="padding-left:20px;">
+
+                    <div class="row mb-2" style="padding-left:15px;">
+                       <div class="col-12 col-md-8">
+                        <base-input type="text" class="no-margin"
+                              label="Deployment repository URL (optional)"
+                              :disabled="false"
+                              placeholder=""
+                              v-model="deploy.url">
+                        </base-input>
+                        <!-- <span v-show="showErrorCredId" style="color:red;font-size:12px;">This field is required</span> -->
+
+                      </div>
+                      <div class="col-12 col-md-4">
+                        <base-input type="text" class="no-margin"
+                              label="Deployment repository Branch (optional)"
+                              :disabled="false"
+                              placeholder=""
+                              v-model="deploy.branch">
+                        </base-input>
+                      </div>
+
+                    </div>
+
+                    <div v-show="criteria != 'default'" class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
+                      <!-- <h4 style="font-weight:700;padding-left:15px;">Tool selection</h4>
+                      <p style="padding-left:15px;font-size:15px;">A set of supported tools will be available for selection according to the criterion selected above. The catch-all <em>commands</em> tool can be used to execute alternative commands and/or additional non-supported tools.</p> -->
+                      <div class="col-12 col-md-6">
+                        <label> CHOOSE A TOOL (required)</label>
+                        <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
+                          <option value="default">Select ...</option>
+                          <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
+                          <!-- <option value="tox">TOX</option>
+                          <option value="command">COMMANDS</option> -->
+                        </select>
+                      </div>
+                      <div v-show="showBuilderTool" class="text-left col-12 col-md-6" style="padding-top:25px;">
+                        <button style="max-height:40px;" type="button" class="btn  btn-info" @click="addTool()"><i class="fa fa-plus"></i>ADD TOOL</button>
+                      </div>
+                    </div>
+                    <div>
+                      <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a tool to define some pipeline work.</span>
+                    </div>
+                    <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderTool">
+                      <div id="ref-arg"></div>
+                    </div>
+
+
+                    <div v-show="builder_tool != 'default'" class="col-12 mt-2">
+                      <span v-show="docker_image !=''" class="badge badge-secondary">image:<span style="font-weight:bold"> {{docker_image}}</span></span>
+                      <span v-show="docker_lang !=''" style="margin:0px 5px;" class="badge badge-primary">lang:<span style="font-weight:bold"> {{docker_lang}}</span></span>
+                      <span v-show="docker_version !=''" style="margin:0px 5px;" class="badge badge-danger">version:<span style="font-weight:bold"> {{docker_version}}</span></span>
+
+                      <div class="row" style="padding-top:20px">
+                        <div style="display:contents" class="col-12 col-md-6">
+                          <span class="custom-label" style="font-weight:bold;font-size:16px;">Use custom service?</span>
+                          <div class="custom-div-append">
+                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Define your own container service <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_2_criteria#running-the-tools-with-your-own-services'>more info</a>">
+                              <i class="fa fa-question-circle"></i>
+                            </button>
+                          </div>
+                        </div>
+                        <div style="display:contents" class="col-12 col-md-6">
+                          <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="change_image_yes"></base-checkbox>
+                          <span class="custom-label">No</span><base-checkbox name="workspace" v-model="change_image_no"></base-checkbox>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div v-show="array_selected_tools.length > 0" style="padding-top:40px;margin-bottom:2rem;">
+                      <div class="text-center" style="padding-bottom:10px;">
+                        <span class="custom-table-title" style="te">Selected Tools</span>
+                      </div>
+                      <div class="table-responsive">
+                        <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <thead>
+                                <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Tool</th>
+                                <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Arguments</th>
+                                <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
+                            </thead>
+                            <tbody v-for="(tool, index) in array_selected_tools" :key="index">
+                              <tr
+                                  style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                  <td
+                                      style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <div style="text-align:left;text-transform: uppercase;">
+                                          {{array_selected_tools[index].name}}
+                                      </div>
+                                  </td>
+                                  <td
+                                      style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <div :id="'list-arg'+index" style="text-align:center;">
+                                          {{startListArg(tool['args'], index)}}
+                                      </div>
+
+                                  </td>
+                                  <td
+                                      style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeTool(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                      </button>
+                                  </td>
+
+                              </tr>
+                            </tbody>
+                        </table>
+                      </div>
+                  </div>
+                </div>
+
+                <hr/>
+
+                <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
+                  <span class="custom-label">FAIR?</span>
                   <div class="custom-div-append">
                     <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>more info</a>">
                       <i class="fa fa-question-circle"></i>
@@ -1087,6 +1215,13 @@ input[type=number]::-webkit-inner-spin-button {
 
 .modal-dialog{
   transform:none!important;
+}
+
+hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 </style>
