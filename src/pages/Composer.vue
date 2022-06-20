@@ -866,11 +866,6 @@
     created(){
       var _this = this;
       var sizeRepos = this.objectSize(this.$store.state.config_yaml.config.project_repos);
-      if(this.$store.state.name == ''){
-        this.notifyVue("Please define the name of the pipeline",'nc-icon nc-simple-remove','danger')
-        this.$router.push({name:"PipelineName"})
-      }
-      console.log(this.$store.state.docker_compose.services)
       var sizeServices = this.objectSize(this.$store.state.docker_compose.services)
       if(sizeServices > 0){
         var all_services = Object.keys(this.$store.state.docker_compose.services);

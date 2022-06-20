@@ -112,7 +112,7 @@
                     <div class="row mb-2" style="padding-left:15px;">
                        <div class="col-12 col-md-8">
                         <base-input type="text" class="no-margin"
-                              label="Deployment repository URL (optional)"
+                              label="Repository URL (optional)"
                               :disabled="false"
                               placeholder=""
                               v-model="deploy.url">
@@ -122,7 +122,7 @@
                       </div>
                       <div class="col-12 col-md-4">
                         <base-input type="text" class="no-margin"
-                              label="Deployment repository Branch (optional)"
+                              label="Repository Branch (optional)"
                               :disabled="false"
                               placeholder=""
                               v-model="deploy.branch">
@@ -176,10 +176,17 @@
                       </div>
                     </div>
 
+                     <div v-show="change_image_yes"  class="col-12 col-md-6" style="display:grid;">
+                        <!--<label>SELECT THE SERVICE</label>-->
+                        <select class="custom-select" id="service" v-model='service' >
+                          <option value="default">Choose a service...</option>
+                          <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
+                        </select>
+                        <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal()"><i class="fa fa-plus"></i>ADD SERVICE</button>
+                        <span v-show="showErrorService" style="color:red; font-size:12px;">For the selected tool you must select a service.</span>
+                    </div>
+
                     <div v-show="array_selected_tools.length > 0" style="padding-top:40px;margin-bottom:2rem;">
-                      <div class="text-center" style="padding-bottom:10px;">
-                        <span class="custom-table-title" style="te">Selected Tools</span>
-                      </div>
                       <div class="table-responsive">
                         <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                             <thead>
@@ -225,62 +232,42 @@
                       <i class="fa fa-question-circle"></i>
                     </button>
                   </div>
-                  <span class="custom-label" style="padding-left:75px;">Yes</span><base-checkbox name="credentials" v-model="deploy.yes"></base-checkbox>
-                  <span class="custom-label">No</span><base-checkbox name="credentials" v-model="deploy.no"></base-checkbox>
+                  <span class="custom-label" style="padding-left:75px;">Yes</span><base-checkbox name="credentials" v-model="fair.yes"></base-checkbox>
+                  <span class="custom-label">No</span><base-checkbox name="credentials" v-model="fair.no"></base-checkbox>
                 </div>
 
-                <div v-show='deploy.yes' class="text-left" style="padding-left:20px;">
+                <div v-show='fair.yes' class="text-left" style="padding-left:20px;">
 
-                    <div class="row mb-2" style="padding-left:15px;">
-                       <div class="col-12 col-md-8">
-                        <base-input type="text" class="no-margin"
-                              label="Deployment repository URL (optional)"
-                              :disabled="false"
-                              placeholder=""
-                              v-model="deploy.url">
-                        </base-input>
-                        <!-- <span v-show="showErrorCredId" style="color:red;font-size:12px;">This field is required</span> -->
 
-                      </div>
-                      <div class="col-12 col-md-4">
-                        <base-input type="text" class="no-margin"
-                              label="Deployment repository Branch (optional)"
-                              :disabled="false"
-                              placeholder=""
-                              v-model="deploy.branch">
-                        </base-input>
-                      </div>
 
-                    </div>
-
-                    <div v-show="criteria != 'default'" class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
+                    <div v-show="criteria_fair != 'default'" class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
                       <!-- <h4 style="font-weight:700;padding-left:15px;">Tool selection</h4>
                       <p style="padding-left:15px;font-size:15px;">A set of supported tools will be available for selection according to the criterion selected above. The catch-all <em>commands</em> tool can be used to execute alternative commands and/or additional non-supported tools.</p> -->
                       <div class="col-12 col-md-6">
                         <label> CHOOSE A TOOL (required)</label>
-                        <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
+                        <select class="custom-select" id="sqacriteria" v-model='builder_tool_fair' >
                           <option value="default">Select ...</option>
-                          <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
+                          <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools_fair" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
                           <!-- <option value="tox">TOX</option>
                           <option value="command">COMMANDS</option> -->
                         </select>
                       </div>
-                      <div v-show="showBuilderTool" class="text-left col-12 col-md-6" style="padding-top:25px;">
-                        <button style="max-height:40px;" type="button" class="btn  btn-info" @click="addTool()"><i class="fa fa-plus"></i>ADD TOOL</button>
+                      <div v-show="showBuilderToolFair" class="text-left col-12 col-md-6" style="padding-top:25px;">
+                        <button style="max-height:40px;" type="button" class="btn  btn-info" @click="addToolFair()"><i class="fa fa-plus"></i>ADD TOOL</button>
                       </div>
                     </div>
                     <div>
                       <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a tool to define some pipeline work.</span>
                     </div>
-                    <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderTool">
-                      <div id="ref-arg"></div>
+                    <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderToolFair">
+                      <div id="ref-arg-fair"></div>
                     </div>
 
 
-                    <div v-show="builder_tool != 'default'" class="col-12 mt-2">
-                      <span v-show="docker_image !=''" class="badge badge-secondary">image:<span style="font-weight:bold"> {{docker_image}}</span></span>
-                      <span v-show="docker_lang !=''" style="margin:0px 5px;" class="badge badge-primary">lang:<span style="font-weight:bold"> {{docker_lang}}</span></span>
-                      <span v-show="docker_version !=''" style="margin:0px 5px;" class="badge badge-danger">version:<span style="font-weight:bold"> {{docker_version}}</span></span>
+                    <div v-show="builder_tool_fair != 'default'" class="col-12 mt-2">
+                      <span v-show="docker_image !=''" class="badge badge-secondary">image:<span style="font-weight:bold"> {{docker_image_fair}}</span></span>
+                      <span v-show="docker_lang !=''" style="margin:0px 5px;" class="badge badge-primary">lang:<span style="font-weight:bold"> {{docker_lang_fair}}</span></span>
+                      <span v-show="docker_version !=''" style="margin:0px 5px;" class="badge badge-danger">version:<span style="font-weight:bold"> {{docker_version_fair}}</span></span>
 
                       <div class="row" style="padding-top:20px">
                         <div style="display:contents" class="col-12 col-md-6">
@@ -292,13 +279,13 @@
                           </div>
                         </div>
                         <div style="display:contents" class="col-12 col-md-6">
-                          <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="change_image_yes"></base-checkbox>
-                          <span class="custom-label">No</span><base-checkbox name="workspace" v-model="change_image_no"></base-checkbox>
+                          <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="change_image_yes_fair"></base-checkbox>
+                          <span class="custom-label">No</span><base-checkbox name="workspace" v-model="change_image_no_fair"></base-checkbox>
                         </div>
                       </div>
                     </div>
 
-                    <div v-show="array_selected_tools.length > 0" style="padding-top:40px;margin-bottom:2rem;">
+                    <div v-show="array_selected_tools_fair.length > 0" style="padding-top:40px;margin-bottom:2rem;">
                       <div class="text-center" style="padding-bottom:10px;">
                         <span class="custom-table-title" style="te">Selected Tools</span>
                       </div>
@@ -309,25 +296,25 @@
                                 <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Arguments</th>
                                 <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
                             </thead>
-                            <tbody v-for="(tool, index) in array_selected_tools" :key="index">
+                            <tbody v-for="(tool, index) in array_selected_tools_fair" :key="index">
                               <tr
                                   style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
                                   <td
                                       style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                       <div style="text-align:left;text-transform: uppercase;">
-                                          {{array_selected_tools[index].name}}
+                                          {{array_selected_tools_fair[index].name}}
                                       </div>
                                   </td>
                                   <td
                                       style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                       <div :id="'list-arg'+index" style="text-align:center;">
-                                          {{startListArg(tool['args'], index)}}
+                                          {{startListArgFair(tool['args'], index)}}
                                       </div>
 
                                   </td>
                                   <td
                                       style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeTool(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeToolFair(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
                                       </button>
                                   </td>
 
@@ -348,24 +335,46 @@
 						</template>
 					</card>
 				</div>
+        <div class="modal" id="myModal" tabindex="-1" role="dialog" >
+          <div class="modal-dialog modal-xl" role="document" style="max-height:650px;">
+            <div class="modal-content">
+              <div class="modal-header" style="border-bottom:1px solid #ccc;padding-bottom:20px;">
+                <h5 style='font-weight:700' class="modal-title">Add New Services</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" style="border-bottom:1px solid #ccc;padding-bottom:0px;max-height:70vh;overflow-y:auto">
+                <composer @service_name="getServiceName"></composer>
+              </div>
+              <div class="modal-footer" style="padding-top:20px;">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-fill" @click="checkServices()" data-dismiss="modal">Done</button>
+              </div>
+            </div>
+          </div>
+        </div>
 			</div>
 		</div>
   	</div>
 </template>
 <script>
 
-  import LTable from 'src/components/Table.vue'
-  import Card from 'src/components/Cards/Card.vue'
-  import Services from '../services/services'
+  import LTable from 'src/components/Table.vue';
+  import Card from 'src/components/Cards/Card.vue';
+  import Services from '../services/services';
+   import Composer from './Composer.vue';
   export default {
     components: {
 		LTable,
-		Card
+		Card,
+    Composer
     },
     mixins: [Services],
     data () {
       return {
         criteria:'default',
+        criteria_fair:'default',
         array_criterias:[],
         service:{
           name:'',
@@ -389,6 +398,10 @@
           url:'',
           branch:''
         },
+        fair:{
+          yes:false,
+          no:true,
+        },
         autoRefresh:false,
         pipeline_id:'',
         loading: false,
@@ -406,15 +419,29 @@
         array_criterias:[],
         change_image_yes: false,
         change_image_no: true,
+        change_image_yes_fair: false,
+        change_image_no_fair: true,
         docker_image: '',
         docker_lang: '',
         docker_version: '',
+        docker_image_fair: '',
+        docker_lang_fair: '',
+        docker_version_fair: '',
         builder_tool: 'default',
+        builder_tool_fair: 'default',
         showBuilderTool:false,
+        showBuilderToolFair:false,
         array_tools:[],
+        array_tools_fair:[],
         selected_tool:{},
+        selected_tool_fair:{},
         showErrorBuilderTool:false,
         array_selected_tools:[],
+        array_selected_tools_fair:[],
+        service_name: '',
+        service:'default',
+        service_name_fair: '',
+        service_fair:'default',
 
 
       }
@@ -433,50 +460,61 @@
           this.docker_image = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.image) ? this.selected_tool.docker.image : (Object.keys(this.selected_tool).length > 0 && this.selected_tool.docker && this.selected_tool.docker.dockerfile)?'Dockerfile':''
           this.docker_lang = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.lang) ? this.selected_tool.lang : ''
           this.docker_version = (Object.keys(this.selected_tool).length > 0 && this.selected_tool.version) ? this.selected_tool.version : ''
-
         }else{
            this.change_image_yes = true;
+        }
+      },
+      'change_image_yes_fair'(val){
+        if(val==true){
+          this.change_image_no_fair = false;
+        }else{
+          this.change_image_no_fair = true;
+        }
+      },
+      'change_image_no_fair'(val){
+         if(val==true){
+            this.change_image_yes_fair = false;
+            this.docker_image_fair = (Object.keys(this.selected_tool_fair).length > 0 && this.selected_tool_fair.docker && this.selected_tool_fair.docker.image) ? this.selected_tool_fair.docker.image : (Object.keys(this.selected_tool_fair).length > 0 && this.selected_tool_fair.docker && this.selected_tool_fair.docker.dockerfile)?'Dockerfile':''
+            this.docker_lang_fair = (Object.keys(this.selected_tool_fair).length > 0 && this.selected_tool_fair.lang) ? this.selected_tool_fair.lang : ''
+            this.docker_version_fair = (Object.keys(this.selected_tool_fair).length > 0 && this.selected_tool_fair.version) ? this.selected_tool_fair.version : ''
+
+        }else{
+           this.change_image_yes_fair = true;
         }
       },
       'criteria'(val){
         this.showBuilderTool=false;
         if(val != "default"){
-          this.show_link = true;
-          this.showSelect = true;
           for (var i in this.array_criterias){
             if (this.array_criterias[i].id == val){
               this.array_tools = this.array_criterias[i]['tools']
             }
           }
           this.showErrorCriteria = false;
-          if(val == "qc_style"){
-            this.criteria_link = ""
-          }else if(val == "qc_coverage"){
-            this.criteria_link=""
-          }else if(val == "qc_functional"){
-            this.criteria_link = ""
-          }else if(val == "qc_security"){
-            this.criteria_link = ""
-          }else if(val == "qc_doc"){
-            this.criteria_link == ""
-          }
-        }else{
-          this.show_link = false;
-          this.showSelect = false;
         }
       },
-      'builder_tool'(val){
-        if(val != 'default'){
-          for (var i in this.array_tools){
-            if(this.array_tools[i].name == val){
-              this.selected_tool = this.array_tools[i]
+      'criteria_fair'(val){
+        this.showBuilderToolFair=false;
+        if(val != "default"){
+          for (var i in this.array_criterias){
+            if (this.array_criterias[i].id == val){
+              this.array_tools_fair = this.array_criterias[i]['tools']
             }
           }
-          console.log(this.selected_tool)
+        }
+      },
+      'builder_tool_fair'(val){
+        console.log(val)
+        if(val != 'default'){
+          this.selected_tool_fair = {};
+          for (var i in this.array_tools_fair){
+            if(this.array_tools_fair[i].name == val){
+              this.selected_tool_fair = JSON.parse(JSON.stringify(this.array_tools_fair[i]));
+            }
+          }
           var _this = this;
-
           setTimeout(function(){
-            for (var i in _this.selected_tool.args){
+            for (var i in _this.selected_tool_fair.args){
               $("#inputTag_"+i).tagsinput({
                 trimValue: true
               })
@@ -485,21 +523,41 @@
 
           var no_error = 0;
           var select_false = 0;
-          for(var i in this.selected_tool.args){
-            if(typeof this.selected_tool.args[i].selectable !== 'undefined' && this.selected_tool.args[i].selectable == true  && typeof this.selected_tool.args[i].format !== 'undefined' && typeof this.selected_tool.args[i].type !== 'undefined' && typeof this.selected_tool.args[i].value !== 'undefined'){
+          for(var i in this.selected_tool_fair.args){
+            if(typeof this.selected_tool_fair.args[i].selectable !== 'undefined' && this.selected_tool_fair.args[i].selectable == true  && typeof this.selected_tool_fair.args[i].format !== 'undefined' && typeof this.selected_tool_fair.args[i].type !== 'undefined' && typeof this.selected_tool_fair.args[i].value !== 'undefined'){
              no_error = no_error + 1;
-            }else if(typeof this.selected_tool.args[i].selectable !== 'undefined' && this.selected_tool.args[i].selectable == false){
+            }else if(typeof this.selected_tool_fair.args[i].selectable !== 'undefined' && this.selected_tool_fair.args[i].selectable == false){
               select_false = select_false + 1;
             }
           }
-          if(no_error+select_false == this.selected_tool.args.length){
-            this.showBuilderTool = true;
-          }else{
-            this.showBuilderTool = false;
-            this.notifyVue("There was an error bulding the arguments of the tool.")
-          }
+          this.showBuilderToolFair = true;
+         //Painting Arg
+          console.log(this.selected_tool_fair.args)
+          this.paintingArgFair(this.selected_tool_fair.args, 0);
+
+          setTimeout(function(){
+            var count = 0;
+            for (var i in _this.selected_tool_fair.args){
+              if(_this.selected_tool_fair.args[i].repeatable && _this.selected_tool_fair.args[i].repeatable == true){
+                $("#inputTag_"+count+'_'+i).tagsinput({
+                  trimValue: true
+                });
+                count=count*1+1;
+              }
+            }
+            },100)
+            this.change_image_yes_fair = false;
+            this.change_image_no_fair = true;
+            console.log(this.selected_tool_fair)
+            this.docker_image_fair = (Object.keys(this.selected_tool_fair).length > 0 && this.selected_tool_fair.docker && this.selected_tool_fair.docker.image) ? this.selected_tool_fair.docker.image : (Object.keys(this.selected_tool_fair).length > 0 && this.selected_tool_fair.docker && this.selected_tool_fair.docker.dockerfile)?'Dockerfile':''
+            this.docker_lang_fair = (Object.keys(this.selected_tool_fair).length > 0 && this.selected_tool_fair.lang) ? this.selected_tool_fair.lang : ''
+            this.docker_version_fair = (Object.keys(this.selected_tool_fair).length > 0 && this.selected_tool_fair.version) ? this.selected_tool_fair.version : ''
+
         }else{
-          this.showBuilderTool = false;
+          this.showBuilderToolFair = false;
+          this.docker_image_fair = '';
+          this.docker_lang_fair = '';
+          this.docker_version_fair = '';
         }
       },
       "doc.yes"(val){
@@ -532,6 +590,21 @@
           this.deploy.yes = false;
         }else{
           this.deploy.yes = true;
+        }
+      },
+      "fair.yes"(val){
+         if(val==true){
+          this.fair.no = false;
+        }else{
+          this.fair.no = true;
+        }
+
+      },
+      "fair.no"(val){
+        if(val==true){
+          this.fair.yes = false;
+        }else{
+          this.fair.yes = true;
         }
       },
       "autoRefresh"(val) {
@@ -599,6 +672,25 @@
     },
 
     methods:{
+      getServiceName(event){
+        this.service_name = event;
+        this.service = event;
+        this.docker_image = event;
+        this.docker_lang = '';
+        this.docker_version = '';
+        $('#myModal').modal('hide');
+      },
+      getServiceNameFair(event){
+        this.service_name_fair = event;
+        this.service_fair = event;
+        this.docker_image_fair = event;
+        this.docker_lang_fair = '';
+        this.docker_version_fair = '';
+        $('#myModal').modal('hide');
+      },
+      openModal(item){
+        $('#myModal').modal('show');
+      },
       goToReport(){
         this.$router.push({name: 'full-assessment-report'});
       },
@@ -641,9 +733,13 @@
                 repo:this.deploy.url.trim(),
                 branch:this.deploy.branch.trim()
               },
-              'deploy_tool':{
+              'deploy_tool':array_selected_tools[0]
+            }
 
-              }
+          }
+          if(this.fair.yes){
+            data['fair'] = {
+              'fair_tool':array_selected_tools_fair[0]
             }
 
           }
@@ -937,10 +1033,29 @@
           for(var i in response.data){
             this.array_criterias.push(response.data[i]);
             this.criteria = 'SvcQC.Dep';
+            this.criteria_fair = 'QC.FAIR'
           }
+        }else if(response.status == 403){
+           this.loadingError = true;
+           this.$swal.fire({
+            title: 'We are having problems making the request.',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#E14726',
+            footer: `<a style="font-size:18px;color:red; text-decoration:underline;"  href="https://github.com/EOSC-synergy/SQAaaS/issues/new/choose" target="_blank">Report the issue</a>`,
+
+          })
+
         }else{
           this.loadingError = true;
-          this.notifyVue("We are having problems making the request.")
+          this.$swal.fire({
+            title: 'We are having problems making the request.',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#E14726',
+            footer: `<a style="font-size:18px;color:red; text-decoration:underline;"  href="https://github.com/EOSC-synergy/SQAaaS/issues/new/choose" target="_blank">Report the issue</a>`,
+          })
         }
       },
 
@@ -1084,6 +1199,152 @@
         this.$delete(this.array_selected_tools,key)
         if (this.isEmpty(this.array_selected_tools)) {
           this.showBuilderTool = false;
+        }
+
+      },
+
+
+
+      async addToolFair(){
+        let args = await this.addingFair(this.selected_tool_fair.args, 0)
+        var error_args = false;
+        for (var i in args){
+          if(args[i].type == 'positional' && args[i].value == ''){
+            error_args = true;
+          }
+        }
+        if(error_args == true){
+          this.showErrorArgsFair = true;
+        }else{
+          this.showErrorArgsFair = false;
+          this.selected_tool_fair['args'] =  args;
+          this.builder_tool_fair = 'default';
+          this.change_image_yes_fair = false;
+          this.change_image_no_fair = true;
+          this.showBuilderToolFair = false;
+          this.array_selected_tools_fair.push(this.selected_tool_fair);
+        }
+      },
+
+      async paintingArgFair(args, count){
+        var text = '', body = '';
+        for(var i in args){
+          text = '';
+          if(args[i].selectable ==true &&( typeof args[i].repeatable == 'undefined' || args[i].repeatable == false) && args[i].format == 'string'){
+          // if(args[i].selectable ==false &&( typeof args[i].repeatable == 'undefined' || args[i].repeatable == false)){
+            text += `<div class="form-group" style="margin-bottom:0px;">
+                    <label for="${'simple_input_'+count+'_'+i}">${args[i].description}</label>
+                    <input id="${'simple_input_'+count+'_'+i}" type="text" class="form-control" style="height:32px;"
+                      placeholder='${args[i].value.replace(/[']+/g, '')}' value='${args[i].value.replace(/[']+/g, '')}'
+                    >
+                  </div>`
+
+          }else if(args[i].selectable ==true && args[i].repeatable == true && args[i].format == 'string'){
+            text += `<div class="form-group">
+                  <label id="${'array_input_label'+count+'_'+i}" for="">${args[i].description}</label>
+                  <div class="bs-example">
+                    <input type="text" id="${'inputTag_'+count+'_'+i}" value='${args[i].value.replace(/[']+/g, '')}' data-role="tagsinput">
+                  </div>
+                  <div class="text-right">
+                    <label id="array_input_label2" for="">Note: Type something and press Enter.</label>
+
+                  </div>
+                </div>`
+          }else if(args[i].selectable ==true &&( typeof args[i].repeatable == 'undefined' || args[i].repeatable == false) && args[i].format == 'array'){
+            text += `<div class="form-group">
+                  <label id="${'array_input_label'+count+'_'+i}" for="">${args[i].description}</label>
+                  <div class="bs-example">
+                     <select class="custom-select select-options" id="${'select_'+count+'_'+i}" data-index='select-val'>
+                     ${this.paintSelectOptFair(args[i].value)}
+                    </select>
+                  </div>
+
+                </div>`
+          }
+
+          if(args[i].args && args[i].args.length > 0){
+            text += await this.paintingArgFair(args[i].args, (count*1+1))
+          }
+
+          body += text
+        }
+
+        $('#ref-arg-fair').html(body)
+        $('.select-options').on('change', function(){
+          console.log($(this).attr('data-index'))
+          console.log($(this).val())
+        })
+        return body;
+      },
+      paintSelectOptFair(opts){
+        console.log(opts)
+        let message = "<option selected disabled value=''>Selected option ...</option>"
+        for(var i in opts){
+          message += `<option value="${opts[i]}">${opts[i]}</option>`
+        }
+
+        return message;
+      },
+      async addingFair(args, count){
+        for(var i in args){
+          if (this.selected_tool_fair.args[i].selectable ==true && this.selected_tool_fair.args[i].format == 'string'){
+            if(args[i].repeatable == true){
+              args[i].value = $("#inputTag_"+count+'_'+i).val();
+              setTimeout(function(){
+                $("#inputTag_"+count+'_'+i).tagsinput('removeAll');
+              },500)
+            }else {
+              args[i].value = $("#simple_input_"+count+'_'+i).val();
+              $("#simple_input_"+count+'_'+i).val('');
+            }
+          }else if(this.selected_tool_fair.args[i].selectable ==true && this.selected_tool_fair.args[i].format == 'array'){
+              console.log($('#select_'+count+'_'+i).val())
+              args[i].value = $('#select_'+count+'_'+i).val();
+          }
+          if(args[i].args && args[i].args.length > 0){
+            await this.addingFair(args[i].args, (count*1+1))
+          }
+        }
+
+        return args;
+      },
+      async startListArgFair(args,index){
+        let myPromise = new Promise((resolve, reject) => {
+          this.listArgFair(args, index).then(body => {
+            resolve(body);
+          }).catch(err => {
+              reject(err.message);
+          });
+        });
+        return myPromise.then(body => {
+            $('#list-arg'+index).html(body)
+            return body;
+        }).catch(err => {
+            console.log(err);
+        })
+      },
+      async listArgFair(args, index){
+        var text = '', body = '';
+
+        for(var i in args){
+          text = '';
+          if(args[i].type && args[i].value){
+            text += `<p style='margin-bottom:0px;'>
+                      ${args[i].type} : ${args[i].value}
+                    </p>`
+          }
+          if(args[i].args && args[i].args.length > 0){
+            text += await this.listArgFair(args[i].args, index);
+          }
+          body += text;
+
+        }
+        return body;
+      },
+      removeToolFair(key){
+        this.$delete(this.array_selected_tools_fair,key)
+        if (this.isEmpty(this.array_selected_tools_fair)) {
+          this.showBuilderToolFair = false;
         }
 
       },
