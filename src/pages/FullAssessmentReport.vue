@@ -65,9 +65,7 @@
                                 </div>
 
                               </div>
-
                             </div>
-
                           </div>
 
                         </template>
@@ -164,6 +162,12 @@
                                   <a :href="modalInfoData && modalInfoData['tool'] && modalInfoData['tool']['ci']?modalInfoData['tool']['ci']['url']:'#'" target="_blank" style="font-size:18px;">
                                     <span>Tool: {{modalInfoData && modalInfoData['tool'] && modalInfoData['tool'].name  ? modalInfoData['tool'].name: ''}}</span> <i style="color:#1BC10B;" class="fa fa-times-circle" aria-hidden="true"></i></a>
                               </div>
+
+                            </div>
+                            <div style="padding:0px 20px" v-if="modalInfoData['tool']" class="row">
+                              <span v-show="modalInfoData['tool']['docker']" class="badge badge-secondary">image:<span style="font-weight:bold"> {{modalInfoData['tool']['docker']['image']?modalInfoData['tool']['docker']['image'] : modalInfoData['tool']['docker']['dockerfile']?'Dockerfile':''}}</span></span>
+                              <span v-show="modalInfoData['tool']['lang'] != ''" style="margin:0px 5px;" class="badge badge-primary">lang:<span style="font-weight:bold"> {{modalInfoData['tool']['lang']}}</span></span>
+                              <span v-show="modalInfoData['tool']['version']" style="margin:0px 5px;" class="badge badge-danger">version:<span style="font-weight:bold"> {{modalInfoData['tool']['version']}}</span></span>
 
                             </div>
                             <div class="row" style="padding:0px 20px">
