@@ -765,8 +765,8 @@
             this.createSuccess = false
             this.pipeline_create_message = 'Ups something is wrong!!';
              this.$swal.fire({
-              title: 'An unexpected error occurred while running the assessment!',
-              text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+              title: 'An unexpected error occurred while creating the assessment!',
+              // text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
               icon: 'error',
               confirmButtonText: 'Close',
               footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
