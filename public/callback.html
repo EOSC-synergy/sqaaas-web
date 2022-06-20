@@ -36,13 +36,13 @@
   </div>
   <script type="text/javascript" src="../src/env.js"></script>
   <script>
-        const baseUrl = 'https://aai-dev.egi.eu/oidc/';
-        const client_id = '10333f08-7e8f-4cc4-bba0-e66f4e5505d0';
+        const baseUrl = 'https://aai-dev.egi.eu/auth/realms/egi/protocol/';
+        const client_id = 'de655015-2300-4c66-9a84-0d7e3fd15675';
         const groupId = '00gwb2x6jewAvwYSX0h7';
         const redirect_uri = `${location.origin}/callback.html`;
-        const authorize_endpoint = `${baseUrl}authorize`;
-        const token_endpoint = `${baseUrl}token`;
-        const userinfo_endpoint = `${baseUrl}userinfo`;
+        const authorize_endpoint = `${baseUrl}openid-connect/auth`;
+        const token_endpoint = `${baseUrl}openid-connect/token`;
+        const userinfo_endpoint = `${baseUrl}openid-connect/userinfo`;
         const scope = 'openid profile email eduperson_entitlement';
 
         const q = new URLSearchParams(location.search);
