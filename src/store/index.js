@@ -21,8 +21,7 @@ export default new Vuex.Store({
        credentials:[]
      },
      sqa_criteria:{},
-     environment:{},
-     timeout:600
+     environment:{}
    },
    docker_compose:{
      version:"3.7",
