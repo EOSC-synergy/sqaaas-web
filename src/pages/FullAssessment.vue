@@ -96,7 +96,7 @@
 
                 <hr/>
 
-                <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
+                <!-- <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
                   <span class="custom-label">Deployment settings?</span>
                   <div class="custom-div-append">
                     <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>more info</a>">
@@ -105,9 +105,9 @@
                   </div>
                   <span class="custom-label" style="padding-left:75px;">Yes</span><base-checkbox name="credentials" v-model="deploy.yes"></base-checkbox>
                   <span class="custom-label">No</span><base-checkbox name="credentials" v-model="deploy.no"></base-checkbox>
-                </div>
+                </div> -->
 
-                <div v-show='deploy.yes' class="text-left" style="padding-left:20px;">
+                <!-- <div v-show='deploy.yes' class="text-left" style="padding-left:20px;">
 
                     <div class="row mb-2" style="padding-left:15px;">
                        <div class="col-12 col-md-8">
@@ -117,7 +117,6 @@
                               placeholder=""
                               v-model="deploy.url">
                         </base-input>
-                        <!-- <span v-show="showErrorCredId" style="color:red;font-size:12px;">This field is required</span> -->
 
                       </div>
                       <div class="col-12 col-md-4">
@@ -132,15 +131,11 @@
                     </div>
 
                     <div v-show="criteria != 'default'" class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
-                      <!-- <h4 style="font-weight:700;padding-left:15px;">Tool selection</h4>
-                      <p style="padding-left:15px;font-size:15px;">A set of supported tools will be available for selection according to the criterion selected above. The catch-all <em>commands</em> tool can be used to execute alternative commands and/or additional non-supported tools.</p> -->
                       <div class="col-12 col-md-6">
                         <label> CHOOSE A TOOL (required)</label>
                         <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
                           <option value="default">Select ...</option>
                           <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
-                          <!-- <option value="tox">TOX</option>
-                          <option value="command">COMMANDS</option> -->
                         </select>
                       </div>
                       <div v-show="showBuilderTool" class="text-left col-12 col-md-6" style="padding-top:25px;">
@@ -177,7 +172,6 @@
                     </div>
 
                      <div v-show="change_image_yes"  class="col-12 col-md-6" style="display:grid;">
-                        <!--<label>SELECT THE SERVICE</label>-->
                         <select class="custom-select" id="service" v-model='service' >
                           <option value="default">Choose a service...</option>
                           <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
@@ -221,11 +215,11 @@
                         </table>
                       </div>
                   </div>
-                </div>
+                </div> -->
 
-                <hr/>
+                <!-- <hr/> -->
 
-                <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
+                <!-- <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
                   <span class="custom-label">FAIR?</span>
                   <div class="custom-div-append">
                     <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>more info</a>">
@@ -237,19 +231,12 @@
                 </div>
 
                 <div v-show='fair.yes' class="text-left" style="padding-left:20px;">
-
-
-
                     <div v-show="criteria_fair != 'default'" class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
-                      <!-- <h4 style="font-weight:700;padding-left:15px;">Tool selection</h4>
-                      <p style="padding-left:15px;font-size:15px;">A set of supported tools will be available for selection according to the criterion selected above. The catch-all <em>commands</em> tool can be used to execute alternative commands and/or additional non-supported tools.</p> -->
                       <div class="col-12 col-md-6">
                         <label> CHOOSE A TOOL (required)</label>
                         <select class="custom-select" id="sqacriteria" v-model='builder_tool_fair' >
                           <option value="default">Select ...</option>
                           <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools_fair" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
-                          <!-- <option value="tox">TOX</option>
-                          <option value="command">COMMANDS</option> -->
                         </select>
                       </div>
                       <div v-show="showBuilderToolFair" class="text-left col-12 col-md-6" style="padding-top:25px;">
@@ -323,7 +310,7 @@
                         </table>
                       </div>
                   </div>
-                </div>
+                </div> -->
 
                 <div style="padding:20px;">
                   <button class="btn btn-primary btn-fill" @click="getResults()">Start Assessment</button>
@@ -442,6 +429,7 @@
         service:'default',
         service_name_fair: '',
         service_fair:'default',
+        showErrorService:false
 
 
       }
