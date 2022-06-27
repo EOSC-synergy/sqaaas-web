@@ -732,9 +732,9 @@
 
           }
           this.showErrorURL = false;
-          // this.loading = true;
+          this.loading = true;
           this.modal_message = 'Submitting Pipeline ...';
-          // this.getPipelineAssessmentCall(data,this.getPipelineAssessmentCallBack)
+          this.getPipelineAssessmentCall(data,this.getPipelineAssessmentCallBack)
         }else{
           this.showErrorURL = true;
         }
