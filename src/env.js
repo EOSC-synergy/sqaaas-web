@@ -5,5 +5,5 @@ module.exports = {
     "url_authorize": "https://aai-demo.egi.eu/auth/realms/egi/protocol/openid-connect/auth",
     "url_user_info": "https://aai-demo.egi.eu/auth/realms/egi/protocol/openid-connect/userinfo",
     "token_endpoint": "https://aai-demo.egi.eu/auth/realms/egi/protocol/openid-connect/token",
-    "api" : "https://api-staging.sqaaas.eosc-synergy.eu/v1",
+    "api" : "https://api.sqaaas.eosc-synergy.eu/v1",
 }
