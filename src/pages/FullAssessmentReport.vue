@@ -165,8 +165,12 @@
 
                             </div>
                             <div style="padding:0px 20px" v-if="modalInfoData['tool']" class="row">
-                              <span v-show="modalInfoData['tool']['docker']" class="badge badge-secondary">image:<span style="font-weight:bold"> {{modalInfoData['tool']['docker']['image']?modalInfoData['tool']['docker']['image'] : modalInfoData['tool']['docker']['dockerfile']?'Dockerfile':''}}</span></span>
-                              <span v-show="modalInfoData['tool']['lang'] != ''" style="margin:0px 5px;" class="badge badge-primary">lang:<span style="font-weight:bold"> {{modalInfoData['tool']['lang']}}</span></span>
+                              <span v-show="modalInfoData['tool']['docker'] &&  modalInfoData['tool']['docker']['image']" class="badge badge-secondary">image:<span style="font-weight:bold"> 
+                                {{modalInfoData['tool']['docker'] && modalInfoData['tool']['docker']['image']?modalInfoData['tool']['docker']['image'] : modalInfoData['tool']['docker'] && modalInfoData['tool']['docker']['dockerfile']?'Dockerfile':''}}
+                                </span>
+                              </span>
+                              
+                              <span v-show="modalInfoData['tool']['lang'] && modalInfoData['tool']['lang']!= ''" style="margin:0px 5px;" class="badge badge-primary">lang:<span style="font-weight:bold"> {{modalInfoData['tool']['lang']}}</span></span>
                               <span v-show="modalInfoData['tool']['version']" style="margin:0px 5px;" class="badge badge-danger">version:<span style="font-weight:bold"> {{modalInfoData['tool']['version']}}</span></span>
 
                             </div>
