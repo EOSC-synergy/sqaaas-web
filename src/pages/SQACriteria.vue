@@ -1098,7 +1098,7 @@
     created(){
       this.loading = true;
       this.getCriteriaCall(this.getCriteriaCallBack)
-      // this.checkauthCall(this.checkauthCallBack);
+      this.checkauthCall(this.checkauthCallBack);
       if(this.$store.state.config_yaml.config.credentials.length > 0){
         this.showCredInfo = true;
       }
