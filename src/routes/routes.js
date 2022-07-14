@@ -14,6 +14,8 @@ import SelectOption from 'src/pages/SelectOption.vue'
 import PipelineName from 'src/pages/PipelineName.vue'
 import FullAssessment from 'src/pages/FullAssessment.vue'
 import FullAssessmentReport from 'src/pages/FullAssessmentReport.vue'
+import PrivacyPolicy from 'src/pages/PrivacyPolicy.vue'
+import TermsUse from 'src/pages/TermsUse.vue'
 
 function requireAuth (to, from, next) {
   localStorage.getItem('session');
@@ -45,6 +47,14 @@ const routes = [
     component: Login,
     // beforeEnter: requireAuth
   },
+  { path: '/privacy-policy',
+    component: PrivacyPolicy,
+  // beforeEnter: requireAuth
+  },
+  { path: '/terms-use',
+  component: TermsUse,
+// beforeEnter: requireAuth
+},
   { path: '/',
     component: Login,
   // beforeEnter: requireAuth
