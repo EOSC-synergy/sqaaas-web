@@ -96,7 +96,7 @@
 
                 <hr/>
 
-                <!-- <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
+                <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
                   <span class="custom-label">Deployment settings?</span>
                   <div class="custom-div-append">
                     <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>more info</a>">
@@ -105,9 +105,9 @@
                   </div>
                   <span class="custom-label" style="padding-left:75px;">Yes</span><base-checkbox name="credentials" v-model="deploy.yes"></base-checkbox>
                   <span class="custom-label">No</span><base-checkbox name="credentials" v-model="deploy.no"></base-checkbox>
-                </div> -->
+                </div>
 
-                <!-- <div v-show='deploy.yes' class="text-left" style="padding-left:20px;">
+                <div v-show='deploy.yes' class="text-left" style="padding-left:20px;">
 
                     <div class="row mb-2" style="padding-left:15px;">
                        <div class="col-12 col-md-8">
@@ -171,12 +171,12 @@
                       </div>
                     </div>
 
-                     <div v-show="change_image_yes"  class="col-12 col-md-6" style="display:grid;">
+                    <div v-show="change_image_yes"  class="col-12 col-md-6" style="display:grid;">
                         <select class="custom-select" id="service" v-model='service' >
                           <option value="default">Choose a service...</option>
                           <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
                         </select>
-                        <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal()"><i class="fa fa-plus"></i>ADD SERVICE</button>
+                        <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal();set_fair_service == false"><i class="fa fa-plus"></i>ADD SERVICE</button>
                         <span v-show="showErrorService" style="color:red; font-size:12px;">For the selected tool you must select a service.</span>
                     </div>
 
@@ -215,11 +215,11 @@
                         </table>
                       </div>
                   </div>
-                </div> -->
+                </div>
 
-                <!-- <hr/> -->
+                <hr/>
 
-                <!-- <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
+                <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
                   <span class="custom-label">FAIR?</span>
                   <div class="custom-div-append">
                     <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>more info</a>">
@@ -272,6 +272,14 @@
                       </div>
                     </div>
 
+                     <div v-show="change_image_yes_fair"  class="col-12 col-md-6" style="display:grid;">
+                        <select class="custom-select" id="service" v-model='service_fair' >
+                          <option value="default">Choose a service...</option>
+                          <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
+                        </select>
+                        <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal();set_fair_service == true"><i class="fa fa-plus"></i>ADD SERVICE</button>
+                    </div>
+
                     <div v-show="array_selected_tools_fair.length > 0" style="padding-top:40px;margin-bottom:2rem;">
                       <div class="text-center" style="padding-bottom:10px;">
                         <span class="custom-table-title" style="te">Selected Tools</span>
@@ -310,7 +318,7 @@
                         </table>
                       </div>
                   </div>
-                </div> -->
+                </div>
 
                 <div style="padding:20px;">
                   <button class="btn btn-primary btn-fill" @click="getResults()">Start Assessment</button>
@@ -429,7 +437,8 @@
         service:'default',
         service_name_fair: '',
         service_fair:'default',
-        showErrorService:false
+        showErrorService:false,
+        set_fair_service:false
 
 
       }
@@ -661,19 +670,19 @@
 
     methods:{
       getServiceName(event){
-        this.service_name = event;
-        this.service = event;
-        this.docker_image = event;
-        this.docker_lang = '';
-        this.docker_version = '';
-        $('#myModal').modal('hide');
-      },
-      getServiceNameFair(event){
-        this.service_name_fair = event;
-        this.service_fair = event;
-        this.docker_image_fair = event;
-        this.docker_lang_fair = '';
-        this.docker_version_fair = '';
+        if(set_fair_service){
+          this.service_name_fair = event;
+          this.service_fair = event;
+          this.docker_image_fair = event;
+          this.docker_lang_fair = '';
+          this.docker_version_fair = '';
+        }else{
+          this.service_name = event;
+          this.service = event;
+          this.docker_image = event;
+          this.docker_lang = '';
+          this.docker_version = '';
+        }
         $('#myModal').modal('hide');
       },
       openModal(item){
@@ -721,13 +730,13 @@
                 repo:this.deploy.url.trim(),
                 branch:this.deploy.branch.trim()
               },
-              'deploy_tool':array_selected_tools[0]
+              'deploy_tool':this.array_selected_tools[0]
             }
 
           }
           if(this.fair.yes){
             data['fair'] = {
-              'fair_tool':array_selected_tools_fair[0]
+              'fair_tool':this.array_selected_tools_fair[0]
             }
 
           }
@@ -742,7 +751,6 @@
 
       },
       getPipelineAssessmentCallBack(response){
-        console.log(response)
         if(response.status == 201 && response.data.id){
           this.pipeline_id = response.data.id;
           this.runAssessmentPipelineCall(this.pipeline_id,this.runAssessmentPipelineCallBack)
@@ -1119,7 +1127,6 @@
         return body;
       },
       paintSelectOpt(opts){
-        console.log(opts)
         let message = "<option selected disabled value=''>Selected option ...</option>"
         for(var i in opts){
           message += `<option value="${opts[i]}">${opts[i]}</option>`
@@ -1140,7 +1147,6 @@
               $("#simple_input_"+count+'_'+i).val('');
             }
           }else if(this.selected_tool.args[i].selectable ==true && this.selected_tool.args[i].format == 'array'){
-              console.log($('#select_'+count+'_'+i).val())
               args[i].value = $('#select_'+count+'_'+i).val();
           }
           if(args[i].args && args[i].args.length > 0){
@@ -1265,7 +1271,6 @@
         return body;
       },
       paintSelectOptFair(opts){
-        console.log(opts)
         let message = "<option selected disabled value=''>Selected option ...</option>"
         for(var i in opts){
           message += `<option value="${opts[i]}">${opts[i]}</option>`
@@ -1286,7 +1291,6 @@
               $("#simple_input_"+count+'_'+i).val('');
             }
           }else if(this.selected_tool_fair.args[i].selectable ==true && this.selected_tool_fair.args[i].format == 'array'){
-              console.log($('#select_'+count+'_'+i).val())
               args[i].value = $('#select_'+count+'_'+i).val();
           }
           if(args[i].args && args[i].args.length > 0){
