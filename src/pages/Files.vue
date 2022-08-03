@@ -15,6 +15,7 @@
             </div>
             <div class="text-center">
                 <a v-show="showBuildUrl" style="color:white;margin-right:10px;" class="btn btn-primary btn-fill btn-sm" :href="build_url" target="_blank">Check logs</a>
+                <a v-show="build_status == 'WAITING_SCAN_ORG'" style="color:white;margin-right:10px;" class="btn btn-primary btn-fill btn-sm" href="https://docs.sqaaas.eosc-synergy.eu/advanced/jenkins_scan_organisation" target="_blank">About this status</a>
                 <button style="margin-left:10px;" class="btn btn-sm btn-danger btn-fill" :disabled="disable_cancel" @click="cancelExecution()">Cancel</button>
               </div>
             </div>
@@ -34,7 +35,7 @@
                     </div>
                   </div>
                   <div style="background-color:#c2edd6;padding-left:80px;padding-top:20px;width:40%">
-                    <img src="../../static/pipeline.png" alt="" style="opacity: 0.5;">
+                    <img src="../../static/pipeline.png" alt="" class="responsive" style="opacity: 0.5;">
                   </div>
                 </div>
               </template>
@@ -86,9 +87,11 @@
                     <card  class="strpied-tabled-with-hover"
                               body-classes=""
                         >
-                      <template slot="header" >
+                      <!--
+		      <template slot="header" >
                         <h4 class="text-center" style="padding-bottom:1rem;font-weight:700;">Pipeline files (JePL format)</h4>
                       </template>
+                      -->
                       <template >
                         <div class="col-12 col-md-8">
                           <p class="text-left" style="font-size:14px;margin-bottom:1rem;">
@@ -118,7 +121,7 @@
                           </table>
                           </div>
                         </div>
-                        <div class="col-12 col-md-8">
+                        <div v-if="Object.keys($store.state.docker_compose.services).length > 0" class="col-12 col-md-8">
                           <p class="text-left" style="font-size:14px;">
                             <strong style="font-weight:bold;">Services:</strong> {{''}}
                           </p>
@@ -157,7 +160,7 @@
                           </div>
                         </div>
 
-                        <div class="col-12 col-md-8">
+                        <div v-if="Object.keys($store.state.config_yaml.sqa_criteria).length > 0" class="col-12 col-md-8">
                           <p class="text-left" style="font-size:14px;">
                             <strong style="font-weight:bold;">SQA Criteria:</strong> {{''}}
                           </p>
@@ -168,23 +171,24 @@
                           <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
                               <thead>
                                   <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Criteria</th>
-                                  <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">External Repository and Service</th>
-                                  <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">When</th>
+                                  <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">External Repository and Service</th>
+                                  <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Tools</th>
+                                  <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">When</th>
                               </thead>
                               <tbody v-for="(criteria, index) in $store.state.config_yaml.sqa_criteria" :key="index">
                                       <tr
                                           style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px;">
                                           <td
-                                              style="padding-right: 10px; padding-left: 10px; padding-top: 5px;vertical-align: top;">
+                                              style="padding-right: 10px; padding-left: 10px; padding-top: 5px;vertical-align: middle;">
                                               <div style="text-align:left;">
                                                   {{index}}
                                               </div>
                                           </td>
                                           <td
-                                              style="text-align:left;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                              style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
                                               <div v-for="(repo_criteria, index) in criteria.repos" :key="index" >
                                                 <div class="row">
-                                                  <div class="col-md-6">
+                                                  <div v-if="repo_criteria.repo_url != 'default' && repo_criteria.container" class="col-md-12">
                                                     <p class="text-left" style="font-size:14px;margin-bottom:0px;">
                                                       <strong style="font-weight:bold;">Name:</strong> {{(repo_criteria.repo_url != 'default')?repo_criteria.repo_url:''}}
                                                     </p>
@@ -192,32 +196,43 @@
                                                       <strong style="font-weight:bold;">Service:</strong> {{repo_criteria.container}}
                                                     </p>
                                                   </div>
-                                                  <div class="col-md-6">
-                                                    <p class="text-left" style="font-size:14px;margin-bottom:0;">
-                                                      <strong style="font-weight:bold;">Commands: </strong>
-                                                    </p>
-                                                    <p style="margin-bottom:0;">
-                                                      <span style="font-size:14px;" v-for="(command, index) in repo_criteria.commands" :key="index">
-                                                        {{(index==repo_criteria.commands.length-1) ? command : command+','}}
-                                                      </span>
+                                                  <div v-else class="col-md-12">
+                                                    <p class="text-center" style="font-size:14px;margin-bottom:0px;">
+                                                      -
                                                     </p>
 
                                                   </div>
+
                                                 </div>
                                               </div>
 
                                           </td>
-                                          <td style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                            <div v-if="criteria.when && criteria.when.building_tag && criteria.when.building_tag == true">
-                                              <p>On Tag Creation</p>
-                                            </div>
-                                            <div v-else-if="criteria.when && criteria.when.branch">
-                                              <p>Branch: {{(criteria.when) ? ((criteria.when.branch) ? criteria.when.branch.pattern : '') : ''}}</p>
+                                          <td  style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                            <div v-for="(repo_criteria, index) in criteria.repos" :key="index" >
+                                                <div class="row">
+                                                  <div class="col-md-12">
+                                                    <p class="text-center" style="font-size:14px;margin-bottom:0;">
+                                                      <span style="font-size:14px;" >{{repo_criteria['tool']['name']}} </span>
+                                                    </p>
+                                                  </div>
+                                                </div>
                                             </div>
 
                                           </td>
+                                          <td style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px; vertical-align: middle;">
+                                            <div class="row">
+                                              <div v-if="criteria.when && criteria.when.building_tag && criteria.when.building_tag == true">
+                                                  <p>On Tag Creation</p>
+                                                </div>
+                                                <div v-else-if="criteria.when && criteria.when.branch">
+                                                  <p>Branch: {{(criteria.when) ? ((criteria.when.branch) ? criteria.when.branch.pattern : '') : ''}}</p>
+                                                </div>
+                                                <div class="col-md-12" v-else>
+                                                    <p class="text-center" style="font-size:14px;margin-bottom:0px;">-</p>
+                                                </div>
+                                            </div>
+                                          </td>
                                       </tr>
-
                               </tbody>
                           </table>
                           </div>
@@ -231,9 +246,11 @@
                     <card  class="strpied-tabled-with-hover"
                             body-classes=""
                       >
+                      <!--
                       <template slot="header" >
                         <h4 class="text-center" style="padding-bottom:1rem;font-weight:700;">Pipeline files (JePL format)</h4>
                       </template>
+                      -->
                        <template >
                             <!-- <div class="row">
                               <div class="col-12 text-center">
@@ -306,9 +323,11 @@
                   <card  class="strpied-tabled-with-hover"
                               body-classes=""
                         >
+                    <!--
                     <template slot="header" >
                       <h4 class="text-center" style="font-weight:700;padding-bottom:1rem;">Pull Request</h4>
                     </template>
+                    -->
                     <template >
                       <div class="col-12 col-md-6 mx-auto mb-3">
 
@@ -336,10 +355,11 @@
                     <card  class="strpied-tabled-with-hover"
                               body-classes=""
                         >
+                    <!--
                     <template slot="header" >
                       <h4 class="card-title text-center" style="padding-bottom:1rem;font-weight:700;">Pipeline Execution</h4>
                     </template>
-
+                    -->
                     <template >
                       <div style="padding-bottom:20px;padding-bottom: 3rem;padding-left:20px;padding-right:20px;">
 
@@ -356,7 +376,7 @@
                           </div> -->
 
 
-                          <div class="row" v-show="showFieldsPipeline">
+                          <div class="row">
                             <base-input class="col-12 col-md-6 no-margin" type="text"
                               label="URL of the pipeline's target repository"
                               :disabled="false"
@@ -370,36 +390,40 @@
                                 v-model="repo_branch_mimic">
                             </base-input>
                           </div>
-                          <div class="text-center" v-show="showFieldsPipeline">
+                          <div class="text-center">
                             <p style="font-style:italic;color: #A7A1A0;margin-bottom:0px;"><i style="color:#A7A1A0;" class="fa fa-bell" aria-hidden="true"></i> Repositories MUST be public for the checkout to work.</p>
                           </div>
 
-                          <div class="text-center" style="padding-top:20px;">
+                           <div class="row" style="padding-left:20px;padding-top:10px;margin-bottom:1rem;">
+                              <div style="display:contents" class="col-12 col-md-6">
+                                <span class="custom-label" style="font-weight:bold;font-size:17px">Force the pipeline to run to completion</span>
+                                <div class="custom-div-append">
+                                  <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Enabling this option makes the pipeline run past failed stages">
+                                    <i class="fa fa-question-circle"></i>
+                                  </button>
+                                </div>
+                              </div>
+                              <div style="display:contents" class="col-12 col-md-6">
+                                <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="keepgoing_yes"></base-checkbox>
+                                <span class="custom-label">No</span><base-checkbox name="workspace" v-model="keepgoing_no"></base-checkbox>
+                              </div>
+                            </div>
+
+                           <div class="text-center" style="padding-top:40px;">
                             <button @click="runPipeline()" type="button" class="btn btn-sm btn-primary btn-fill">
                                 Run/Try Pipeline
                             </button>
-                          </div>
-                          <div style="padding-bottom:15px;padding-top:20px;" class="text-center col-12" v-show="showStatus">
-                              <span v-if="build_status == 'SUCCESS'" class="badge badge-success"  style="font-size:18px;font-weight:700;">Pipeline was executed successfully! <i style="color:white;" class="fa fa-check" aria-hidden="true"></i></span>
-                              <span  v-else-if="build_status == 'FAILURE'" class="badge badge-danger"  style="font-size:18px;font-weight:700;">Oops, something went wrong while executing the pipeline! <i style="color:white;" class="fa fa-times" aria-hidden="true"></i></span>
-                          </div>
-                          <div class="row">
-                            <div class="text-center col-12 col-md-6" style="padding-top:25px;" v-show="showBuildUrl">
-                              <p><img src="../../static/jenkins.png" alt="" style="padding-bottom:10px;max-width:150px;"></p>
-                              <p style="font-size:18px;font-weight:bold">See the build in Jenkins</p>
-                              <a style="color:white;" class="btn btn-primary btn-fill btn-sm" :href="build_url" target="_blank">Go now!</a>
-                            </div>
-                            <div v-show="showBadge == true" class="col-12 col-md-6 text-center" id="badge" style="padding-top:20px;padding-left:15px;">
-                            </div>
                           </div>
                       </div>
 
                     </template>
                   </card>
+
                   </div>
                 </div>
               </template>
           </card>
+
           <!-- <div class="row" style="margin-top:2rem; margin-bottom:2rem;padding-bottom:2rem;">
               <div class="col-12 col-md-12 text-center">
                   <button @click="back()" type="button" class="btn btn-next-back btn-back" >
@@ -491,10 +515,26 @@
         },
         showFeature:'summary',
         pipeline_create_message:'',
-        createSuccess:true
+        createSuccess:true,
+        keepgoing_yes:false,
+        keepgoing_no:true,
 		}
     },
     watch:{
+       'keepgoing_yes'(val){
+        if(val==true){
+          this.keepgoing_no = false;
+        }else{
+          this.keepgoing_no = true;
+        }
+      },
+      'keepgoing_no'(val){
+         if(val==true){
+          this.keepgoing_yes = false;
+        }else{
+          this.keepgoing_yes = true;
+        }
+      },
       "repo_pull_request"(val){
         if(val != ''){
           this.showErrorPullRequest = false;
@@ -547,7 +587,6 @@
 
       },
       cancelExecution(){
-        console.log('here')
         this.autoRefresh = false;
         this.loading = false;
       },
@@ -600,7 +639,14 @@
             this.disabled_button = false;
             this.$router.replace(this.$route.query.redirect || "/logout");
           }else{
-            this.notifyVue("Error "+ response.status +":", (response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
+             this.$swal.fire({
+              title: 'An unexpected error occurred while running the assessment!',
+              text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+              confirmButtonColor: '#E14726',
+            })
           }
         }
         this.loading = false;
@@ -671,9 +717,24 @@
             this.disabled_button = false;
             this.$router.replace(this.$route.query.redirect || "/logout");
           }else{
+             this.$swal.fire({
+              title: 'An unexpected error occurred while running the assessment!',
+              text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+              confirmButtonColor: '#E14726',
+            })
             this.createSuccess = false;
             this.pipeline_create_message = 'Ups something is wrong!!';
-            this.notifyVue("Error", response.status +":" + response.data.detail,'nc-icon nc-simple-remove','danger')
+            this.$swal.fire({
+              title: 'An unexpected error occurred while running the assessment!',
+              text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+              confirmButtonColor: '#E14726',
+            })
           }
         }
         this.loading_create = false;
@@ -703,7 +764,16 @@
           }else{
             this.createSuccess = false
             this.pipeline_create_message = 'Ups something is wrong!!';
-            this.notifyVue("Error", response.status +":" + response.data.detail,'nc-icon nc-simple-remove','danger')
+             this.$swal.fire({
+              title: 'An unexpected error occurred while creating the assessment!',
+              // text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+              confirmButtonColor: '#E14726',
+            })
+
+
           }
         }
         this.loading_create = false;
@@ -725,7 +795,8 @@
         var data = {
           id:this.pipeline_id,
           url:this.repo_url_mimic,
-          branch:this.repo_branch_mimic
+          branch:this.repo_branch_mimic,
+          keepgoing: this.keepgoing_yes
         }
         if(this.showFieldsPipeline == false){
           this.loading = true;
@@ -758,8 +829,14 @@
         }else{
           this.showBuildUrl = false;
           this.showBuildUrl = false;
-          console.log(response.status)
-          this.notifyVue("Error "+response.status +":",(response.data) ? response.data: '','nc-icon nc-simple-remove','danger')
+          this.$swal.fire({
+              title: 'An unexpected error occurred while running the assessment!',
+              text: response.detail?response.detail:response.reason?response.reason:response.data.detail?response.data.detail:'Error',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+              confirmButtonColor: '#E14726',
+            })
           this.loading = false;
         }
       },
@@ -782,20 +859,29 @@
             this.$store.state.build_url = this.build_url;
             this.showBuildUrl = true;
           }
-
-          console.log(response.data.build_status)
           if(response.data.build_status == 'SUCCESS'){
             this.showStatusBar = false;
-            if(response.data.openbadge_id != null){
-              this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
-            }
             this.loading = false;
             this.autoRefresh = false;
+            this.$swal.fire({
+              title: 'Pipeline was executed successfully!',
+              icon: 'success',
+              confirmButtonText: 'Close',
+              footer: `<a class='btn btn-info btn-fill btn-sm' style='color:white; font-weight:700; font-size:16px;' href="${this.build_url}" target="_blank">See the build in Jenkins</a>`,
+              confirmButtonColor: '#28a745',
+            })
           }
 
           if(this.build_status == "FAILURE"){
             this.loading = false;
             this.autoRefresh = false;
+            this.$swal.fire({
+              title: 'Oops, something went wrong while executing the pipeline!',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              footer: `<a class='btn btn-info btn-fill btn-sm' style='color:white; font-weight:700; font-size:16px;' href="${this.build_url}" target="_blank">See the build in Jenkins</a>`,
+              confirmButtonColor: '#E14726',
+            })
           }
 
         }else if(response.status == 403){
@@ -810,7 +896,15 @@
           this.$store.state.status = '';
           this.$store.state.build_url = '';
           this.loading = false;
-          this.notifyVue("Error "+response.status +":", "Pipeline has not been execute",'nc-icon nc-simple-remove','danger')
+           this.$swal.fire({
+              title: 'An unexpected error occurred while running the assessment!',
+              text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+              confirmButtonColor: '#E14726',
+            })
+
 
         }else{
           this.autoRefresh = false;
@@ -830,7 +924,14 @@
           this.showStatus = false;
         }else{
           this.showStatus = false;
-          this.notifyVue("Error "+ response.status +":", (response.data)?response.data:'','nc-icon nc-simple-remove','danger')
+          this.$swal.fire({
+            title: 'An unexpected error occurred while running the assessment!',
+            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            icon: 'error',
+            confirmButtonText: 'Close',
+            footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+            confirmButtonColor: '#E14726',
+          })
         }
       },
       pullrequest(){
@@ -859,7 +960,14 @@
         }else if(response.status == 403){
           this.$router.replace(this.$route.query.redirect || "/logout");
         }else{
-          this.notifyVue("Error "+response.status +":",(response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
+           this.$swal.fire({
+              title: 'An unexpected error occurred while running the assessment!',
+              text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+              confirmButtonColor: '#E14726',
+            })
         }
         this.loading_create = false;
 
@@ -921,7 +1029,14 @@
            console.log(this.yamlConfig)
           // this.getBuilderScriptCall(this.pipeline_id,this.getBuilderScriptCallBack);
         }else{
-          this.notifyVue("Error "+response.status +":",(response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
+           this.$swal.fire({
+              title: 'An unexpected error occurred while running the assessment!',
+              text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+              confirmButtonColor: '#E14726',
+            })
         }
       },
       getBuilderScriptCallBack(response){
@@ -931,12 +1046,19 @@
              var parts = response.data[i].file_name.split("/");
              var file = {
                file_name:parts[parts.length - 1],
-               content: YAML.stringify(response.data[i].content, undefined, 2)
+               content: response.data[i].content
              }
              this.yamlConfig.push(file)
            }
         }else{
-          this.notifyVue("Error "+response.status +":",(response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
+           this.$swal.fire({
+              title: 'An unexpected error occurred while running the assessment!',
+              text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+              confirmButtonColor: '#E14726',
+            })
         }
       },
       getComposerCallBack(response){
@@ -945,7 +1067,14 @@
            this.yamlComposer= YAML.stringify(response.data.content)
           //  this.yamlComposer= response.data
         }else{
-          this.notifyVue("Error "+response.status +":",(response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
+          this.$swal.fire({
+              title: 'An unexpected error occurred while running the assessment!',
+              text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+              confirmButtonColor: '#E14726',
+            })
         }
 
       },
@@ -953,7 +1082,14 @@
         if(response.status == 200){
           this.yamlJenkinsfile= response.data.content;
         }else{
-          this.notifyVue("Error "+response.status +":",(response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
+           this.$swal.fire({
+              title: 'An unexpected error occurred while running the assessment!',
+              text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+              confirmButtonColor: '#E14726',
+            })
         }
       },
       download(filename, text) {
@@ -988,12 +1124,20 @@
           $('blockquote p').css('text-align','center');
           $('blockquote p a').css('display','unset');
         }else{
-          this.notifyVue("Error "+response.status +":",(response.data) ? response.data : '','nc-icon nc-simple-remove','danger')
+           this.$swal.fire({
+              title: 'An unexpected error occurred while running the assessment!',
+              text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
+              confirmButtonColor: '#E14726',
+            })
         }
       },
 
   },
   created(){
+
     this.checkauthCall(this.checkauthCallBack);
     this.$store.state.status = '';
     this.$store.state.build_url = '';
@@ -1035,9 +1179,7 @@
     }
   },
   mounted(){
-    this.$eventHub.$emit('steps', 4);
-
-
+    this.$eventHub.$emit('steps', 3);
   }
 }
 </script>
@@ -1191,5 +1333,41 @@
 
 blockquote p{
   text-align: center!important;
+}
+
+.responsive {
+  width: 100%;
+  height: auto;
+}
+
+.custom-append-button {
+  padding-top: 0px !important;
+  padding-bottom: 0.38rem !important;
+  padding-left:0.75rem !important;
+  padding-right:0.75rem !important;
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    /* line-height: 1.5; */
+    color: #495057;
+    /* text-align: center; */
+    /* white-space: nowrap; */
+
+    border: none;
+
+    height: 40px;
+}
+
+.custom-div-append {
+  padding:0px 0px 0px 0px;
+  margin:0px;
+  margin-left: -3px;
+}
+
+.custom-label{
+  padding-top:5px;
+  padding-left:20px;
+  color: #9A9A9A;
+
 }
 </style>

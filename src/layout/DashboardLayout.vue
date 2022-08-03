@@ -1,6 +1,6 @@
 <template>
 	<div class="wrapper">
-		<side-bar v-show="$route.path != '/auth/pipeline-name' && $route.path != '/auth/select-option' && $route.path != '/auth/full-assessment' ">
+		<side-bar v-show="$route.path != '/auth/pipeline-name' && $route.path != '/auth/select-option' && $route.path != '/auth/full-assessment' && $route.path != '/auth/full-assessment/report' ">
 
       <div class="widget-body ">
                 <p style="padding-left:20px;font-size: 30px;">Pipeline as a Service</p>
@@ -17,24 +17,22 @@
                                           </sidebar-link>
                                             <!-- <a href="#tab1" data-toggle="tab" class="active"> <span class="step">1</span> <span class="title">Basic information</span> </a> -->
                                         </li>
-                                        <li @click="menuChange('2')" data-target="#step2" class="step2 general-step">
+                                        <!-- <li @click="menuChange('2')" data-target="#step2" class="step2 general-step">
                                           <sidebar-link  to="/auth/composer-options">
-                                            <!-- <i class="nc-icon nc-tag-content"></i> -->
-                                            <span class="step">2</span> <span class="title">Services</span>
+                                            <span class="step">2</span> <span class="title">Tooling</span>
                                           </sidebar-link>
-                                            <!-- <a href="#tab2" data-toggle="tab"> <span class="step">2</span> <span class="title">Billing information</span> </a> -->
-                                        </li>
-                                        <li @click="menuChange('3')" data-target="#step3" class="step3 general-step">
+                                        </li> -->
+                                        <li @click="menuChange('2')" data-target="#step3" class="step3 general-step">
                                           <sidebar-link to="/auth/sqa-criteria">
                                             <!-- <i class="nc-icon nc-tap-01"></i> -->
-                                            <span class="step">3</span> <span class="title">criteria</span>
+                                            <span class="step">2</span> <span class="title">criteria</span>
                                           </sidebar-link>
                                             <!-- <a href="#tab3" data-toggle="tab"> <span class="step">3</span> <span class="title">Domain Setup</span> </a> -->
                                         </li>
-                                        <li data-target="#step4" class="" >
+                                        <li data-target="#step3" class="" >
                                           <sidebar-link to="/auth/files">
                                             <!-- <i class="nc-icon nc-notes"></i> -->
-                                            <span class="step">4</span> <span class="title">PIPELINE</span>
+                                            <span class="step">3</span> <span class="title">PIPELINE</span>
                                           </sidebar-link>
                                             <!-- <a href="#tab4" data-toggle="tab"> <span class="step">4</span> <span class="title">Save Form</span> </a> -->
                                         </li>
@@ -58,7 +56,7 @@
 			</sidebar-link>
       <mobile-menu></mobile-menu>
 		</side-bar>
-    <div v-if="$route.path == '/auth/pipeline-name' || $route.path == '/auth/select-option' || $route.path == '/auth/full-assessment' ">
+    <div v-if="$route.path == '/auth/pipeline-name' || $route.path == '/auth/select-option' || $route.path == '/auth/full-assessment' || $route.path == '/auth/full-assessment/report' ">
 			<top-navbar></top-navbar>
 
 			<dashboard-content @click="toggleSidebar">

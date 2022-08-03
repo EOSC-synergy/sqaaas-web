@@ -307,9 +307,9 @@
           }
           if(this.build_status != null && this.build_status == 'FAILURE'){
             this.showStatusBar = false;
-            if(response.data.openbadge_id != null){
-              this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
-            }
+            // if(response.data.openbadge_id != null){
+            //   this.getBadgeCallGET(this.pipeline_id,this.getBadgeCallBackGET)
+            // }
               this.loading = false;
               this.autoRefresh = false;
           }

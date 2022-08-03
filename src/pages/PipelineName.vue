@@ -12,11 +12,12 @@
                   BACK
               </button>
               <div class="text-center" style="margin-bottom: 40px;">
-                <p class="text-center" style="font-size:40px;padding-bottom:20px;">Start composing your CI/CD pipeline</p>
-                <div style="padding-bottom:40px;margin-top:2rem;">
+                <h2 style="color: #76BAC6; font-weight: bold;">SQAaaS lets you create customized CI/CD pipelines</h2>
+                <h4>Choose a name for the pipeline and start the composition</h4>
+                <div style="padding-bottom:40px">
                   <div class="col-12 col-md-6 mx-auto mb-3">
                     <div>
-                      <input type="text" class="form-control" placeholder="Name of the pipeline. Exmaple: worsica." aria-label="Name of the pipeline. Exmaple: worsica." aria-describedby="basic-addon2" v-model="pipelineName">
+                      <input type="text" class="form-control" placeholder="Name of the pipeline. Example: worsica." aria-label="Name of the pipeline. Example: worsica." aria-describedby="basic-addon2" v-model="pipelineName">
                       <button class="btn btn-next btn-next-back" :disabled='disabled_next' style="border-width:1px; border-color:#000;color:#3472F7;margin-top:10px;" type="button" @click="next()">Create pipeline</button>
                     </div>
                     <label  v-show="showErrorPipeline" style="color:red; font-size:12px;" >Error: Invalid character.</label>

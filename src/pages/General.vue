@@ -27,7 +27,7 @@
                     </div>
                   </div>
                   <div style="background-color:#e6ede8;padding-left:80px;padding-top:55px;padding-bottom:10px;width:30%">
-                    <img src="../../static/git.png" alt="" style="opacity: 0.5;">
+                    <img src="../../static/git.png" alt="" class="responsive" style="opacity: 0.5;">
                   </div>
                 </div>
               </template>
@@ -36,7 +36,7 @@
                     <div style="display:contents" class="col-12 col-md-6">
                       <span class="custom-label" style="font-weight:bold;font-size:17px">Does your pipeline need code from external repositories?</span>
                       <div class="custom-div-append">
-                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="External repositories are those different from the one that will contain the current pipeline">
+                        <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="External repositories are those different from the one that will contain the current pipeline <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#defining-repositories'>more info</a>">
                           <i class="fa fa-question-circle"></i>
                         </button>
                       </div>
@@ -145,12 +145,12 @@
                   <div class="card">
                     <div class="card-header" role="tab" id="accordionHeadingGeneralOptions">
                       <div class="mb-0 row">
-                        <div class="col-12 no-padding accordion-head">
+                        <div class="col-12 accordion-head" style="padding:0px 20px 0px 20px;">
                           <a data-toggle="collapse" data-parent="#accordion_general_options" href="#accordionBodyGeneralOptions" aria-expanded="false" aria-controls="accordionBodyGeneral"
                             class="collapsed ">
                             <i class="fa fa-angle-down" aria-hidden="true"></i>
-                            <p style="margin-bottom: 0px;">ADVANCED OPTIONS</p>
-                            <p>(Credencials, Env Vars)</p>
+                            <p style="margin-bottom: 0px;">ADVANCED OPTIONS (Credentials, Env Vars)</p>
+                            <!-- <p>(Credentials, Env Vars)</p> -->
                           </a>
                         </div>
                       </div>
@@ -169,14 +169,14 @@
                             v-model="repo.path">
                       </base-input> -->
                       <!-- <div class="custom-div-append">
-                          <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>More info</a>">
+                          <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Information <a target='blank' href='https://indigo-dc.github.io/jenkins-pipeline-library/release/2.1.0/user/config_file.html#docker-registry-upload-images' title='test add link'>more info</a>">
                             <i class="fa fa-question-circle"></i>
                           </button>
                       </div> -->
                         <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
                           <span class="custom-label">Add Credentials?</span>
                           <div class="custom-div-append">
-                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance">
+                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>more info</a>">
                               <i class="fa fa-question-circle"></i>
                             </button>
                         </div>
@@ -184,9 +184,9 @@
                           <span class="custom-label">No</span><base-checkbox name="credentials" v-model="config.credentials.no"></base-checkbox>
                         </div>
                         <div v-show='config.credentials.yes' style="padding-left:30px;">
-
+                          <i class="fa fa-bell" /> Credentials shall be pre-defined in Jenkins before being used in the pipeline. <a href='https://jenkins.eosc-synergy.eu/credentials/'>Head to our Jenkins instance</a> and then fill in the form below.
                           <base-input type="text" class="no-margin"
-                                label="JENKINS CREDENTIALS ID"
+                                label="JENKINS CREDENTIAL ID"
                                 :disabled="false"
                                 placeholder="userpass"
                                 v-model="credentials.id">
@@ -273,7 +273,7 @@
                       <div class="row" style="padding-left:20px;margin-top:2rem;margin-bottom:2rem;">
                         <span class="custom-label">Customize Environment?</span>
                         <div class="custom-div-append" style="padding-left:5px">
-                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Define here the environment variables that will be furtherly used by the pipeline">
+                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Define here the environment variables that will be furtherly used by the pipeline <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#environment'>more info</a>">
                               <i class="fa fa-question-circle"></i>
                             </button>
                         </div>
@@ -544,7 +544,7 @@
         if(this.repo.path != ''){
           this.$store.state.config_yaml.config.deploy_template = this.repo.path.trim()
         }
-         this.$router.push({name: 'composer'});
+        this.$router.push({name: 'SQACriteria'});
       },
       back(){
          this.$router.push({name: 'PipelineName'});
@@ -911,6 +911,11 @@ input[type=number]::-webkit-inner-spin-button {
   color:black;
   font-weight:700;
 
+}
+
+.responsive {
+  width: 100%;
+  height: auto;
 }
 
 </style>

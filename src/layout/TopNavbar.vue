@@ -1,7 +1,7 @@
 <template>
   <nav class="bg-blue navbar navbar-expand-lg" style="padding-bottom:2px;padding-top:3px">
     <div class="container-fluid">
-      <a class="navbar-brand res-size" style="color:white;" href="#">Software Quality Assurance as a Service</a>
+      <a class="navbar-brand res-size" style="color:white;" href="/#/auth/select-option">Software Quality Assurance as a Service</a>
       <button style="color:white;" type="button"
               class="navbar-toggler navbar-toggler-right"
               :class="{toggled: $sidebar.showSidebar}"
@@ -55,6 +55,12 @@
             <div class="divider"></div>
             <a class="dropdown-item" href="#">Separated link</a>
           </base-dropdown> -->
+          <li class="nav-item" >
+            <a title="Help" target='_blank' href="https://docs.sqaaas.eosc-synergy.eu/" class="nav-link text-white"><span style='padding-top:10px;font-size:18px;'>Documentation</span><i style='padding-left:10px' class="fa fa-book" aria-hidden="true"></i></a>
+          </li>
+          <li class="nav-item" >
+            <span style='padding-left:20px; border-right: solid 1px white;'></span>
+          </li>
           <li class="nav-item">
             <button style="font-size:18px; color:white;" class="btn btn-primary btn-simple nav-link" @click="logOut()">Log Out<i style="padding-left:10px" class="nc-icon nc-button-power"></i></button>
           </li>

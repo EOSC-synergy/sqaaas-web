@@ -37,7 +37,11 @@
 						<div class="menu-footer-container">
 							<ul class="menu">
 								<li class="" style="border-top: 1px solid #343434;padding:0.5rem 0;">
-									<a href="https://appsgrycap.i3m.upv.es:31443/im-web/terms.html" style="color:#42697a">Terms of Service</a>
+									<a target="_blank" href="/#/privacy-policy" style="color:#42697a">Privacy Policy</a>
+								</li>
+
+								<li class="" style="border-top: 1px solid #343434;padding:0.5rem 0;">
+									<a target="_blank" href="/#/terms-use" style="color:#42697a">Terms of Service</a>
 								</li>
 
 								<li style="border-top: 1px solid #343434;padding:0.5rem 0;">

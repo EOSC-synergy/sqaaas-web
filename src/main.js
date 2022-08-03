@@ -4,6 +4,10 @@ import VueAnalytics from 'vue-analytics'
 import App from './App.vue'
 import env from './env.js'
 import store from "./store"
+import VueSweetalert2 from 'vue-sweetalert2';
+
+// If you don't need the styles, do not connect
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 // LightBootstrap plugin
 import LightBootstrap from './light-bootstrap-main'
@@ -15,6 +19,7 @@ import './registerServiceWorker'
 // plugin setup
 Vue.use(VueRouter)
 Vue.use(LightBootstrap)
+Vue.use(VueSweetalert2);
 
 Vue.prototype.$eventHub = new Vue();
 
