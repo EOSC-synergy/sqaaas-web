@@ -859,7 +859,7 @@
             this.showBuildUrl = true;
           }
 
-          if(response.data.build_status == 'SUCCESS'){
+          if(response.data.build_status == 'SUCCESS' || response.data.build_status == 'success'){
             this.showStatusBar = false;
             this.autoRefresh = false;
             this.getOutputCall(this.pipeline_id,this.getOutputCallBack);
