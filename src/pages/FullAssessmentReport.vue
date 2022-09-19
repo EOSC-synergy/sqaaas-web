@@ -105,10 +105,18 @@
                                                   <div class="row" style="padding:0px 20px;">
 
                                                     <div v-if="subcrit['valid'] == true" style="text-align:center;">
-                                                      <p style="font-size:18px;margin-bottom:0px;"><span style="font-weight:700!important; padding-right:30px;"><i style="color:#1BC10B;padding-right: 40px;" class="fa fa-check-circle" aria-hidden="true"></i>{{index1}}</span>{{subcrit['id']}} {{subcrit['description']}}</p>
+                                                      <p style="font-size:18px;margin-bottom:0px;"><span style="font-weight:700!important; padding-right:30px;">
+                                                        <i style="color:#1BC10B;padding-right: 40px;" class="fa fa-check-circle" aria-hidden="true"></i>{{index1}}</span>{{subcrit['id']}} {{subcrit['description']}}
+                                                      </p>
                                                     </div>
                                                     <div v-else style="text-align:center;">
-                                                      <p style="font-size:18px;margin-bottom:0px;"><span style="font-weight:700!important; padding-right:30px;"><i style="color:red;padding-right: 40px;" class="fa fa-times-circle" aria-hidden="true"></i>{{index1}}</span>{{subcrit['id']}} {{subcrit['description']}}</p>
+                                                      <p style="font-size:18px;margin-bottom:0px;"><span style="font-weight:700!important; padding-right:30px;">
+                                                        <i style="color:red;padding-right: 40px;" class="fa fa-times-circle" aria-hidden="true"></i>{{index1}}</span>{{subcrit['id']}} {{subcrit['description']}}
+                                                        <svg v-if="subcrit.required_for_next_level_badge" fill="#de960f" viewBox="0 0 24 24" height="24" width="24" style="margin-left: 8px; margin-top: -5px" data-toggle="tooltip" data-placement="top" title="Required for achieving next level of badge">
+                                                          <path d="M12 22c3.859 0 7-3.141 7-7s-3.141-7-7-7c-3.86 0-7 3.141-7 7s3.14 7 7 7zm0-12c2.757 0 5 2.243 5 5s-2.243 5-5 5-5-2.243-5-5 2.243-5 5-5zm-1-8H7v5.518a8.957 8.957 0 0 1 4-1.459V2zm6 0h-4v4.059a8.957 8.957 0 0 1 4 1.459V2z"></path><path d="m10.019 15.811-.468 2.726L12 17.25l2.449 1.287-.468-2.726 1.982-1.932-2.738-.398L12 11l-1.225 2.481-2.738.398z"></path>
+                                                        </svg>
+                                                      </p>
+
                                                     </div>
                                                   </div>
                                                 </td>
@@ -360,6 +368,10 @@
 
 
       })
+
+     $(function () {
+       $('[data-toggle="tooltip"]').tooltip()
+     })
 
   },
   created(){
