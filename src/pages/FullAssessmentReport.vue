@@ -20,16 +20,16 @@
 
                 <template class="card-body">
 
-                  <div class="container-fluid header mb-4">
+                  <div class="container-fluid header mb-5">
                     <div class="row">
-                      <div class="col-6">
+                      <div class="col-12 col-md-6">
 
                         <RepoData :repo="this.$store.state.report.repository[0]" />
 
                       </div>
-                      <div class="col-6">
+                      <div class="col-12 col-md-6 mt-5 mt-md-1">
 
-                        <div/>
+                        <CriteriaSummary :report="this.$store.state.report.report" :mapping_icon="mapping_icon" :mapping_criteria_name="mapping_criteria_name"/>
 
                       </div>
                     </div>
@@ -60,7 +60,7 @@
 
                   <div class="col-12 col-sm-12 col-md-12 col-lg-6 mx-auto">
                     <h3 style="padding-bottom:10px; font-weight:bold;">Criteria Report</h3>
-                    <card v-for="(crit, index) in $store.state.report.report" :key="index" style="padding:0px!important;max-width:1000px;">
+                    <card v-for="(crit, index) in $store.state.report.report" :id="index" :key="index" style="padding:0px!important;max-width:1000px;">
                         <template slot='header' style="background-color:#E8E6E5!important;">
                           <div  style="padding-left:1.5rem;background-color:#E8E6E5!important;border-bottom:1px solid #dee2e6">
                             <!-- <div class="col-2">
@@ -231,10 +231,12 @@
   import Card from 'src/components/Cards/Card.vue'
   import Services from '../services/services'
   import Editor from './AceEditor'
-  import RepoData from "src/components/AssessmentReport/RepoData";
+  import RepoData from 'src/components/AssessmentReport/RepoData';
+  import CriteriaSummary from '@/components/AssessmentReport/CriteriaSummary';
   export default {
     components: {
     RepoData,
+    CriteriaSummary,
 		LTable,
 		Card,
     'editor': Editor,
@@ -286,7 +288,6 @@
 
     methods:{
       modalInfo(info){
-        console.log(info)
         this.modalInfoData = info;
 
         // if(crit != '' && type != '' && tool != ''){
