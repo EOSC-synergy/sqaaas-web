@@ -847,7 +847,7 @@
        checkStatusCallBack(response){
         if(response.status == 200){
           this.disable_cancel = false;
-          if (response.data.build_status != 'NOT_EXECUTED'){
+          if (response.data.build_status.toUpperCase() != 'NOT_EXECUTED'){
             this.build_status = response.data.build_status;
             this.$store.state.status = this.build_status;
             this.showStatus = true;
@@ -859,14 +859,14 @@
             this.showBuildUrl = true;
           }
 
-          if(response.data.build_status == 'SUCCESS'){
+          if(response.data.build_status.toUpperCase() == 'SUCCESS'){
             this.showStatusBar = false;
             this.autoRefresh = false;
             this.getOutputCall(this.pipeline_id,this.getOutputCallBack);
 
           }
 
-          if(response.data.build_status == "FAILURE"){
+          if(response.data.build_status.toUpperCase() == "FAILURE"){
             this.loading = false;
             this.autoRefresh = false;
             this.$swal.fire({
@@ -878,7 +878,7 @@
             })
           }
 
-          if(response.data.build_status == "ABORTED"){
+          if(response.data.build_status.toUpperCase() == "ABORTED"){
             this.loading = false;
             this.autoRefresh = false;
             this.$swal.fire({
