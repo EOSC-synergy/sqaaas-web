@@ -96,7 +96,7 @@ export default {
 
 #badge_report_title{
   max-width: 1200px;
-  margin-bottom: 20px;
+  margin: 0 auto 20px auto;
   font-weight: bold;
 }
 
