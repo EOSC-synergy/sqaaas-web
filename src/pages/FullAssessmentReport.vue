@@ -58,6 +58,8 @@
                     </div>
                   </div>
 
+                  <BadgeResults :badgeCriteria="this.$store.state.report.badge.software.criteria" :mapping_icon="mapping_icon" :mapping_criteria_name="mapping_criteria_name" />
+
                   <div class="col-12 col-sm-12 col-md-12 col-lg-6 mx-auto">
                     <h3 style="padding-bottom:10px; font-weight:bold;">Criteria Report</h3>
                     <card v-for="(crit, index) in $store.state.report.report" :id="index" :key="index" style="padding:0px!important;max-width:1000px;">
@@ -232,11 +234,13 @@
   import Services from '../services/services'
   import Editor from './AceEditor'
   import RepoData from 'src/components/AssessmentReport/RepoData';
-  import CriteriaSummary from '@/components/AssessmentReport/CriteriaSummary';
+  import CriteriaSummary from 'src/components/AssessmentReport/CriteriaSummary';
+  import BadgeResults from "src/components/AssessmentReport/BadgeResults";
   export default {
     components: {
     RepoData,
     CriteriaSummary,
+    BadgeResults,
 		LTable,
 		Card,
     'editor': Editor,
@@ -255,27 +259,34 @@
         mapping_icon:{
           'default': 'fa-certificate',
           'QC.Acc':'fa-certificate',
-          'QC.Doc':'fa-book',
-          'QC.FAIR':'fa-certificate',
-          'QC.Fun':'fa-filter',
           'QC.Lic':'fa-id-card',
-          'QC.Met':'fa-database',
-          'QC.Sec':'fa-lock',
           'QC.Sty':'fa-bullseye',
+          'QC.Met':'fa-database',
           'QC.Uni':'fa-cogs',
-          'QC.Ver':'fa-code-fork'
+          'QC.Doc':'fa-book',
+          'QC.Sec':'fa-lock',
+          'QC.Ver':'fa-code-fork',
+          'QC.FAIR':'fa-certificate',
+          'QC.Fun':'fa-filter'
         },
         mapping_criteria_name:{
           'QC.Acc':'Code Accessibility',
-          'QC.Doc':'Documentation',
-          'QC.FAIR':'FAIRness level of Digital Objects',
-          'QC.Fun':'Functional',
           'QC.Lic':'Licensing',
-          'QC.Met':'Code metadata',
-          'QC.Sec':'Security',
           'QC.Sty':'Code Style',
+          'QC.Met':'Code metadata',
           'QC.Uni':'Unit Testing',
-          'QC.Ver':'Versioning'
+          'QC.Har':'Test Harness',
+          'QC.Tdd':'Test-Driven Development',
+          'QC.Doc':'Documentation',
+          'QC.Sec':'Security',
+          'QC.Wor':'Code Workflow',
+          'QC.Ver':'Versioning',
+          'QC.Man':'Code Management',
+          'QC.Rev':'Code Review',
+          'QC.Del':'Automated Delivery',
+          'QC.Dep':'Automated Deployment',
+          'QC.FAIR':'FAIRness level of Digital Objects',
+          'QC.Fun':'Functional'
         }
 
       }
