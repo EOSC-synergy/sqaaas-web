@@ -12,7 +12,14 @@
                       <button class="btn btn-default btn-simple" @click="gotoFull()"><i class="fa fa-arrow-left" aria-hidden="true"></i><span style="font-weight: bold;padding-top:5px;font-size:18px;" class="card-title">Back</span></button>
                     </div>
                     <div class="col-6 text-right mt-2 ">
-                      <button style="color: #fff;background-color: #6c757d;border-color: #6c757d;" class="btn  " @click="refresh()"><i class="fa fa-refresh" style="padding-right:10px;" aria-hidden="true"></i> New Assessment</button>
+                      <button style="color: #fff;background-color: #6c757d;border-color: #6c757d;" class="btn" @click="refresh()"><i class="fa fa-refresh" style="padding-right:10px;" aria-hidden="true"></i> New Assessment</button>
+                      <div class="btn-group">
+                        <button id="downloadDropdown" style="color: #fff;background-color: #6c757d;border-color: #6c757d;margin-left: 10px;" class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download" style="padding-right:10px;" aria-hidden="true" ></i> Download </button>
+                        <ul id="downloadDropdownMenu" class="dropdown-menu">
+                          <li><a role="button" @click="downloadJSON()"><i class="fa fa-file-alt" style="color: #455098; margin-right: 5px;"></i> JSON</a></li>
+                          <li><a role="button"><i class="fa fa-file-pdf-o" style="color: #984545; margin-right: 5px;"></i> PDF</a></li>
+                        </ul>
+                      </div>
                     </div>
 
                   </div>
@@ -322,6 +329,19 @@
       },
       refresh(){
         this.$router.push({name: 'full_assessment'});
+      },
+      downloadJSON(){
+        let a = document.createElement("a");
+        a.style.display = "none"
+        let json = JSON.stringify(this.$store.state.report,null, "\t");
+        let blob = new Blob([json], {type: "octet/stream"});
+        let url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = "SQAaaS Report - " + this.$store.state.report.repository[0].name + ".json"
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
       }
 
 
@@ -402,6 +422,31 @@
 .header {
   padding: 0 5%;
 }
+
+#downloadDropdownMenu{
+  position: absolute;
+  top: 100%!important;
+  left: 10px!important;
+  z-index: 1000;
+  min-width: 160px;
+  padding: 4px 0;
+  margin-top: 2px;
+  font-size: 14px;
+  border-radius: 4px;
+  box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+}
+#downloadDropdownMenu > li:hover {
+  background-color: #eeeeee;
+}
+#downloadDropdownMenu > li > a {
+  display: block;
+  padding: 4px 20px;
+  color: #333;
+}
+#downloadDropdownMenu > li:nth-child(2) > a{
+  cursor: not-allowed;
+}
+
 
 input[type=number]::-webkit-inner-spin-button {
   opacity: 1;
