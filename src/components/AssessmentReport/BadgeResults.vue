@@ -1,9 +1,5 @@
 <template>
 
-  <div>
-
-    <h3 id="badge_report_title">Badge Report</h3>
-
     <card id="badge_report">
 
       <div class="row">
@@ -46,8 +42,6 @@
       </div>
 
     </card>
-
-  </div>
 
 </template>
 
@@ -93,12 +87,6 @@ export default {
 </script>
 
 <style scoped>
-
-#badge_report_title{
-  max-width: 1200px;
-  margin: 0 auto 20px auto;
-  font-weight: bold;
-}
 
 #badge_report{
   max-width: 1200px;

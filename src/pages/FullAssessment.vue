@@ -751,6 +751,8 @@
 
       },
       getPipelineAssessmentCallBack(response){
+        console.log("---> getPipelineAssessmentCallBack <---")
+        console.log(response)
         if(response.status == 201 && response.data.id){
           this.pipeline_id = response.data.id;
           this.runAssessmentPipelineCall(this.pipeline_id,this.runAssessmentPipelineCallBack)
