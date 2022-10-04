@@ -3,9 +3,7 @@
       <div class="container-fluid" style="min-height:70vh;">
         <div class="row" style="overflow-y: auto;">
           	<div class="col-12" style="margin-top:40px;">
-              <card class="strpied-tabled-with-hover"
-                body-classes=""
-              >
+              <card class="strpied-tabled-with-hover" body-classes="">
                 <template slot="header" >
                   <div class="row" style="padding: 0px 10px;">
                     <div class="col-6" style="display:inline-flex;">
@@ -27,48 +25,65 @@
 
                 <template class="card-body">
 
-                  <div class="container-fluid header mb-5">
-                    <div class="row">
-                      <div class="col-12 col-md-6">
+                  <div class="container-fluid mb-5">
+
+                    <div class="row mt-3">
+                      <div class="col d-flex justify-content-center">
 
                         <RepoData :repo="this.$store.state.report.repository[0]" />
 
                       </div>
-                      <div class="col-12 col-md-6 mt-5 mt-md-1">
+                    </div>
+
+                    <div class="row mt-5">
+                      <div class="col">
+
+                        <h2 style="font-weight:bold; max-width: 1200px; margin: 0 auto 0 auto;">Badge Report</h2>
+
+                      </div>
+                    </div>
+
+                    <div class="row mt-3">
+
+                      <div class="col d-flex justify-content-center">
+
+                        <BadgeAchieved :badge="this.$store.state.report.badge" />
+
+                      </div>
+                    </div>
+
+                    <div class="row mt-5">
+                      <div class="col">
+
+                        <BadgeResults :badgeCriteria="this.$store.state.report.badge.software.criteria" :mapping_icon="mapping_icon" :mapping_criteria_name="mapping_criteria_name" />
+
+                      </div>
+                    </div>
+
+
+                    <div class="row mt-5">
+                      <div class="col">
+
+                        <h2 style="font-weight:bold; max-width: 1200px; margin: 0 auto 0 auto;">Criteria Report</h2>
+
+                      </div>
+                    </div>
+
+                    <div class="row mt-5">
+                      <div class="col d-flex justify-content-center">
 
                         <CriteriaSummary :report="this.$store.state.report.report" :mapping_icon="mapping_icon" :mapping_criteria_name="mapping_criteria_name"/>
 
                       </div>
                     </div>
+
                   </div>
 
 
-                  <h2 class="text-center" v-if="showBadgeSoftware== true || showBadgeService == true || showBadgeFair==true" style="color: #6c757d; font-weight: bold;">Congratulations!!! the following badge/s have been awarded</h2>
-                  <div class="text-center" v-else>
-                    <h3>Sorry, you have not earned any badges</h3>
-                    <div style="padding-right: 150px;">
-                      <i style="opacity: 0.5" class="fa fa-frown-o fa-10x" aria-hidden="true"></i>
 
-                    </div>
-                  </div>
-
-                  <div class="text-center">
-                    <h4><a href="https://docs.sqaaas.eosc-synergy.eu/quality_assessment_and_awarding/synergy_badging_approach" target="blank">Learn more about the EOSC-Synergy badging approach</a></h4>
-                  </div>
-
-                  <div class="row" style="margin-bottom:4rem;">
-                    <div v-show="showBadgeSoftware == true" :class="{'col-md-4':showBadgeService == true && showBadgeFair == true, 'col-md-6':((showBadgeService == true && showBadgeFair == false) || (showBadgeService == false && showBadgeFair == true)), 'col-md-12':showBadgeService == false && showBadgeFair == false}" class="col-12 text-center" id="badge-software" style="padding-top:20px;padding-left:15px;">
-                    </div>
-                    <div v-show="showBadgeService == true" :class="{'col-md-4':showBadgeSoftware == true && showBadgeFair == true, 'col-md-6':((showBadgeSoftware == true && showBadgeFair == false) || (showBadgeSoftware == false && showBadgeFair == true)), 'col-md-12':showBadgeSoftware == false && showBadgeFair == false}" class="col-12 text-center" id="badge-service" style="padding-top:20px;padding-left:15px;">
-                    </div>
-                    <div v-show="showBadgeFair == true"  :class="{'col-md-4':showBadgeSoftware == true && showBadgeFair == true, 'col-md-6':((showBadgeSoftware == true && showBadgeFair == false) || (showBadgeSoftware == false && showBadgeFair == true)), 'col-md-12':showBadgeSoftware == false && showBadgeFair == false}" class="col-12 col-md-4 text-center" id="badge-fair" style="padding-top:20px;padding-left:15px;">
-                    </div>
-                  </div>
-
-                  <BadgeResults :badgeCriteria="this.$store.state.report.badge.software.criteria" :mapping_icon="mapping_icon" :mapping_criteria_name="mapping_criteria_name" />
 
                   <div class="col-12 col-sm-12 col-md-12 col-lg-6 mx-auto">
-                    <h3 style="padding-bottom:10px; font-weight:bold;">Criteria Report</h3>
+
                     <card v-for="(crit, index) in $store.state.report.report" :id="index" :key="index" style="padding:0px!important;max-width:1000px;">
                         <template slot='header' style="background-color:#E8E6E5!important;">
                           <div  style="padding-left:1.5rem;background-color:#E8E6E5!important;border-bottom:1px solid #dee2e6">
@@ -106,7 +121,7 @@
                           <div>
                               <div class="table-responsive">
                                 <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
-                                    <tbody v-for="(subcrit, index1) in crit['subcriteria']" :key="index1">
+                                    <tbody v-for="(subcrit, index1) in crit['subcriteria']" :key="index1" class="subcriteria">
 
                                             <tr
                                                 style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
@@ -125,7 +140,6 @@
                                                           <path d="M12 22c3.859 0 7-3.141 7-7s-3.141-7-7-7c-3.86 0-7 3.141-7 7s3.14 7 7 7zm0-12c2.757 0 5 2.243 5 5s-2.243 5-5 5-5-2.243-5-5 2.243-5 5-5zm-1-8H7v5.518a8.957 8.957 0 0 1 4-1.459V2zm6 0h-4v4.059a8.957 8.957 0 0 1 4 1.459V2z"></path><path d="m10.019 15.811-.468 2.726L12 17.25l2.449 1.287-.468-2.726 1.982-1.932-2.738-.398L12 11l-1.225 2.481-2.738.398z"></path>
                                                         </svg>
                                                       </p>
-
                                                     </div>
                                                   </div>
                                                 </td>
@@ -173,62 +187,67 @@
 
                 </template>
               </card>
-                <!-- Modal -->
-                <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header ">
-                        <h5 class="modal-title " style="font-weight:700; font-size:18px;" id="exampleModalLabel">REPORT</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body" style="">
-                        <div class="row">
-                          <card class="col-12">
-                            <div class="row" style="padding:0px 20px">
-                              <div v-if="modalInfoData && modalInfoData['tool'] && modalInfoData['tool']['ci'] && modalInfoData && modalInfoData['tool']['ci']['status'] == 'SUCCESS'" >
-                                  <a :href="modalInfoData && modalInfoData['tool'] && modalInfoData['tool']['ci']?modalInfoData['tool']['ci']['url']:'#'" target="_blank" style="font-size:18px;">
-                                    <span>Tool: {{modalInfoData && modalInfoData['tool'] && modalInfoData['tool'].name  ? modalInfoData['tool'].name: ''}}</span> <i style="color:#1BC10B;padding-left:10px;" class="fa fa-check-circle" aria-hidden="true"></i></a>
-                              </div>
-                              <div v-else style="text-align:left;">
-                                  <a :href="modalInfoData && modalInfoData['tool'] && modalInfoData['tool']['ci']?modalInfoData['tool']['ci']['url']:'#'" target="_blank" style="font-size:18px;">
-                                    <span>Tool: {{modalInfoData && modalInfoData['tool'] && modalInfoData['tool'].name  ? modalInfoData['tool'].name: ''}}</span> <i style="color:#1BC10B;" class="fa fa-times-circle" aria-hidden="true"></i></a>
-                              </div>
 
+
+
+              <!-- Info Modal -->
+              <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header ">
+                      <h5 class="modal-title " style="font-weight:700; font-size:18px;" id="exampleModalLabel">REPORT</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body" style="">
+                      <div class="row">
+                        <card class="col-12">
+                          <div class="row" style="padding:0px 20px">
+                            <div v-if="modalInfoData && modalInfoData['tool'] && modalInfoData['tool']['ci'] && modalInfoData && modalInfoData['tool']['ci']['status'] == 'SUCCESS'" >
+                                <a :href="modalInfoData && modalInfoData['tool'] && modalInfoData['tool']['ci']?modalInfoData['tool']['ci']['url']:'#'" target="_blank" style="font-size:18px;">
+                                  <span>Tool: {{modalInfoData && modalInfoData['tool'] && modalInfoData['tool'].name  ? modalInfoData['tool'].name: ''}}</span> <i style="color:#1BC10B;padding-left:10px;" class="fa fa-check-circle" aria-hidden="true"></i></a>
                             </div>
-                            <div style="padding:0px 20px" v-if="modalInfoData['tool']" class="row">
-                              <span v-show="modalInfoData['tool']['docker'] &&  modalInfoData['tool']['docker']['image']" class="badge badge-secondary">image:<span style="font-weight:bold">
-                                {{modalInfoData['tool']['docker'] && modalInfoData['tool']['docker']['image']?modalInfoData['tool']['docker']['image'] : modalInfoData['tool']['docker'] && modalInfoData['tool']['docker']['dockerfile']?'Dockerfile':''}}
-                                </span>
+                            <div v-else style="text-align:left;">
+                                <a :href="modalInfoData && modalInfoData['tool'] && modalInfoData['tool']['ci']?modalInfoData['tool']['ci']['url']:'#'" target="_blank" style="font-size:18px;">
+                                  <span>Tool: {{modalInfoData && modalInfoData['tool'] && modalInfoData['tool'].name  ? modalInfoData['tool'].name: ''}}</span> <i style="color:#1BC10B;" class="fa fa-times-circle" aria-hidden="true"></i></a>
+                            </div>
+
+                          </div>
+                          <div style="padding:0px 20px" v-if="modalInfoData['tool']" class="row">
+                            <span v-show="modalInfoData['tool']['docker'] &&  modalInfoData['tool']['docker']['image']" class="badge badge-secondary">image:<span style="font-weight:bold">
+                              {{modalInfoData['tool']['docker'] && modalInfoData['tool']['docker']['image']?modalInfoData['tool']['docker']['image'] : modalInfoData['tool']['docker'] && modalInfoData['tool']['docker']['dockerfile']?'Dockerfile':''}}
                               </span>
+                            </span>
 
-                              <span v-show="modalInfoData['tool']['lang'] && modalInfoData['tool']['lang']!= ''" style="margin:0px 5px;" class="badge badge-primary">lang:<span style="font-weight:bold"> {{modalInfoData['tool']['lang']}}</span></span>
-                              <span v-show="modalInfoData['tool']['version']" style="margin:0px 5px;" class="badge badge-danger">version:<span style="font-weight:bold"> {{modalInfoData['tool']['version']}}</span></span>
+                            <span v-show="modalInfoData['tool']['lang'] && modalInfoData['tool']['lang']!= ''" style="margin:0px 5px;" class="badge badge-primary">lang:<span style="font-weight:bold"> {{modalInfoData['tool']['lang']}}</span></span>
+                            <span v-show="modalInfoData['tool']['version']" style="margin:0px 5px;" class="badge badge-danger">version:<span style="font-weight:bold"> {{modalInfoData['tool']['version']}}</span></span>
 
-                            </div>
-                            <div class="row" style="padding:0px 20px">
-                                <p><span style="font-weight:700!important;">Plugin:</span> {{modalInfoData && modalInfoData['plugin'] && modalInfoData['plugin']['name'] ? modalInfoData['plugin']['name']:''}} {{modalInfoData && modalInfoData['plugin'] && modalInfoData['plugin']['version'] ? modalInfoData['plugin']['version']:''}}</p>
-                            </div>
+                          </div>
+                          <div class="row" style="padding:0px 20px">
+                              <p><span style="font-weight:700!important;">Plugin:</span> {{modalInfoData && modalInfoData['plugin'] && modalInfoData['plugin']['name'] ? modalInfoData['plugin']['name']:''}} {{modalInfoData && modalInfoData['plugin'] && modalInfoData['plugin']['version'] ? modalInfoData['plugin']['version']:''}}</p>
+                          </div>
 
-                            <div class="row" style="padding:0px 20px">
+                          <div class="row" style="padding:0px 20px">
 
-                                <a :href="modalInfoData && modalInfoData['standard'] && modalInfoData['standard']['url']?modalInfoData['standard']['url']:'#'" target="_blank" style="font-size:18px;"><p>{{modalInfoData && modalInfoData['standard'] && modalInfoData['standard']['title'] ? modalInfoData['standard']['title']:''}} {{modalInfoData && modalInfoData['standard'] && modalInfoData['standard']['version'] ? modalInfoData['standard']['version']:''}}  </p></a>
-                            </div>
+                              <a :href="modalInfoData && modalInfoData['standard'] && modalInfoData['standard']['url']?modalInfoData['standard']['url']:'#'" target="_blank" style="font-size:18px;"><p>{{modalInfoData && modalInfoData['standard'] && modalInfoData['standard']['title'] ? modalInfoData['standard']['title']:''}} {{modalInfoData && modalInfoData['standard'] && modalInfoData['standard']['version'] ? modalInfoData['standard']['version']:''}}  </p></a>
+                          </div>
 
-                            <div v-show="showEditor" class="col-12" style="padding-top:2rem;height:40vh;overflow-y: auto;">
-                              <editor  editor-id="'editor_modal'" lang="json" :content="modalUnstructured"  key="editor_modal" ></editor>
-                            </div>
-                          </card>
-                        </div>
+                          <div v-show="showEditor" class="col-12" style="padding-top:2rem;height:40vh;overflow-y: auto;">
+                            <editor  editor-id="'editor_modal'" lang="json" :content="modalUnstructured"  key="editor_modal" ></editor>
+                          </div>
+                        </card>
                       </div>
-                      <div class="modal-footer" style="justify-content: end;">
-                        <button type="button" class="btn btn-secondary" style="color: #fff!important;background-color: #6c757d!important;border-color: #6c757d!important;" data-dismiss="modal">Close</button>
-                        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-                      </div>
+                    </div>
+                    <div class="modal-footer" style="justify-content: end;">
+                      <button type="button" class="btn btn-secondary" style="color: #fff!important;background-color: #6c757d!important;border-color: #6c757d!important;" data-dismiss="modal">Close</button>
+                      <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
                     </div>
                   </div>
                 </div>
+              </div>
+
+
           </div>
         </div>
       </div>
@@ -242,12 +261,15 @@
   import Editor from './AceEditor'
   import RepoData from 'src/components/AssessmentReport/RepoData';
   import CriteriaSummary from 'src/components/AssessmentReport/CriteriaSummary';
-  import BadgeResults from "src/components/AssessmentReport/BadgeResults";
+  import BadgeResults from 'src/components/AssessmentReport/BadgeResults';
+  import BadgeAchieved from "@/components/AssessmentReport/BadgeAchieved";
+  import html2canvas from 'html2canvas';
   export default {
     components: {
     RepoData,
     CriteriaSummary,
     BadgeResults,
+    BadgeAchieved,
 		LTable,
 		Card,
     'editor': Editor,
@@ -255,12 +277,9 @@
     mixins: [Services],
     data () {
       return {
-        showBadgeSoftware:false,
-        showBadgeService:false,
-        showBadgeFair:false,
         modalInfoData:{},
         modalInfoSubcriteriaData:{},
-         editor: '',
+        editor: '',
         modalUnstructured:'',
         showEditor:false,
         mapping_icon:{
@@ -298,12 +317,7 @@
 
       }
     },
-     watch:{
-
-
-
-    },
-
+    watch:{},
     methods:{
       modalInfo(info){
         this.modalInfoData = info;
@@ -342,68 +356,29 @@
         a.click();
         window.URL.revokeObjectURL(url);
         a.remove();
+      },
+
+
+      showBadge(){
+        let badge = this.$store.state.report.badge;
+        return [badge.software.data, badge.services.data, badge.fair.data].filter(Boolean).length;
+      },
+      activeBadgeTypes(){
+        let activeBadgeTypes = []
+        let badge = this.$store.state.report.badge;
+        for (let badgeType in badge){
+          if (badge[badgeType].data) activeBadgeTypes.push(badge[badgeType])
+        }
+        return activeBadgeTypes
       }
+    },
 
-
-  },
    mounted(){
+     console.log("---> store.state.report <---")
+     console.log(this.$store.state.report)
      this.$eventHub.$emit('steps', 5);
-     var _this = this
-     this.$nextTick(function () {
-       console.log(this.$store.state.report)
-        if(this.$store.state.report.badge['software'] && this.$store.state.report.badge['software']['data']){
-          this.showBadgeSoftware = true;
-          if($("#badge-software").has("blockquote").length == 0){
-            var _div = `
-                <div class="text-center">
-                  <img style="width:400px;height:400px" src="${this.$store.state.report.badge["software"]["data"]['image']}"></img>
-                  <div class="row" style="justify-content: center;">
-                      <a style="font-size:18px; border:1px solid; margin-right: 0.25rem;" target="blank" href="${this.$store.state.report.badge["software"]["verification_url"]}"><span style="margin:20px;">Verify</span></a>
-                      <a style="font-size:18px; border:1px solid; margin-left: 0.25rem;" target="blank" href="${this.$store.state.report.badge["software"]["data"]["openBadgeId"]}"><span style="margin:20px;">Go to Badgr's award page</span></a>
-                  </div>
-                </div>`
-            $("#badge-software").append(_div)
-          }
-        }
-        if(this.$store.state.report.badge['service'] && this.$store.state.report.badge['service']['data']){
-          this.showBadgeService = true;
-          if($("#badge-service").has("blockquote").length == 0){
-            var _div = `
-                <div class="text-center">
-                  <img style="width:400px;height:400px" src="${this.$store.state.report.badge["service"]["data"]['image']}"></img>
-                  <div class="row" style="justify-content: center;">
-                      <a style="font-size:18px; border:1px solid; margin-right: 0.25rem;" target="blank" href="${this.$store.state.report.badge["service"]["verification_url"]}"><span style="margin:20px;">Verify</span></a>
-                      <a style="font-size:18px; border:1px solid; margin-left: 0.25rem;" target="blank" href="${this.$store.state.report.badge["service"]["data"]["openBadgeId"]}"><span style="margin:20px;">Go to Badgr's award page</span></a>
-                  </div>
-                </div>`
-            $("#badge-service").append(_div)
-          }
-        }
-        if(this.$store.state.report.badge['fair'] && this.$store.state.report.badge['fair']['data'] ){
-          this.showBadgeFair = true;
-          if($("#badge-fair").has("blockquote").length == 0){
-            var _div = `
-                <div class="text-center">
-                  <img style="width:400px;height:400px" src="${this.$store.state.report.badge["fair"]["data"]['image']}"></img>
-                  <div class="row" style="justify-content: center;">
-                      <a style="font-size:18px; border:1px solid; margin-right: 0.25rem;" target="blank" href="${this.$store.state.report.badge["fair"]["verification_url"]}"><span style="margin:20px;">Verify</span></a>
-                      <a style="font-size:18px; border:1px solid; margin-left: 0.25rem;" target="blank" href="${this.$store.state.report.badge["fair"]["data"]["openBadgeId"]}"><span style="margin:20px;">Go to Badgr's award page</span></a>
-                  </div>
-                </div>`
-            $("#badge-fair").append(_div)
-          }
-        }
-        $('blockquote p').css('text-align','center');
-        $('blockquote p a').css('display','unset');
-        $('blockquote img').css('height','300px');
-        $('blockquote img').css('width','300px');
 
-
-      })
-
-     $(function () {
-       $('[data-toggle="tooltip"]').tooltip()
-     })
+     $('[data-toggle="tooltip"]').tooltip()
 
   },
   created(){
@@ -417,10 +392,6 @@
   padding-left:20px;
   color: #9A9A9A;
 
-}
-
-.header {
-  padding: 0 5%;
 }
 
 #downloadDropdownMenu{
