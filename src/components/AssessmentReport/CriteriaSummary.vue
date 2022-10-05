@@ -1,13 +1,13 @@
 <template>
 
-  <div>
+  <div class="criteria_summary">
     <div class="row gx-4 gx-md-5" v-for="(criteria, criteriaToken) in validCriterias()">
 
-      <div class="col-12 col-lg-7 offset-lg-5">
+      <div class="col-12">
         <div class="criteria">
           <div class="criteriaTitle" @click="scrollToCriteria(criteriaToken)">
             <i class="criteriaIcon fa" :class="criteriaIcon(criteriaToken)"></i>
-            {{ criteriaName(criteriaToken) }}
+            <span class="criteriaName"> {{ criteriaName(criteriaToken) }} </span>
           </div>
           <div class="criteriaPercentage" :style="stylePercentage(criteria)">
             {{ criteriaPercentage(criteria) }}
@@ -64,6 +64,9 @@ export default {
 
 <style scoped>
 
+.criteria_summary{
+  width: max(440px, 45%);
+}
 .criteria {
   display: flex;
   flex-direction: row;
@@ -78,15 +81,13 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  color: #6c757d;
-  font-weight: bold;
+  font-size: 17px;
   flex-wrap: nowrap;
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
-  font-size: .75rem;
-  max-width: 230px;
-  min-width: 120px;
+  padding: 0 0.8rem;
+  max-width: 240px;
+  min-width: 160px;
   width: 45%;
+  background-color: #f1efee;
   cursor: pointer;
 }
 .criteriaTitle:hover{
@@ -94,31 +95,31 @@ export default {
 }
 
 .criteriaIcon {
-  margin-right: 0.25rem;
+  margin-right: 0.75rem;
   display: inline-block;
   position: relative;
+  color: #4F4A48FF;
 }
 
 .criteriaPercentage {
   background-color: #00000019;
   min-width: 35px;
-  font-size: .8rem;
-  height: 24px;
-  line-height: 24px;
+  font-size: 1.1rem;
+  height: 2.8rem;
+  line-height: 2.8rem;
   width: 50px;
   text-align: center;
   font-weight: bold;
-  font-family: SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;
 }
 
 .criteriaProgress {
   flex-grow: 1;
   position: relative;
-  margin-top: 10px;
-  margin-left: .5rem;
-  margin-right: .5rem;
+  margin-top: 20px;
+  margin-left: 1rem;
+  margin-right: 1rem;
   background-color: #00000019;
-  height: 4px;
+  height: 6px;
 }
 
 .criteriaProgressBar{
