@@ -164,6 +164,9 @@
                                                           <button class="btn btn-primary btn-link" style="border:none; font-size:18px;" data-toggle="modal" data-target="#exampleModal" @click="modalInfo(subcrit['evidence'][a])">
                                                             More Info
                                                           </button>
+                                                          <button v-if="!subcrit['evidence'][a]['valid'] === true" class="btn btn-primary btn-link hint-button" style="border:none; font-size:18px; padding-top: 0; padding-bottom: 0;" data-toggle="modal" data-target="#hintModal" @click="modalHint(subcrit.hint)">
+                                                            Hint
+                                                          </button>
                                                         </div>
                                                       </div>
                                                   </div>
@@ -248,6 +251,32 @@
               </div>
 
 
+
+              <!-- Hint Modal -->
+              <div class="modal fade bd-example-modal-lg" id="hintModal" tabindex="-1" role="dialog" aria-labelledby="hintModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" style="font-weight:700; font-size:18px;" id="hintModalLabel">HINT</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body" style="">
+                      <div class="row">
+                        <card class="col-12">
+                          <div id="hintData"></div>
+                        </card>
+                      </div>
+                    </div>
+                    <div class="modal-footer" style="justify-content: end;">
+                      <button type="button" class="btn btn-secondary" style="color: #fff!important;background-color: #6c757d!important;border-color: #6c757d!important;" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
           </div>
         </div>
       </div>
@@ -263,7 +292,6 @@
   import CriteriaSummary from 'src/components/AssessmentReport/CriteriaSummary';
   import BadgeResults from 'src/components/AssessmentReport/BadgeResults';
   import BadgeAchieved from "@/components/AssessmentReport/BadgeAchieved";
-  import html2canvas from 'html2canvas';
   export default {
     components: {
     RepoData,
@@ -337,6 +365,9 @@
           this.modalUnstructured = '';
         }
         console.log(this.modalInfoData)
+      },
+      modalHint(hint){
+        $('#hintData').html(hint)
       },
       gotoFull(){
         this.$router.push({name: 'full_assessment'});
@@ -417,6 +448,12 @@
 #downloadDropdownMenu > li:nth-child(2) > a{
   cursor: not-allowed;
 }
+
+
+.subcriteria:not(:last-child) .hint-button{
+  margin-bottom: 10px;
+}
+
 
 
 input[type=number]::-webkit-inner-spin-button {
