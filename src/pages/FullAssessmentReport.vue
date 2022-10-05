@@ -292,7 +292,6 @@
   import CriteriaSummary from 'src/components/AssessmentReport/CriteriaSummary';
   import BadgeResults from 'src/components/AssessmentReport/BadgeResults';
   import BadgeAchieved from "@/components/AssessmentReport/BadgeAchieved";
-  import html2canvas from 'html2canvas';
   export default {
     components: {
     RepoData,
