@@ -227,8 +227,13 @@
                             <span v-show="modalInfoData['tool']['version']" style="margin:0px 5px;" class="badge badge-danger">version:<span style="font-weight:bold"> {{modalInfoData['tool']['version']}}</span></span>
 
                           </div>
-                          <div class="row" style="padding:0px 20px">
+                          <div class="row" style="margin-top: 10px; padding:0px 20px">
                               <p><span style="font-weight:700!important;">Plugin:</span> {{modalInfoData && modalInfoData['plugin'] && modalInfoData['plugin']['name'] ? modalInfoData['plugin']['name']:''}} {{modalInfoData && modalInfoData['plugin'] && modalInfoData['plugin']['version'] ? modalInfoData['plugin']['version']:''}}</p>
+                          </div>
+
+                          <div class="row" v-if="modalInfoData && modalInfoData['tool'] && modalInfoData['tool']['build_repo']"style="padding:0px 20px">
+
+                            <p><span style="font-weight:700!important;">Build repo:</span> <a :href="modalInfoData && modalInfoData['tool'] && modalInfoData['tool']['build_repo']? modalInfoData['tool']['build_repo']:'#'" target="_blank" style="font-size:18px;"> {{modalInfoData && modalInfoData['tool'] && modalInfoData['tool']['build_repo'] ? modalInfoData['tool']['build_repo']:''}} </a></p>
                           </div>
 
                           <div class="row" style="padding:0px 20px">
