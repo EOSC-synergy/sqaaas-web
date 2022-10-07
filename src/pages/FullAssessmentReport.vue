@@ -164,7 +164,7 @@
                                                           <button class="btn btn-primary btn-link" style="border:none; font-size:18px;" data-toggle="modal" data-target="#exampleModal" @click="modalInfo(subcrit['evidence'][a])">
                                                             More Info
                                                           </button>
-                                                          <button v-if="!subcrit['evidence'][a]['valid'] === true" class="btn btn-primary btn-link hint-button" style="border:none; font-size:18px; padding-top: 0; padding-bottom: 0;" data-toggle="modal" data-target="#hintModal" @click="modalHint(subcrit.hint)">
+                                                          <button v-if="!subcrit['valid'] === true" class="btn btn-primary btn-link hint-button" style="border:none; font-size:18px; padding-top: 0; padding-bottom: 0;" data-toggle="modal" data-target="#hintModal" @click="modalHint(subcrit.hint)">
                                                             Hint
                                                           </button>
                                                         </div>
