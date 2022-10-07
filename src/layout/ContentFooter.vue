@@ -55,15 +55,22 @@
 
 						</div>
 					</div>
+
 				</div>
 			</div>
 		</div>
-		<div class="text-center footer-widget" style="background:white;padding-bottom:1rem;">
-			<p style="text-align:right;padding-top:3rem;padding-right:6rem;">
-				<button id="button" class="btn btn-primary btn-simple" @click="top()">Back to top</button>
-			</p>
-			<img src="../../static/eosc-synergy.png" style="heigth:200px;width:200px" alt="">
-		</div>
+
+    <div class="container-fluid">
+      <div class="row mt-3 mb-3">
+        <div class="col-8 offset-2 text-center">
+          <a href="https://www.eosc-synergy.eu" target="_blank"><img src="../../static/eosc-synergy.png" style="width: 200px;" alt=""></a>
+        </div>
+        <div class="col-2 text-center">
+          <button id="button" class="btn btn-primary btn-simple" @click="top()"> <i class="fa fa-arrow-up" aria-hidden="true"></i> Back to top</button>
+        </div>
+      </div>
+    </div>
+
 	</footer>
 </template>
 <script>
