@@ -10,12 +10,13 @@
                       <button class="btn btn-default btn-simple" @click="gotoFull()"><i class="fa fa-arrow-left" aria-hidden="true"></i><span style="font-weight: bold;padding-top:5px;font-size:18px;" class="card-title">Back</span></button>
                     </div>
                     <div class="col-6 text-right mt-2 ">
-                      <button style="color: #fff;background-color: #6c757d;border-color: #6c757d;" class="btn" @click="refresh()"><i class="fa fa-refresh" style="padding-right:10px;" aria-hidden="true"></i> New Assessment</button>
+                      <button style="color: #fff;background-color: #6c757d;border: none;" class="btn" @click="refresh()"><i class="fa fa-refresh" style="padding-right:10px;" aria-hidden="true"></i> New Assessment</button>
                       <div class="btn-group">
-                        <button id="downloadDropdown" style="color: #fff;background-color: #6c757d;border-color: #6c757d;margin-left: 10px;" class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download" style="padding-right:10px;" aria-hidden="true" ></i> Download </button>
+                        <button id="downloadDropdown" style="color: #fff;background-color: #6c757d;border: none;margin-left: 15px;" class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download" style="padding-right:10px;" aria-hidden="true" ></i> Download </button>
                         <ul id="downloadDropdownMenu" class="dropdown-menu">
                           <li><a role="button" @click="downloadJSON()"><i class="fa fa-file-alt" style="color: #455098; margin-right: 5px;"></i> JSON</a></li>
-                          <li><a role="button"><i class="fa fa-file-pdf-o" style="color: #984545; margin-right: 5px;"></i> PDF</a></li>
+                          <li><a role="button" @click="downloadPNG()"><i class="fa fa-file-image-o" style="color: #459849; margin-right: 5px;"></i> PNG</a></li>
+                          <li><a role="button" @click="downloadPDF()"><i class="fa fa-file-pdf-o" style="color: #984545; margin-right: 5px;"></i> PDF</a></li>
                         </ul>
                       </div>
                     </div>
@@ -231,7 +232,7 @@
                               <p><span style="font-weight:700!important;">Plugin:</span> {{modalInfoData && modalInfoData['plugin'] && modalInfoData['plugin']['name'] ? modalInfoData['plugin']['name']:''}} {{modalInfoData && modalInfoData['plugin'] && modalInfoData['plugin']['version'] ? modalInfoData['plugin']['version']:''}}</p>
                           </div>
 
-                          <div class="row" v-if="modalInfoData && modalInfoData['tool'] && modalInfoData['tool']['build_repo']"style="padding:0px 20px">
+                          <div class="row" v-if="modalInfoData && modalInfoData['tool'] && modalInfoData['tool']['build_repo']" style="padding:0px 20px">
 
                             <p><span style="font-weight:700!important;">Build repo:</span> <a :href="modalInfoData && modalInfoData['tool'] && modalInfoData['tool']['build_repo']? modalInfoData['tool']['build_repo']:'#'" target="_blank" style="font-size:18px;"> {{modalInfoData && modalInfoData['tool'] && modalInfoData['tool']['build_repo'] ? modalInfoData['tool']['build_repo']:''}} </a></p>
                           </div>
@@ -297,6 +298,9 @@
   import CriteriaSummary from 'src/components/AssessmentReport/CriteriaSummary';
   import BadgeResults from 'src/components/AssessmentReport/BadgeResults';
   import BadgeAchieved from "@/components/AssessmentReport/BadgeAchieved";
+  import html2canvas from 'html2canvas';
+  import jsPDF from 'jspdf';
+
   export default {
     components: {
     RepoData,
@@ -381,6 +385,7 @@
         this.$router.push({name: 'full_assessment'});
       },
       downloadJSON(){
+
         let a = document.createElement("a");
         a.style.display = "none"
         let json = JSON.stringify(this.$store.state.report,null, "\t");
@@ -392,8 +397,37 @@
         a.click();
         window.URL.revokeObjectURL(url);
         a.remove();
+
       },
 
+      downloadPNG(){
+
+        $('#downloadDropdown').dropdown('hide')
+
+        html2canvas(document.body, {useCORS: true}).then(canvas => {
+          let a = document.createElement("a");
+          a.style.display = "none"
+          canvas.toBlob(blob => {
+            a.href = window.URL.createObjectURL(blob);
+            a.download = "SQAaaS Report - " + this.$store.state.report.repository[0].name +".png"
+            a.click();
+            window.URL.revokeObjectURL(a.href);
+            a.remove();
+          })
+        });
+
+      },
+      downloadPDF(){
+
+        $('#downloadDropdown').dropdown('hide')
+
+        html2canvas(document.body, {useCORS: true}).then(canvas => {
+          let pdf = new jsPDF({unit: 'px', format: [canvas.width, canvas.height], compress: true});
+          pdf.addImage({imageData: canvas, format: 'jpg', width: canvas.width, height: canvas.height});
+          pdf.save("SQAaaS Report - " + this.$store.state.report.repository[0].name +".pdf");
+        });
+
+      },
 
       showBadge(){
         let badge = this.$store.state.report.badge;
@@ -449,9 +483,6 @@
   display: block;
   padding: 4px 20px;
   color: #333;
-}
-#downloadDropdownMenu > li:nth-child(2) > a{
-  cursor: not-allowed;
 }
 
 
