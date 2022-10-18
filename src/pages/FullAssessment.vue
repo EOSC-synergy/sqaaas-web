@@ -744,11 +744,10 @@
           this.loading = true;
           this.modal_message = 'Submitting Pipeline ...';
           this.getPipelineAssessmentCall(data,this.getPipelineAssessmentCallBack)
-        }else{
-          this.showErrorURL = true;
         }
-
-
+	// else{
+        //   this.showErrorURL = true;
+        // }
       },
       getPipelineAssessmentCallBack(response){
         console.log("---> getPipelineAssessmentCallBack <---")
