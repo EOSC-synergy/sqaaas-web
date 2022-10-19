@@ -713,7 +713,8 @@
         // }
         this.showErrorAPI = false;
         console.log(this.array_selected_tools)
-        if(this.params.url != ''){
+        if(this.params.url != '') {
+          console.log('Code repository provided!')
           var data = {
             repo_code:{
               repo:this.params.url.trim(),
@@ -724,27 +725,31 @@
               branch:this.doc.branch.trim()
             }
           }
-          if(this.deploy.yes){
-            data['deployment'] = {
-              'repo_deploy':{
+        }
+        if(this.deploy.yes) {
+          console.log('Deployment repository provided!')
+          var data = {
+            deployment: {
+              repo_deploy: {
                 repo:this.deploy.url.trim(),
                 branch:this.deploy.branch.trim()
               },
-              'deploy_tool':this.array_selected_tools[0]
+              deploy_tool:this.array_selected_tools[0]
             }
-
           }
-          if(this.fair.yes){
-            data['fair'] = {
-              'fair_tool':this.array_selected_tools_fair[0]
-            }
-
-          }
-          this.showErrorURL = false;
-          this.loading = true;
-          this.modal_message = 'Submitting Pipeline ...';
-          this.getPipelineAssessmentCall(data,this.getPipelineAssessmentCallBack)
         }
+        if(this.fair.yes){
+          console.log('FAIR data provided!')
+          var data = {
+            fair: {
+              fair_tool:this.array_selected_tools_fair[0]
+            }
+          }
+        }
+        this.showErrorURL = false;
+        this.loading = true;
+        this.modal_message = 'Submitting Pipeline ...';
+        this.getPipelineAssessmentCall(data,this.getPipelineAssessmentCallBack)
 	// else{
         //   this.showErrorURL = true;
         // }
