@@ -330,7 +330,8 @@
           'QC.Sec':'fa-lock',
           'QC.Ver':'fa-code-fork',
           'QC.FAIR':'fa-certificate',
-          'QC.Fun':'fa-filter'
+          'QC.Fun':'fa-filter',
+          'SvcQC.Dep':'fa-rocket-launch'
         },
         mapping_criteria_name:{
           'QC.Acc':'Code Accessibility',
@@ -349,7 +350,8 @@
           'QC.Del':'Automated Delivery',
           'QC.Dep':'Automated Deployment',
           'QC.FAIR':'FAIRness level of Digital Objects',
-          'QC.Fun':'Functional'
+          'QC.Fun':'Functional',
+          'SvcQC.Dep':'Service Deployment'
         }
 
       }
