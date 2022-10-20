@@ -331,7 +331,13 @@
           'QC.Ver':'fa-code-fork',
           'QC.FAIR':'fa-certificate',
           'QC.Fun':'fa-filter',
-          'SvcQC.Dep':'fa-rocket-launch'
+          'SvcQC.Dep':'fa-rocket-launch',
+          'SvcQC.Fun':'fa-filter',
+          'SvcQC.Sec':'fa-lock',
+          'SvcQC.Doc':'fa-book',
+          'SvcQC.Api':'fa-computer-classic',
+          'SvcQC.Per':'fa-check-double',
+          'SvcQC.Int':'fa-arrows-to-line'
         },
         mapping_criteria_name:{
           'QC.Acc':'Code Accessibility',
@@ -351,9 +357,14 @@
           'QC.Dep':'Automated Deployment',
           'QC.FAIR':'FAIRness level of Digital Objects',
           'QC.Fun':'Functional',
-          'SvcQC.Dep':'Service Deployment'
+          'SvcQC.Dep':'Service Deployment',
+          'SvcQC.Fun':'Service Functional Testing',
+          'SvcQC.Sec':'Security Testing (DAST)',
+          'SvcQC.Doc':'Service Documentation',
+          'SvcQC.Api':'API Testing',
+          'SvcQC.Per':'Performance Testing',
+          'SvcQC.Int':'Integration Testing'
         }
-
       }
     },
     watch:{},
