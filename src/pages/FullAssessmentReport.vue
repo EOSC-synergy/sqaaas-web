@@ -56,7 +56,8 @@
                     <div class="row mt-5">
                       <div class="col">
 
-                        <BadgeResults :badgeCriteria="this.$store.state.report.badge.software.criteria" :mapping_icon="mapping_icon" :mapping_criteria_name="mapping_criteria_name" />
+                        <!--<BadgeResults :badgeCriteria="this.$store.state.report.badge.services.criteria" :mapping_icon="mapping_icon" :mapping_criteria_name="mapping_criteria_name" />-->
+                        <BadgeResults :badgeCriteria="this.$store.state.report.badge.fair.criteria" :mapping_icon="mapping_icon" :mapping_criteria_name="mapping_criteria_name" />
 
                       </div>
                     </div>

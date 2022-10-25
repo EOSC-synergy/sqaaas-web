@@ -40,7 +40,9 @@ export default {
   props: ['badge'],
   methods:{
     showBadge(){
-      return [this.badge.software.data, this.badge.services.data, this.badge.fair.data].filter(Boolean).length;
+      console.log('----> Method showBadge() --')
+      console.log(this.badge.fair);
+      return [this.badge.fair.data].filter(Boolean).length;
     },
     activeBadgeTypes(){
       let activeBadgeTypes = {}
