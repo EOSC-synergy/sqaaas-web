@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  sqaaas-api-server:
+    image: eoscsynergy/sqaaas-web:${BRANCH_NAME}
+    build:
+      context: .
+      dockerfile: Dockerfile
+
