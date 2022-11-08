@@ -1,26 +1,22 @@
 <template>
 
-  <div>
-
-    <h3 id="badge_report_title">Badge Report</h3>
-
     <card id="badge_report">
 
       <div class="row">
 
-        <div v-for="(badge, badgeType) in badgeCriteria" class="col-12 col-lg-4">
+        <div v-for="(badge, badgeLevel) in badgeCriteria" class="col-12 col-lg-4">
 
-          <div class="badge_header" :class="badgeSatisfiedClass(badgeType)">
+          <div class="badge_header" :class="badgeSatisfiedClass(badgeLevel)">
             <div class="row">
               <div class="col-10">
-                <svg :fill="colorBadge(badgeType)" viewBox="0 0 24 24" height="40" width="40">
+                <svg :fill="colorBadge(badgeLevel)" viewBox="0 0 24 24" height="40" width="40">
                   <path d="M12 22c3.859 0 7-3.141 7-7s-3.141-7-7-7c-3.86 0-7 3.141-7 7s3.14 7 7 7zm0-12c2.757 0 5 2.243 5 5s-2.243 5-5 5-5-2.243-5-5 2.243-5 5-5zm-1-8H7v5.518a8.957 8.957 0 0 1 4-1.459V2zm6 0h-4v4.059a8.957 8.957 0 0 1 4 1.459V2z"></path><path d="m10.019 15.811-.468 2.726L12 17.25l2.449 1.287-.468-2.726 1.982-1.932-2.738-.398L12 11l-1.225 2.481-2.738.398z"></path>
                 </svg>
-                <span class="badge_header_title"> {{capitalize(badgeType)}} badge</span>
+                <span class="badge_header_title"> {{capitalize(badgeLevel)}} badge</span>
               </div>
               <div class="col-2">
                 <div>
-                  <i v-if="badgeSatisfied(badgeType)" class="fa fa-2x fa-check-circle"></i>
+                  <i v-if="badgeSatisfied(badgeLevel)" class="fa fa-2x fa-check-circle"></i>
                   <i v-else class="fa fa-2x fa-times-circle"></i>
                 </div>
               </div>
@@ -28,10 +24,10 @@
           </div>
 
           <div class="badge_criterias">
-            <div class="badge_criteria" v-for="criteriaToken in incrementalCriterias(badgeType)">
+            <div class="badge_criteria" v-for="criteriaToken in incrementalCriterias(badgeLevel)">
               <div class="row">
                 <div class="col-1">
-                  <i v-if="criteriaSatisfied(criteriaToken, badgeType)" class="fa fa-check"></i>
+                  <i v-if="criteriaSatisfied(criteriaToken, badgeLevel)" class="fa fa-check"></i>
                   <i v-else class="fa fa-times"></i>
                 </div>
                 <div class="col-10">
@@ -47,8 +43,6 @@
 
     </card>
 
-  </div>
-
 </template>
 
 <script>
@@ -56,19 +50,19 @@ export default {
   name: "BadgeResults",
   props: ['badgeCriteria', 'mapping_icon', 'mapping_criteria_name'],
   methods: {
-    capitalize(badgeType) {
-      return badgeType.charAt(0).toUpperCase() + badgeType.slice(1)
+    capitalize(badgeLevel) {
+      return badgeLevel.charAt(0).toUpperCase() + badgeLevel.slice(1)
     },
-    colorBadge(badgeType) {
-      if (badgeType === "bronze") return '#cd7f32'
-      if (badgeType === "silver") return '#b7b7b7'
-      if (badgeType === "gold")   return '#e5b80b'
+    colorBadge(badgeLevel) {
+      if (badgeLevel === "bronze") return '#cd7f32'
+      if (badgeLevel === "silver") return '#b7b7b7'
+      if (badgeLevel === "gold")   return '#e5b80b'
       else return "black"
     },
-    incrementalCriterias(badgeType) {
-      if (badgeType === "bronze") return this.badgeCriteria.bronze.to_fulfill
-      if (badgeType === "silver") return this.badgeCriteria.silver.to_fulfill.filter(crit => !this.badgeCriteria.bronze.to_fulfill.includes(crit))
-      if (badgeType === "gold")   return this.badgeCriteria.gold.to_fulfill.filter(crit => !this.badgeCriteria.silver.to_fulfill.includes(crit))
+    incrementalCriterias(badgeLevel) {
+      if (badgeLevel === "bronze") return this.badgeCriteria.bronze.to_fulfill
+      if (badgeLevel === "silver") return this.badgeCriteria.silver.to_fulfill.filter(crit => !this.badgeCriteria.bronze.to_fulfill.includes(crit))
+      if (badgeLevel === "gold")   return this.badgeCriteria.gold.to_fulfill.filter(crit => !this.badgeCriteria.silver.to_fulfill.includes(crit))
       else return []
     },
     criteriaName(criteriaToken) {
@@ -78,14 +72,16 @@ export default {
     criteriaIcon(criteriaToken){
       return this.mapping_icon[criteriaToken] || this.mapping_icon['default']
     },
-    criteriaSatisfied(criteriaToken, badgeType){
-      return this.badgeCriteria[badgeType].fulfilled.includes(criteriaToken)
+    criteriaSatisfied(criteriaToken, badgeLevel){
+      return this.badgeCriteria[badgeLevel].fulfilled.includes(criteriaToken)
     },
-    badgeSatisfied(badgeType){
-      return this.badgeCriteria[badgeType].missing.length === 0
+    badgeSatisfied(badgeLevel){
+      if (badgeLevel === "bronze") return this.badgeCriteria["bronze"].missing.length === 0
+      if (badgeLevel === "silver") return this.badgeCriteria["bronze"].missing.length === 0 && this.badgeCriteria["silver"].missing.length === 0
+      if (badgeLevel === "gold")   return this.badgeCriteria["bronze"].missing.length === 0 && this.badgeCriteria["silver"].missing.length === 0 && this.badgeCriteria["gold"].missing.length === 0
     },
-    badgeSatisfiedClass(badgeType){
-      return (this.badgeCriteria[badgeType].missing.length === 0)? "satisfied" : "not_satisfied"
+    badgeSatisfiedClass(badgeLevel){
+      return (this.badgeSatisfied(badgeLevel))? "satisfied" : "not_satisfied"
     }
   }
 
@@ -93,12 +89,6 @@ export default {
 </script>
 
 <style scoped>
-
-#badge_report_title{
-  max-width: 1200px;
-  margin: 0 auto 20px auto;
-  font-weight: bold;
-}
 
 #badge_report{
   max-width: 1200px;

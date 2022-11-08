@@ -1,18 +1,16 @@
 <template>
 
-  <div class="container-fluid m-0 p-0">
-
     <div class="row repo_data">
-      <div class="col-auto text-center" style="min-width: 100px;">
+      <div class="col-auto text-center">
 
-        <img :src='repo.avatar_url' width="90px">
+        <img :src='repo.avatar_url' width="140px">
 
       </div>
-      <div class="col">
+      <div class="col-auto">
         <div class="row">
           <div class="col repo_data_name">
 
-            <a :href='repo.url' target="_blank" style="font-size: 28px; font-weight: bold;"> {{ this.$store.state.report.repository[0].name }} </a>
+            <a :href='repo.url' target="_blank" style="font-size: 36px; font-weight: bold;"> {{ this.$store.state.report.repository[0].name }} </a>
 
           </div>
         </div>
@@ -86,8 +84,6 @@
       </div>
     </div>
 
-  </div>
-
 </template>
 
 <script>
@@ -99,7 +95,9 @@ export default {
 
 <style scoped>
 
-.repo_data{}
+.repo_data{
+  font-size: 18px;
+}
 .repo_data_name{}
 .repo_data_name a:hover{
   color: #4a639a;
@@ -136,4 +134,5 @@ export default {
 .repo_data_topic a:hover{
   color: #22386b;
 }
+
 </style>
