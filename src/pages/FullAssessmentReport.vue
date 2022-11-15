@@ -56,7 +56,7 @@
                     <div class="row mt-5">
                       <div class="col">
 
-                        <BadgeResults :badgeCriteria="this.$store.state.report.badge.software.criteria" :mapping_icon="mapping_icon" :mapping_criteria_name="mapping_criteria_name" />
+                        <BadgeResults :badgeCriteria="getBadgeCriteria()" :mapping_icon="mapping_icon" :mapping_criteria_name="mapping_criteria_name" />
 
                       </div>
                     </div>
@@ -79,8 +79,6 @@
                     </div>
 
                   </div>
-
-
 
 
                   <div class="col-12 col-sm-12 col-md-12 col-lg-6 mx-auto">
@@ -330,7 +328,14 @@
           'QC.Sec':'fa-lock',
           'QC.Ver':'fa-code-fork',
           'QC.FAIR':'fa-certificate',
-          'QC.Fun':'fa-filter'
+          'QC.Fun':'fa-filter',
+          'SvcQC.Dep':'fa-rocket-launch',
+          'SvcQC.Fun':'fa-filter',
+          'SvcQC.Sec':'fa-lock',
+          'SvcQC.Doc':'fa-book',
+          'SvcQC.Api':'fa-computer-classic',
+          'SvcQC.Per':'fa-check-double',
+          'SvcQC.Int':'fa-arrows-to-line'
         },
         mapping_criteria_name:{
           'QC.Acc':'Code Accessibility',
@@ -349,9 +354,15 @@
           'QC.Del':'Automated Delivery',
           'QC.Dep':'Automated Deployment',
           'QC.FAIR':'FAIRness level of Digital Objects',
-          'QC.Fun':'Functional'
+          'QC.Fun':'Functional',
+          'SvcQC.Dep':'Service Deployment',
+          'SvcQC.Fun':'Service Functional Testing',
+          'SvcQC.Sec':'Security Testing (DAST)',
+          'SvcQC.Doc':'Service Documentation',
+          'SvcQC.Api':'API Testing',
+          'SvcQC.Per':'Performance Testing',
+          'SvcQC.Int':'Integration Testing'
         }
-
       }
     },
     watch:{},
@@ -399,7 +410,6 @@
         a.remove();
 
       },
-
       downloadPNG(){
 
         $('#downloadDropdown').dropdown('hide')
@@ -428,19 +438,12 @@
         });
 
       },
-
-      showBadge(){
-        let badge = this.$store.state.report.badge;
-        return [badge.software.data, badge.services.data, badge.fair.data].filter(Boolean).length;
-      },
-      activeBadgeTypes(){
-        let activeBadgeTypes = []
-        let badge = this.$store.state.report.badge;
-        for (let badgeType in badge){
-          if (badge[badgeType].data) activeBadgeTypes.push(badge[badgeType])
-        }
-        return activeBadgeTypes
+      getBadgeCriteria(){
+        return this.$store.state.report.badge.software && this.$store.state.report.badge.software.criteria ||
+               this.$store.state.report.badge.services && this.$store.state.report.badge.services.criteria ||
+               this.$store.state.report.badge.fair && this.$store.state.report.badge.fair.criteria
       }
+
     },
 
    mounted(){

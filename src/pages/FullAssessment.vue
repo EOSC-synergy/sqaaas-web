@@ -34,298 +34,302 @@
               <div class="text-center col-12 col-sm-12 col-xl-8 col-lg-10 mx-auto" style="justify-content: center;margin-top:20px;">
                 <h2 style="color: #76BAC6; font-weight: bold;">Take credit for the quality achievements of your code</h2>
                 <h4>Fill in the form below to trigger the assessment process</h4>
-                <div class="text-left row">
-                  <div class="col-12 col-md-8">
-                    <base-input type="text"
-                              label="Repository URL"
-                              :disabled="false"
-                              placeholder="Repository URL"
-                              style="margin-bottom:0px"
-                              v-model="params.url">
-                    </base-input>
-                    <p v-show="showErrorURL" style="color:red; font-size:12px;padding-left:20px; padding-top:0px;">This field is required</p>
-                  </div>
-                  <div class="col-12 col-md-4">
-                    <base-input type="text"
-                              label="Branch"
-                              :disabled="false"
-                              placeholder="master"
-                              style="margin-bottom:0px"
-                              v-model="params.branch">
-                    </base-input>
-                  </div>
-                </div>
 
-                <hr/>
+                <nav class="nav nav-tabs nav-justified mt-5 mb-4" id="assessmentTypeTabs">
+                    <a class="nav-link active"data-toggle="pill" data-target="#assesmentSoftwareForm" type="button">Software</a>
+                    <a class="nav-link" data-toggle="pill" data-target="#assesmentServiceForm" type="button">Service</a>
+                    <a class="nav-link" data-toggle="pill" data-target="#assesmentFairForm" type="button">FAIR</a>
+                </nav>
 
+                <div class="tab-content">
+                  <div class="tab-pane fade show active" id="assesmentSoftwareForm">
 
+                    <div class="text-left mb-4">
 
-                <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
-                  <span class="custom-label">External repo for documentation?</span>
-                  <div class="custom-div-append">
-                    <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>more info</a>">
-                      <i class="fa fa-question-circle"></i>
-                    </button>
-                  </div>
-                  <span class="custom-label" style="padding-left:75px;">Yes</span><base-checkbox name="credentials" v-model="doc.yes"></base-checkbox>
-                  <span class="custom-label">No</span><base-checkbox name="credentials" v-model="doc.no"></base-checkbox>
-                </div>
-
-                <div v-show='doc.yes' class="text-left row" style="padding-left:40px;">
-                    <div class="col-12 col-md-8">
-                      <base-input type="text" class="no-margin"
-                            label="Repo URL"
-                            :disabled="false"
-                            placeholder=""
-                            v-model="doc.url">
-                      </base-input>
-                      <!-- <span v-show="showErrorCredId" style="color:red;font-size:12px;">This field is required</span> -->
-
-                    </div>
-                    <div class="col-12 col-md-4">
-                      <base-input type="text" class="no-margin"
-                            label="Branch"
-                            :disabled="false"
-                            placeholder=""
-                            v-model="doc.branch">
-                      </base-input>
-                    </div>
-
-
-                </div>
-
-                <hr/>
-
-                <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
-                  <span class="custom-label">Deployment settings?</span>
-                  <div class="custom-div-append">
-                    <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>more info</a>">
-                      <i class="fa fa-question-circle"></i>
-                    </button>
-                  </div>
-                  <span class="custom-label" style="padding-left:75px;">Yes</span><base-checkbox name="credentials" v-model="deploy.yes"></base-checkbox>
-                  <span class="custom-label">No</span><base-checkbox name="credentials" v-model="deploy.no"></base-checkbox>
-                </div>
-
-                <div v-show='deploy.yes' class="text-left" style="padding-left:20px;">
-
-                    <div class="row mb-2" style="padding-left:15px;">
-                       <div class="col-12 col-md-8">
-                        <base-input type="text" class="no-margin"
-                              label="Repository URL (optional)"
-                              :disabled="false"
-                              placeholder=""
-                              v-model="deploy.url">
-                        </base-input>
-
-                      </div>
-                      <div class="col-12 col-md-4">
-                        <base-input type="text" class="no-margin"
-                              label="Repository Branch (optional)"
-                              :disabled="false"
-                              placeholder=""
-                              v-model="deploy.branch">
-                        </base-input>
+                      <div class="row mb-3" >
+                        <div class="col-12 col-md-8">
+                          <base-input type="text"
+                                      label="Repository URL"
+                                      :disabled="false"
+                                      placeholder=""
+                                      style="margin-bottom:0px"
+                                      v-model="params.url">
+                          </base-input>
+                          <p v-show="showErrorSoftwareURL" style="color:red; font-size:12px;padding-left:0px; padding-top:6px;"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> This field is required</p>
+                        </div>
+                        <div class="col-12 col-md-4">
+                          <base-input type="text"
+                                      label="Branch"
+                                      :disabled="false"
+                                      placeholder="master"
+                                      style="margin-bottom:0px"
+                                      v-model="params.branch">
+                          </base-input>
+                        </div>
                       </div>
 
-                    </div>
 
-                    <div v-show="criteria != 'default'" class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
-                      <div class="col-12 col-md-6">
-                        <label> CHOOSE A TOOL (required)</label>
-                        <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
-                          <option value="default">Select ...</option>
-                          <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
-                        </select>
+                      <div class="row">
+                        <div class="col-12 col-md-8">
+                          <base-input type="text" class="no-margin"
+                                      label="External documentation repository URL (optional)"
+                                      :disabled="false"
+                                      placeholder=""
+                                      v-model="doc.url">
+                          </base-input>
+
+                        </div>
+                        <div class="col-12 col-md-4">
+                          <base-input type="text" class="no-margin"
+                                      label="Branch"
+                                      :disabled="false"
+                                      placeholder="master"
+                                      v-model="doc.branch">
+                          </base-input>
+                        </div>
+
                       </div>
-                      <div v-show="showBuilderTool" class="text-left col-12 col-md-6" style="padding-top:25px;">
-                        <button style="max-height:40px;" type="button" class="btn  btn-info" @click="addTool()"><i class="fa fa-plus"></i>ADD TOOL</button>
+
+                      <div class="row mt-3"><div class="col">Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/'>EOSC-Synergy Jenkins</a> instance. <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>More info</a></div></div>
+
+                    </div>
+
+
+
+                    <button class="btn btn-primary btn-fill mb-3" @click="getResults('software')">Start Software Assessment</button>
+
+
+                  </div>
+                  <div class="tab-pane fade" id="assesmentServiceForm">
+
+                    <div class="text-left mb-4">
+
+                      <div class="row mb-2">
+                        <div class="col-12 col-md-8">
+                          <base-input type="text" class="no-margin"
+                                      label="Repository URL"
+                                      :disabled="false"
+                                      placeholder=""
+                                      v-model="deploy.url">
+                          </base-input>
+                          <p v-show="showErrorServiceURL" style="color:red; font-size:12px; padding-top:6px; padding-left:0px;"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> This field is required</p>
+                        </div>
+                        <div class="col-12 col-md-4">
+                          <base-input type="text" class="no-margin"
+                                      label="Branch"
+                                      :disabled="false"
+                                      placeholder="master"
+                                      v-model="deploy.branch">
+                          </base-input>
+                        </div>
                       </div>
-                    </div>
-                    <div>
-                      <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a tool to define some pipeline work.</span>
-                    </div>
-                    <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderTool">
-                      <div id="ref-arg"></div>
-                    </div>
+
+                      <div v-show="criteria != 'default'" class="row">
+                        <div class="col-12 col-md-6">
+                          <label> Choose a tool </label>
+                          <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
+                            <option value="default">Select ...</option>
+                            <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
+                          </select>
+                        </div>
+                        <div v-show="showBuilderTool" class="text-left col-12 col-md-6" style="padding-top:25px;">
+                          <button style="max-height:40px;" type="button" class="btn  btn-info" @click="addToolService()"><i class="fa fa-plus"></i>Add Tool</button>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p v-show="showErrorServiceBuilderTool" style="color:red; font-size:12px; padding-top:6px; padding-left:0px;"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> You must select a tool to define some pipeline work</p>
+                      </div>
+
+                      <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderTool">
+                        <div id="ref-arg"></div>
+                      </div>
 
 
-                    <div v-show="builder_tool != 'default'" class="col-12 mt-2">
-                      <span v-show="docker_image !=''" class="badge badge-secondary">image:<span style="font-weight:bold"> {{docker_image}}</span></span>
-                      <span v-show="docker_lang !=''" style="margin:0px 5px;" class="badge badge-primary">lang:<span style="font-weight:bold"> {{docker_lang}}</span></span>
-                      <span v-show="docker_version !=''" style="margin:0px 5px;" class="badge badge-danger">version:<span style="font-weight:bold"> {{docker_version}}</span></span>
+                      <div v-show="builder_tool != 'default'" class="col-12 mt-2">
+                        <span v-show="docker_image !=''" class="badge badge-secondary">image:<span style="font-weight:bold"> {{docker_image}}</span></span>
+                        <span v-show="docker_lang !=''" style="margin:0px 5px;" class="badge badge-primary">lang:<span style="font-weight:bold"> {{docker_lang}}</span></span>
+                        <span v-show="docker_version !=''" style="margin:0px 5px;" class="badge badge-danger">version:<span style="font-weight:bold"> {{docker_version}}</span></span>
 
-                      <div class="row" style="padding-top:20px">
-                        <div style="display:contents" class="col-12 col-md-6">
-                          <span class="custom-label" style="font-weight:bold;font-size:16px;">Use custom service?</span>
-                          <div class="custom-div-append">
-                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Define your own container service <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_2_criteria#running-the-tools-with-your-own-services'>more info</a>">
-                              <i class="fa fa-question-circle"></i>
-                            </button>
+                        <div class="row" style="padding-top:20px">
+                          <div style="display:contents" class="col-12 col-md-6">
+                            <span class="custom-label" style="font-weight:bold;font-size:16px;">Use custom service?</span>
+                            <div class="custom-div-append">
+                              <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Define your own container service <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_2_criteria#running-the-tools-with-your-own-services'>more info</a>">
+                                <i class="fa fa-question-circle"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <div style="display:contents" class="col-12 col-md-6">
+                            <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="change_image_yes"></base-checkbox>
+                            <span class="custom-label">No</span><base-checkbox name="workspace" v-model="change_image_no"></base-checkbox>
                           </div>
                         </div>
-                        <div style="display:contents" class="col-12 col-md-6">
-                          <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="change_image_yes"></base-checkbox>
-                          <span class="custom-label">No</span><base-checkbox name="workspace" v-model="change_image_no"></base-checkbox>
-                        </div>
                       </div>
-                    </div>
 
-                    <div v-show="change_image_yes"  class="col-12 col-md-6" style="display:grid;">
+                      <div v-show="change_image_yes"  class="col-12 col-md-6" style="display:grid;">
                         <select class="custom-select" id="service" v-model='service' >
                           <option value="default">Choose a service...</option>
                           <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
                         </select>
-                        <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal();set_fair_service == false"><i class="fa fa-plus"></i>ADD SERVICE</button>
+                        <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal();set_fair_service == false"><i class="fa fa-plus"></i>Add Service</button>
                         <span v-show="showErrorService" style="color:red; font-size:12px;">For the selected tool you must select a service.</span>
-                    </div>
+                      </div>
 
-                    <div v-show="array_selected_tools.length > 0" style="padding-top:40px;margin-bottom:2rem;">
-                      <div class="table-responsive">
-                        <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
-                            <thead>
-                                <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Tool</th>
-                                <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Arguments</th>
-                                <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
-                            </thead>
-                            <tbody v-for="(tool, index) in array_selected_tools" :key="index">
+                      <div v-show="array_selected_tools_service.length > 0" style="padding-top:40px;margin-bottom:2rem;">
+                          <div class="table-responsive">
+                            <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <thead>
+                              <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Tool</th>
+                              <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Arguments</th>
+                              <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
+                              </thead>
+                              <tbody v-for="(tool, index) in array_selected_tools_service" :key="index">
                               <tr
-                                  style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
-                                  <td
-                                      style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                      <div style="text-align:left;text-transform: uppercase;">
-                                          {{array_selected_tools[index].name}}
-                                      </div>
-                                  </td>
-                                  <td
-                                      style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                      <div :id="'list-arg'+index" style="text-align:center;">
-                                          {{startListArg(tool['args'], index)}}
-                                      </div>
+                                style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                <td
+                                  style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                  <div style="text-align:left;text-transform: uppercase;">
+                                    {{array_selected_tools_service[index].name}}
+                                  </div>
+                                </td>
+                                <td
+                                  style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                  <div :id="'list-arg'+index" style="text-align:center;">
+                                    {{startListArg(tool['args'], index)}}
+                                  </div>
 
-                                  </td>
-                                  <td
-                                      style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeTool(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
-                                      </button>
-                                  </td>
+                                </td>
+                                <td
+                                  style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                  <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeToolService(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                  </button>
+                                </td>
 
                               </tr>
-                            </tbody>
-                        </table>
-                      </div>
-                  </div>
-                </div>
-
-                <hr/>
-
-                <div class="row" style="padding-left:20px;margin-top:1rem;margin-bottom:1rem">
-                  <span class="custom-label">FAIR?</span>
-                  <div class="custom-div-append">
-                    <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/' title='test add link'>EOSC-Synergy Jenkins</a> instance <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>more info</a>">
-                      <i class="fa fa-question-circle"></i>
-                    </button>
-                  </div>
-                  <span class="custom-label" style="padding-left:75px;">Yes</span><base-checkbox name="credentials" v-model="fair.yes"></base-checkbox>
-                  <span class="custom-label">No</span><base-checkbox name="credentials" v-model="fair.no"></base-checkbox>
-                </div>
-
-                <div v-show='fair.yes' class="text-left" style="padding-left:20px;">
-                    <div v-show="criteria_fair != 'default'" class="row" style="padding-bottom:0px;margin-bottom:0px;padding-left:15px;padding-right:15px;">
-                      <div class="col-12 col-md-6">
-                        <label> CHOOSE A TOOL (required)</label>
-                        <select class="custom-select" id="sqacriteria" v-model='builder_tool_fair' >
-                          <option value="default">Select ...</option>
-                          <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools_fair" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
-                        </select>
-                      </div>
-                      <div v-show="showBuilderToolFair" class="text-left col-12 col-md-6" style="padding-top:25px;">
-                        <button style="max-height:40px;" type="button" class="btn  btn-info" @click="addToolFair()"><i class="fa fa-plus"></i>ADD TOOL</button>
-                      </div>
-                    </div>
-                    <div>
-                      <span v-show="showErrorBuilderTool" style="color:red; font-size:12px;padding-left:20px;">You must select a tool to define some pipeline work.</span>
-                    </div>
-                    <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderToolFair">
-                      <div id="ref-arg-fair"></div>
-                    </div>
-
-
-                    <div v-show="builder_tool_fair != 'default'" class="col-12 mt-2">
-                      <span v-show="docker_image !=''" class="badge badge-secondary">image:<span style="font-weight:bold"> {{docker_image_fair}}</span></span>
-                      <span v-show="docker_lang !=''" style="margin:0px 5px;" class="badge badge-primary">lang:<span style="font-weight:bold"> {{docker_lang_fair}}</span></span>
-                      <span v-show="docker_version !=''" style="margin:0px 5px;" class="badge badge-danger">version:<span style="font-weight:bold"> {{docker_version_fair}}</span></span>
-
-                      <div class="row" style="padding-top:20px">
-                        <div style="display:contents" class="col-12 col-md-6">
-                          <span class="custom-label" style="font-weight:bold;font-size:16px;">Use custom service?</span>
-                          <div class="custom-div-append">
-                            <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Define your own container service <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_2_criteria#running-the-tools-with-your-own-services'>more info</a>">
-                              <i class="fa fa-question-circle"></i>
-                            </button>
+                              </tbody>
+                            </table>
                           </div>
                         </div>
-                        <div style="display:contents" class="col-12 col-md-6">
-                          <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="change_image_yes_fair"></base-checkbox>
-                          <span class="custom-label">No</span><base-checkbox name="workspace" v-model="change_image_no_fair"></base-checkbox>
+
+                      <div class="mt-3">Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/'>EOSC-Synergy Jenkins</a> instance. <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>More info</a></div>
+
+                    </div>
+
+                    <button class="btn btn-primary btn-fill mb-3" @click="getResults('service')">Start Service Assessment</button>
+
+                  </div>
+                  <div class="tab-pane fade" id="assesmentFairForm">
+
+                    <div class="text-left mb-4">
+
+                      <div class="text-left">
+                        <div v-show="criteria_fair != 'default'" class="row">
+                          <div class="col-12 col-md-6">
+                            <label> Choose a tool</label>
+                            <select class="custom-select" id="sqacriteria" v-model='builder_tool_fair' >
+                              <option value="default">Select ...</option>
+                              <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools_fair" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
+                            </select>
+                          </div>
+                          <div v-show="showBuilderToolFair" class="text-left col-12 col-md-6" style="padding-top:25px;">
+                            <button style="max-height:40px;" type="button" class="btn  btn-info" @click="addToolFair()"><i class="fa fa-plus"></i>Add Tool</button>
+                          </div>
                         </div>
-                      </div>
-                    </div>
+                        <div>
+                          <p v-show="showErrorFairBuilderTool" style="color:red; font-size:12px; padding-top:6px; padding-left:0px;"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> You must select a tool to define some pipeline work.</p>
+                        </div>
+                        <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderToolFair">
+                          <div id="ref-arg-fair"></div>
+                        </div>
 
-                     <div v-show="change_image_yes_fair"  class="col-12 col-md-6" style="display:grid;">
-                        <select class="custom-select" id="service" v-model='service_fair' >
-                          <option value="default">Choose a service...</option>
-                          <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
-                        </select>
-                        <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal();set_fair_service == true"><i class="fa fa-plus"></i>ADD SERVICE</button>
-                    </div>
 
-                    <div v-show="array_selected_tools_fair.length > 0" style="padding-top:40px;margin-bottom:2rem;">
-                      <div class="text-center" style="padding-bottom:10px;">
-                        <span class="custom-table-title" style="te">Selected Tools</span>
-                      </div>
-                      <div class="table-responsive">
-                        <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
-                            <thead>
-                                <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Tool</th>
-                                <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Arguments</th>
-                                <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
-                            </thead>
-                            <tbody v-for="(tool, index) in array_selected_tools_fair" :key="index">
+                        <div v-show="builder_tool_fair != 'default'" class="col-12 mt-2">
+                          <span v-show="docker_image !=''" class="badge badge-secondary">image:<span style="font-weight:bold"> {{docker_image_fair}}</span></span>
+                          <span v-show="docker_lang !=''" style="margin:0px 5px;" class="badge badge-primary">lang:<span style="font-weight:bold"> {{docker_lang_fair}}</span></span>
+                          <span v-show="docker_version !=''" style="margin:0px 5px;" class="badge badge-danger">version:<span style="font-weight:bold"> {{docker_version_fair}}</span></span>
+
+                          <div class="row" style="padding-top:20px">
+                            <div style="display:contents" class="col-12 col-md-6">
+                              <span class="custom-label" style="font-weight:bold;font-size:16px;">Use custom service?</span>
+                              <div class="custom-div-append">
+                                <button type="button" class="btn custom-append-button" data-toggle="tooltip" data-html="true" data-placement="top" title="Define your own container service <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_2_criteria#running-the-tools-with-your-own-services'>more info</a>">
+                                  <i class="fa fa-question-circle"></i>
+                                </button>
+                              </div>
+                            </div>
+                            <div style="display:contents" class="col-12 col-md-6">
+                              <span class="custom-label">Yes</span><base-checkbox name="workpace" v-model="change_image_yes_fair"></base-checkbox>
+                              <span class="custom-label">No</span><base-checkbox name="workspace" v-model="change_image_no_fair"></base-checkbox>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div v-show="change_image_yes_fair"  class="col-12 col-md-6" style="display:grid;">
+                          <select class="custom-select" id="service" v-model='service_fair' >
+                            <option value="default">Choose a service...</option>
+                            <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
+                          </select>
+                          <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal();set_fair_service == true"><i class="fa fa-plus"></i>Add Service</button>
+                        </div>
+
+                        <div v-show="array_selected_tools_fair.length > 0" style="padding-top:40px;margin-bottom:2rem;">
+                          <div class="text-center" style="padding-bottom:10px;">
+                            <span class="custom-table-title" style="te">Selected Tools</span>
+                          </div>
+                          <div class="table-responsive">
+                            <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <thead>
+                              <th style="text-align:left;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Tool</th>
+                              <th style="text-align:center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;">Arguments</th>
+                              <th style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px;background-color:#eee;font-size:14px;width:100%;">Remove</th>
+                              </thead>
+                              <tbody v-for="(tool, index) in array_selected_tools_fair" :key="index">
                               <tr
-                                  style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
-                                  <td
-                                      style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                      <div style="text-align:left;text-transform: uppercase;">
-                                          {{array_selected_tools_fair[index].name}}
-                                      </div>
-                                  </td>
-                                  <td
-                                      style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                      <div :id="'list-arg'+index" style="text-align:center;">
-                                          {{startListArgFair(tool['args'], index)}}
-                                      </div>
+                                style="border-width: 0px; border-bottom-width: 1px; border-color: gray; height: 1px">
+                                <td
+                                  style="padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                  <div style="text-align:left;text-transform: uppercase;">
+                                    {{array_selected_tools_fair[index].name}}
+                                  </div>
+                                </td>
+                                <td
+                                  style="text-align:center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                  <div :id="'list-arg'+index" style="text-align:center;">
+                                    {{startListArgFair(tool['args'], index)}}
+                                  </div>
 
-                                  </td>
-                                  <td
-                                      style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
-                                      <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeToolFair(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
-                                      </button>
-                                  </td>
+                                </td>
+                                <td
+                                  style="text-align:center;justify-content: center;padding-right: 10px; padding-left: 10px; padding-top: 5px;">
+                                  <button type="button" class="btn-simple btn btn-xs btn-info" @click="removeToolFair(index)"><i style="font-size:15px;color:red;" class="fa fa-trash"></i>
+                                  </button>
+                                </td>
 
                               </tr>
-                            </tbody>
-                        </table>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
                       </div>
+
+                      <div class="text-left mt-3">Credentials can only be used once they are defined in <a target='blank' href='https://jenkins.eosc-synergy.eu/credentials/'>EOSC-Synergy Jenkins</a> instance. <a target='blank' href='https://docs.sqaaas.eosc-synergy.eu/pipeline_as_a_service/step_1_repositories#credentials'>More info</a></div>
+
+                    </div>
+
+                    <button class="btn btn-primary btn-fill mb-3" @click="getResults('fair')">Start FAIR Assessment</button>
+
                   </div>
                 </div>
 
+                <!--
                 <div style="padding:20px;">
                   <button class="btn btn-primary btn-fill" @click="getResults()">Start Assessment</button>
-                  <!-- <button v-show="showReportBtn" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#errorModal">See Report</button> -->
-                   <!-- <button v-show="showReportBtn" style="margin-right:20px;" class="btn btn-primary btn-fill" @click="goToReport()">See Report</button> -->
-                  <!-- <button v-show="showReportBtn" style="color: #fff;background-color: #6c757d;border-color: #6c757d;" class="btn  " @click="refresh()"><i class="fa fa-refresh" style="padding-right:5px;" aria-hidden="true"></i> New Assessment</button> -->
+                  <button v-show="showReportBtn" class="btn btn-primary btn-fill" data-toggle="modal" data-target="#errorModal">See Report</button>
+                  <button v-show="showReportBtn" style="margin-right:20px;" class="btn btn-primary btn-fill" @click="goToReport()">See Report</button>
+                  <button v-show="showReportBtn" style="color: #fff;background-color: #6c757d;border-color: #6c757d;" class="btn  " @click="refresh()"><i class="fa fa-refresh" style="padding-right:5px;" aria-hidden="true"></i> New Assessment</button>
                 </div>
+                -->
               </div>
 						</template>
 					</card>
@@ -382,20 +386,14 @@
           branch:''
         },
         doc:{
-          yes:false,
-          no:true,
-           url:'',
+          url:'',
           branch:''
         },
         deploy:{
-          yes:false,
-          no:true,
           url:'',
           branch:''
         },
         fair:{
-          yes:false,
-          no:true,
         },
         autoRefresh:false,
         pipeline_id:'',
@@ -406,7 +404,8 @@
         showBuildUrl:false,
         build_status:'',
         showReportBtn: false,
-        showErrorURL:false,
+        showErrorSoftwareURL: false,
+        showErrorServiceURL: false,
         repo_info:{},
         showErrorAPI:false,
         showErrorFailure:false,
@@ -430,8 +429,9 @@
         array_tools_fair:[],
         selected_tool:{},
         selected_tool_fair:{},
-        showErrorBuilderTool:false,
-        array_selected_tools:[],
+        showErrorServiceBuilderTool: false,
+        showErrorFairBuilderTool: false,
+        array_selected_tools_service:[],
         array_selected_tools_fair:[],
         service_name: '',
         service:'default',
@@ -557,53 +557,6 @@
           this.docker_version_fair = '';
         }
       },
-      "doc.yes"(val){
-         if(val==true){
-          this.doc.no = false;
-        }else{
-          this.doc.no = true;
-        }
-
-      },
-      "doc.no"(val){
-        if(val==true){
-          this.doc.yes = false;
-          this.doc.url = "";
-          this.doc.branch = "";
-        }else{
-          this.doc.yes = true;
-        }
-      },
-       "deploy.yes"(val){
-         if(val==true){
-          this.deploy.no = false;
-        }else{
-          this.deploy.no = true;
-        }
-
-      },
-      "deploy.no"(val){
-        if(val==true){
-          this.deploy.yes = false;
-        }else{
-          this.deploy.yes = true;
-        }
-      },
-      "fair.yes"(val){
-         if(val==true){
-          this.fair.no = false;
-        }else{
-          this.fair.no = true;
-        }
-
-      },
-      "fair.no"(val){
-        if(val==true){
-          this.fair.yes = false;
-        }else{
-          this.fair.yes = true;
-        }
-      },
       "autoRefresh"(val) {
         if (val) {
             this.t = setInterval(() => {
@@ -697,59 +650,89 @@
       gotoSelect(){
         this.$router.push({name: 'SelectOption'});
       },
-      getResults(){
-        // var data = {}
-        // if(this.params.url != ''){
-        //   data['repo_code'] = {
-        //     repo:this.params.url.trim(),
-        //     branch:this.params.branch.trim()
-        //   }
-        // }
-        // if(this.doc.url != ''){
-        //   data['repo_docs'] = {
-        //     repo:this.doc.url.trim(),
-        //     branch:this.doc.branch.trim()
-        //   }
-        // }
+      getResults(assesmentType){
+
         this.showErrorAPI = false;
-        console.log(this.array_selected_tools)
-        if(this.params.url != ''){
-          var data = {
-            repo_code:{
-              repo:this.params.url.trim(),
-              branch:this.params.branch.trim()
+        this.showErrorSoftwareURL = false;
+        this.showErrorServiceURL = false;
+        this.showErrorServiceBuilderTool = false;
+        this.showErrorFairBuilderTool = false;
+
+        let data = {}
+        if (assesmentType === 'software'){
+          if(this.params.url.trim() === ''){
+            this.showErrorSoftwareURL = true;
+            return
+          }
+          console.log('Code repository provided')
+          data = {
+            repo_code: {
+              repo: this.params.url.trim(),
+              branch: this.params.branch.trim()
             },
-            repo_docs:{
-              repo:this.doc.url.trim(),
-              branch:this.doc.branch.trim()
+            repo_docs: {
+              repo: this.doc.url.trim(),
+              branch: this.doc.branch.trim()
             }
           }
-          if(this.deploy.yes){
-            data['deployment'] = {
-              'repo_deploy':{
-                repo:this.deploy.url.trim(),
-                branch:this.deploy.branch.trim()
+        }
+        else if (assesmentType === 'service'){
+          if(this.deploy.url.trim() === ''){
+            this.showErrorServiceURL = true;
+            return
+          }
+          if(!this.array_selected_tools_service[0]){
+            this.showErrorServiceBuilderTool = true;
+            return
+          }
+
+          console.log('Deployment repository provided')
+          data = {
+            repo_code: {
+              repo: this.params.url.trim(),
+              branch: this.params.branch.trim()
+            },
+            repo_docs: {
+              repo: this.doc.url.trim(),
+              branch: this.doc.branch.trim()
+            },
+            deployment: {
+              repo_deploy: {
+                repo: this.deploy.url.trim(),
+                branch: this.deploy.branch.trim()
               },
-              'deploy_tool':this.array_selected_tools[0]
+              deploy_tool: this.array_selected_tools_service[0]
             }
-
           }
-          if(this.fair.yes){
-            data['fair'] = {
-              'fair_tool':this.array_selected_tools_fair[0]
+        }
+        else if (assesmentType === 'fair'){
+          if(!this.array_selected_tools_fair[0]){
+            this.showErrorFairBuilderTool = true;
+            return
+          }
+
+          console.log('FAIR data provided')
+          data = {
+            repo_code: {
+              repo: this.params.url.trim(),
+              branch: this.params.branch.trim()
+            },
+            repo_docs: {
+              repo: this.doc.url.trim(),
+              branch: this.doc.branch.trim()
+            },
+            fair: {
+              fair_tool:this.array_selected_tools_fair[0]
             }
-
           }
-          this.showErrorURL = false;
-          this.loading = true;
-          this.modal_message = 'Submitting Pipeline ...';
-          this.getPipelineAssessmentCall(data,this.getPipelineAssessmentCallBack)
-        }else{
-          this.showErrorURL = true;
         }
 
 
+        this.loading = true;
+        this.modal_message = 'Submitting Pipeline ...';
+        this.getPipelineAssessmentCall(data, this.getPipelineAssessmentCallBack)
       },
+
       getPipelineAssessmentCallBack(response){
         console.log("---> getPipelineAssessmentCallBack <---")
         console.log(response)
@@ -1057,7 +1040,7 @@
         }
       },
 
-      async addTool(){
+      async addToolService(){
         let args = await this.adding(this.selected_tool.args, 0)
         var error_args = false;
         for (var i in args){
@@ -1074,7 +1057,7 @@
           this.change_image_yes = false;
           this.change_image_no = true;
           this.showBuilderTool = false;
-          this.array_selected_tools.push(this.selected_tool);
+          this.array_selected_tools_service.push(this.selected_tool);
         }
       },
 
@@ -1191,9 +1174,9 @@
         }
         return body;
       },
-      removeTool(key){
-        this.$delete(this.array_selected_tools,key)
-        if (this.isEmpty(this.array_selected_tools)) {
+      removeToolService(key){
+        this.$delete(this.array_selected_tools_service,key)
+        if (this.isEmpty(this.array_selected_tools_service)) {
           this.showBuilderTool = false;
         }
 
@@ -1349,9 +1332,11 @@
       this.pipeline_id = '';
       this.params.url = '';
       this.params.brach = '';
-      this.doc.yes = false;
       this.showReportBtn = false;
       this.build_status = '';
+  },
+  mounted(){
+
   }
 }
 </script>
@@ -1477,6 +1462,20 @@ hr {
   margin-bottom: 1rem;
   border: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#assessmentTypeTabs .nav-link.active{
+  background-color: #3472F7 !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: larger;
+}
+
+#assesmentSoftwareForm,
+#assesmentServiceForm,
+#assesmentFairForm{
+  padding-left: 35px;
+  padding-right: 35px;
 }
 
 </style>
