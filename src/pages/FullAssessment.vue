@@ -688,14 +688,6 @@
 
           console.log('Deployment repository provided')
           data = {
-            repo_code: {
-              repo: this.params.url.trim(),
-              branch: this.params.branch.trim()
-            },
-            repo_docs: {
-              repo: this.doc.url.trim(),
-              branch: this.doc.branch.trim()
-            },
             deployment: {
               repo_deploy: {
                 repo: this.deploy.url.trim(),
@@ -713,14 +705,6 @@
 
           console.log('FAIR data provided')
           data = {
-            repo_code: {
-              repo: this.params.url.trim(),
-              branch: this.params.branch.trim()
-            },
-            repo_docs: {
-              repo: this.doc.url.trim(),
-              branch: this.doc.branch.trim()
-            },
             fair: {
               fair_tool:this.array_selected_tools_fair[0]
             }
