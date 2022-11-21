@@ -44,7 +44,7 @@ export default {
     },
     getAssessmentType(){
       if (this.badge.software) return "software"
-      if (this.badge.service)  return "service"
+      if (this.badge.services) return "services"
       if (this.badge.fair)     return "fair"
     },
     getBadgeLevel(){
