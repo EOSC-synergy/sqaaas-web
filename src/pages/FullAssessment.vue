@@ -55,7 +55,7 @@
                                       style="margin-bottom:0px"
                                       v-model="params.url">
                           </base-input>
-                          <p v-show="showErrorSoftwareURL" style="color:red; font-size:12px;padding-left:0px; padding-top:6px;"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> This field is required</p>
+                          <p v-show="error.software.repository_URL" style="color:red; font-size:12px;padding-left:0px; padding-top:6px;"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ error.software.repository_URL }}</p>
                         </div>
                         <div class="col-12 col-md-4">
                           <base-input type="text"
@@ -112,7 +112,7 @@
                                       placeholder=""
                                       v-model="deploy.url">
                           </base-input>
-                          <p v-show="showErrorServiceURL" style="color:red; font-size:12px; padding-top:6px; padding-left:0px;"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> This field is required</p>
+                          <p v-show="error.services.repository_URL" style="color:red; font-size:12px; padding-top:6px; padding-left:0px;"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ error.services.repository_URL }}</p>
                         </div>
                         <div class="col-12 col-md-4">
                           <base-input type="text" class="no-margin"
@@ -127,18 +127,20 @@
                       <div v-show="criteria != 'default'" class="row">
                         <div class="col-12 col-md-6">
                           <label> Choose a tool </label>
-                          <select class="custom-select" id="sqacriteria" v-model='builder_tool' >
+                          <select class="custom-select" id="sqacriteria" v-model='builder_tool_service' >
                             <option value="default">Select ...</option>
                             <option style="text-transform:capitalize;" v-for="(tool,key) in array_tools" :key="key" :value="tool['name']">{{tool['name'].toUpperCase()}}</option>
                           </select>
                         </div>
                         <div v-show="showBuilderTool" class="text-left col-12 col-md-6" style="padding-top:25px;">
                           <button style="max-height:40px;" type="button" class="btn  btn-info" @click="addToolService()"><i class="fa fa-plus"></i>Add Tool</button>
+                          <span v-show="error.services.tool_arguments" style="color:red; font-size:12px; margin-left:12px;"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ error.services.tool_arguments }}</span>
+                          <span v-show="error.services.tool_addition" style="color:red; font-size:12px; margin-left:12px;"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ error.services.tool_addition }}</span>
                         </div>
                       </div>
 
                       <div>
-                        <p v-show="showErrorServiceBuilderTool" style="color:red; font-size:12px; padding-top:6px; padding-left:0px;"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> You must select a tool to define some pipeline work</p>
+                        <p v-show="error.services.tool_selection" style="color:red; font-size:12px; padding-top:6px; padding-left:0px;"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ error.services.tool_selection }}</p>
                       </div>
 
                       <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderTool">
@@ -146,7 +148,7 @@
                       </div>
 
 
-                      <div v-show="builder_tool != 'default'" class="col-12 mt-2">
+                      <div v-show="builder_tool_service != 'default'" class="col-12 mt-2">
                         <span v-show="docker_image !=''" class="badge badge-secondary">image:<span style="font-weight:bold"> {{docker_image}}</span></span>
                         <span v-show="docker_lang !=''" style="margin:0px 5px;" class="badge badge-primary">lang:<span style="font-weight:bold"> {{docker_lang}}</span></span>
                         <span v-show="docker_version !=''" style="margin:0px 5px;" class="badge badge-danger">version:<span style="font-weight:bold"> {{docker_version}}</span></span>
@@ -173,7 +175,6 @@
                           <option v-for="(service,key) in $store.state.docker_compose.services" :key="key" :value="key">{{key}}</option>
                         </select>
                         <button type="button" class="btn-simple btn btn-xs btn-info text-left" @click="openModal();set_fair_service == false"><i class="fa fa-plus"></i>Add Service</button>
-                        <span v-show="showErrorService" style="color:red; font-size:12px;">For the selected tool you must select a service.</span>
                       </div>
 
                       <div v-show="array_selected_tools_service.length > 0" style="padding-top:40px;margin-bottom:2rem;">
@@ -234,10 +235,12 @@
                           </div>
                           <div v-show="showBuilderToolFair" class="text-left col-12 col-md-6" style="padding-top:25px;">
                             <button style="max-height:40px;" type="button" class="btn  btn-info" @click="addToolFair()"><i class="fa fa-plus"></i>Add Tool</button>
+                            <span v-show="error.fair.tool_arguments" style="color:red; font-size:12px; margin-left:12px;"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ error.fair.tool_arguments }}</span>
+                            <span v-show="error.fair.tool_addition" style="color:red; font-size:12px; margin-left:12px;"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ error.fair.tool_addition }}</span>
                           </div>
                         </div>
                         <div>
-                          <p v-show="showErrorFairBuilderTool" style="color:red; font-size:12px; padding-top:6px; padding-left:0px;"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> You must select a tool to define some pipeline work.</p>
+                          <p v-show="error.fair.tool_selection" style="color:red; font-size:12px; padding-top:6px; padding-left:0px;"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ error.fair.tool_selection }}</p>
                         </div>
                         <div class="col-12" style="margin-top:20px;" id='tools' v-show="showBuilderToolFair">
                           <div id="ref-arg-fair"></div>
@@ -404,11 +407,7 @@
         showBuildUrl:false,
         build_status:'',
         showReportBtn: false,
-        showErrorSoftwareURL: false,
-        showErrorServiceURL: false,
         repo_info:{},
-        showErrorAPI:false,
-        showErrorFailure:false,
         message_error: '',
         array_criterias:[],
         change_image_yes: false,
@@ -421,7 +420,7 @@
         docker_image_fair: '',
         docker_lang_fair: '',
         docker_version_fair: '',
-        builder_tool: 'default',
+        builder_tool_service: 'default',
         builder_tool_fair: 'default',
         showBuilderTool:false,
         showBuilderToolFair:false,
@@ -429,18 +428,29 @@
         array_tools_fair:[],
         selected_tool:{},
         selected_tool_fair:{},
-        showErrorServiceBuilderTool: false,
-        showErrorFairBuilderTool: false,
         array_selected_tools_service:[],
         array_selected_tools_fair:[],
         service_name: '',
         service:'default',
         service_name_fair: '',
         service_fair:'default',
-        showErrorService:false,
-        set_fair_service:false
-
-
+        set_fair_service:false,
+        error: {
+          software: {
+            repository_URL: ''
+          },
+          services: {
+            repository_URL: '',
+            tool_selection: '',
+            tool_arguments: '',
+            tool_addition: '',
+          },
+          fair: {
+            tool_selection: '',
+            tool_arguments: '',
+            tool_addition: '',
+          }
+        }
       }
     },
      watch:{
@@ -487,7 +497,6 @@
               this.array_tools = this.array_criterias[i]['tools']
             }
           }
-          this.showErrorCriteria = false;
         }
       },
       'criteria_fair'(val){
@@ -566,7 +575,7 @@
             clearInterval(this.t)
         }
       },
-      'builder_tool'(val){
+      'builder_tool_service'(val){
         if(val != 'default'){
           this.selected_tool = {};
           console.log(this.array_tools, val)
@@ -652,16 +661,20 @@
       },
       getResults(assesmentType){
 
-        this.showErrorAPI = false;
-        this.showErrorSoftwareURL = false;
-        this.showErrorServiceURL = false;
-        this.showErrorServiceBuilderTool = false;
-        this.showErrorFairBuilderTool = false;
+        this.error.software.repository_URL = '';
+        this.error.services.repository_URL = '';
+        this.error.services.tool_selection = '';
+        this.error.services.tool_arguments = '';
+        this.error.services.tool_addition = '';
+        this.error.fair.tool_selection = '';
+        this.error.fair.tool_arguments = '';
+        this.error.fair.tool_addition = '';
+
 
         let data = {}
         if (assesmentType === 'software'){
           if(this.params.url.trim() === ''){
-            this.showErrorSoftwareURL = true;
+            this.error.software.repository_URL = 'This field is required';
             return
           }
           console.log('Code repository provided')
@@ -677,12 +690,17 @@
           }
         }
         else if (assesmentType === 'service'){
+
           if(this.deploy.url.trim() === ''){
-            this.showErrorServiceURL = true;
+            this.error.services.repository_URL = 'This field is required';
+            return
+          }
+          if(this.builder_tool_service === 'default' && !this.array_selected_tools_service[0]){
+            this.error.services.tool_selection = 'You must select a tool to define some pipeline work';
             return
           }
           if(!this.array_selected_tools_service[0]){
-            this.showErrorServiceBuilderTool = true;
+            this.error.services.tool_addition = 'You must add this tool first';
             return
           }
 
@@ -698,8 +716,12 @@
           }
         }
         else if (assesmentType === 'fair'){
+          if(this.builder_tool_fair === 'default' && !this.array_selected_tools_fair[0]){
+            this.error.fair.tool_selection = 'You must select a tool to define some pipeline work';
+            return
+          }
           if(!this.array_selected_tools_fair[0]){
-            this.showErrorFairBuilderTool = true;
+            this.error.fair.tool_addition = 'You must add this tool first';
             return
           }
 
@@ -726,7 +748,7 @@
         }else if(response.status == 500){
           this.$swal.fire({
             title: 'An unexpected error occurred while running the assessment!',
-            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            text: response.detail? response.detail : response.reason? response.reason : response.data? response.data.status+" "+response.data.title+": "+response.data.detail : 'Error',
             icon: 'error',
             confirmButtonText: 'Close',
             footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
@@ -753,7 +775,7 @@
         }else if(response.status == 500){
            this.$swal.fire({
             title: 'An unexpected error occurred while running the assessment!',
-            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            text: response.detail? response.detail : response.reason? response.reason : response.data? response.data.status+" "+response.data.title+": "+response.data.detail : 'Error',
             icon: 'error',
             confirmButtonText: 'Close',
             footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
@@ -913,7 +935,6 @@
           this.autoRefresh = false;
           this.showStatus = false;
           this.loading = false;
-          this.showErrorFailure;
         }
       },
       cancelExecution(){
@@ -935,7 +956,7 @@
         }else if(response.status == 500){
            this.$swal.fire({
              title: 'An unexpected error occurred while running the assessment!',
-            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            text: response.detail? response.detail : response.reason? response.reason : response.data? response.data.status+" "+response.data.title+": "+response.data.detail : 'Error',
             icon: 'error',
             confirmButtonText: 'Close',
             footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
@@ -969,7 +990,7 @@
          }else if(response.status == 500){
            this.$swal.fire({
              title: 'An unexpected error occurred while running the assessment!',
-            text: response.detail?response.detail:response.reason?response.reason:response.data?response.data:'Error',
+            text: response.detail? response.detail : response.reason? response.reason : response.data? response.data.status+" "+response.data.title+": "+response.data.detail : 'Error',
             icon: 'error',
             confirmButtonText: 'Close',
             footer: `<p style="color: red; font-weight: bold;">Please contact sqaaas@ibergrid.eu</p>`,
@@ -1025,6 +1046,8 @@
       },
 
       async addToolService(){
+        this.error.services.tool_selection = '';
+        this.error.services.tool_addition = '';
         let args = await this.adding(this.selected_tool.args, 0)
         var error_args = false;
         for (var i in args){
@@ -1033,11 +1056,12 @@
           }
         }
         if(error_args == true){
-          this.showErrorArgs = true;
+          this.error.services.tool_arguments = 'Tool arguments are required';
         }else{
-          this.showErrorArgs = false;
+          this.error.services.tool_arguments = '';
+          this.error.services.tool_addition = '';
           this.selected_tool['args'] =  args;
-          this.builder_tool = 'default';
+          this.builder_tool_service = 'default';
           this.change_image_yes = false;
           this.change_image_no = true;
           this.showBuilderTool = false;
@@ -1169,6 +1193,8 @@
 
 
       async addToolFair(){
+        this.error.fair.tool_selection = '';
+        this.error.fair.tool_addition = '';
         let args = await this.addingFair(this.selected_tool_fair.args, 0)
         var error_args = false;
         for (var i in args){
@@ -1177,9 +1203,10 @@
           }
         }
         if(error_args == true){
-          this.showErrorArgsFair = true;
+          this.error.fair.tool_arguments = 'Tool arguments are required';
         }else{
-          this.showErrorArgsFair = false;
+          this.error.fair.tool_arguments = '';
+          this.error.fair.tool_addition = '';
           this.selected_tool_fair['args'] =  args;
           this.builder_tool_fair = 'default';
           this.change_image_yes_fair = false;
