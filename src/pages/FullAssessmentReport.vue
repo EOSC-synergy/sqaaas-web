@@ -31,7 +31,7 @@
                     <div class="row mt-3">
                       <div class="col d-flex justify-content-center">
 
-                        <RepoData :repo="this.$store.state.report.repository[0]" />
+                        <RepoData :assessmentType="getAssessmentType()" :repo="this.$store.state.report.repository[0]" />
 
                       </div>
                     </div>
@@ -435,6 +435,11 @@
       },
       refresh(){
         this.$router.push({name: 'full_assessment'});
+      },
+      getAssessmentType(){
+        if (this.$store.state.report.badge.software) return "software"
+        if (this.$store.state.report.badge.services) return "services"
+        if (this.$store.state.report.badge.fair)     return "fair"
       },
       downloadJSON(){
 
