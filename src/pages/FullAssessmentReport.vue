@@ -31,7 +31,7 @@
                     <div class="row mt-3">
                       <div class="col d-flex justify-content-center">
 
-                        <RepoData :repo="this.$store.state.report.repository[0]" />
+                        <RepoData :assessmentType="getAssessmentType()" :repo="this.$store.state.report.repository[0]" />
 
                       </div>
                     </div>
@@ -379,7 +379,7 @@
           'rda_a1_05d':'Data can be accessed automatically (i.e. by a computer program)',
           'rda_a1_1_01m':'Metadata is accessible through a free access protocol',
           'rda_a1_1_01d':'Data is accessible through a free access protocol',
-          'rda_a1_2_02d':'Data is accessible through an access protocol that supports authentication and authorisation',
+          'rda_a1_2_01d':'Data is accessible through an access protocol that supports authentication and authorisation',
           'rda_a2_01m':'Metadata is guaranteed to remain available after data is no longer available',
           'rda_i1_01m':'Metadata uses knowledge representation expressed in standardised format',
           'rda_i1_01d':'Data uses knowledge representation expressed in standardised format',
@@ -435,6 +435,11 @@
       },
       refresh(){
         this.$router.push({name: 'full_assessment'});
+      },
+      getAssessmentType(){
+        if (this.$store.state.report.badge.software) return "software"
+        if (this.$store.state.report.badge.services) return "services"
+        if (this.$store.state.report.badge.fair)     return "fair"
       },
       downloadJSON(){
 
