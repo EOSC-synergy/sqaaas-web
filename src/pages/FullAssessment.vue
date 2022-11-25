@@ -36,7 +36,7 @@
                 <h4>Fill in the form below to trigger the assessment process</h4>
 
                 <nav class="nav nav-tabs nav-justified mt-5 mb-4" id="assessmentTypeTabs">
-                    <a class="nav-link active"data-toggle="pill" data-target="#assesmentSoftwareForm" type="button">Software</a>
+                    <a class="nav-link active" data-toggle="pill" data-target="#assesmentSoftwareForm" type="button">Software</a>
                     <a class="nav-link" data-toggle="pill" data-target="#assesmentServiceForm" type="button">Service</a>
                     <a class="nav-link" data-toggle="pill" data-target="#assesmentFairForm" type="button">FAIR</a>
                 </nav>
@@ -668,13 +668,20 @@
         this.error.services.tool_addition = '';
         this.error.fair.tool_selection = '';
         this.error.fair.tool_arguments = '';
+        $('#error_fair_url').remove();
         this.error.fair.tool_addition = '';
 
 
         let data = {}
+        let url_pattern_regex = /^(https:|http:|www\.)\S*/;
+
         if (assesmentType === 'software'){
           if(this.params.url.trim() === ''){
             this.error.software.repository_URL = 'This field is required';
+            return
+          }
+          if(!url_pattern_regex.test(this.params.url.trim())){
+            this.error.software.repository_URL = 'URL format required';
             return
           }
           console.log('Code repository provided')
@@ -693,6 +700,10 @@
 
           if(this.deploy.url.trim() === ''){
             this.error.services.repository_URL = 'This field is required';
+            return
+          }
+          if(!url_pattern_regex.test(this.deploy.url.trim())){
+            this.error.services.repository_URL = 'URL format required';
             return
           }
           if(this.builder_tool_service === 'default' && !this.array_selected_tools_service[0]){
@@ -716,9 +727,17 @@
           }
         }
         else if (assesmentType === 'fair'){
+
           if(this.builder_tool_fair === 'default' && !this.array_selected_tools_fair[0]){
             this.error.fair.tool_selection = 'You must select a tool to define some pipeline work';
             return
+          }
+          if(this.builder_tool_fair === 'fair-eva' || this.builder_tool_fair === 'F-UJI'){
+            let simple_input_0_0 = $('#simple_input_0_0');
+            if(!url_pattern_regex.test(simple_input_0_0.val())){
+              simple_input_0_0.after("<p id='error_fair_url' style='color:red; font-size:12px; padding-top:6px; padding-left:0px;'> <i class='fa fa-exclamation-triangle' aria-hidden='true'></i> URL format required</p>")
+              return
+            }
           }
           if(!this.array_selected_tools_fair[0]){
             this.error.fair.tool_addition = 'You must add this tool first';
