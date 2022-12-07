@@ -31,7 +31,7 @@
                     <div class="row mt-3">
                       <div class="col d-flex justify-content-center">
 
-                        <RepoData :repo="this.$store.state.report.repository[0]" />
+                        <RepoData :assessmentType="getAssessmentType()" :repo="this.$store.state.report.repository[0]" />
 
                       </div>
                     </div>
@@ -56,7 +56,7 @@
                     <div class="row mt-5">
                       <div class="col">
 
-                        <BadgeResults :badgeCriteria="this.$store.state.report.badge.software.criteria" :mapping_icon="mapping_icon" :mapping_criteria_name="mapping_criteria_name" />
+                        <BadgeResults :badgeCriteria="getBadgeCriteria()" :mapping_icon="mapping_icon" :mapping_criteria_name="mapping_criteria_name" />
 
                       </div>
                     </div>
@@ -79,8 +79,6 @@
                     </div>
 
                   </div>
-
-
 
 
                   <div class="col-12 col-sm-12 col-md-12 col-lg-6 mx-auto">
@@ -165,7 +163,7 @@
                                                           <button class="btn btn-primary btn-link" style="border:none; font-size:18px;" data-toggle="modal" data-target="#exampleModal" @click="modalInfo(subcrit['evidence'][a])">
                                                             More Info
                                                           </button>
-                                                          <button v-if="!subcrit['evidence'][a]['valid'] === true" class="btn btn-primary btn-link hint-button" style="border:none; font-size:18px; padding-top: 0; padding-bottom: 0;" data-toggle="modal" data-target="#hintModal" @click="modalHint(subcrit.hint)">
+                                                          <button v-if="!subcrit['valid'] === true" class="btn btn-primary btn-link hint-button" style="border:none; font-size:18px; padding-top: 0; padding-bottom: 0;" data-toggle="modal" data-target="#hintModal" @click="modalHint(subcrit.hint)">
                                                             Hint
                                                           </button>
                                                         </div>
@@ -330,7 +328,14 @@
           'QC.Sec':'fa-lock',
           'QC.Ver':'fa-code-fork',
           'QC.FAIR':'fa-certificate',
-          'QC.Fun':'fa-filter'
+          'QC.Fun':'fa-filter',
+          'SvcQC.Dep':'fa-rocket',
+          'SvcQC.Fun':'fa-filter',
+          'SvcQC.Sec':'fa-lock',
+          'SvcQC.Doc':'fa-book',
+          'SvcQC.Api':'fa-desktop',
+          'SvcQC.Per':'fa-calendar-check',
+          'SvcQC.Int':'fa-arrows-alt'
         },
         mapping_criteria_name:{
           'QC.Acc':'Code Accessibility',
@@ -349,9 +354,56 @@
           'QC.Del':'Automated Delivery',
           'QC.Dep':'Automated Deployment',
           'QC.FAIR':'FAIRness level of Digital Objects',
-          'QC.Fun':'Functional'
+          'QC.Fun':'Functional',
+          'SvcQC.Dep':'Service Deployment',
+          'SvcQC.Fun':'Service Functional Testing',
+          'SvcQC.Sec':'Security Testing (DAST)',
+          'SvcQC.Doc':'Service Documentation',
+          'SvcQC.Api':'API Testing',
+          'SvcQC.Per':'Performance Testing',
+          'SvcQC.Int':'Integration Testing',
+          'rda_f1_01m':'Metadata is identified by a persistent identifier',
+          'rda_f1_01d':'Data is identified by a persistent identifier',
+          'rda_f1_02m':'Metadata is identified by a globally unique identifier',
+          'rda_f1_02d':'Data is identified by a globally unique identifier',
+          'rda_f2_01m':'Rich metadata is provided to allow discovery',
+          'rda_f3_01m':'Metadata includes the identifier for the data',
+          'rda_f4_01m':'Metadata is offered in such a way that it can be harvested and indexed',
+          'rda_a1_01m':'Metadata contains information to enable the user to get access to the data',
+          'rda_a1_02m':'Metadata can be accessed manually (i.e. with human intervention)',
+          'rda_a1_02d':'Data can be accessed manually (i.e. with human intervention)',
+          'rda_a1_03m':'Metadata identifier resolves to a metadata record',
+          'rda_a1_03d':'Data identifier resolves to a digital object',
+          'rda_a1_04m':'Metadata is accessed through standardised protocol',
+          'rda_a1_04d':'Data is accessible through standardised protocol',
+          'rda_a1_05d':'Data can be accessed automatically (i.e. by a computer program)',
+          'rda_a1_1_01m':'Metadata is accessible through a free access protocol',
+          'rda_a1_1_01d':'Data is accessible through a free access protocol',
+          'rda_a1_2_01d':'Data is accessible through an access protocol that supports authentication and authorisation',
+          'rda_a2_01m':'Metadata is guaranteed to remain available after data is no longer available',
+          'rda_i1_01m':'Metadata uses knowledge representation expressed in standardised format',
+          'rda_i1_01d':'Data uses knowledge representation expressed in standardised format',
+          'rda_i1_02m':'Metadata uses machine-understandable knowledge representation',
+          'rda_i1_02d':'Data uses machine-understandable knowledge representation',
+          'rda_i2_01m':'Metadata uses FAIR-compliant vocabularies',
+          'rda_i2_01d':'Data uses FAIR-compliant vocabularies',
+          'rda_i3_01m':'Metadata includes references to other metadata',
+          'rda_i3_01d':'Data includes references to other data',
+          'rda_i3_02m':'Metadata includes references to other data',
+          'rda_i3_02d':'Data includes qualified references to other data',
+          'rda_i3_03m':'Metadata includes qualified references to other metadata',
+          'rda_i3_04m':'Metadata include qualified references to other data',
+          'rda_r1_01m':'Plurality of accurate and relevant attributes are provided to allow reuse',
+          'rda_r1_1_01m':'Metadata includes information about the licence under which the data can be reused',
+          'rda_r1_1_02m':'Metadata refers to a standard reuse licence',
+          'rda_r1_1_03m':'Metadata refers to a machine-understandable reuse licence',
+          'rda_r1_2_01m':'Metadata includes provenance information according to community-specific standards',
+          'rda_r1_2_02m':'Metadata includes provenance information according to a crosscommunity language',
+          'rda_r1_3_01m':'Metadata complies with a community standard',
+          'rda_r1_3_01d':'Data complies with a community standard',
+          'rda_r1_3_02m':'Metadata is expressed in compliance with a machineunderstandable community standard',
+          'rda_r1_3_02d':'Data is expressed in compliance with a machine-understandable'
         }
-
       }
     },
     watch:{},
@@ -384,6 +436,11 @@
       refresh(){
         this.$router.push({name: 'full_assessment'});
       },
+      getAssessmentType(){
+        if (this.$store.state.report.badge.software) return "software"
+        if (this.$store.state.report.badge.services) return "services"
+        if (this.$store.state.report.badge.fair)     return "fair"
+      },
       downloadJSON(){
 
         let a = document.createElement("a");
@@ -399,7 +456,6 @@
         a.remove();
 
       },
-
       downloadPNG(){
 
         $('#downloadDropdown').dropdown('hide')
@@ -428,19 +484,12 @@
         });
 
       },
-
-      showBadge(){
-        let badge = this.$store.state.report.badge;
-        return [badge.software.data, badge.services.data, badge.fair.data].filter(Boolean).length;
-      },
-      activeBadgeTypes(){
-        let activeBadgeTypes = []
-        let badge = this.$store.state.report.badge;
-        for (let badgeType in badge){
-          if (badge[badgeType].data) activeBadgeTypes.push(badge[badgeType])
-        }
-        return activeBadgeTypes
+      getBadgeCriteria(){
+        return this.$store.state.report.badge.software && this.$store.state.report.badge.software.criteria ||
+               this.$store.state.report.badge.services && this.$store.state.report.badge.services.criteria ||
+               this.$store.state.report.badge.fair && this.$store.state.report.badge.fair.criteria
       }
+
     },
 
    mounted(){

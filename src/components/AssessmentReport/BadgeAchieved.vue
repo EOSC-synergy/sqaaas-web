@@ -3,27 +3,27 @@
   <div style="width: 75rem;" class="text-center">
     <div v-if="showBadge()">
 
-      <h3 v-if="showBadge() === 1" class="mb-5">Congratulations! The following badge has been awarded</h3>
-      <h3 v-else class="mb-5">Congratulations! The following badges have been awarded</h3>
+      <h3 class="mb-5">Congratulations! The following badge has been awarded</h3>
 
       <div class="row">
-        <div class="col" v-for="(badge, badgeType) in activeBadgeTypes()">
+        <div class="col">
 
           <!-- <img :src="badge.data.image" class="mb-1"/> -->
-          <img :src="getImageBadge(badgeType)" width="400px" class="mb-5"/>
+          <img :src="getImageBadge()" width="400px" class="mb-5"/>
 
           <div class="row" style="justify-content: center;">
-            <a :href="badge.verification_url" target="_blank" class="badge_button">Verify</a>
-            <a :href="badge.data.openBadgeId" target="_blank" class="badge_button">Go to Badgr's award page</a>
+            <a :href="getVerificationURL()" target="_blank" class="badge_button">Verify</a>
+            <a :href="getOpenBadgeID()" target="_blank" class="badge_button">Go to Badgr's award page</a>
           </div>
         </div>
+
       </div>
 
     </div>
 
     <div v-else>
 
-      <h3 class="mb-4"> Sorry, you have not earned any badges</h3>
+      <h3 class="mb-4"> Sorry, you have not earned any badge</h3>
       <img src="../../../static/badges/no_badge_blur.png" width="300px"/>
 
     </div>
@@ -40,23 +40,29 @@ export default {
   props: ['badge'],
   methods:{
     showBadge(){
-      return [this.badge.software.data, this.badge.services.data, this.badge.fair.data].filter(Boolean).length;
+      return this.badge.software && this.badge.software.verification_url || this.badge.services && this.badge.services.verification_url || this.badge.fair && this.badge.fair.verification_url
     },
-    activeBadgeTypes(){
-      let activeBadgeTypes = {}
-      for (let badgeType in this.badge){
-        if (this.badge[badgeType].data) activeBadgeTypes[badgeType] = this.badge[badgeType]
-      }
-      return activeBadgeTypes
+    getAssessmentType(){
+      if (this.badge.software) return "software"
+      if (this.badge.services) return "services"
+      if (this.badge.fair)     return "fair"
     },
-    getBadgeLevel(badgeType){
-           if (this.badge[badgeType].criteria.bronze.missing.length > 0) return "no_badge"
-      else if (this.badge[badgeType].criteria.silver.missing.length > 0) return "bronze"
-      else if (this.badge[badgeType].criteria.gold.missing.length > 0)   return "silver"
-      else return "gold"
+    getBadgeLevel(){
+      let assessmentType = this.getAssessmentType()
+
+      if (this.badge[assessmentType].criteria.bronze.missing.length > 0) return "no_badge"
+      if (this.badge[assessmentType].criteria.silver.missing.length > 0) return "bronze"
+      if (this.badge[assessmentType].criteria.gold.missing.length > 0)   return "silver"
+      return "gold"
     },
-    getImageBadge(badgeType){
-      return require('../../../static/badges/badge_'+badgeType+'_'+this.getBadgeLevel(badgeType)+'.png')
+    getImageBadge(){
+      return require('../../../static/badges/badge_'+this.getAssessmentType()+'_'+this.getBadgeLevel()+'.png')
+    },
+    getVerificationURL(){
+      return this.badge[this.getAssessmentType()].verification_url
+    },
+    getOpenBadgeID(){
+      return this.badge[this.getAssessmentType()].data.openBadgeId
     }
   }
 }

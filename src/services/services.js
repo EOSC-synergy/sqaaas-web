@@ -189,7 +189,7 @@ export default {
     getCriteriaCall(callBackHandler){
       axios({
        method: 'get',
-       url: this.env.api +'/criteria',
+       url: this.env.api +'/criteria?assessment=true',
      }).then(response => {
          return callBackHandler(response);
      })
