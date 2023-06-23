@@ -1,6 +1,6 @@
 # sqaaas-web
 
-[![SQAaaS badge shields.io](https://img.shields.io/badge/sqaaas%20software-silver-lightgrey)](https://api.eu.badgr.io/public/assertions/DQqj3BNQRaGMTorg-pOAow "SQAaaS silver badge achieved")
+[![SQAaaS badge shields.io](https://img.shields.io/badge/sqaaas%20software-silver-lightgrey)](https://eu.badgr.com/public/assertions/XHEYOSImTsOiLPl1KrIe0w "SQAaaS silver badge achieved")
 
 <img src="https://github.com/EOSC-synergy/service-qa-baseline/blob/master/content/images/logo-SYNERGY.png" height="80">
 
@@ -12,7 +12,7 @@
 </p>
 
 #### Achievements 
-[![SQAaaS badge](https://github.com/EOSC-synergy/SQAaaS/raw/master/badges/badges_150x116/badge_software_silver.png)]([https://eu.badgr.com/public/assertions/bw3v-fVCR6eJoMjwG11afw](https://api.eu.badgr.io/public/assertions/DQqj3BNQRaGMTorg-pOAow) "SQAaaS silver badge achieved")
+[![SQAaaS badge](https://github.com/EOSC-synergy/SQAaaS/raw/master/badges/badges_150x116/badge_software_silver.png)](https://eu.badgr.com/public/assertions/XHEYOSImTsOiLPl1KrIe0w "SQAaaS silver badge achieved")
 
 ## Software Quality Asurance (SQA) as a Service Web
 
