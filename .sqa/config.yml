@@ -1,6 +1,6 @@
 config:
   credentials:
-      - id: userpass_sqaaas_web
+      - id: sqaaas_web
         username_var: GIT_USER
         password_var: GIT_PASSWORD
 
@@ -13,5 +13,5 @@ sqa_criteria:
           - > 
             env GIT_ASKPASS=/sqaaas-web/.git_credential_helper.sh
             npm --prefix /sqaaas-web run deploy --
-            --user="Diana M. Naranjo <dnaranjo@i3m.upv.es>"
+            --user="David Arce <darce@i3m.upv.es>"
             --repo=https://${GIT_USER}@github.com/eosc-synergy/sqaaas-web
