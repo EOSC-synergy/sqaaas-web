@@ -8,7 +8,7 @@
 <p float="left">
     <img src="https://github.com/EOSC-synergy/service-qa-baseline/blob/master/content/images/logo-LIP.png" height="80">
     <img src="https://github.com/EOSC-synergy/service-qa-baseline/blob/master/content/images/logo-csic.png" height="80">
-    <img src="https://github.com/EOSC-synergy/service-qa-baseline/blob/master/content/images/logo-UPV.png" height="80">
+    <img src="https://github.com/EOSC-synergy/service-qa-baseline/blob/master/content/images/logo-UPV.png" height="78">
 </p>
 
 #### Achievements 
